@@ -1,0 +1,70 @@
+.nso_container {
+  .__home_groups {
+    .nso_carousel {
+      p-carousel {
+        .p-carousel {
+          .p-carousel-content {
+            .p-carousel-container {
+              .p-carousel-prev {
+                position: absolute;
+                top: -28px;
+                right: 32px;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+
+                .p-carousel-prev-icon {
+                  color: var(--text-main);
+                  opacity: .5;
+                }
+
+                &:hover {
+                  background-color: none;
+                  background: none;
+
+                  .p-carousel-prev-icon {
+                    opacity: 1;
+                  }
+                }
+              }
+
+              .p-carousel-next {
+                position: absolute;
+                top: -28px;
+                right: 0;
+                margin: 0px;
+                display: flex;
+                justify-content: flex-end;
+
+                .p-carousel-prev-icon {
+                  color: var(--text-main);
+                  opacity: .5;
+                }
+
+                &:hover {
+                  background-color: none;
+                  background: none;
+
+                  .p-carousel-prev-icon {
+                    opacity: 1;
+                  }
+                }
+              }
+            }
+          }
+
+          .p-carousel-indicators {
+            .p-carousel-indicator {
+              .p-link {
+                width: 10px;
+                height: 10px;
+                border-radius: 5px;
+                background-color: var(--devide);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

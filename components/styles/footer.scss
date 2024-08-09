@@ -1,0 +1,207 @@
+.nso_footer {
+  position: relative;
+  background-color: var(--surface-c);
+
+
+  .__group {
+
+    padding-top: 60px;
+
+    .__title {
+      color: var(--text-sub);
+      font-size: var(--font-size18);
+      font-weight: 400;
+    }
+
+    .__content {
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+
+      .nso_add_item {
+        margin-top: 10px;
+        width: fit-content;
+        padding-right: 20px;
+
+        &:first-child {
+          margin-top: 0px;
+        }
+      }
+
+      .__sub_labels {
+        width: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+
+        span {
+          font-size: var(--font-size15);
+          color: var(--text-sub);
+          font-weight: 300;
+
+          &:first-child {
+            font-weight: 300;
+          }
+        }
+
+        &:first-child {
+          margin-top: 0px;
+        }
+      }
+
+      .__desc {
+        width: 300px;
+        font-size: var(--font-size14);
+        color: var(--text-sub);
+        font-weight: 300;
+      }
+
+      .__input {
+        padding: 20px 0;
+
+        span {
+          width: 100%;
+
+          i {
+            padding-top: 4px;
+            padding-left: 4px;
+            background-color: #fff;
+            color: var(--surface-c);
+            ;
+            width: 22px;
+            height: 22px;
+            border-radius: 12px;
+            font-size: var(--font-size13);
+          }
+
+          input {
+            width: 100%;
+            padding-bottom: 15px;
+            color: white;
+            background-color: transparent;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid #fff;
+            border-radius: 0;
+
+            &::placeholder {
+              opacity: .5;
+            }
+          }
+        }
+      }
+
+      .__menu {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        @media only screen and (min-device-width:1000px) {
+          ._item {
+            width: 25%;
+          }
+        }
+
+        ._item {
+          margin-top: 25px;
+          padding-right: 30px;
+          word-wrap: break-word;
+          font-size: var(--font-size14);
+          font-weight: 400;
+          font-style: normal;
+          line-height: 17px;
+          letter-spacing: -.04rem;
+        }
+
+        ._item:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .__sub_footer {
+    // margin-top: 50px;
+    border-top: 1px solid #CED0D112;
+    width: 100%;
+    height: 80px;
+
+    .__wrap_between {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      height: 60px;
+
+      .__text {
+        color: var(--text-sub);
+        font-size: var(--font-size13);
+        text-transform: uppercase;
+      }
+
+      ul {
+        list-style-type: none;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        transition: .3s;
+        padding: 0;
+
+        li {
+          cursor: pointer;
+          text-transform: uppercase;
+          padding: 0 14px;
+
+          span {
+            width: 34px;
+            height: 34px;
+            display: block;
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+
+            &:hover {
+              background-color: var(--surface-a-mirror);
+              border-radius: 50%;
+            }
+          }
+
+          &:nth-child(1) {
+            span {
+              background-image: url('/images/facebook.svg');
+            }
+          }
+
+          &:nth-child(2) {
+            span {
+              background-image: url('/images/linkedin.svg');
+            }
+          }
+
+          &:nth-child(3) {
+            span {
+              background-image: url('/images/twitter.svg');
+            }
+          }
+
+          &:nth-child(4) {
+            span {
+              width: 40px;
+              background-image: url('/images/tlgrm2.png');
+            }
+          }
+
+          &:nth-child(5) {
+            span {
+              width: 40px;
+              background-image: url('/images/viber.svg');
+            }
+          }
+        }
+      }
+    }
+  }
+}

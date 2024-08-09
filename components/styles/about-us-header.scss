@@ -1,0 +1,131 @@
+.__header {
+    span {
+        color: var(--text-main);
+        font-family: sans-serif;
+        font-weight: 700;
+        font-size: var(--font-size24);
+        text-transform: uppercase;
+        letter-spacing: -1px;
+    }
+
+}
+.__logo{
+    width: clamp(200px, 75%, 300px) !important;
+    height: 100px;
+    background-image: url('/logo.png');
+    background-position: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: .5s;
+}
+.nso_about_us_menu {
+    box-shadow: 0 16px 25px rgb(88 143 204 / 6%);
+
+    .nso_container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.__about_img {
+    margin-left: 3rem;
+}
+
+.__top_text {
+    color: #3c4d58;
+    font-size: var(--font-size24);
+    font-weight: 700;
+}
+
+.__sub_body {
+    margin-top: 10px;
+}
+
+.about_us_header {
+    display: flex;
+    // height: 124px;
+    margin-top: 162px;
+    // background-image: url('/Vector.png');
+
+    .nso_container {
+        color: var(--text-main);
+        font-size: var(--font-size24);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .about_us_path {
+        margin-top: 10px;
+        color: var(--text-main);
+        font-size: var(--font-size14);
+    }
+
+}
+
+.sub_menu {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    ul {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        list-style-type: none;
+        margin-block-end: 0px;
+        margin-block-start: 0px;
+        justify-content: flex-start;
+        padding-inline-start: 0px;
+
+        li {
+            font-size: var(--font-size15);
+            font-weight: 500;
+            padding: 20px 35px;
+            color: var(--text-main);
+            cursor: pointer;
+
+            &:hover {
+                color: var(--text-accent);
+            }
+
+            a {
+                text-decoration: none;
+                color: var(--text-main);
+            }
+        }
+
+        .active {
+            background-color: var(--surface-c);
+
+            a {
+
+                color: white !important;
+            }
+        }
+    }
+}
+
+.nso_page_header {
+    background: #f9fafb00;
+}
+
+@media only screen and (max-device-width: 480px) {
+
+    .nso_about_us_menu {
+
+        .nso_container {
+            padding: 0;
+        }
+    }
+
+    .about_us_header {
+
+        .nso_container {
+            margin-bottom: 20px;
+        }
+
+        height: auto !important;
+    }
+}

@@ -1,0 +1,280 @@
+@charset "UTF-8";
+
+:root {
+    --accent: #005BAA;
+    --second: #FFFFFF;
+
+    --text-main: #333A3F;
+    --text-accent: #030303;
+    --text-second: #CED0D1;
+    --text-sub: #FFFFFF;
+    --text-desc: #7C7E80;
+    --text-warn: #E75E5E;
+    --text-success: #40AC70;
+
+    --surface-a: #FFFFFF;
+    --surface-a-mirror: #FFFFFF12;
+    --surface-a-trans: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+    --surface-b: #F5F7F9;
+    --surface-c: #005BAA;
+    --surface-d: #F2F5F9;
+    --surface-d-mirror: #f2f5f952;
+    --surface-water: #E4EEFF;
+    --surface-silver: #F9FAFB;
+    --surface-warn: #E75E5E;
+    --surface-success: #40AC70;
+    --surface-dark: #333A3F;
+    --surface-success-grad: linear-gradient(91.09deg, #40AC70 0.36%, #55C486 99.48%);
+    --surface-bk: linear-gradient(91.17deg, #F6FBFB 0.72%, #D7DEF6 59.53%, #EFD8D8 98.91%);
+    --surface-bk2: linear-gradient(116.83deg, #DEEBFF -89.24%, rgba(222, 235, 255, 0) 220.34%, #F9FAFB 220.34%);
+    --surface-bk3: linear-gradient(91.17deg, #F9FAFA 0.72%, #DEEBFF 59.53%, #FDF8FF 98.91%);
+
+    --border-a: #1F4F8E;
+    --border-b: #81578E;
+    --border-c: #C65244;
+    --border-d: #909C9A;
+    --border-e: #57AD90;
+    --border-f: #E3B234;
+    --border-g: #333A3F24;
+
+    --table-header: #F8FBFF;
+
+    --devide: #CED0D1;
+
+    // --statistic-branch1: url('~src/assets/images/bulegiin_icon/1_hun_am.svg');
+    // --statistic-branch2: url('~src/assets/images/bulegiin_icon/2_aj_uildver.svg');
+    // --statistic-branch3: url('~src/assets/images/bulegiin_icon/26_nd_halamj.svg');
+    // --statistic-branch4: url('~src/assets/images/bulegiin_icon/9_undes_tootsoo.svg');
+    // --statistic-branch5: url('~src/assets/images/bulegiin_icon/14_bolovsrol.svg');
+    // --statistic-branch6: url('~src/assets/images/bulegiin_icon/12_ajil_erhlelt.svg');
+
+    // --down-arrow: url(~src/assets/images/down-arrow.png);
+
+    --font-size10: 10px;
+    --font-size11: 11px;
+    --font-size12: 12px;
+    --font-size13: 13px;
+    --font-size14: 14px;
+    --font-size15: 15px;
+    --font-size16: 16px;
+    --font-size17: 17px;
+    --font-size18: 18px;
+    --font-size20: 20px;
+    --font-size22: 22px;
+    --font-size23: 23px;
+    --font-size24: 24px;
+    --font-size25: 25px;
+    --font-size26: 26px;
+    --font-size27: 27px;
+    --font-size28: 28px;
+    --font-size29: 29px;
+    --font-size30: 30px;
+    --font-size32: 32px;
+    --font-size36: 36px;
+    --font-size38: 38px;
+    --font-size40: 40px;
+    --font-size52: 52px; 
+}
+
+.prefers-dark-color {
+    --accent: #005BAA;
+    --second: #FFFFFF;
+
+    --text-main: #333A3F;
+    --text-accent: #005BAA;
+    --text-second: #CED0D1;
+    --text-sub: #FFFFFF;
+    --text-desc: #7C7E80;
+    --text-warn: #E75E5E;
+    --text-success: #40AC70;
+
+    --surface-a: #FFFFFF;
+    --surface-a-mirror: #FFFFFF12;
+    --surface-a-trans: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.6) 100%);
+    --surface-b: #F5F7F9;
+    --surface-c: #005BAA;
+    --surface-d: #F2F5F9;
+    --surface-d-mirror: #f2f5f952;
+    --surface-water: #E4EEFF;
+    --surface-silver: #F9FAFB;
+    --surface-warn: #E75E5E;
+    --surface-success: #40AC70;
+    --surface-dark: #333A3F;
+    --surface-success-grad: linear-gradient(91.09deg, #40AC70 0.36%, #55C486 99.48%);
+    --surface-bk: linear-gradient(91.17deg, #F6FBFB 0.72%, #D7DEF6 59.53%, #EFD8D8 98.91%);
+    --surface-bk2: linear-gradient(116.83deg, #DEEBFF -89.24%, rgba(222, 235, 255, 0) 220.34%, #F9FAFB 220.34%);
+    --surface-bk3: linear-gradient(91.17deg, #F9FAFA 0.72%, #DEEBFF 59.53%, #FDF8FF 98.91%);
+
+    --border-a: #1F4F8E;
+    --border-b: #81578E;
+    --border-c: #C65244;
+    --border-d: #909C9A;
+    --border-e: #57AD90;
+    --border-f: #E3B234;
+    --border-g: #333A3F24;
+
+    --table-header: #F8FBFF;
+
+    --devide: #CED0D1;
+
+}
+
+.nso_dark {
+
+    --accent: #FFFFFF;
+    --second: #FFFFFF;
+
+    --text-main: #FFFFFF;
+    --text-accent: #005BAA;
+    --text-second: #CED0D1;
+    --text-sub: #FFFFFF;
+    --text-desc: #7C7E80;
+    --text-warn: #E75E5E;
+    --text-success: #40AC70;
+
+    --surface-a: #333A3F;
+    --surface-a-mirror: #FFFFFF12;
+    --surface-a-trans: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, #333A3F 100%);
+    --surface-b: #7C7E80;
+    --surface-c: #7C7E80;
+    --surface-d: #FFFFFF12;
+    --surface-d-mirror: #f2f5f952;
+    --surface-water: #E4EEFF;
+    --surface-silver: #3d3f42;
+    --surface-warn: #E75E5E;
+    --surface-success: #40AC70;
+    --surface-dark: #FFFFFF;
+    --surface-success-grad: linear-gradient(91.09deg, #40AC70 0.36%, #55C486 99.48%);
+    --surface-bk: linear-gradient(91.17deg, #333A3F 0.72%, #7C7E80 59.53%, #4A98DB 98.91%);
+    --surface-bk2: linear-gradient(116.83deg, #DEEBFF -89.24%, rgba(222, 235, 255, 0) 220.34%, #F9FAFB 220.34%);
+    --surface-bk3: linear-gradient(91.17deg, #4A98DB 0.72%, #7C7E80 59.53%, #333A3F 98.91%);
+
+    --border-a: #1F4F8E;
+    --border-b: #81578E;
+    --border-c: #C65244;
+    --border-d: #909C9A;
+    --border-e: #57AD90;
+    --border-f: #E3B234;
+    --border-g: #333A3F24;
+
+    --table-header: #5d646a;
+
+    --devide: #CED0D1;
+
+    // --statistic-branch1: url('~src/assets/images/stat-1-2.png');
+    // --statistic-branch2: url('~src/assets/images/stat-2-2.png');
+    // --statistic-branch3: url('~src/assets/images/stat-3-2.png');
+    // --statistic-branch4: url('~src/assets/images/stat-4-2.png');
+    // --statistic-branch5: url('~src/assets/images/stat-5-2.png');
+    // --statistic-branch6: url('~src/assets/images/stat-6-2.png');
+
+    // --down-arrow: url(~src/assets/images/down-arrow-1.png);
+}
+
+.nso_fontsize_80 {
+    --font-size10: 8px;
+    --font-size11: 9px;
+    --font-size12: 10px;
+    --font-size13: 11px;
+    --font-size14: 12px;
+    --font-size15: 13px;
+    --font-size16: 14px;
+    --font-size17: 15px;
+    --font-size18: 16px;
+    --font-size20: 18px;
+    --font-size22: 20px;
+    --font-size23: 21px;
+    --font-size24: 22px;
+    --font-size25: 23px;
+    --font-size26: 24px;
+    --font-size27: 25px;
+    --font-size28: 26px;
+    --font-size29: 27px;
+    --font-size30: 28px;
+    --font-size32: 30px;
+    --font-size36: 34px;
+    --font-size38: 36px;
+    --font-size40: 38px;
+    --font-size52: 50px;
+}
+
+.nso_fontsize_100 {
+    --font-size10: 9px;
+    --font-size11: 10px;
+    --font-size12: 11px;
+    --font-size13: 12px;
+    --font-size14: 13px;
+    --font-size15: 14px;
+    --font-size16: 15px;
+    --font-size17: 16px;
+    --font-size18: 17px;
+    --font-size20: 19px;
+    --font-size22: 21px;
+    --font-size23: 22px;
+    --font-size24: 23px;
+    --font-size25: 24px;
+    --font-size26: 25px;
+    --font-size27: 26px;
+    --font-size28: 27px;
+    --font-size29: 28px;
+    --font-size30: 29px;
+    --font-size32: 31px;
+    --font-size36: 35px;
+    --font-size38: 37px;
+    --font-size40: 39px;
+    --font-size52: 51px;
+}
+
+.nso_fontsize_120 {
+    --font-size10: 10px;
+    --font-size11: 11px;
+    --font-size12: 12px;
+    --font-size13: 13px;
+    --font-size14: 14px;
+    --font-size15: 15px;
+    --font-size16: 16px;
+    --font-size17: 17px;
+    --font-size18: 18px;
+    --font-size20: 20px;
+    --font-size22: 22px;
+    --font-size23: 23px;
+    --font-size24: 24px;
+    --font-size25: 25px;
+    --font-size26: 26px;
+    --font-size27: 27px;
+    --font-size28: 28px;
+    --font-size29: 29px;
+    --font-size30: 30px;
+    --font-size32: 32px;
+    --font-size36: 36px;
+    --font-size38: 38px;
+    --font-size40: 40px;
+    --font-size52: 52px;
+}
+
+.nso_fontsize_140 {
+    --font-size10: 11px;
+    --font-size11: 12px;
+    --font-size12: 13px;
+    --font-size13: 14px;
+    --font-size14: 15px;
+    --font-size15: 16px;
+    --font-size16: 17px;
+    --font-size17: 18px;
+    --font-size18: 19px;
+    --font-size20: 21px;
+    --font-size22: 22px;
+    --font-size23: 24px;
+    --font-size24: 25px;
+    --font-size25: 26px;
+    --font-size26: 27px;
+    --font-size27: 28px;
+    --font-size28: 29px;
+    --font-size29: 30px;
+    --font-size30: 31px;
+    --font-size32: 33px;
+    --font-size36: 37px;
+    --font-size38: 39px;
+    --font-size40: 41px;
+    --font-size52: 53px;
+}
