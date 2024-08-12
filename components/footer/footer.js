@@ -82,19 +82,19 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <div className="__sub_labels">
                                 <span>{t('footer.today')}</span>
-                                <span>{/* Insert traffic data for today */}</span>
+                                <span>235{/* Insert traffic data for today */}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.week')}</span>
-                                <span>{/* Insert traffic data for the week */}</span>
+                                <span>1564{/* Insert traffic data for the week */}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.thisMonth')}</span>
-                                <span>{/* Insert traffic data for this month */}</span>
+                                <span>24234{/* Insert traffic data for this month */}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.total')}</span>
-                                <span>{/* Insert traffic data for total */}</span>
+                                <span>124234{/* Insert traffic data for total */}</span>
                             </div>
                         </div>
                     </div>
@@ -102,26 +102,21 @@ export default function Footer({ lng }) {
                         <span className="__title">{t('footer.getLatestNews')}</span>
                         <div className="__content">
                             <span className="__desc">{t('footer.suggestionForNewReport')}</span>
-                            <div className="__input">
-                                <span className="p-input-icon-right">
-                                    <i className="pi pi-arrow-right" ></i>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        autoComplete="off"
-                                        // {...register('email', { required: true })}
-                                        placeholder={t('footer.email')}
-                                    />
+
+                            <div _ngcontent-lvi-c61="" class="__input">
+                                <span _ngcontent-lvi-c61="" class="p-input-icon-right">
+                                    {/* <i _ngcontent-lvi-c61="" class="pi pi-arrow-right"></i> */}
+                                    <input _ngcontent-lvi-c61="" type="email" name="email" autocomplete="off" formcontrolname="email" pinputtext="" placeholder="Имэйл хаяг" class="ng-untouched ng-pristine ng-invalid p-inputtext p-component" />
                                 </span>
                             </div>
                             <div className="__input" style={{ display: 'flex' }}>
                                 <div className="__input">
                                     <a href="https://iaac.mn/" target="_blank" rel="noopener noreferrer">
-                                        <img src="/assets/images/110-call-atg-logo.gif" width="140px" alt="Logo" />
+                                        <img src="/images/110-call-atg-logo.gif" width="140px" alt="Logo" />
                                     </a>
                                 </div>
                                 <div className="__input">
-                                    <img src="/assets/images/refreshQR.png" style={{ marginLeft: '10px' }} height="83px" alt="QR Code" />
+                                    <img src="/images/refreshQR.png" style={{ marginLeft: '10px' }} width={84} alt="QR Code" />
                                 </div>
                             </div>
                         </div>
@@ -133,10 +128,22 @@ export default function Footer({ lng }) {
                                     <span className="__text">© {currentYear}. {t('footer.copyright')}</span>
                                 </div>
                                 <div>
-                                    {/* Replace with your social links */}
-                                    <ul>
-                                        {/* Add social links here */}
-                                    </ul>
+                                    <ul _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                            <span _ngcontent-lvi-c61=""></span>
+                                        </li>
+                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                            <span _ngcontent-lvi-c61=""></span>
+                                        </li>
+                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                            <span _ngcontent-lvi-c61=""></span>
+                                        </li>
+                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                            <span _ngcontent-lvi-c61=""></span>
+                                        </li>
+                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                            <span _ngcontent-lvi-c61=""></span>
+                                        </li></ul>
                                 </div>
                             </div>
                         </div>

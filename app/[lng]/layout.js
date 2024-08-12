@@ -1,5 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.scss";
+import "primeflex/primeflex.css";
+import 'primeicons/primeicons.css';
 import Layout from '@/components/baseLayout';
 import Providers from "@/utils/providers/providers";
 
