@@ -103,10 +103,10 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <span className="__desc">{t('footer.suggestionForNewReport')}</span>
 
-                            <div _ngcontent-lvi-c61="" class="__input">
-                                <span _ngcontent-lvi-c61="" class="p-input-icon-right">
-                                    {/* <i _ngcontent-lvi-c61="" class="pi pi-arrow-right"></i> */}
-                                    <input _ngcontent-lvi-c61="" type="email" name="email" autocomplete="off" formcontrolname="email" pinputtext="" placeholder="Имэйл хаяг" class="ng-untouched ng-pristine ng-invalid p-inputtext p-component" />
+                            <div _ngcontent-lvi-c61="" className="__input">
+                                <span _ngcontent-lvi-c61="" className="p-input-icon-right">
+                                    {/* <i _ngcontent-lvi-c61="" className="pi pi-arrow-right"></i> */}
+                                    <input _ngcontent-lvi-c61="" type="email" name="email" autoComplete="off" formcontrolname="email" pinputtext="" placeholder="Имэйл хаяг" className="ng-untouched ng-pristine ng-invalid p-inputtext p-component" />
                                 </span>
                             </div>
                             <div className="__input" style={{ display: 'flex' }}>
@@ -128,20 +128,20 @@ export default function Footer({ lng }) {
                                     <span className="__text">© {currentYear}. {t('footer.copyright')}</span>
                                 </div>
                                 <div>
-                                    <ul _ngcontent-lvi-c61="" class="ng-star-inserted">
-                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                    <ul _ngcontent-lvi-c61="" className="ng-star-inserted">
+                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
                                             <span _ngcontent-lvi-c61=""></span>
                                         </li>
-                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
                                             <span _ngcontent-lvi-c61=""></span>
                                         </li>
-                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
                                             <span _ngcontent-lvi-c61=""></span>
                                         </li>
-                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
                                             <span _ngcontent-lvi-c61=""></span>
                                         </li>
-                                        <li _ngcontent-lvi-c61="" class="ng-star-inserted">
+                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
                                             <span _ngcontent-lvi-c61=""></span>
                                         </li></ul>
                                 </div>

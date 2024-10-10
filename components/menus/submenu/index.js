@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '@/app/i18n/client';
 import { useRouter, usePathname } from "next/navigation";
-// import { useTranslation } from '@/app/i18n/client';
 
 export default function Index({ lng }) {
-    // const { t } = useTranslation(lng, "header", "");
     const router = useRouter();
     const pathname = usePathname();
-    // const { pathname, asPath, query } = router;
+    const { t } = useTranslation(lng, "lng", "");
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -31,26 +30,41 @@ export default function Index({ lng }) {
         return null; // Or a loading spinner, etc.
     }
 
+    const menus = [
+        {
+            name: "Тархаах хуваарь",
+            link: ""
+        },
+        {
+            name: t('menuAboutUs.education'),
+            link: ""
+        },
+        {
+            name: "Шилэн данс",
+            link: ""
+        },
+        {
+            name: "Холбоо барих",
+            link: ""
+        },
+        {
+            name: "Хуучин хувилбар",
+            link: "https://1212.mn/"
+        },
+    ];
+    
     return (
         <>
             <div className="__sub_header">
                 <div className="nso_container">
                     <ul className="__sub_header_list">
-                        <li>
-                            <a className="__stat_top_title">Тархаах хуваарь</a>
-                        </li>
-                        <li>
-                            <a className="__stat_top_title">Ил тод байдал</a>
-                        </li>
-                        <li>
-                            <a className="__stat_top_title">Шилэн данс</a>
-                        </li>
-                        <li>
-                            <a className="__stat_top_title">Холбоо барих</a>
-                        </li>
-                        <li>
-                            <a className="__stat_top_title">Хуучин хувилбар</a>
-                        </li>
+                        {
+                            menus.map((dt, index) => {
+                                return <li key={index}>
+                                    <a className="__stat_top_title" href={dt.link}>{dt.name}</a>
+                                </li>
+                            })
+                        }
                         <li onClick={switchLanguage}>
                             {router.locale === 'mn' ? 'EN' : 'MN'}
                         </li>

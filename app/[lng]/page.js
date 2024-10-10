@@ -1,9 +1,12 @@
 "use client"
+import Layout from '@/components/baseLayout';
 import HomeSection from '@/components/home/HomeSection';
+import CarouselNews from '@/components/home/CarouselNews';
+import CarouselMedia from '@/components/home/CarouselMedia';
 
-export default function Home() {
+export default function Home({ params: { lng } }) {
   return (
-    <div>
+    <Layout lng={lng}>
       <HomeSection indicators={[]} covidInfo={[
         {
           "id": 3437452,
@@ -69,7 +72,9 @@ export default function Home() {
           "tableauEng": null,
           "updatedDate": "2024-03-31T15:00:00Z"
         }
-      ]} searchData={[]} />
-    </div>
+      ]} searchData={[]} lng={lng} />
+      <CarouselNews />
+      <CarouselMedia />
+    </Layout>
   );
 }

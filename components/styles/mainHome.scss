@@ -25,7 +25,6 @@
     width: 100%;
     height: fit-content;
     padding-top: 161px;
-    background: var(--surface-bk);
 
     .__home_groups {
         display: flex;
@@ -817,6 +816,86 @@
 
 .__action_area a {
     text-decoration: none;
+}
+
+.__search {
+    width: 100%;
+    display: inline-flex;
+    position: relative;
+}
+
+.__main_search {
+    width: 100%;
+
+    .p-input-icon-right {
+        width: 100%;
+
+        i {
+            width: 60px;
+            height: 60px;
+            top: 0;
+            right: 0;
+            background: var(--surface-c);
+            color: var(--text-sub);
+            margin-top: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    }
+
+    .p-autocomplete {
+        width: 100%;
+
+        .p-autocomplete {
+            .p-autocomplete-panel {
+                .p-autocomplete-items {
+                    .p-autocomplete-item-group {
+                        background: var(--surface-d);
+                        color: var(--surface-c);
+                        text-transform: uppercase;
+
+                    }
+                    .p-highlight {
+                        color: var(--surface-c);
+                        background: var(--surface-d);
+                    }
+                }
+            }
+        }
+
+        span {
+            width: 100%;
+
+            .p-autocomplete-loader {
+                display: none;
+            }
+
+            button {
+                width: 60px !important;
+                border-radius: 0;
+                border: 0px;
+                background: var(--surface-c);
+
+                &:hover {
+                    background: var(--surface-c) !important;
+                }
+            }
+        }
+    }
+
+    input {
+        width: 100%;
+        border: none;
+        height: 60px;
+        border-radius: 0px;
+        padding: 20px;
+
+        &::placeholder {
+            color: var(--text-second);
+        }
+    }
 }
 
 .search_result {
