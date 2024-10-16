@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "image:build": "docker build -t gitlab.nso.mn:5050/sps/nso-nextjs .",
+    "image:push": "docker push gitlab.nso.mn:5050/sps/nso-nextjs",
+    "image:all": "docker build -t gitlab.nso.mn:5050/sps/nso-nextjs . && docker push gitlab.nso.mn:5050/sps/nso-nextjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
@@ -37,6 +40,8 @@
     "react-cookie": "^7.2.0",
     "react-dom": "^18",
     "react-i18next": "^15.0.1",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
     "sass": "^1.77.8",
     "sqlite3": "^5.1.7",
     "tedious": "^18.3.0"

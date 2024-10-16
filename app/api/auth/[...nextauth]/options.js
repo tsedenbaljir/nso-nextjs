@@ -25,10 +25,19 @@ export const options = {
       },
       async authorize(credentials, req) {
         try {
-          const foundUser = await users.raw("CALL GetOperatorLogin(?,?)",
-            [credentials.name, credentials.password]);
-          if (foundUser[0][1].length > 0) {
-            return { name: foundUser[0][1][0] };
+          
+          const foundUser = await users.raw(`
+            SELECT [username], [password] 
+            FROM [user] 
+            WHERE [username] = '${credentials.name}' AND [password] = '${credentials.password}'
+          `, []);
+          
+            console.log(foundUser);
+            
+          // const foundUser = await users.raw(`CALL GetOperatorLogin('${credentials.name}','${credentials.password}')`,
+          //   []);
+          if (foundUser.length > 0) {
+            return { name: foundUser };
           }
         } catch (error) {
           console.log(error);
@@ -40,18 +49,15 @@ export const options = {
   session: {
     strategy: "jwt",
   },
-  secret: "@dmindata",
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/",
   },
   callbacks: {
     async jwt({ token, user }) {
-      // console.log("back", user);
-      // if (user) token.role = user.role;
       return token;
     },
     async session({ session, token }) {
-      // if (session?.user) session.user.role = token.role;
       return session;
     },
   },

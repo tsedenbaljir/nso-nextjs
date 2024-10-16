@@ -1,0 +1,68 @@
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/dockerconfigjson
+metadata:
+  name: gitlab-secret
+  namespace: nso1212
+data:
+  .dockerconfigjson: ew0KICAiYXV0aHMiOiB7DQogICAgImh0dHBzOi8vZ2l0bGFiLm5zby5tbjo1MDUwIjogew0KICAgICAgInVzZXJuYW1lIjogIm5zbzEyMTItYXBwIiwNCiAgICAgICJwYXNzd29yZCI6ICJGSFZFemNmdFRKN21Nc2p6d0Z3VCIsDQogICAgICAiZW1haWwiOiAidHNlZGVuYmFsamlyQG5zby5tbiIsDQogICAgICAiYXV0aCI6ICJibk52TVRJeE1pMWhjSEE2UmtoV1JYcGpablJVU2pkdFRYTnFlbmRHZDFRPSINCiAgICB9DQogIH0NCn0NCg==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nso1212-deployment
+  namespace: nso1212
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nso1212
+  template:
+    metadata:
+      labels:
+        app: nso1212
+    spec:
+      containers:
+        - name: nso1212
+          image: gitlab.nso.mn:5050/sps/nso-nextjs:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+      imagePullSecrets:
+        - name: gitlab-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nso1212-svc
+  namespace: nso1212
+spec:
+  selector:
+    app: nso1212
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nso1212-ingress
+  namespace: nso1212
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: nso1212.app.nso.mn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nso1212-svc
+                port:
+                  number: 80

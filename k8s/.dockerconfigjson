@@ -1,0 +1,10 @@
+{
+  "auths": {
+    "https://gitlab.nso.mn:5050": {
+      "username": "nso1212-app",
+      "password": "FHVEzcftTJ7mMsjzwFwT",
+      "email": "tsedenbaljir@nso.mn",
+      "auth": "bnNvMTIxMi1hcHA6RkhWRXpjZnRUSjdtTXNqendGd1QK"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import DarkModeSwitcher from './darkMode';
 import { Path } from '@/utils/path';
+import { signOut } from "next-auth/react";
 import MenuItems from './MenuItems';
 import { LogoutOutlined } from '@ant-design/icons';
 
@@ -64,7 +65,9 @@ export default function Sidebar() {
           <DarkModeSwitcher />
         </div>
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 xl:py-10">
-          <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium duration-300 ease-in-out hover:bg-red-light-2 hover:text-white dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base text-gray-6 border">
+          <button className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium duration-300 ease-in-out hover:bg-red-light-2 hover:text-white dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base text-gray-6 border"
+            onClick={() => { signOut() }}
+          >
             <LogoutOutlined />
             Гарах
           </button>

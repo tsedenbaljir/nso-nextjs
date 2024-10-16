@@ -18,6 +18,7 @@ export default function Login() {
         redirect: false,
       });
       if (result.error) {
+        console.log(result.error);
         message.error("Хэрэглэгчийн нэр эсвэл нууц үг буруу байна.");
         setLoading(false);
       } else {
