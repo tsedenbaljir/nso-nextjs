@@ -29,29 +29,6 @@ export default function Index({ lng }) {
     if (!mounted) {
         return null; // Or a loading spinner, etc.
     }
-
-    const menus = [
-        {
-            name: "Тархаах хуваарь",
-            link: ""
-        },
-        {
-            name: t('menuAboutUs.education'),
-            link: ""
-        },
-        {
-            name: "Шилэн данс",
-            link: ""
-        },
-        {
-            name: "Холбоо барих",
-            link: ""
-        },
-        {
-            name: "Хуучин хувилбар",
-            link: "https://1212.mn/"
-        },
-    ];
     
     return (
         <>

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Path } from '@/utils/path';
-import DropDown from '@/components/menus/dropDown';
+import { useRouter } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 
 export default function Index({ lng }) {
@@ -25,93 +25,48 @@ export default function Index({ lng }) {
     };
   }, []);
 
-  const menus = [
-    {
-      name: t('aboutUs'),
-      link: "/mn",
-      subMenu: [
-        {
-          name: t('orgStructure'),
-          link: "/mn",
-        },
-        {
-          name: t('timeLine'),
-          link: "/mn",
-        }]
-    },
-    {
-      name: t('menuAboutUs.cooperation'),
-      link: "cooperation",
-      subMenu: [
-        {
-          name: t('cooperationB'),
-          link: "/mn",
-        },
-        {
-          name: t('cooperationM'),
-          link: "/mn",
-        }]
-    },
-    {
-      name: t('menuAboutUs.news'),
-      link: "news",
-      subMenu: [
-        {
-          name: t('LASTNEWS'),
-          link: "/mn",
-        },
-        {
-          name: t('MEDIANEWS'),
-          link: "/mn",
-        }]
-    },
-    {
-      name: t('menuAboutUs.legal'),
-      link: "https://1212.mn/",
-      subMenu: [
-        {
-          name: t('legalMenu.Rules'),
-          link: "/mn",
-        },
-        {
-          name: t('legalMenu.Command'),
-          link: "/mn",
-        },
-        {
-          name: t('legalMenu.Documents'),
-          link: "/mn",
-        }]
-    },
-    {
-      name: t('transparency'),
-      link: "education",
-      subMenu: [
-        {
-          name: "Хүний нөөц",
-          link: "/mn",
-        },
-        {
-          name: "Үйл ажиллагааны ил тод байдал",
-          link: "/mn",
-        },
-        {
-          name: "Авлигын эсрэг арга хэмжээ",
-          link: "/mn",
-        },
-        {
-          name: "Үйл ажиллагааны хөтөлбөр, тайлан",
-          link: "/mn",
-        },
-        {
-          name: "Төрийн албаны зөвлөлийн Үндэсний статистикийн хорооны дэргэдэх салбар зөвлөл",
-          link: "/mn",
-        },
-        {
-          name: "Тендэр",
-          link: "/mn",
-        }]
-    },
-  ]
+  const router = useRouter();
+  const [menus, setMenus] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const myHeaders = new Headers();
+  myHeaders.append(
+    "Authorization",
+    "Bearer " + process.env.BACKEND_KEY
+  );
+
+  const requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow',
+  };
+
+  useEffect(() => {
+    const fetchMenus = async () => {
+      try {
+        const response = await fetch(`${process.env.BACKEND_URL}/api/czesnij-tohirgoos/eabubq9bu38wbvfk84u8wcm1?populate[Menus][populate][subMenu][populate]=*`, requestOptions);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const res = await response.json();
+
+        const filteredMenus = res.data.Menus
+          .filter(menu => menu.IsActive === true)
+          .map(menu => ({
+            ...menu,
+            subMenu: menu.subMenu.filter(sub => sub.IsActive === true)
+          }));
+
+        setMenus(filteredMenus);
+        setLoading(true);
+      } catch (error) {
+        console.error('Error fetching menus:', error);
+      }
+    };
+
+    fetchMenus();
+  }, []);
 
   return (
     <>
@@ -120,25 +75,28 @@ export default function Index({ lng }) {
           <div className="__menu">
             <Link className="__logo lg:col-3 md:col-3 sm:col-12" href='/'></Link>
             <ul>
-              {
-                menus.map((dt, idx) => (
-                  <li key={idx} className="dropdown">
-                    <Link className={`${pth === dt.link && 'active-link'} __stat_cat_title`} href={"/" + dt.link}>
-                      {dt.name}
+              {loading && menus.map((dt, idx) => (
+                <li key={idx} className="dropdown">
+                  {dt.url && (
+                    <Link className={`${pth === dt.url && 'active-link'} __stat_cat_title`} href={dt.url}>
+                      {lng === 'en' ? dt.enName : dt.name}
                     </Link>
+                  )}
+                  {dt.subMenu && dt.subMenu.length > 0 && (
                     <div className="dropdown-content">
                       <span>
-                        {dt?.subMenu?.map((sb) => (
-                          <Link key={sb.name} className="" href={"/" + sb.link}>
-                            {sb.name}
-                          </Link>
+                        {dt.subMenu.map((sb, sbIdx) => (
+                          sb.url ? (
+                            <Link key={sbIdx} href={sb.url}>
+                              {lng === 'en' ? sb.enName : sb.name}
+                            </Link>
+                          ) : null
                         ))}
                       </span>
                     </div>
-                  </li>
-                ))
-              }
-              {/* <DropDown lng={lng} /> */}
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
