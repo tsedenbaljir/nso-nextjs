@@ -3,15 +3,16 @@
 @tailwind utilities;
 @import "@/components/styles/about-us-header.scss";
 @import "@/components/styles/element-design.scss";
-@import "@/components/styles/latest-news.scss";
 @import "@/components/styles/variable.scss";
 @import "@/components/styles/header.scss";
 @import "@/components/styles/footer.scss";
 @import "@/components/styles/style.scss";
-@import "@/components/styles/home.scss";
 @import "@/components/styles/theme.scss";
 @import "@/components/styles/welcome.scss";
 @import "@/components/styles/mainHome.scss";
+@import "@/components/styles/home.scss";
+@import "@/components/styles/latest-news.scss";
+@import "@/components/styles/responsive.scss";
 
 :root {
   --foreground-rgb: 0, 0, 0;

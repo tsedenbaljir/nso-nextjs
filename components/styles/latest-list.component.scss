@@ -1,0 +1,202 @@
+.nso_about_us {
+
+    .__header {
+        color: var(--text-main);
+
+        .__title {
+            font-size: var(--font-size24);
+            font-weight: 600;
+        }
+    }
+
+    .__about_post {
+        margin-top: 60px;
+    }
+
+    ._group_list_all,
+    .__post_all {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 20px;
+
+
+        .__list {
+            display: flex;
+            cursor: pointer;
+            flex-direction: column;
+            @media only screen and (min-width: 1000px) {
+                width: calc(25% - 20px);
+            }
+
+            &:hover {
+                .__title {
+                    color: var(--accent);
+                }
+            }
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+
+    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+        color: var(--accent);
+        border-top: 2px solid;
+        background-color: var(--surface-water);
+    }
+
+    .__image {
+        border: 1px solid var(--accent);
+        width: 270px;
+        height: 160px;
+    }
+
+    .__title {
+        font-size: var(--font-size16);
+        margin-top: 15px;
+        font-weight: bold;
+        padding-right: 10px;
+        color: var(--text-main);
+    }
+
+    .__view_comments {
+        .__info {
+            padding-top: 18px;
+            display: flex;
+            align-items: center;
+
+            .__view {
+                display: flex;
+                align-items: center;
+                font-size: var(--font-size15);
+                font-weight: 400;
+                color: var(--text-main);
+
+                &::before {
+                    content: '';
+                    width: 15px;
+                    height: 15px;
+                    margin-right: 6px;
+                    // background-image: url('~src/assets/images/about_us/eye-gray.png');
+                    background-position: center;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                }
+            }
+
+            .__comment {
+                margin-left: 10px;
+                display: flex;
+                align-items: center;
+                font-size: var(--font-size15);
+                font-weight: 400;
+                color: var(--text-main);
+
+                &::before {
+                    content: '';
+                    width: 15px;
+                    height: 15px;
+                    margin-right: 6px;
+                    // background-image: url('~src/assets/images/about_us/bubble-gray.png');
+                    background-position: center;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+    }
+
+    //media news tab ----------
+    ::ng-deep .p-tabmenu .p-tabmenu-nav {
+        background: none;
+    }
+
+    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+        padding: 0;
+        background: none;
+
+        .ng-star-inserted {
+            padding: 15px;
+        }
+    }
+
+    .__statistic_groups {
+        width: 100%;
+    }
+
+    .card0 {
+
+        display: grid;
+        grid-template-columns: auto auto auto;
+
+        .nso_news_card_media {
+            cursor: pointer;
+            display: grid;
+            grid-template-areas:
+                'header header header header header header'
+                'menu main main main right right'
+                'menu footer footer footer footer footer';
+            padding: 10px 10px 10px 0;
+            &:hover {
+                .__title {
+                    color: var(--accent);
+                }
+            }
+        }
+
+        .__img_media {
+            border: 1px solid var(--accent);
+            grid-area: menu;
+            width: 270px;
+            height: 160px;
+        }
+
+        .__rigth_side {
+
+            font-size: var(--font-size14);
+            grid-area: main;
+            margin-left: 20px;
+        }
+
+        .__desc {
+            font-size: var(--font-size14);
+            grid-area: footer;
+        }
+    }
+
+    .card1 {
+
+        display: grid;
+        grid-template-columns: auto auto auto;
+
+        .nso_news_card_all {
+            display: grid;
+            grid-template-areas:
+                'header header header header header header'
+                'menu main main main right right'
+                'menu footer footer footer footer footer';
+            grid-gap: 10px;
+            padding: 10px 10px 10px 0;
+        }
+
+        .__img_all {
+            grid-area: menu;
+            width: 100px;
+            height: 85px;
+        }
+
+        .__date {
+            font-size: var(--font-size14);
+            grid-area: footer;
+        }
+
+        .__title {
+            font-size: var(--font-size14);
+            grid-area: main;
+        }
+    }
+
+    // media news tab end-----------
+}

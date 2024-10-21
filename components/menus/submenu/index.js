@@ -1,15 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from '@/app/i18n/client';
 import { useRouter, usePathname } from "next/navigation";
+import OneField from '@/components/Loading/OneField/Index';
+import Link from 'next/link';
 
 export default function Index({ lng }) {
     const router = useRouter();
     const pathname = usePathname();
-    const { t } = useTranslation(lng, "lng", "");
     const [mounted, setMounted] = useState(false);
+    const [menus, setMenus] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setMounted(true);
+    }, []);
+
+    const myHeaders = new Headers();
+    myHeaders.append(
+        "Authorization",
+        "Bearer " + process.env.BACKEND_KEY
+    );
+
+    const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+    };
+
+    useEffect(() => {
+        const fetchMenus = async () => {
+            try {
+                const response = await fetch(`${process.env.BACKEND_URL}/api/czesnij-tohirgoos/jo702rceqsu6onv0tif6zd4v?populate[Menus][populate][populate]=*`, {
+                    ...requestOptions,
+                    cache: 'no-store',  // Prevents caching
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const res = await response.json();
+
+                const filteredMenus = res.data.Menus;
+
+                setMenus(filteredMenus);
+                setLoading(true);
+            } catch (error) {
+                console.error('Error fetching menus:', error);
+            }
+        };
+
+        fetchMenus();
     }, []);
 
     const switchLanguage = () => {
@@ -27,20 +66,22 @@ export default function Index({ lng }) {
     }
 
     if (!mounted) {
-        return null; // Or a loading spinner, etc.
+        return null;
     }
-    
+
     return (
         <>
             <div className="__sub_header">
                 <div className="nso_container">
                     <ul className="__sub_header_list">
-                        {
+                        {loading ?
                             menus.map((dt, index) => {
                                 return <li key={index}>
-                                    <a className="__stat_top_title" href={dt.link}>{dt.name}</a>
+                                    <Link className="__stat_top_title" href={dt.url ? dt.url : "#"}>{lng === 'mn' ? dt.name : dt.enName}</Link>
                                 </li>
-                            })
+                            }) : <div>
+                            <OneField /><OneField /><OneField />
+                        </div>
                         }
                         <li onClick={switchLanguage}>
                             {router.locale === 'mn' ? 'EN' : 'MN'}

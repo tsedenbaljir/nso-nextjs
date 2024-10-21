@@ -1,80 +1,49 @@
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import newsBody from './newsBody';
 import { Carousel } from 'primereact/carousel';
+import Text from '@/components/Loading/Text/Index';
 
 export default function CarouselMedia() {
-    const [products, setProducts] = useState([{
-        id: '1000',
-        code: 'f230fh0g3',
-        name: 'Bamboo Watch',
-        description: 'Product Description',
-        image: 'bamboo-watch.jpg',
-        price: 65,
-        category: 'Accessories',
-        quantity: 24,
-        inventoryStatus: 'INSTOCK',
-        rating: 5
-    },
-    {
-        id: '1000',
-        code: 'f230fh0g3',
-        name: 'Bamboo Watch',
-        description: 'Product Description',
-        image: 'bamboo-watch.jpg',
-        price: 65,
-        category: 'Accessories',
-        quantity: 24,
-        inventoryStatus: 'INSTOCK',
-        rating: 5
-    },
-    {
-        id: '1000',
-        code: 'f230fh0g3',
-        name: 'Bamboo Watch',
-        description: 'Product Description',
-        image: 'bamboo-watch.jpg',
-        price: 65,
-        category: 'Accessories',
-        quantity: 24,
-        inventoryStatus: 'INSTOCK',
-        rating: 5
-    },
-    {
-        id: '1000',
-        code: 'f230fh0g3',
-        name: 'Bamboo Watch',
-        description: 'Product Description',
-        image: 'bamboo-watch.jpg',
-        price: 65,
-        category: 'Accessories',
-        quantity: 24,
-        inventoryStatus: 'INSTOCK',
-        rating: 5
-    },
-    {
-        id: '1000',
-        code: 'f230fh0g3',
-        name: 'Bamboo Watch',
-        description: 'Product Description',
-        image: 'bamboo-watch.jpg',
-        price: 65,
-        category: 'Accessories',
-        quantity: 24,
-        inventoryStatus: 'INSTOCK',
-        rating: 5
-    },
-    {
-        id: '1000',
-        code: 'f230fh0g3',
-        name: 'Bamboo Watch',
-        description: 'Product Description',
-        image: 'bamboo-watch.jpg',
-        price: 65,
-        category: 'Accessories',
-        quantity: 24,
-        inventoryStatus: 'INSTOCK',
-        rating: 5
-    }]);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const myHeaders = new Headers();
+    myHeaders.append(
+        "Authorization",
+        "Bearer " + process.env.BACKEND_KEY
+    );
+
+    const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+    };
+
+    useEffect(() => {
+        const fetchArticles = async () => {
+            try {
+                const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language`, {
+                    ...requestOptions,
+                    cache: 'no-store',
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const articles = await response.json();
+                setProducts(articles.data);
+                setLoading(true);
+            } catch (error) {
+                console.error('Error fetching articles:', error);
+            }
+        };
+
+        fetchArticles();
+    }, []);
+
     const responsiveOptions = [
         {
             breakpoint: '1400px',
@@ -98,51 +67,6 @@ export default function CarouselMedia() {
         }
     ];
 
-    const getSeverity = (product) => {
-        switch (product) {
-            case 'INSTOCK':
-                return 'success';
-
-            case 'LOWSTOCK':
-                return 'warning';
-
-            case 'OUTOFSTOCK':
-                return 'danger';
-
-            default:
-                return null;
-        }
-    };
-
-    const productTemplate = (product) => {
-        return (
-            <div
-                className="__posts"
-            >
-                <img
-                    className="__image"
-                    src="https://downloads.1212.mn/5B05CusPc1Abc8_v1TzBz_gjjrAhMucLHM8iefp2.jpg"
-                />
-                <div className="__title">
-                    <div>
-                        БНСУ-ын Статистикийн газартай харилцан туршл...
-                    </div>
-                </div>
-                <div className="__view_comments">
-                    <div className="__info">
-                        <span className="__view">
-                            234
-                            <div style={{ marginLeft: 20 }}>
-                                <i className="pi pi-calendar-minus"></i>
-                                2024-05-26
-                            </div>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     return (
         <div className="nso_about_us">
             <div className="nso_container">
@@ -154,20 +78,20 @@ export default function CarouselMedia() {
                     </div>
                     <div className="__post">
                         <div className="_group_list">
-                            <Carousel
+                            {loading ? <Carousel
                                 value={products}
                                 numVisible={4}
                                 numScroll={4}
                                 autoplayInterval={10000}
                                 showNavigators={false}
                                 responsiveOptions={responsiveOptions}
-                                itemTemplate={productTemplate}
-                            />
-                            <div
+                                itemTemplate={newsBody}
+                            /> : <Text />}
+                            <Link href="/news/latest"
                                 className="__action_area"
                             >
                                 <button className="nso_btn success">Дэлгэрэнгүй</button>
-                            </div>
+                            </Link>
                         </div>
                     </div>
                 </div>

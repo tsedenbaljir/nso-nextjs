@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Path } from '@/utils/path';
 import { useRouter } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
+import OneField from '@/components/Loading/OneField/Index';
 
 export default function Index({ lng }) {
   var pth = Path();
@@ -44,7 +45,10 @@ export default function Index({ lng }) {
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-        const response = await fetch(`${process.env.BACKEND_URL}/api/czesnij-tohirgoos/eabubq9bu38wbvfk84u8wcm1?populate[Menus][populate][subMenu][populate]=*`, requestOptions);
+        const response = await fetch(`${process.env.BACKEND_URL}/api/czesnij-tohirgoos/eabubq9bu38wbvfk84u8wcm1?populate[Menus][populate][subMenu][populate]=*`, {
+          ...requestOptions,
+          cache: 'no-store',  // Prevents caching
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -75,12 +79,16 @@ export default function Index({ lng }) {
           <div className="__menu">
             <Link className="__logo lg:col-3 md:col-3 sm:col-12" href='/'></Link>
             <ul>
-              {loading && menus.map((dt, idx) => (
+              {loading ? menus.map((dt, idx) => (
                 <li key={idx} className="dropdown">
-                  {dt.url && (
+                  {dt.url ? (
                     <Link className={`${pth === dt.url && 'active-link'} __stat_cat_title`} href={dt.url}>
                       {lng === 'en' ? dt.enName : dt.name}
                     </Link>
+                  ) : (
+                    <div className={`${pth.includes(dt.path) && 'active-link'} __stat_cat_title`}>
+                      {lng === 'en' ? dt.enName : dt.name}
+                    </div>
                   )}
                   {dt.subMenu && dt.subMenu.length > 0 && (
                     <div className="dropdown-content">
@@ -96,7 +104,9 @@ export default function Index({ lng }) {
                     </div>
                   )}
                 </li>
-              ))}
+              )) : <>
+                <OneField /><OneField /><OneField />
+              </>}
             </ul>
           </div>
         </div>

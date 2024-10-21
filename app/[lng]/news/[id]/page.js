@@ -27,7 +27,10 @@ export default function Home({ params: { lng }, params }) {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/articles/${params.id}?populate=cover&populate=category&populate=language`, requestOptions);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/articles/${params.id}?populate=cover&populate=category&populate=language`, {
+                    ...requestOptions,
+                    cache: 'no-store',  // Prevents caching
+                });
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -44,7 +47,10 @@ export default function Home({ params: { lng }, params }) {
         fetchArticles();
         const fetchSideBar = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language`, requestOptions);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language`, {
+                    ...requestOptions,
+                    cache: 'no-store',  // Prevents caching
+                });
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -62,14 +68,13 @@ export default function Home({ params: { lng }, params }) {
 
     return (
         <Layout lng={lng}>
-            <div className='nso_main_section'>
-                {loading && <div className='nso_about_us'>
-                    <div className="nso_container">
-                        <Articles article={article} />
-                        <ArticleSideBar article={sidebar} />
-                    </div>
-                </div>}
-            </div>
+            {loading && <div className='nso_about_us mt-35'>
+                <div className="nso_container">
+                    <Articles article={article} />
+                    <ArticleSideBar article={sidebar} />
+                </div>
+            </div>}
+            <br/>
         </Layout>
     );
 }

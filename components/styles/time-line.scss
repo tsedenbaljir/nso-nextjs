@@ -1,0 +1,111 @@
+//tabs
+.__desc_text {
+    width: auto;
+    height: 100%;
+    display: flex;
+    padding: 45px;
+    font-size: var(--font-size24);
+    font-size: var(--font-size20);
+    color: var(--text-main);
+    font-weight: 451;
+    background: linear-gradient(137deg, rgba(246, 217, 190, 0.24) 0%, rgba(252, 227, 240, 0.24) 70%, rgba(229, 243, 255, 0.24) 100%);
+}
+
+.p-tabview-panels {
+    border-top: 2px solid black;
+}
+
+.nso_page_header {
+    background: #f9fafb00;
+}
+
+.card {
+    left: 0;
+}
+@media only screen and (max-width: 1000px) {
+    .card {
+        width: 900px;
+        overflow-x: scroll;
+    }
+}
+@media only screen and (max-width: 700px) {
+    .card {
+        width: 576px;
+        overflow-x: scroll;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .card {
+        width: 366px;
+        overflow-x: scroll;
+    }
+}
+
+.__middlecircle {
+    border-radius: 100%;
+    background-color: var(--surface-c);
+}
+
+.__middlecircle {
+    width: 1rem;
+    height: 1rem;
+    padding: 1rem;
+    display: flex;
+    border-radius: 50%;
+    text-align: center;
+    align-items: center;
+    color: var(--blue-50);
+    justify-content: center;
+    background-color: var(--blue-600);
+    border: 2px solid var(--primary-color-hover);
+}
+
+.__timeline_title {
+    font-weight: 870;
+    font-size: large;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+
+.nso_container {
+
+
+    .opposite {
+        padding: 0;
+        width: 100px;
+        text-align: left;
+        font-weight: 800;
+        padding-top: 5px;
+        color: var(--blue-600);
+    }
+
+    ::ng-deep .p-timeline-event-content {
+        flex: none;
+        width: 1000px;
+        margin-bottom: 20px;
+    }
+
+    ::ng-deep .p-timeline-event-connector {
+        margin: 4px;
+        background-color: var(--blue-200);
+    }
+
+    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+        color: var(--accent);
+        border-top: 2px solid;
+        background-color: var(--surface-water);
+    }
+
+    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+        padding: 0;
+        background: none;
+
+        .ng-star-inserted {
+            padding: 15px;
+        }
+    }
+}
+
+.__about_img {
+    margin-left: 40px;
+}

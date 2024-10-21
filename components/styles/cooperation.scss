@@ -1,0 +1,27 @@
+.nso_about_us {
+    .__statistic_groups {
+        margin: 44px 0;
+    }
+
+    .nso_tab_content {
+        line-height: 25px;
+        text-align: justify;
+        color: var(--text-main);
+    }
+
+    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+        color: var(--accent);
+        border-top: 2px solid;
+        background-color: #e4eeff5c;
+    }
+    
+    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+        padding: 0;
+        background: none;
+
+        .ng-star-inserted {
+            padding: 15px;
+        }
+    }
+
+}

@@ -1,0 +1,61 @@
+.nso_about_us {
+
+    .__nso_desc {
+        display: flex;
+        margin: 64px 0;
+    }
+
+    span .__ss {
+        font-size: 60px;
+        font-weight: 900;
+        font-family: Manrope, "SemiBold";
+    }
+
+    .__top_text {
+        font-size: var(--font-size24);
+        font-weight: 600;
+    }
+
+    // tabs
+    .__desc_text {
+        width: auto;
+        height: 100%;
+        display: flex;
+        padding: 45px;
+        font-weight: 451;
+        text-align: justify;
+        color: var(--text-main);
+        font-size: var(--font-size24);
+        font-size: var(--font-size20);
+        background: linear-gradient(137deg, rgba(246, 217, 190, 0.24) 0%, rgba(252, 227, 240, 0.24) 70%, rgba(229, 243, 255, 0.24) 100%);
+    }
+
+    // .nso_tab_content {
+    //     border-top: 2px solid black;
+    // }
+    
+    .nso_container {
+
+        .active {
+            font-size: 15px;
+            color: var(--accent);
+            border-top: 2px solid;
+            background-color: #e4eeff5c;
+        }
+
+        // @media only screen and (max-width: 480px) {
+        //     ::ng-deep .nso_tab .p-tabmenu .p-tabmenu-nav .p-tabmenuitem {
+        //         width: 50% !important;
+        //     }
+        // }
+
+        .tab_item {
+            padding: 15px;
+            font-size: 15px;
+        }
+    }
+
+    .__about_img {
+        margin-left: 40px;
+    }
+}
