@@ -1,14 +1,31 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client'
 
 export default function Footer({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
     const router = useRouter();
+
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch('/api/analytic');
+            const result = await response.json();
+            console.log(result);
+            
+            setData(result);
+            setLoading(false);
+        };
+
+        fetchData();
+    }, []);
+
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [tabMenusList, setTabMenusList] = useState([]); // Initialize with your tabs data
-    const [tabItems, setTabItems] = useState([]); // Initialize with your tab items data
+    // const [tabMenusList, setTabMenusList] = useState([]); // Initialize with your tabs data
+    // const [tabItems, setTabItems] = useState([]); // Initialize with your tab items data
     const currentYear = new Date().getFullYear();
 
     const getDialogShow = (dialogId) => {
@@ -82,19 +99,19 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <div className="__sub_labels">
                                 <span>{t('footer.today')}</span>
-                                <span>235{/* Insert traffic data for today */}</span>
+                                <span>{!loading && Number(data.rows[3].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.week')}</span>
-                                <span>1564{/* Insert traffic data for the week */}</span>
+                                <span>{!loading && Number(data.rows[2].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.thisMonth')}</span>
-                                <span>24234{/* Insert traffic data for this month */}</span>
+                                <span>{!loading && Number(data.rows[1].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.total')}</span>
-                                <span>124234{/* Insert traffic data for total */}</span>
+                                <span>{!loading && Number(data.rows[0].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                         </div>
                     </div>

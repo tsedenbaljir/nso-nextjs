@@ -21,6 +21,8 @@ const nextConfig = {
         FRONTEND: process.env.FRONTEND,
         BACKEND_URL: process.env.BACKEND_URL,
         BACKEND_KEY: process.env.BACKEND_KEY,
+        GOOGLE_SERVICE_ACCOUNT: process.env.GOOGLE_SERVICE_ACCOUNT,
+        GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,
     },
     output: "standalone",
     api: {

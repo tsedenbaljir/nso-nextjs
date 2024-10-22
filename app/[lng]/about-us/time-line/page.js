@@ -343,39 +343,34 @@ export default function AboutUs({ params: { lng } }) {
 
     return (
         <Layout lng={lng}>
-            <br />
-            <div className='nso_main_section'>
-                <div className="nso_about_us_body">
-                    <div className="nso_container">
-                        <div>
-                            <div className="__timeline_title">
-                                {lng === "mn" ? "Он цагийн түүхэн товчоо" : "History of Mongolian Statistics"}
-                            </div>
-                            <div className="card">
-                                <Timeline
-                                    value={timelineEvents}
-                                    opposite={(event) => (
+            <div className="nso_about_us_body mt-44">
+                <div className="nso_container">
+                    <div>
+                        <div className="__timeline_title">
+                            {lng === "mn" ? "Он цагийн түүхэн товчоо" : "History of Mongolian Statistics"}
+                        </div>
+                        <div className="card">
+                            {timelineEvents.map((datas) => {
+                                return (
+                                    <div className="lines flex m-5">
                                         <span className='opposite'>
-                                            {event.date}
+                                            {datas.date}
                                         </span>
-                                    )}  // Date on opposite side
-                                    marker={() => (
                                         <div className="__middlecircle">
                                             <i className="pi pi-angle-down"></i>  {/* Custom marker */}
                                         </div>
-                                    )}
-                                    content={(event) => (
-                                        <small className="p-text-secondary" style={{ width: "600px", display: 'block' }}>
-                                            {event.desc}
+                                        <small className="p-text-secondary m-2 text-justify" style={{ width: "100%", display: 'block' }}>
+                                            {datas.desc}
                                             <br />
                                         </small>
-                                    )}
-                                />
-                            </div>
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
             </div>
+            <br />
         </Layout>
     );
 }
