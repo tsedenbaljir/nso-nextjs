@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Path } from '@/utils/path';
 import { useRouter, usePathname } from "next/navigation";
 import OneField from '@/components/Loading/OneField/Index';
-import Link from 'next/link';
 
 export default function Index({ lng }) {
+    var pth = Path();
     const router = useRouter();
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
@@ -35,7 +37,7 @@ export default function Index({ lng }) {
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);  
                 }
                 const res = await response.json();
 
@@ -70,25 +72,23 @@ export default function Index({ lng }) {
     }
 
     return (
-        <>
-            <div className="__sub_header">
-                <div className="nso_container">
-                    <ul className="__sub_header_list">
-                        {loading ?
-                            menus.map((dt, index) => {
-                                return <li key={index}>
-                                    <Link className="__stat_top_title" href={dt.url ? dt.url : "#"}>{lng === 'mn' ? dt.name : dt.enName}</Link>
-                                </li>
-                            }) : <div>
+        <div className="__sub_header">
+            <div className="nso_container">
+                <ul className="__sub_header_list">
+                    {loading ?
+                        menus.map((dt, index) => {
+                            return <li key={index} className={`${pth.includes(dt.path) && 'active-link-top'}`}>
+                                <Link className="__stat_top_title text-xs" href={dt.url ? dt.url : "#"}>{lng === 'mn' ? dt.name : dt.enName}</Link>
+                            </li>
+                        }) : <div>
                             <OneField /><OneField /><OneField />
                         </div>
-                        }
-                        <li onClick={switchLanguage}>
-                            {router.locale === 'mn' ? 'EN' : 'MN'}
-                        </li>
-                    </ul>
-                </div>
+                    }
+                    <li onClick={switchLanguage}>
+                        {router.locale === 'mn' ? 'EN' : 'MN'}
+                    </li>
+                </ul>
             </div>
-        </>
+        </div>
     );
 }

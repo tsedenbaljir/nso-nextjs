@@ -1,24 +1,20 @@
 import React from 'react';
-
 export default function Index({ page, totalPages, path }) {
-    const dots = 3;
+    const last = 5;
+
     return (
         <>
             <div className="nso_pagination">
                 <ul>
-                    {page > dots && (
+                    <li>
+                        <a href={`/mn/news/${path}`}>{"<< Эхэнд"}</a>
+                    </li>
+                    {page > last &&
                         <li>
-                            <a href={`/mn/news/${path}`}>{"<< Эхэнд"}</a>
+                            <i>...</i>
                         </li>
-                    )}
-                    {Array.from({ length: totalPages }, (_, index) => {
-                        if (index === page - dots - 1 || index === page + dots) {
-                            return (
-                                <li key={index}>
-                                    <i>...</i>
-                                </li>
-                            );
-                        }
+                    }
+                    {Array.from({ length: page + last > totalPages ? totalPages : page + last }, (_, index) => {
                         return (
                             <li key={index}>
                                 {index + 1 === parseInt(page) ? (
@@ -28,12 +24,15 @@ export default function Index({ page, totalPages, path }) {
                                 )}
                             </li>
                         );
-                    })}
-                    {page + dots < totalPages && (
+                    }).slice(page > last ? page - 3 : 0, page > last ? page + 2 : page + last)}
+                    {page + last < totalPages &&
                         <li>
-                            <a href={`/mn/news/${path}?page=${totalPages}`}>{"Сүүлд >>"}</a>
+                            <i>...</i>
                         </li>
-                    )}
+                    }
+                    <li>
+                        <a href={`/mn/news/${path}?page=${totalPages}`}>{"Сүүлд >>"}</a>
+                    </li>
                 </ul>
             </div>
         </>

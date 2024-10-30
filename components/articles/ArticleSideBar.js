@@ -12,17 +12,17 @@ export default function ArticleSideBar({ article }) {
                 </div>
             </div>
             {
-                article.map((art) => {
+                article.slice(0, 6).map((art) => {
                     return <div className="__post cursor-pointer"
                         onClick={() => {
                             router.push("/news/" + art.documentId);
                         }}>
                         <a className="__posts">
                             <div className="bg-gray">
-                                <img
+                                {art.cover && <img
                                     className="__header_image"
                                     src={process.env.BACKEND_URL + art.cover.formats.large.url}
-                                />
+                                />}
                             </div>
                             <div className="__title overflow-hidden">
                                 <div className="line-clamp-3">

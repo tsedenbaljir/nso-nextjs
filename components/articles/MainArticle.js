@@ -29,7 +29,7 @@ export default function MainArticle({ name, path }) {
     const fetchArticles = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language&pagination[page]=${page}&pagination[pageSize]=${articlesPerPage}`, {
+            const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language&pagination[page]=${page}&pagination[pageSize]=${articlesPerPage}&sort=createdAt:desc`, {
                 ...requestOptions,
                 cache: 'no-store',
             });
@@ -66,7 +66,7 @@ export default function MainArticle({ name, path }) {
                 </div>
             </div >
             <div className="nso_container">
-                <Pagination page={page} totalPages={totalPages} path={path} />
+                <Pagination page={parseInt(page)} totalPages={totalPages} path={path} />
             </div>
             <br />
         </div>

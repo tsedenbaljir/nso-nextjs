@@ -4,16 +4,16 @@ import { useRouter } from "next/navigation";
 export default function index(product) {
     const router = useRouter();
     return (
-        <div
+        <div key={product.id}
             className="__posts cursor-pointer"
             onClick={() => {
                 router.push("/news/" + product.documentId);
             }}
         >
-            <img
+            {product.cover && <img
                 className="__image"
                 src={process.env.BACKEND_URL + product.cover.formats.thumbnail.url}
-            />
+            />}
             <div className="__title overflow-hidden">
                 <div className="line-clamp-2">
                     {product.title}

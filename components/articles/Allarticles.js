@@ -4,6 +4,7 @@ import TextLoading from '@/components/Loading/Text/Index';
 
 export default function Index({ Articles, loading }) {
     const router = useRouter();
+    
     return (
         <>
             <div className="__post_all">
@@ -29,11 +30,11 @@ export default function Index({ Articles, loading }) {
                                             router.push(`/news/${art.documentId}`);  // Use the proper ID to navigate
                                         }}
                                     >
-                                        <img
+                                        {art.cover && <img
                                             className="__image"
                                             src={process.env.BACKEND_URL + art.cover.formats.thumbnail.url}
                                             alt={art.title}
-                                        />
+                                        />}
                                         <div className="__title overflow-hidden">
                                             <div className="line-clamp-2">
                                                 {art.title}

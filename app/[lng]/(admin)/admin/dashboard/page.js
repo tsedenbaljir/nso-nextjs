@@ -1,4 +1,4 @@
-import AdminLayout from '../../../../../components/admin/layouts/AdminLayout';
+import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import DataStatsOne from "@/components/DataStats/DataStatsOne";
 
 const Dashboard = () => {

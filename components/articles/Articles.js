@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 export default function Articles({ article }) {
+    
     return (
         <div className="__about_post">
             <div className="__info_detail_page for" >
                 <div className="bg-gray">
-                    <img
+                    {article.cover && <img
                         className="__header_image"
                         src={process.env.BACKEND_URL + article.cover.formats.large.url}
-                    />
+                    />}
                 </div>
                 <div className='__view_comments'>
                     <div className=" __info">
@@ -25,8 +27,10 @@ export default function Articles({ article }) {
                 </div>
                 <div className="__info">
                     <div className="__social">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {article.Content}
+                        <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            rehypePlugins={[rehypeRaw]}>
+                            {article.Content.replace(/\\r\\n|\\n|\\r/g, '<br/>')}
                         </ReactMarkdown>
                     </div>
                 </div>

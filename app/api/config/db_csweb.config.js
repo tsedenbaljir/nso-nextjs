@@ -1,6 +1,6 @@
 const knex = require("knex");
 
-const users = knex({
+const db = knex({
   client: "mssql",
   connection: {
     host: "10.0.0.160",
@@ -17,5 +17,4 @@ const users = knex({
   debug: true,
 });
 
-module.exports = { users };
-
+module.exports = { db };

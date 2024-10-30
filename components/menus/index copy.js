@@ -66,57 +66,31 @@ export default function Index({ lng }) {
           }));
 
         setMenus(filteredMenus);
+
         const MobileMenus = res.data.Menus
           .filter(menu => menu.IsActive === true)
-          .map((menu, index) => ({
-            template: (options) => (
-              <div
-                className={`p-panelmenu-header-link __stat_cat_title mt-3`}
-              >
-                <span className={`p-panelmenu-icon pi ${options.expanded ? 'pi-chevron-down' : 'pi-chevron-right'}`}></span>
-                <div className='uppercase font-medium'>
-                  {lng === "mn" ? menu.name : menu.enName}
-                </div>
-              </div>
-            ),
-            items: menu.subMenu
-              .filter(sub => sub.IsActive === true)
-              .map(dt => ({
-                label: lng === "mn" ? dt.name : dt.enName,
-                url: dt.url,
-              })),
-          }));
-
+          .map(menu => {
+            if (menu.subMenu.length === 0) {
+              return {
+                label: lng === "mn" ? menu.name : menu.enName,
+                url: menu.url
+              }
+            } else {
+              return {
+                label: lng === "mn" ? menu.name : menu.enName,
+                styleClass: '__stat_cat_title',
+                items: menu.subMenu.filter(sub => sub.IsActive === true).map(dt => {
+                  return {
+                    label: lng === "mn" ? dt.name : dt.enName,
+                    url: dt.url
+                  }
+                })
+              }
+            }
+          });
+          
         setMobileMenus(MobileMenus)
         setLoading(true);
-      } catch (error) {
-        console.error('Error fetching menus:', error);
-      }
-    };
-
-    fetchMenus();
-  }, []);
-
-  const [menusTop, setMenusTop] = useState([]);
-  const [loadingTop, setLoadingTop] = useState(false);
-
-  useEffect(() => {
-    const fetchMenus = async () => {
-      try {
-        const response = await fetch(`${process.env.BACKEND_URL}/api/czesnij-tohirgoos/jo702rceqsu6onv0tif6zd4v?populate[Menus][populate][populate]=*`, {
-          ...requestOptions,
-          cache: 'no-store',  // Prevents caching
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const res = await response.json();
-
-        const filteredMenus = res.data.Menus;
-
-        setMenusTop(filteredMenus);
-        setLoadingTop(true);
       } catch (error) {
         console.error('Error fetching menus:', error);
       }
@@ -169,24 +143,8 @@ export default function Index({ lng }) {
           </div>
         </div>
       </div>
-
       <div className={`__dropdown __mobile ${showMenu && "show"}`}>
         {loading && <PanelMenu model={mobileMenus} className="w-full md:w-20rem" />}
-        {loadingTop ?
-          menusTop.map((dt, index) => {
-            return <>
-              <div className={`p-panelmenu-header-link __stat_cat_title mt-3`}>
-                <div key={index} className={`uppercase font-medium`}>
-                  <Link className="uppercase font-medium" href={dt.url ? dt.url : "#"}>
-                    {lng === 'mn' ? dt.name : dt.enName}
-                  </Link>
-                </div>
-              </div>
-            </>
-          }) : <div>
-            <OneField /><OneField /><OneField />
-          </div>
-        }
       </div >
     </>
   );

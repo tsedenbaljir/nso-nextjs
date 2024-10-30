@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import { users } from "@/app/api/config/db_csweb.config";
+import { db } from "@/app/api/config/db_csweb.config";
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error(
@@ -26,7 +26,7 @@ export const options = {
       async authorize(credentials, req) {
         try {
           
-          const foundUser = await users.raw(`
+          const foundUser = await db.raw(`
             SELECT [username], [password] 
             FROM [user] 
             WHERE [username] = '${credentials.name}' AND [password] = '${credentials.password}'
@@ -34,7 +34,7 @@ export const options = {
           
             console.log(foundUser);
             
-          // const foundUser = await users.raw(`CALL GetOperatorLogin('${credentials.name}','${credentials.password}')`,
+          // const foundUser = await db.raw(`CALL GetOperatorLogin('${credentials.name}','${credentials.password}')`,
           //   []);
           if (foundUser.length > 0) {
             return { name: foundUser };

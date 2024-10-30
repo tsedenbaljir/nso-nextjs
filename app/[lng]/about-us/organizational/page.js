@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Layout from '@/components/baseLayout';
 import "@/components/styles/about-us.scss";
 
-export default function AboutUs({ lng }) {
+export default function AboutUs({ params: { lng } }) {
     const { t } = useTranslation();
     const [activeItem, setActiveItem] = useState(0);
 
@@ -26,7 +26,7 @@ export default function AboutUs({ lng }) {
                             <div className="__nso_desc">
                                 <div className="__about">
                                     <div className="__top_text">
-                                    Үндэсний Статистикийн Хороо
+                                        Үндэсний Статистикийн Хороо
                                     </div>
                                     <div className="__sub_body">
                                         <div className="card">
