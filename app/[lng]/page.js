@@ -9,7 +9,7 @@ export default function Home({ params: { lng } }) {
     <Layout lng={lng}>
       <HomeSection indicators={[]} searchData={[]} lng={lng} />
       <Sector lng={lng} />
-      <CarouselNews />
+      <CarouselNews lng={lng} />
       <br/>
     </Layout>
   );

@@ -6,27 +6,28 @@ import rehypeRaw from 'rehype-raw';
 export default function Articles({ article }) {
 
     return (
-        <div className="__about_post">
+        <div className="__about_post" >
             <div className="__info_detail_page" >
-                <div className="bg-gray">
+                <div>
                     <img
                         className="__header_image"
                         src={`https://downloads.1212.mn/${article.header_image}`}
-                        alt="main-news"
                     />
                 </div>
-                <div className='__view_comments'>
-                    <div className=" __info">
-                        <i className="pi pi-calendar-minus"></i>
-                        {article.created_date.substr(0, 10)}
-                    </div>
-                </div>
-                <div className="__post_title mt-3">
+                <div className="__post_title" >
                     {article.name}
-                </div>
-                <div className="border-b border-blue-700 p-2 mb-3">
-                </div>
+                </div >
                 <div className="__info" >
+                    <div className="__view_comments" >
+                        <div className="__info" >
+                            <span className="__view" >
+                                <div className='ml-5'>
+                                    <i className="pi pi-calendar-minus"></i>
+                                    {article.created_date.substr(0, 10)}
+                                </div >
+                            </span >
+                        </div >
+                    </div >
                     <div className="__social" >
                         <div
                             id="__one"
@@ -40,7 +41,7 @@ export default function Articles({ article }) {
                         </div >
                     </div >
                 </div >
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

@@ -4,7 +4,7 @@ import TextLoading from '@/components/Loading/Text/Index';
 
 export default function Index({ Articles, loading }) {
     const router = useRouter();
-    
+
     return (
         <>
             <div className="__post_all">
@@ -23,28 +23,29 @@ export default function Index({ Articles, loading }) {
                         </div>
                     ) : (
                         Articles.length > 0 ? (
-                            Articles.map((art) => (
-                                <div className="__list" key={art.id}>
+                            Articles.map((art, index) => (
+                                <div className="__list" key={index}>
                                     <div className="__posts"
                                         onClick={() => {
-                                            router.push(`/news/${art.documentId}`);  // Use the proper ID to navigate
+                                            router.push(`/news/${art.id}`);  // Use the proper ID to navigate
                                         }}
                                     >
-                                        {art.cover && <img
+                                        <img
                                             className="__image"
-                                            src={process.env.BACKEND_URL + art.cover.formats.thumbnail.url}
-                                            alt={art.title}
-                                        />}
+                                            width="100%"
+                                            src={`https://downloads.1212.mn/${art.header_image}`}
+                                            alt="main-news"
+                                        />
                                         <div className="__title overflow-hidden">
                                             <div className="line-clamp-2">
-                                                {art.title}
+                                                {art.name}
                                             </div>
                                         </div>
                                         <div className="__view_comments">
                                             <div className="__info">
                                                 <div className='ml-5'>
                                                     <i className="pi pi-calendar-minus"></i>
-                                                    {art.createdAt.substr(0, 10)}
+                                                    {art.created_date.substr(0, 10)}
                                                 </div>
                                                 {/* <span className="__view">
                                                 </span> */}

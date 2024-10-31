@@ -11,6 +11,11 @@
 
     .__about_post {
         margin-top: 60px;
+        width: 75%;
+    }
+    
+    .__about_post_cr {
+        margin-top: 60px;
         width: 100%;
     }
 
@@ -29,10 +34,10 @@
 
 
     .__image {
-        border: 1px solid var(--accent);
-        width: 270px;
-        height: 160px;
-        object-fit: cover;
+        border: 1px solid var(--accent) !important;
+        width: 270px !important;
+        height: 160px !important;
+        object-fit: cover !important;
     }
 
     .__title {

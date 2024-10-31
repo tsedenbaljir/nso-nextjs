@@ -1,37 +1,70 @@
 "use client"
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/baseLayout';
+import { useRouter } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 import '@/components/styles/laws.scss';
 
-export default function Home({ params: { lng } }) {
+export default function Home({ params: { lng }, params }) {
     const { t } = useTranslation(lng, "lng", "");
+    const router = useRouter();
 
-    const array = [...Array(10)]
-    console.log(array);
-    
-    const body = () => {
+    // States
+    const [Articles, setArticles] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
+    };
+
+    const fetchArticles = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(`/api/laws?type=${params.name}`, {
+                ...requestOptions,
+                cache: 'no-store',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const articlesData = await response.json();
+
+            setArticles(articlesData.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching articles:', error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchArticles();
+    }, []);
+
+    const body = (dt) => {
         return <div
             className="__post"
             target="blank"
+            onClick={() => {
+                router.push("https://downloads.1212.mn/" + JSON.parse(dt.file_info).pathName);
+            }}
         >
             <img
-                className="__image"
                 src="/images/about_us/pdf-logo.png"
-                width="36"
-                height="47"
+                style={{ width: "36px", height: "47px" }}
             />
             <div className="__laws-body">
                 <div className="__title">
-                    Нийтийн албанд нийтийн болон хувийн ашиг сонирхлыг зохицуулах, ашиг сонирхлын зөрчлөөс
-                    урьдчилан сэргийлэх тухай хууль
+                    {dt.name}
                 </div>
-                <div className="__view_comments">
-                    <ul>
-                        <li className="__info">
-                            <span className="__date">2024.6.2</span>
-                        </li>
-                    </ul>
+                <div className="__view_comments mt-3">
+                    <span className="__date text-gray-5 text-sm">{dt.created_date.substr(0, 10)}</span>
                 </div>
             </div>
             <img
@@ -40,6 +73,7 @@ export default function Home({ params: { lng } }) {
             />
         </div>
     }
+
     return (
         <Layout lng={lng}>
             <div className="nso_about_us mt-40">
@@ -53,8 +87,8 @@ export default function Home({ params: { lng } }) {
                                 <div className="__laws">
                                     <div className="__info_detail_page">
                                         {
-                                            array.map((dt) => {
-                                                return body()
+                                            Articles.map((dt) => {
+                                                return body(dt)
                                             })
                                         }
                                     </div>

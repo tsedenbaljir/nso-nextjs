@@ -15,24 +15,25 @@ export default function ArticleSideBar({ article }) {
                 article.slice(0, 6).map((art) => {
                     return <div className="__post cursor-pointer"
                         onClick={() => {
-                            router.push("/news/" + art.documentId);
+                            router.push("/news/" + art.id);
                         }}>
                         <a className="__posts">
                             <div className="bg-gray">
-                                {art.cover && <img
+                                <img
                                     className="__header_image"
-                                    src={process.env.BACKEND_URL + art.cover.formats.large.url}
-                                />}
+                                    src={`https://downloads.1212.mn/${art.header_image}`}
+                                    alt="main-news"
+                                />
                             </div>
                             <div className="__title overflow-hidden">
                                 <div className="line-clamp-3">
-                                    {art.title}
+                                    {art.name}
                                 </div>
                             </div>
                             <div className='__view_comments'>
                                 <div className=" __info">
                                     <i className="pi pi-calendar-minus"></i>
-                                    {art.createdAt.substr(0, 10)}
+                                    {art.created_date.substr(0, 10)}
                                 </div>
                             </div>
                         </a>

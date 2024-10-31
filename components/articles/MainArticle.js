@@ -5,7 +5,7 @@ import Pagination from '@/components/articles/Pagination';
 import Allarticles from '@/components/articles/Allarticles';
 import "@/components/styles/latest-list.component.scss";
 
-export default function MainArticle({ name, path }) {
+export default function MainArticle({ name, path, lng }) {
     // search params
     const searchParams = useSearchParams();
     const page = searchParams.get('page') || 1;
@@ -17,19 +17,18 @@ export default function MainArticle({ name, path }) {
 
     const articlesPerPage = 12;
 
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + process.env.BACKEND_KEY);
-
     const requestOptions = {
         method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
     };
 
     const fetchArticles = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language&pagination[page]=${page}&pagination[pageSize]=${articlesPerPage}&sort=createdAt:desc`, {
+            const response = await fetch(`/api/articles?page=${page}&pageSize=${articlesPerPage}&lng=${lng}&type=${path}`, {
                 ...requestOptions,
                 cache: 'no-store',
             });
@@ -39,9 +38,9 @@ export default function MainArticle({ name, path }) {
             }
 
             const articlesData = await response.json();
-
-            setArticles(articlesData.data);
-            setTotalPages(articlesData.meta.pagination.pageCount);
+            
+            setArticles(articlesData.data[0]);
+            setTotalPages(articlesData.data[1].totalPage);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching articles:', error);
@@ -56,7 +55,7 @@ export default function MainArticle({ name, path }) {
     return (
         <div className="nso_about_us mt-35">
             <div className="nso_container">
-                <div className="__about_post">
+                <div className="__about_post_cr">
                     <div className="__header">
                         <div className="__title">
                             {name}
@@ -66,7 +65,7 @@ export default function MainArticle({ name, path }) {
                 </div>
             </div >
             <div className="nso_container">
-                <Pagination page={parseInt(page)} totalPages={totalPages} path={path} />
+                <Pagination page={parseInt(page)} totalPages={totalPages} path={path} lng={lng} />
             </div>
             <br />
         </div>

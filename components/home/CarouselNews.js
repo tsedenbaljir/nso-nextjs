@@ -5,26 +5,21 @@ import newsBody from './newsBody';
 import { Carousel } from 'primereact/carousel';
 import Text from '@/components/Loading/Text/Index';
 
-export default function CarouselNews() {
+export default function CarouselNews({ lng }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const myHeaders = new Headers();
-    myHeaders.append(
-        "Authorization",
-        "Bearer " + process.env.BACKEND_KEY
-    );
-
     const requestOptions = {
         method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
     };
-
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language`, {
+                const response = await fetch(`/api/articles?page=1&pageSize=12&lng=${lng}&type=latest`, {
                     ...requestOptions,
                     cache: 'no-store',
                 });
@@ -34,7 +29,7 @@ export default function CarouselNews() {
                 }
 
                 const articles = await response.json();
-                setProducts(articles.data);
+                setProducts(articles.data[0]);
                 setLoading(true);
             } catch (error) {
                 console.error('Error fetching articles:', error);
@@ -70,7 +65,7 @@ export default function CarouselNews() {
     return (
         <div className="nso_about_us">
             <div className="nso_container">
-                <div className="__about_post">
+                <div className="__about_post_cr">
                     <div className="__header">
                         <div className="__title">
                             ШИНЭ МЭДЭЭ
@@ -82,7 +77,7 @@ export default function CarouselNews() {
                                 value={products}
                                 numVisible={4}
                                 numScroll={4}
-                                autoplayInterval={10000}
+                                autoplayInterval={100000}
                                 showNavigators={false}
                                 responsiveOptions={responsiveOptions}
                                 itemTemplate={newsBody}

@@ -12,22 +12,18 @@ export default function Home({ params: { lng }, params }) {
     const [sidebar, setSidebar] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const myHeaders = new Headers();
-    myHeaders.append(
-        "Authorization",
-        "Bearer " + process.env.BACKEND_KEY
-    );
-
     const requestOptions = {
         method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        redirect: 'follow'
     };
 
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/articles/${params.id}?populate=cover&populate=category&populate=language`, {
+                const response = await fetch(`/api/articles/${params.id}`, {
                     ...requestOptions,
                     cache: 'no-store',  // Prevents caching
                 });
@@ -47,17 +43,15 @@ export default function Home({ params: { lng }, params }) {
         fetchArticles();
         const fetchSideBar = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/articles?populate=cover&populate=category&populate=language`, {
-                    ...requestOptions,
-                    cache: 'no-store',  // Prevents caching
-                });
+                const response = await fetch(`/api/articles?page=1&pageSize=12&lng=${lng}&type=latest`);
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const articles = await response.json();
-                setSidebar(articles.data);
+                const res = await response.json();
+                
+                setSidebar(res.data[0]);
             } catch (error) {
                 console.error('Error fetching articles:', error);
             }
@@ -74,7 +68,7 @@ export default function Home({ params: { lng }, params }) {
                     <ArticleSideBar article={sidebar} />
                 </div>
             </div>}
-            <br/>
+            <br />
         </Layout>
     );
 }
