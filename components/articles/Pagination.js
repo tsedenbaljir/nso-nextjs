@@ -1,14 +1,14 @@
 import React from 'react';
-export default function Index({ page, totalPages, path, lng }) {
+export default function Index({ page, totalPages, mainPath, path, lng, articlesPerPage }) {
     const last = 5;
-    const totalPage = Math.ceil(totalPages / 12)
+    const totalPage = Math.ceil(totalPages / articlesPerPage)
     return (
         <>
             <div className="nso_pagination">
                 <ul>
-                    <li>
-                        <a href={`/${lng}/news/${path}`}>{"<< Эхэнд"}</a>
-                    </li>
+                    {totalPage > last && <li>
+                        <a href={`/${lng}/${mainPath}/${path}`}>{lng === "mn" ? "<< Эхэнд" : "<< First"}</a>
+                    </li>}
                     {page > last &&
                         <li>
                             <i>...</i>
@@ -20,7 +20,7 @@ export default function Index({ page, totalPages, path, lng }) {
                                 {index + 1 === parseInt(page) ? (
                                     <span>{index + 1}</span>
                                 ) : (
-                                    <a href={`/${lng}/news/${path}?page=${index + 1}`}>{index + 1}</a>
+                                    <a href={`/${lng}/${mainPath}/${path}?page=${index + 1}`}>{index + 1}</a>
                                 )}
                             </li>
                         );
@@ -30,9 +30,9 @@ export default function Index({ page, totalPages, path, lng }) {
                             <i>...</i>
                         </li>
                     }
-                    <li>
-                        <a href={`/${lng}/news/${path}?page=${totalPage}`}>{"Сүүлд >>"}</a>
-                    </li>
+                    {totalPage > last && <li>
+                        <a href={`/${lng}/${mainPath}/${path}?page=${totalPage}`}>{lng === "mn" ? "Сүүлд >>" : " Last >>"}</a>
+                    </li>}
                 </ul>
             </div>
         </>

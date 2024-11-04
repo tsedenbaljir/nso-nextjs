@@ -65,7 +65,7 @@ export default function MainArticle({ name, path, lng }) {
                 </div>
             </div >
             <div className="nso_container">
-                <Pagination page={parseInt(page)} totalPages={totalPages} path={path} lng={lng} />
+                <Pagination page={parseInt(page)} mainPath={"news"} articlesPerPage={articlesPerPage} totalPages={totalPages} path={path} lng={lng} />
             </div>
             <br />
         </div>

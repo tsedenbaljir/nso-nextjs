@@ -85,7 +85,7 @@ export default function Index({ lng }) {
                         </div>
                     }
                     <li onClick={switchLanguage}>
-                        {router.locale === 'mn' ? 'EN' : 'MN'}
+                        {lng === 'mn' ? 'EN' : 'MN'}
                     </li>
                 </ul>
             </div>

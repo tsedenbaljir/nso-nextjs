@@ -23,6 +23,7 @@ const nextConfig = {
         BACKEND_KEY: process.env.BACKEND_KEY,
         GOOGLE_SERVICE_ACCOUNT: process.env.GOOGLE_SERVICE_ACCOUNT,
         GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,
+        ELASTIC_SEARCH: process.env.ELASTIC_SEARCH,
     },
     output: "standalone",
     api: {
