@@ -4,7 +4,7 @@ import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
 import Providers from "@/utils/providers/providers";
 import Script from "next/script";
-import RouteLoadingOverlay from '@/components/loading/RouteLoadingOverlay';
+// import RouteLoadingOverlay from '@/components/loading/RouteLoadingOverlay';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         <Providers>
-          <RouteLoadingOverlay />
+          {/* <RouteLoadingOverlay /> */}
           {children}
         </Providers>
       </body>

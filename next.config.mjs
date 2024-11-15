@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    experimental: {
-        appDir: true,
-    },
     images: {
         minimumCacheTTL: 60,
         domains: [
@@ -14,7 +11,6 @@ const nextConfig = {
             "api.ipify.org",
         ],
     },
-    secret: "@dmindata",
     env: {
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
@@ -26,9 +22,6 @@ const nextConfig = {
         ELASTIC_SEARCH: process.env.ELASTIC_SEARCH,
     },
     output: "standalone",
-    api: {
-        responseLimit: "8mb",
-    },
     async headers() {
         return [
             {

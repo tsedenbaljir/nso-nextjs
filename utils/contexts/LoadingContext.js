@@ -1,5 +1,6 @@
 "use client"
 import { createContext, useState, useContext } from 'react';
+import Loader from '@/components/Loader';
 
 const ContextData = createContext(undefined);
 
@@ -19,6 +20,7 @@ export const LoadingContext = ({ children }) => {
     return (
         <ContextData.Provider value={{ loading, setLoading, routeLoading, setRouteLoading }}>
             {children}
+            {loading && <Loader />}
         </ContextData.Provider>
     );
 };
