@@ -1,41 +1,83 @@
 import { NextResponse } from "next/server";
-import { Client } from '@elastic/elasticsearch'
-import { prisma } from "@/utils/prisma";
+import { Client } from "@elastic/elasticsearch";
+import { db } from "../config/db_csweb.config";
+
+const ELASTIC_URL = 'https://10.0.1.161:9200';
+const INDEX_NAME = 'search-nso-1212';
 
 export async function POST() {
-
   const client = new Client({
-    node: 'https://10.0.1.161:9200',
+    node: ELASTIC_URL,
     auth: {
-      username: "elastic",
-      password: "aZAHeeeiM0a828e+Jnfm"
+      apiKey: process.env.ELASTIC_SEARCH
     },
     tls: { rejectUnauthorized: false }
   });
 
-  await client.indices.delete({ index: 'search-nso-1212' });
+  try {
+    // Check if index exists before trying to delete
+    const indexExists = await client.indices.exists({ index: INDEX_NAME });
+    if (indexExists) {
+      await client.indices.delete({ index: INDEX_NAME });
+    }
 
-  const databases = await prisma.$queryRaw`SELECT db_id, db_name from database`;
-  const forms = await prisma.$queryRaw`SELECT * from vw_formdatabase`;
-  const table = await prisma.$queryRaw`SELECT * from vw_tableDB`;
-  const indicators = await prisma.$queryRaw`SELECT * from vw_indicatorDBTab`;
-  const classifications = await prisma.$queryRaw`SELECT * from vw_classificationdbs`;
-  // console.log("databasesS", databasesS);
+    // Create index with proper mappings
+    await client.indices.create({
+      index: INDEX_NAME,
+      body: {
+        mappings: {
+          properties: {
+            id: { type: 'keyword' },
+            name: { type: 'text', analyzer: 'thai' },
+            body: { type: 'text', analyzer: 'thai' },
+            file_info: { type: 'text', analyzer: 'thai' },
+            _type: { type: 'keyword' }
+          }
+        }
+      }
+    });
 
-  const allData = [
-    ...databases.map((data) => ({ ...data, _type: 'database' })),
-    ...forms.map((data) => ({ ...data, _type: 'form' })),
-    ...indicators.map((data) => ({ ...data, _type: 'indicator' })),
-    ...table.map((data) => ({ ...data, _type: 'table' })),
-    ...classifications.map((data) => ({ ...data, _type: 'classification' })),
-  ];
+    // Fetch data from database
+    const [web_1212_content, web_1212_download] = await Promise.all([
+      db.raw(`SELECT * from web_1212_content`),
+      db.raw(`SELECT * from web_1212_download`)
+    ]);
 
-  // Index with the bulk helper
-  const result = await client.helpers.bulk({
-    datasource: allData,
-    pipeline: "ent-search-generic-ingestion",
-    onDocument: (doc) => ({ index: { _index: 'search-nso-1212' } }),
-  });
+    const allData = [
+      ...web_1212_content.map((data) => ({ ...data, _type: 'content' })),
+      ...web_1212_download.map((data) => ({ ...data, _type: 'download' }))
+    ];
 
-  return NextResponse.json({ response: result });
+    // Bulk index with progress tracking
+    const chunkSize = 1000;
+    const operations = [];
+    
+    for (const doc of allData) {
+      operations.push({
+        index: { _index: INDEX_NAME }
+      });
+      operations.push(doc);
+    }
+
+    const { items } = await client.bulk({
+      refresh: true,
+      operations
+    });
+
+    const failed = items.filter(item => item.index.error);
+
+    return NextResponse.json({
+      success: true,
+      indexed: items.length - failed.length,
+      failed: failed.length,
+      errors: failed.map(item => item.index.error)
+    });
+
+  } catch (error) {
+    console.error('Indexing error:', error);
+    return NextResponse.json(
+      { error: 'Failed to index documents', details: error.message },
+      { status: 500 }
+    );
+  }
 }

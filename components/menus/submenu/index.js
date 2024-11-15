@@ -41,7 +41,7 @@ export default function Index({ lng }) {
                 }
                 const res = await response.json();
 
-                const filteredMenus = res.data.Menus;
+                const filteredMenus = res.data.Menus.filter(sub => sub.IsActive === true);
 
                 setMenus(filteredMenus);
                 setLoading(true);
@@ -78,13 +78,13 @@ export default function Index({ lng }) {
                     {loading ?
                         menus.map((dt, index) => {
                             return <li key={index} className={`${pth.includes(dt.path) && 'active-link-top'}`}>
-                                <Link className="__stat_top_title text-xs" href={dt.url ? dt.url : "#"}>{lng === 'mn' ? dt.name : dt.enName}</Link>
+                                <Link className="__stat_top_title text-xs font-normal" href={dt.url ? dt.url : "#"}>{lng === 'mn' ? dt.name : dt.enName}</Link>
                             </li>
                         }) : <div>
                             <OneField /><OneField /><OneField />
                         </div>
                     }
-                    <li onClick={switchLanguage}>
+                    <li className='font-medium' onClick={switchLanguage}>
                         {lng === 'mn' ? 'EN' : 'MN'}
                     </li>
                 </ul>

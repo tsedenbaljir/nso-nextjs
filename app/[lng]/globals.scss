@@ -14,3 +14,16 @@
 @import "@/components/styles/latest-news.scss";
 @import "@/components/styles/style.scss";
 @import "@/components/styles/responsive.scss";
+@import "@/components/styles/transparency.scss";
+
+.route-loading-overlay {
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease-in-out;
+    
+    .route-loading-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+}
