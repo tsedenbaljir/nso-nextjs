@@ -27,13 +27,13 @@ export default function Index({ Articles, loading }) {
                                 <div className="__list" key={index}>
                                     <div className="__posts"
                                         onClick={() => {
-                                            router.push(`/news/${art.id}`);  // Use the proper ID to navigate
+                                            router.push(`/news/${art.id}`);
                                         }}
                                     >
                                         <img
                                             className="__image"
                                             width="100%"
-                                            src={`https://downloads.1212.mn/${art.header_image}`}
+                                            src={`https://downloads.1212.mn/${art.headerImage}`}
                                             alt="main-news"
                                         />
                                         <div className="__title overflow-hidden">
@@ -43,12 +43,8 @@ export default function Index({ Articles, loading }) {
                                         </div>
                                         <div className="__view_comments">
                                             <div className="__info">
-                                                <div className='ml-5'>
-                                                    <i className="pi pi-calendar-minus"></i>
-                                                    {art.created_date.substr(0, 10)}
-                                                </div>
-                                                {/* <span className="__view">
-                                                </span> */}
+                                                <i className="pi pi-calendar-minus"></i>
+                                                {art.createdDate.substr(0, 10)}
                                             </div>
                                         </div>
                                     </div>
@@ -56,7 +52,7 @@ export default function Index({ Articles, loading }) {
                                 </div>
                             ))
                         ) : (
-                            <div>Мэдээлэл олдсонгүй.</div>  // Display message if no articles are available
+                            <div>Мэдээлэл олдсонгүй.</div>
                         )
                     )}
                 </div>

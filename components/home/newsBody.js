@@ -12,7 +12,7 @@ export default function index(product) {
         >
             <img
                 className="__image"
-                src={`https://downloads.1212.mn/${product.header_image}`}
+                src={`https://downloads.1212.mn/${product.headerImage}`}
                 alt="main-news"
             />
             <div className="__title overflow-hidden">
@@ -24,7 +24,7 @@ export default function index(product) {
                 <div className="__info">
                     <div style={{ marginLeft: 20 }}>
                         <i className="pi pi-calendar-minus"></i>
-                        {product.created_date.substr(0, 10)}
+                        {product.createdDate.substr(0, 10)}
                     </div>
                 </div>
             </div>

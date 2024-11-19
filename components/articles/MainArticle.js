@@ -38,9 +38,9 @@ export default function MainArticle({ name, path, lng }) {
             }
 
             const articlesData = await response.json();
-            
-            setArticles(articlesData.data[0]);
-            setTotalPages(articlesData.data[1].totalPage);
+
+            setArticles(articlesData.data);
+            setTotalPages(articlesData.pagination.total);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching articles:', error);

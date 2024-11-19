@@ -43,7 +43,7 @@ export default function Home({ params: { lng }, params }) {
         fetchArticles();
         const fetchSideBar = async () => {
             try {
-                const response = await fetch(`/api/articles?page=1&pageSize=12&lng=${lng}&type=latest`);
+                const response = await fetch(`/api/articles`);
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -51,7 +51,7 @@ export default function Home({ params: { lng }, params }) {
 
                 const res = await response.json();
                 
-                setSidebar(res.data[0]);
+                setSidebar(res.data);
             } catch (error) {
                 console.error('Error fetching articles:', error);
             }

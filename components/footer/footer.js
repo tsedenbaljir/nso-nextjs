@@ -2,43 +2,52 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client'
+import NavbarDialog from '../Dialog/NavbarDialog';
 
 export default function Footer({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
     const router = useRouter();
 
     const [data, setData] = useState(null);
+    const [navData, setNavData] = useState(null);
+    const [socialLinks, setSocialLinks] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedType, setSelectedType] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('/api/analytic');
-            const result = await response.json();
-            console.log(result);
-            
-            setData(result);
-            setLoading(false);
+            try {
+                const [analyticsResponse, navResponse] = await Promise.all([
+                    fetch('/api/analytic'),
+                    fetch(`https://gateway.1212.mn/services/1212/api/public/navbars?size=100&page=0&sort=listOrder,asc&total=0&language.equals=${lng.toUpperCase()}`)
+                ]);
+
+                const analyticsData = await analyticsResponse.json();
+                const navData = await navResponse.json();
+
+                const footerSocial = navData.find(nav => nav.navbarType === 'NEW_FOOTER_1');
+                
+                setData(analyticsData);
+                setNavData(navData);
+                setSocialLinks(footerSocial);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchData();
-    }, []);
+    }, [lng]);
 
-    const [dialogOpen, setDialogOpen] = useState(false);
-    // const [tabMenusList, setTabMenusList] = useState([]); // Initialize with your tabs data
-    // const [tabItems, setTabItems] = useState([]); // Initialize with your tab items data
-    const currentYear = new Date().getFullYear();
-
-    const getDialogShow = (dialogId) => {
-        // Logic to show dialog based on dialogId
+    const getDialogShow = (dialogType) => {
+        setSelectedType(dialogType);
         setDialogOpen(true);
     };
 
     const directLink = (link) => {
-        window.location.href = link;
-    };
-
-    const sendEmail = () => {
-        // Logic to handle email submission
+        window.open(link, '_blank');
     };
 
     return (
@@ -119,7 +128,6 @@ export default function Footer({ lng }) {
                         <span className="__title">{t('footer.getLatestNews')}</span>
                         <div className="__content">
                             <span className="__desc">{t('footer.suggestionForNewReport')}</span>
-
                             <div _ngcontent-lvi-c61="" className="__input">
                                 <span _ngcontent-lvi-c61="" className="p-input-icon-right">
                                     {/* <i _ngcontent-lvi-c61="" className="pi pi-arrow-right"></i> */}
@@ -142,31 +150,34 @@ export default function Footer({ lng }) {
                         <div>
                             <div className="__wrap_between">
                                 <div>
-                                    <span className="__text">© {currentYear}. {t('footer.copyright')}</span>
+                                    <span className="__text">© {new Date().getFullYear()}. {t('footer.copyright')}</span>
                                 </div>
                                 <div>
-                                    <ul _ngcontent-lvi-c61="" className="ng-star-inserted">
-                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
-                                            <span _ngcontent-lvi-c61=""></span>
-                                        </li>
-                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
-                                            <span _ngcontent-lvi-c61=""></span>
-                                        </li>
-                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
-                                            <span _ngcontent-lvi-c61=""></span>
-                                        </li>
-                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
-                                            <span _ngcontent-lvi-c61=""></span>
-                                        </li>
-                                        <li _ngcontent-lvi-c61="" className="ng-star-inserted">
-                                            <span _ngcontent-lvi-c61=""></span>
-                                        </li></ul>
+                                    {socialLinks && socialLinks.navitems && (
+                                        <ul>
+                                            {socialLinks.navitems.map((item, index) => (
+                                                <li key={item.id}>
+                                                    <span 
+                                                        onClick={() => directLink(item.link)}
+                                                        className={`social-icon nth-${index + 1}`}
+                                                    />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <NavbarDialog
+                visible={dialogOpen}
+                onClose={() => setDialogOpen(false)}
+                type={selectedType}
+                data={navData}
+            />
         </div>
     );
 }

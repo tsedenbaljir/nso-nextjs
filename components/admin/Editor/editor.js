@@ -47,7 +47,6 @@ export default function WYSIWYGEditor({ setBody }) {
                             },
                         });
                     const datares = await data.json();
-                    console.log("datares}}}", datares);
 
                     const uploadUrl = `https://gateway.1212.mn/services/fms/api/public/upload/0/${datares.token}`;
                     const formData = new FormData();

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 export default function Tr({ item, lng, index }) {
     const router = useRouter();
     // Create a Date object once and reuse
-    const publishedDate = new Date(item.published_date);
+    const publishedDate = new Date(item.publishedDate);
     const formattedDate = lng === "mn"
         ? `${publishedDate.getMonth() + 1} сарын ${publishedDate.getDate()}`
         : new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' }).format(publishedDate);
@@ -24,7 +24,7 @@ export default function Tr({ item, lng, index }) {
                 item.name
             )}
             <div className="__table_spec">
-                <span>{item.published_date.substr(0, 10)}</span>
+                <span>{item.publishedDate.substr(0, 10)}</span>
                 {item.body === "<p></p>" && (
                     <span className="__table_views">
                         {lng === "mn" ? 'Хугацаа болоогүй' : 'Soon'}

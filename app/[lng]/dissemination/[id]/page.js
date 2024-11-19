@@ -59,7 +59,7 @@ export default function Home({ params: { lng }, params }) {
                                 <div className="__page_main">
                                     <div className="__page_main_header">
                                         <h1 className='text-xl font-bold'>{article.name}</h1>
-                                        <em className=' mt-3 mb-3'>{article.published_date.substr(0, 10)}</em>
+                                        <em className=' mt-3 mb-3'>{article.publishedDate.substr(0, 10)}</em>
                                     </div>
                                     <div className="__page_main_content">
                                         <div className="__page_main_content_text">

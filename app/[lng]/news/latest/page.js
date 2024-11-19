@@ -10,6 +10,6 @@ export default function Home({ params: { lng } }) {
     return (
         <Layout lng={lng}>
             <MainArticle name={t('LASTNEWS')} path="latest" lng={lng} />
-        </Layout >
+        </Layout>
     );
 }

@@ -1,31 +1,67 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/app/api/config/db_csweb.config';
+import axios from 'axios';
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const page = parseInt(searchParams.get('page') || '1', 10);
-  const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
-  const lng = searchParams.get('lng');
-  const type = searchParams.get('type');
-
-  const offset = (page - 1) * pageSize;
-
+  const page = parseInt(searchParams.get('page') || '0', 10);
+  const pageSize = parseInt(searchParams.get('pageSize') || '12', 10);
+  const lng = searchParams.get('lng') || 'MN';
+  const type = searchParams.get('type') || 'LATEST';
+  
   try {
-    const results = await db.raw(`
-      SELECT * FROM web_1212_content
-      where language = ? and news_type = ?
-      ORDER BY created_date DESC
-      OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
-    `, [lng, type, offset, pageSize]);
+    const response = await axios.get(`https://gateway.1212.mn/services/1212/api/public/contents`, {
+      params: {
+        size: pageSize,
+        page: page,
+        sort: 'createdDate,desc',
+        total: 0,
+        'language.equals': lng.toUpperCase(),
+        'contentType.equals': 'NSONEWS',
+        'published.equals': true,
+        'newsType.equals': type.toUpperCase()
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 300;
+      }
+    });
 
-    const [totalPage] = await db.raw(`
-      SELECT count(1) as totalPage FROM web_1212_content
-      where language = ?
-    `, [lng]);
-      
-    return NextResponse.json({ status: true, data: [results, totalPage], message: "" });
+    const totalCount = response.headers['x-total-count'];
+    const results = response.data;
+    
+    const nextResponse = NextResponse.json({ 
+      status: true, 
+      data: results,
+      pagination: {
+        page,
+        pageSize,
+        total: parseInt(totalCount || '0', 10)
+      },
+      message: "" 
+    });
+
+    nextResponse.headers.set('X-Total-Count', totalCount || '0');
+    nextResponse.headers.set('X-Page', page.toString());
+    nextResponse.headers.set('X-Page-Size', pageSize.toString());
+
+    return nextResponse;
+
   } catch (error) {
-    console.error('Error processing request:', error);
-    return NextResponse.json({ status: false, data: null, message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { 
+        status: false, 
+        data: null,
+        pagination: {
+          page,
+          pageSize,
+          total: 0
+        },
+        message: "Failed to fetch articles" 
+      }, 
+      { status: error.response?.status || 500 }
+    );
   }
+}
+
+export async function POST(req) {
+  // Handle POST requests if needed
 }

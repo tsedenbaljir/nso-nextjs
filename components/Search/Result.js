@@ -29,7 +29,7 @@ export default function Result({ showResult, t, loading, data }) {
                             <span className="group_title">Мэдээ мэдээлэл</span>
                             {data.content.map((dt, i) => (
                                 <Link
-                                    href={`/content/${dt._source.id}`}
+                                    href={`/news/${dt._source.id}`}
                                     key={`content-${dt._source.id}-${i}`}
                                     className="group_item"
                                 >
@@ -47,7 +47,7 @@ export default function Result({ showResult, t, loading, data }) {
                             <span className="group_title">Тархаах хуваарь</span>
                             {data.download.map((dt, i) => (
                                 <Link
-                                    href={`/download/${dt._source.id}`}
+                                    href={`/dissemination/${dt._source.id}`}
                                     key={`download-${dt._source.id}-${i}`}
                                     className="group_item"
                                 >

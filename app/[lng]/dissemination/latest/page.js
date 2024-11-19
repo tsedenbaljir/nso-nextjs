@@ -6,7 +6,7 @@ import { useTranslation } from '@/app/i18n/client';
 import Main from '@/components/dissemination/Main';
 import Text from '@/components/Loading/Text/Index';
 import "@/components/styles/dissemination-list.scss";
-import Pagination from '@/components/articles/Pagination';
+import Pagination from '@/components/dissemination/Pagination';
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function AboutUs({ params: { lng } }) {
@@ -43,8 +43,8 @@ export default function AboutUs({ params: { lng } }) {
                 }
 
                 const articlesData = await response.json();
-                setArticles(articlesData.data[0]);
-                setTotalPages(articlesData.data[1].totalPage);
+                setArticles(articlesData.data);
+                setTotalPages(articlesData.pagination.total);
                 setLoading(false); // Stop loading after data is fetched
             } catch (error) {
                 console.error('Error fetching articles:', error);

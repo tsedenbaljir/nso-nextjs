@@ -1,7 +1,7 @@
 import React from 'react';
 export default function Index({ page, totalPages, mainPath, path, lng, articlesPerPage }) {
     const last = 5;
-    const totalPage = Math.ceil(totalPages / articlesPerPage) - 1
+    const totalPage = Math.ceil(totalPages / articlesPerPage)
     return (
         <>
             <div className="nso_pagination">

@@ -19,7 +19,7 @@ export default function CarouselNews({ lng }) {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(`/api/articles?page=1&pageSize=12&lng=${lng}&type=latest`, {
+                const response = await fetch(`/api/articles?page=0&pageSize=24&lng=${lng}&type=latest`, {
                     ...requestOptions,
                     cache: 'no-store',
                 });
@@ -29,7 +29,7 @@ export default function CarouselNews({ lng }) {
                 }
 
                 const articles = await response.json();
-                setProducts(articles.data[0]);
+                setProducts(articles.data);
                 setLoading(true);
             } catch (error) {
                 console.error('Error fetching articles:', error);
