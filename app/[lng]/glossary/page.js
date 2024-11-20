@@ -1,11 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Layout from '@/components/baseLayout';
-import { useTranslation } from '@/app/i18n/client';
 import { Spin } from 'antd';
+import Layout from '@/components/baseLayout';
 import { Paginator } from 'primereact/paginator';
+import { useTranslation } from '@/app/i18n/client';
 
-export default function Glossary({ params: { lng } }) {
+export default function Glossary({ params: { lng }, searchParams }) {
     const { t } = useTranslation(lng, "lng", "");
     const [list, setList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,6 +16,8 @@ export default function Glossary({ params: { lng } }) {
     const [filterList, setFilterList] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const isMn = lng === 'mn';
+    const [searchTerm, setSearchTerm] = useState(searchParams?.search || '');
+    const [searchResult, setSearchResult] = useState(null);
 
     // Fetch filter counts
     const fetchFilterCount = async (filterCode) => {
@@ -98,6 +100,33 @@ export default function Glossary({ params: { lng } }) {
         setRows(e.rows);
         window.scrollTo(0, 0);
     };
+
+    // Add search functionality
+    useEffect(() => {
+        const fetchSearchResult = async () => {
+            if (searchTerm) {
+                setLoading(true);
+                try {
+                    const response = await fetch(`/api/glossary/search?search=${encodeURIComponent(searchTerm)}&lng=${lng}`);
+                    const data = await response.json();
+                    if (data.status && data.data) {
+                        setSearchResult(data.data);
+                        setList([data.data]); // Show only search result
+                        setTotalRecords(1);
+                    }
+                } catch (error) {
+                    console.error('Error fetching search result:', error);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setSearchResult(null);
+                fetchGlossaryData(); // Reset to normal list view
+            }
+        };
+
+        fetchSearchResult();
+    }, [searchTerm]);
 
     if (loading) {
         return (

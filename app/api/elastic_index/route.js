@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Client } from "@elastic/elasticsearch";
-import { db } from "../config/db_csweb.config";
+import { elastic_133 } from "../config/db_csweb.config";
 
 const ELASTIC_URL = 'https://10.0.1.161:9200';
 const INDEX_NAME = 'search-nso-1212';
@@ -22,6 +22,7 @@ export async function POST() {
     }
 
     // Create index with proper mappings
+    console.log('index created');
     await client.indices.create({
       index: INDEX_NAME,
       body: {
@@ -38,20 +39,24 @@ export async function POST() {
     });
 
     // Fetch data from database
-    const [web_1212_content, web_1212_download] = await Promise.all([
-      db.raw(`SELECT * from web_1212_content`),
-      db.raw(`SELECT * from web_1212_download`)
+    const [web_1212_content, web_1212_download, web_1212_laws, web_1212_glossary] = await Promise.all([
+      elastic_133.raw(`SELECT *  from web_1212_content where content_type = 'NSONEWS' and published = 1 and news_type in('LATEST','MEDIA')`),
+      elastic_133.raw(`SELECT * from web_1212_content where content_type = 'NEWS' and published = 1 and news_type in('LATEST','FUTURE')`),
+      elastic_133.raw(`SELECT *  from web_1212_download where file_type in('Command','Law','Legal','Docs_s') and published = 1`),
+      elastic_133.raw(`SELECT *  from web_1212_glossary where published = 1`)
     ]);
 
     const allData = [
       ...web_1212_content.map((data) => ({ ...data, _type: 'content' })),
-      ...web_1212_download.map((data) => ({ ...data, _type: 'download' }))
+      ...web_1212_download.map((data) => ({ ...data, _type: 'download' })),
+      ...web_1212_laws.map((data) => ({ ...data, _type: 'laws' })),
+      ...web_1212_glossary.map((data) => ({ ...data, _type: 'glossary' }))
     ];
 
     // Bulk index with progress tracking
     const chunkSize = 1000;
     const operations = [];
-    
+
     for (const doc of allData) {
       operations.push({
         index: { _index: INDEX_NAME }

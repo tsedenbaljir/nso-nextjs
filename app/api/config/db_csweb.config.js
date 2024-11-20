@@ -17,4 +17,21 @@ const db = knex({
   debug: true,
 });
 
-module.exports = { db };
+const elastic_133 = knex({
+  client: "mssql",
+  connection: {
+    host: "10.0.10.113",
+    port: 1433,
+    user: "nsolocaluser",
+    password: "-+mncPVLe=95",
+    database: "SPSAPPDB",
+  },
+  options: {
+    connectTimeout: 40000,
+    encrypt: false,
+    trustServerCertificate: false,
+  },
+  debug: true,
+});
+
+module.exports = { db, elastic_133 };
