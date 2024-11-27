@@ -9,15 +9,15 @@ import { LoadingContext } from '@/utils/contexts/LoadingContext';
 function Providers({ children }) {
     return (
         <LoadingContext>
-            <PrimeReactProvider>
-                <AuthProvider>
+            <AuthProvider>
+                <PrimeReactProvider>
                     <AntdRegistry>
                         {/* <UserProvider> */}
                         {children}
                         {/* </UserProvider> */}
                     </AntdRegistry>
-                </AuthProvider>
-            </PrimeReactProvider>
+                </PrimeReactProvider>
+            </AuthProvider>
         </LoadingContext>
     );
 }

@@ -1,64 +1,62 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import { db } from "@/app/api/config/db_csweb.config";
-
-if (!process.env.NEXTAUTH_SECRET) {
-  throw new Error(
-    "please provide process.env.NEXTAUTH_SECRET environment variable"
-  );
-}
+import { db } from "@/app/api/config/db_csweb.config.js";
 
 export const options = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        name: {
-          label: "name:",
-          type: "text",
-          placeholder: "your-name",
-        },
-        password: {
-          label: "password:",
-          type: "password",
-          placeholder: "your-password",
-        },
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
-          
-          const foundUser = await db.raw(`
-            SELECT [username], [password] 
-            FROM [user] 
-            WHERE [username] = '${credentials.name}' AND [password] = '${credentials.password}'
-          `, []);
-          
-            console.log(foundUser);
-            
-          // const foundUser = await db.raw(`CALL GetOperatorLogin('${credentials.name}','${credentials.password}')`,
-          //   []);
-          if (foundUser.length > 0) {
-            return { name: foundUser };
+          const user = await db("users")
+            .where("username", credentials.username)
+            .first();
+
+          if (!user) {
+            return null;
           }
+
+          if (credentials.password === user.password) {
+            return {
+              id: user.id,
+              name: user.username,
+              email: user.email,
+              role: user.role
+            };
+          }
+          return null;
         } catch (error) {
-          console.log(error);
+          console.error("Auth error:", error);
+          return null;
         }
-        return null;
-      },
-    }),
+      }
+    })
   ],
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/",
-  },
   callbacks: {
     async jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+        token.id = user.id;
+      }
       return token;
     },
     async session({ session, token }) {
+      if (token) {
+        session.user.role = token.role;
+        session.user.id = token.id;
+      }
       return session;
-    },
+    }
   },
+  pages: {
+    signIn: "/auth/signin",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+  },
+  secret: process.env.NEXTAUTH_SECRET
 };

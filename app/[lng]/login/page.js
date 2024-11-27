@@ -18,7 +18,6 @@ export default function Login() {
         redirect: false,
       });
       if (result.error) {
-        console.log(result.error);
         message.error("Хэрэглэгчийн нэр эсвэл нууц үг буруу байна.");
         setLoading(false);
       } else {
@@ -26,7 +25,6 @@ export default function Login() {
         router.push("/admin/dashboard");
       }
     } catch (error) {
-      console.error(error);
       setLoading(false);
     }
   };

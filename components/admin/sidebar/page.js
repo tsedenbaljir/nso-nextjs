@@ -31,7 +31,7 @@ export default function Sidebar() {
                 ҮНДСЭН ЦЭС
               </h3>
               <ul className="mb-6 flex flex-col gap-2">
-                <MenuItems name={"Үйл явдал"} isActive={pth === "news"} link={"/news"} />
+                <MenuItems name={"Үйл явдал"} isActive={pth === "news"} link={"/news/all"} />
                 <MenuItems name={"Бидний тухай"} isActive={pth === "about"} link={"/about"} />
                 <MenuItems name={"Цэсний тохиргоо"} isActive={pth === "menus"} link={"/menus"} />
                 <MenuItems name={"Ажлын байр"} isActive={pth === "workspace"} link={"/workspace"} />
