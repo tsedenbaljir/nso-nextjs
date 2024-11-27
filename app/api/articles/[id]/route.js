@@ -1,35 +1,16 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { db } from '@/app/api/config/db_csweb.config.js';
 
 export async function GET(req, { params }) {
   const { id } = params;
-  const { searchParams } = new URL(req.url);
-  const lng = searchParams.get('lng') || 'MN';
 
   try {
-    const response = await axios.get(`https://gateway.1212.mn/services/1212/api/public/content/${id}`, {
-      params: {
-        'language.equals': lng.toUpperCase(),
-      },
-      validateStatus: function (status) {
-        return status >= 200 && status < 300;
-      }
-    });
+    const [results] = await db.raw(`
+      SELECT * FROM web_1212_content WHERE id = ${id}
+    `, []);
 
-    const article = {
-      ...response.data,
-      publishedDate: response.data.publishedDate || response.data.createdDate,
-      headerImage: response.data.headerImage || null,
-      thumbImage: response.data.thumbImage || null,
-      body: response.data.body?.replace(/\\n/g, '\n') || '',
-    };
-
-    return NextResponse.json({ 
-      status: true, 
-      data: article, 
-      message: "" 
-    });
-
+    return NextResponse.json({ status: true, data: results, message: "" });
   } catch (error) {
     console.error('Error fetching article:', error);
     return NextResponse.json(

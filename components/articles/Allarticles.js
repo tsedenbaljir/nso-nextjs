@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import TextLoading from '@/components/Loading/Text/Index';
 
 export default function Index({ Articles, loading }) {
     const router = useRouter();
+    const [errorImages, setErrorImages] = useState({});
+
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return '/images/default.jpg';
+        return `https://downloads.1212.mn/${imagePath}`;
+    };
+
+    const handleImageError = (articleId, imagePath) => {
+        setErrorImages(prev => ({
+            ...prev,
+            [articleId]: `/uploads/${imagePath}`
+        }));
+    };
 
     return (
         <>
@@ -30,12 +44,18 @@ export default function Index({ Articles, loading }) {
                                             router.push(`/news/${art.id}`);
                                         }}
                                     >
-                                        <img
-                                            className="__image"
-                                            width="100%"
-                                            src={`https://downloads.1212.mn/${art.headerImage}`}
-                                            alt="main-news"
-                                        />
+                                        <div className="relative w-full h-[200px]">
+                                            <Image
+                                                src={errorImages[art.id] || getImageUrl(art.header_image)}
+                                                alt={art.name || 'Article image'}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                className="object-cover rounded-lg"
+                                                priority={false}
+                                                quality={75}
+                                                onError={() => handleImageError(art.id, art.header_image)}
+                                            />
+                                        </div>
                                         <div className="__title overflow-hidden">
                                             <div className="line-clamp-2">
                                                 {art.name}
@@ -44,7 +64,7 @@ export default function Index({ Articles, loading }) {
                                         <div className="__view_comments">
                                             <div className="__info">
                                                 <i className="pi pi-calendar-minus"></i>
-                                                {art.createdDate.substr(0, 10)}
+                                                {art.created_date.substr(0, 10)}
                                             </div>
                                         </div>
                                     </div>

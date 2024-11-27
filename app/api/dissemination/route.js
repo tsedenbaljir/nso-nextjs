@@ -9,7 +9,7 @@ export async function GET(req) {
   const type = searchParams.get('type') || 'LATEST';
   
   try {
-    const response = await axios.get(`https://gateway.1212.mn/services/1212/api/public/contents`, {
+    const response = await axios.get(`http://10.0.10.211/services/1212/api/public/contents`, {
       params: {
         size: 10,
         page: page - 1,

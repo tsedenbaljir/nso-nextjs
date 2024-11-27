@@ -50,7 +50,7 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
     );
 
     const handleSearchChange = (event) => {
-        const value = event.target.value.trim();
+        const value = event.target.value;
         setSearchTerm(value);
         setSearching(value);
         debouncedSearch(value);

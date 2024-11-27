@@ -48,7 +48,7 @@ const DynamicForm = () => {
                                     }}
                                     onChange={(e) => handleChange(e, index)}
                                 />
-                                <label htmlFor="name">name</label>
+                                <label htmlFor={`name-${index}`}>name</label>
                             </FloatLabel>
                         </div>
                         <div className="mr-4">
@@ -61,7 +61,7 @@ const DynamicForm = () => {
                                     }}
                                     onChange={(e) => handleChange(e, index)}
                                 />
-                                <label htmlFor="name">name</label>
+                                <label htmlFor={`name-${index}`}>name</label>
                             </FloatLabel>
                         </div>
                         <div className="mr-4">
@@ -74,7 +74,7 @@ const DynamicForm = () => {
                                     }}
                                     onChange={(e) => handleChange(e, index)}
                                 />
-                                <label htmlFor="name">name</label>
+                                <label htmlFor={`name-${index}`}>name</label>
                             </FloatLabel>
                         </div>
                         <div>

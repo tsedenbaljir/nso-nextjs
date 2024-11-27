@@ -12,7 +12,7 @@ export async function GET(req) {
     try {
         const params = {
             size: pageSize,
-            page: page,
+            page: Math.round(page - 1),
             sort: sort,
             total: 0,
             'language.equals': lng.toUpperCase(),
@@ -23,7 +23,7 @@ export async function GET(req) {
             params['sectorType.equals'] = sectorType;
         }
 
-        const response = await axios.get('http://10.0.10.211/services/1212/api/public/glossaries-or', {
+        const response = await axios.get('http://10.0.10.211/services/1212/api/public/job-postings', {
             params,
             validateStatus: function (status) {
                 return status >= 200 && status < 300;

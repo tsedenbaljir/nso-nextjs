@@ -7,7 +7,7 @@ export async function GET(req, { params }) {
   const lng = searchParams.get('lng') || 'MN';
 
   try {
-    const response = await axios.get(`https://gateway.1212.mn/services/1212/api/public/content/${id}`, {
+    const response = await axios.get(`http://10.0.10.211/services/1212/api/public/content/${id}`, {
       params: {
         'language.equals': lng.toUpperCase(),
       },

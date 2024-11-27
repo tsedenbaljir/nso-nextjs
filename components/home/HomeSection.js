@@ -11,7 +11,6 @@ const HomeSection = ({ lng }) => {
     const [search, setSearching] = useState({});
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
-    console.log("data", data);
     
     return (
         <div className="nso_main_section" style={{ background: 'var(--surface-bk)' }}>
@@ -23,7 +22,7 @@ const HomeSection = ({ lng }) => {
                         </div>
                         <div className="__main_search current_space">
                             <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoading} />
-                            {search.length > 2 && <Result showResult={showResult} t={t} loading={loading} data={data} />}
+                            {search.length > 2 && <Result showResult={showResult} t={t} loading={loading} data={data} lng={lng} />}
                             {/* <i className="p-autocomplete-loader pi pi-spinner pi-spin "></i> */}
                         </div>
                     </div >

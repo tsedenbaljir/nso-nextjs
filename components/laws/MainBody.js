@@ -1,6 +1,8 @@
 import React from 'react';
+import { useRouter } from "next/navigation";
 
 export default function Body({ dt }) {
+    const router = useRouter();
     return (
         <div
             className="__post"

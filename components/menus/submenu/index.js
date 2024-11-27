@@ -19,7 +19,7 @@ export default function Index({ lng }) {
     const myHeaders = new Headers();
     myHeaders.append(
         "Authorization",
-        "Bearer " + process.env.BACKEND_KEY
+        "Bearer 82d1546606040d636ba3984d107e0e7b943b5b7484889d95216ae6709556c7201f0c1d3b74119ce25f025143e4f904aaf33943021f659db9c664c96b15bcf75825a79c7c4bed30cd69fa7a7818e781043e458c62ced21b433b0662ac4ea7159ddfd475d6cd36d30e176f028ca02f386d0ad2568a76a84dfd52911f615aba6b28"
     );
 
     const requestOptions = {
@@ -31,7 +31,7 @@ export default function Index({ lng }) {
     useEffect(() => {
         const fetchMenus = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/czesnij-tohirgoos/jo702rceqsu6onv0tif6zd4v?populate[Menus][populate][populate]=*`, {
+                const response = await fetch(`https://medee.nso.mn/api/czesnij-tohirgoos/jo702rceqsu6onv0tif6zd4v?populate[Menus][populate][populate]=*`, {
                     ...requestOptions,
                     cache: 'no-store',  // Prevents caching
                 });

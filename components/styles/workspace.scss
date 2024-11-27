@@ -1,0 +1,81 @@
+.nso_about_us {
+    ::ng-deep .p-dropdown {
+        border: none;
+        font-weight: 500;
+        padding: 3px 10px;
+        border-radius: 30px;
+        color: var(--text-main);
+        background: rgb(206 208 209 / 20%);
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .ws_body {
+        margin-top: 10px;
+        color: var(--text-main);
+        border-bottom: 2px dotted rgba(128, 128, 128, 0.37);
+
+        .ws_title {
+            font-size: var(--font-size24);
+            font-weight: 600;
+        }
+
+        .ws_desc {
+            margin: 15px 0;
+            font-size: var(--font-size16);
+        }
+
+        .__ws_action_area {
+            position: absolute; 
+            right: 0; 
+            margin-top: -60px;
+        }
+
+        ul {
+            padding: 0;
+            display: flex;
+            font-weight: medium;
+            color: var(--text-desc);
+
+            li {
+                margin-left: 20px;
+            }
+        }
+    }
+
+    .notFound {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10vh;
+        align-items: center;
+        justify-content: center;
+
+        .notFoundText {
+            width: 100%;
+            font-size: var(--font-size16);
+            color: var(--text-main);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notFoundImages {
+            width: 100%;
+            height: calc(50vh);
+            background-position: center;
+            background-repeat: no-repeat;
+            // background-image: url('~src/assets/images/about_us/empty_jobs.png');
+        }
+    }
+
+    .__table {
+        a {
+            text-decoration: none;
+
+            &:hover {
+
+                cursor: pointer;
+                color: var(--accent);
+            }
+        }
+    }
+
+}

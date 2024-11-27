@@ -21,6 +21,7 @@
     "accept-language": "^3.0.18",
     "antd": "^5.20.0",
     "axios": "^1.7.7",
+    "formidable": "^3.5.2",
     "https": "^1.0.0",
     "i18next": "^23.12.2",
     "i18next-browser-languagedetector": "^8.0.0",

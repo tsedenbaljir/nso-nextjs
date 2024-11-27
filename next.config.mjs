@@ -9,6 +9,14 @@ const nextConfig = {
             "medee.app.nso.mn",
             "os.alipayobjects.com",
             "api.ipify.org",
+            "downloads.1212.mn",
+        ],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'downloads.1212.mn',
+                pathname: '/**', // Allow all paths under this domain
+            },
         ],
     },
     env: {
@@ -20,6 +28,7 @@ const nextConfig = {
         GOOGLE_SERVICE_ACCOUNT: process.env.GOOGLE_SERVICE_ACCOUNT,
         GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,
         ELASTIC_SEARCH: process.env.ELASTIC_SEARCH,
+        API_URL: process.env.API_URL,
     },
     output: "standalone",
     async headers() {

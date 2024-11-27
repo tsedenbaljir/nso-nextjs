@@ -1,17 +1,15 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import axios from 'axios';
 
 const tinymceKey = 'rvqf3lw6552if615zl9yqk7zqocgsgsy9wuok6az3ifba8uf';
 
 export default function WYSIWYGEditor({ setBody }) {
-
     const handleEditorChange = (content) => {
         setBody(content);
     };
 
-    const handleFilePicker = (callback, value, meta) => {
+    const handleFilePicker = async (callback, value, meta) => {
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
         input.click();
@@ -25,70 +23,93 @@ export default function WYSIWYGEditor({ setBody }) {
             }
 
             try {
-                await fetch(
-                    `https://gateway.1212.mn/api/token?username=tsedenbaljir&password=Nso.123456&grant_type=password`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                            "Content-Type": "application/x-www-form-urlencoded",
-                            Authorization: `Basic bnNvY2xpZW50OmExYTgyNTc4LTI1MWEtNDIzNS1hYzNkLWI1ZWY2YjI0NTNhNg==`,
-                        },
-                    }
-                ).then(async (response) => {
-                    const dt = await response.json();
-                    const data = await fetch('https://gateway.1212.mn/services/1212/api/fms-token',
-                        {
-                            method: "GET",
-                            headers: {
-                                "Access-Control-Allow-Origin": "*",
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ` + dt.access_token,
-                            },
-                        });
-                    const datares = await data.json();
+                const formData = new FormData();
+                formData.append('file', file);
 
-                    const uploadUrl = `https://gateway.1212.mn/services/fms/api/public/upload/0/${datares.token}`;
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    const uploadData = await axios.post(uploadUrl, formData, {
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ` + dt.access_token,
-                        },
-                    });
-
-                    const fileUrl = `https://gateway.1212.mn/services/fms/api/public/download/0/${uploadData.data.pathName}`;
-                    callback(fileUrl, { title: uploadData.data.originalName });
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
                 });
 
+                if (!response.ok) {
+                    throw new Error('Upload failed');
+                }
+
+                const data = await response.json();
+                const fileUrl = `/uploads/${data.fileName}`;
+                callback(fileUrl, { title: file.name });
+
             } catch (error) {
+                console.error('Error uploading file:', error);
                 alert('Файл хавсаргахад алдаа гарлаа!');
             }
         };
     };
 
     return (
-        <div>
-            <h1>Мэдээлэл оруулах</h1>
-            <Editor
-                apiKey={tinymceKey}
-                initialValue="<p></p>"
-                init={{
-                    height: 500,
-                    plugins: 'paste autolink code image link media table charmap hr advlist lists',
-                    toolbar: 'undo redo | bold italic underline | fontsizeselect formatselect | alignleft aligncenter alignright alignjustify outdent indent | numlist bullist | forecolor backcolor removeformat | image media link',
-                    file_picker_types: 'file image media',
-                    relative_urls: false,
-                    file_picker_callback: handleFilePicker,
-                    media_alt_source: false,
-                    media_dimensions: false,
-                    video_template_callback: (data) => `<iframe src="${data.source}" ${data.sourcemime ? `type="${data.sourcemime}"` : ''} ></iframe>`,
-                }}
-                onEditorChange={handleEditorChange}
-            />
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Мэдээлэл оруулах
+            </h1>
+            <div className="rounded-lg">
+                <Editor
+                    apiKey={tinymceKey}
+                    initialValue="<p></p>"
+                    init={{
+                        height: 500,
+                        skin: 'oxide',
+                        content_css: 'default',
+                        plugins: 'paste autolink code image link media table charmap hr advlist lists',
+                        toolbar: 'undo redo | bold italic underline | fontsizeselect formatselect | alignleft aligncenter alignright alignjustify outdent indent | numlist bullist | forecolor backcolor removeformat | image media link',
+                        file_picker_types: 'file image media',
+                        relative_urls: false,
+                        file_picker_callback: handleFilePicker,
+                        media_alt_source: false,
+                        media_dimensions: false,
+                        video_template_callback: (data) => `<iframe src="${data.source}" ${data.sourcemime ? `type="${data.sourcemime}"` : ''} ></iframe>`,
+                        images_upload_handler: async (blobInfo, progress) => {
+                            try {
+                                const formData = new FormData();
+                                formData.append('file', blobInfo.blob());
+
+                                const response = await fetch('/api/upload', {
+                                    method: 'POST',
+                                    body: formData,
+                                });
+
+                                if (!response.ok) {
+                                    throw new Error('Upload failed');
+                                }
+
+                                const data = await response.json();
+                                return `/uploads/${data.fileName}`;
+                            } catch (error) {
+                                console.error('Error uploading image:', error);
+                                throw new Error('Image upload failed');
+                            }
+                        },
+                        content_style: `
+                            body { 
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                                font-size: 16px;
+                                line-height: 1.6;
+                                color: #374151;
+                                margin: 1rem;
+                            }
+                        `,
+                        setup: (editor) => {
+                            editor.on('init', () => {
+                                if (document.documentElement.classList.contains('dark')) {
+                                    editor.getBody().style.backgroundColor = '#1f2937';
+                                    editor.getBody().style.color = '#f3f4f6';
+                                }
+                            });
+                        }
+                    }}
+                    onEditorChange={handleEditorChange}
+                    className="min-h-[500px] w-full"
+                />
+            </div>
         </div>
     );
 }

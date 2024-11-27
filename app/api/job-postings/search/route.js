@@ -7,7 +7,7 @@ export async function GET(req) {
     const lng = searchParams.get('lng') || 'MN';
 
     try {
-        const response = await axios.get('http://10.0.10.211/services/1212/api/public/glossaries-or', {
+        const response = await axios.get('http://10.0.10.211/services/1212/api/public/job-postings', {
             params: {
                 'name.contains': searchTerm,
                 'language.equals': lng.toUpperCase(),

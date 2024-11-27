@@ -1,46 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import Image from 'next/image';
 
 export default function Articles({ article }) {
+    const [imageError, setImageError] = useState(false);
+
+    if (!article) {
+        return <div>No article data available</div>;
+    }
+
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return '/images/default.jpg';
+        if (imagePath.startsWith('http')) return imagePath;
+        if (imagePath.startsWith('/uploads/')) return imagePath;
+        return `https://downloads.1212.mn/${imagePath}`;
+    };
+
+    const handleImageError = () => {
+        setImageError(true);
+    };
+
+    const formatDate = (dateString) => {
+        try {
+            return dateString?.substr(0, 10) || 'Date not available';
+        } catch (error) {
+            return 'Date not available';
+        }
+    };
 
     return (
-        <div className="__about_post">
-            <div className="__info_detail_page" >
+        <article className="__about_post">
+            <div className="__info_detail_page">
                 <div className="bg-gray">
-                    <img
+                    <Image
+                        src={imageError ? `/uploads/${article.header_image}` : getImageUrl(article.header_image)}
+                        alt={article.name || 'Article image'}
+                        width={500}
+                        height={500}
                         className="__header_image"
-                        src={`https://downloads.1212.mn/${article.headerImage}`}
-                        alt="main-news"
+                        onError={handleImageError}
+                        priority
                     />
                 </div>
+
                 <div className='__view_comments'>
-                    <div className=" __info">
-                        <i className="pi pi-calendar-minus"></i>
-                        {article.createdDate.substr(0, 10)}
+                    <div className="__info">
+                        <i className="pi pi-calendar-minus" aria-hidden="true"></i>
+                        <span className="ml-2">{formatDate(article.created_date)}</span>
                     </div>
                 </div>
-                <div className="__post_title mt-3">
+
+                <h1 className="__post_title mt-3">
                     {article.name}
-                </div>
-                <div className="border-b border-blue-700 p-2 mb-3">
-                </div>
-                <div className="__info" >
-                    <div className="__social" >
-                        <div
-                            id="__one"
-                            className="one"
-                        >
+                </h1>
+
+                <div className="border-b border-blue-700 p-2 mb-3" />
+
+                <div className="__info">
+                    <div className="__social">
+                        <div className="one">
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeRaw]}>
-                                {article.body}
+                                rehypePlugins={[rehypeRaw]}
+                            >
+                                {article.body || 'No content available'}
                             </ReactMarkdown>
-                        </div >
-                    </div >
-                </div >
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </article>
     );
 }

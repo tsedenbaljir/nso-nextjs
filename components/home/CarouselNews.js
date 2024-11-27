@@ -19,7 +19,8 @@ export default function CarouselNews({ lng }) {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(`/api/articles?page=0&pageSize=24&lng=${lng}&type=latest`, {
+                // articles?job-postings=${page}&pageSize=${articlesPerPage}&lng=${lng}&type=${path}
+                const response = await fetch(`/api/articles?page=1&pageSize=24&lng=${lng}&type=latest`, {
                     ...requestOptions,
                     cache: 'no-store',
                 });
