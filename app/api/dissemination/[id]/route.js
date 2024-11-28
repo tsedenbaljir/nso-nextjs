@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+import { db } from '@/app/api/config/db_csweb.config';
 
 export async function GET(req, { params }) {
   const { id } = params;
@@ -7,24 +7,30 @@ export async function GET(req, { params }) {
   const lng = searchParams.get('lng') || 'MN';
 
   try {
-    const response = await axios.get(`http://10.0.10.211/services/1212/api/public/content/${id}`, {
-      params: {
-        'language.equals': lng.toUpperCase(),
-      },
-      validateStatus: function (status) {
-        return status >= 200 && status < 300;
-      }
-    });
+    const [result] = await db.raw(`
+      SELECT * FROM web_1212_content 
+      WHERE id = ? AND language = ? AND content_type = 'NEWS'
+    `, [id, lng]);
 
+    if (!result || result.length === 0) {
+      return NextResponse.json({ 
+        status: false, 
+        data: null, 
+        message: "Article not found" 
+      }, { 
+        status: 404 
+      });
+    }
+    
     const article = {
-      ...response.data,
-      publishedDate: response.data.publishedDate || response.data.createdDate,
-      headerImage: response.data.headerImage || null,
-      thumbImage: response.data.thumbImage || null,
-      body: response.data.body?.replace(/\\n/g, '\n') || '',
+      ...result,
+      publishedDate: result.published_date || result.created_date,
+      headerImage: result.header_image || null,
+      thumbImage: result.thumb_image || null,
+      body: result.body,
     };
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       status: true, 
       data: article, 
       message: "" 
@@ -32,13 +38,12 @@ export async function GET(req, { params }) {
 
   } catch (error) {
     console.error('Error fetching article:', error);
-    return NextResponse.json(
-      { 
-        status: false, 
-        data: null, 
-        message: "Failed to fetch article" 
-      }, 
-      { status: error.response?.status || 500 }
-    );
+    return NextResponse.json({ 
+      status: false, 
+      data: null, 
+      message: "Internal server error" 
+    }, { 
+      status: 500 
+    });
   }
 }

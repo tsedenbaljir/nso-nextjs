@@ -1,19 +1,23 @@
 "use client"
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Editor from '@/components/admin/Editor/editor'
 import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
 import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import Upload from "@/components/admin/Edits/UploadImages/Upload";
 
-const Dashboard = () => {
+export default function NewDissemination() {
+    const router = useRouter();
     const [body, setBody] = useState('');
     const [headerImageFile, setHeaderImageFile] = useState(null);
     const [title, setTitle] = useState('');
-    const [newsType, setNewsType] = useState(1);
+    const [newsType, setNewsType] = useState('LATEST');
     const [language, setLanguage] = useState('mn');
     const [published, setPublished] = useState(true);
+    const [publishedDate, setPublishedDate] = useState('');
     const [user, setUser] = useState(null);
+    const [slug, setSlug] = useState('');
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -27,7 +31,7 @@ const Dashboard = () => {
                 console.error('Error fetching user:', error);
             }
         };
-        
+
         fetchUser();
     }, []);
 
@@ -41,9 +45,7 @@ const Dashboard = () => {
                 body: formData,
             });
 
-            if (!response.ok) {
-                throw new Error('Image upload failed');
-            }
+            if (!response.ok) throw new Error('Image upload failed');
 
             const data = await response.json();
             return data.url;
@@ -73,28 +75,26 @@ const Dashboard = () => {
                 created_by: user?.username || 'anonymousUser',
                 created_date: currentDate,
                 last_modified_date: currentDate,
-                content_type: 'NSONEWS',
+                content_type: 'NEWS',
                 news_type: newsType,
-                published_date: currentDate,
+                published_date: publishedDate || currentDate,
                 header_image: imageUrl,
-                views: 0
+                views: 0,
+                slug: slug
             };
 
-            const response = await fetch('/api/articles', {
+            const response = await fetch('/api/dissemination/admin', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(articleData),
             });
 
             const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(data.message || 'Failed to create article');
-            }
+            if (!response.ok) throw new Error(data.message || 'Failed to create article');
 
             alert('Мэдээ амжилттай нэмэгдлээ');
+            router.push('/admin/dissemination');
 
         } catch (error) {
             console.error('Error posting data:', error);
@@ -110,7 +110,7 @@ const Dashboard = () => {
                         <div className="flex flex-grow items-center justify-between px-4 py-5 shadow-2 md:px-5 2xl:px-10">
                             <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
                                 <div className="nso_btn nso_btn_default font-extrabold text-xl">
-                                    Мэдээ нэмэх
+                                    Тархаах мэдээ нэмэх
                                 </div>
                             </div>
                         </div>
@@ -119,10 +119,10 @@ const Dashboard = () => {
                 <div className="items-center justify-between px-4 md:px-5 2xl:px-10">
                     <div className='flex flex-wrap gap-3 mb-4'>
                         <SelectInput
-                            setFields={setNewsType}
+                            setFields={(value) => setNewsType(value === 1 ? 'LATEST' : 'FUTURE')}
                             data={[
-                                { id: 1, name: "Шинэ мэдээ" },
-                                { id: 2, name: "Медиа мэдээ" }
+                                { id: 1, name: "Сүүлд гарсан" },
+                                { id: 2, name: "Удахгүй гарах" }
                             ]}
                         />
                         <SelectInput
@@ -132,8 +132,22 @@ const Dashboard = () => {
                                 { id: 2, name: "EN" }
                             ]}
                         />
+                        <div className="flex items-center">
+                            <input
+                                type="date"
+                                value={publishedDate.split('T')[0]}
+                                onChange={(e) => setPublishedDate(e.target.value)}
+                                className="border rounded px-2 py-1"
+                            />
+                        </div>
+                        <InputItems
+                            name={"Хамрах хүрээ"}
+                            data={slug}
+                            setData={setSlug}
+                            placeholder="my-article-url"
+                        />
                         <div className="flex items-center bg-gray-100 px-2 rounded-md">
-                        <input
+                            <input
                                 type="checkbox"
                                 id="publishedCheckbox"
                                 checked={published}
@@ -147,14 +161,13 @@ const Dashboard = () => {
                         <InputItems name={"Гарчиг"} data={title} setData={setTitle} />
                     </div>
                     <div className='flex flex-wrap gap-3 mb-6'>
-                        <Upload 
-                            setHeaderImageFile={setHeaderImageFile}
-                        />
+                        <Upload setHeaderImageFile={setHeaderImageFile} />
                     </div>
                     <Editor setBody={setBody} />
                     <div className='float-right pt-4'>
                         <button
                             type="button"
+                            onClick={() => router.push('/admin/dissemination')}
                             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-black bg-gray hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             Буцах
@@ -171,6 +184,4 @@ const Dashboard = () => {
             </div>
         </AdminLayout>
     );
-};
-
-export default Dashboard;
+}

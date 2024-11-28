@@ -40,9 +40,11 @@ export default function AboutUs({ params: { lng } }) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const articlesData = await response.json();
-                setArticles(articlesData.data.reverse());
-                setTotalPages(articlesData.pagination.total);
+                const result = await response.json();
+                if (result.status) {
+                    setArticles(result.data);
+                    setTotalPages(result.totalPage);
+                }
                 setLoading(true);
             } catch (error) {
                 console.error('Error fetching articles:', error);
@@ -69,7 +71,7 @@ export default function AboutUs({ params: { lng } }) {
                             articles.map((dt, index) => (
                                 <Tr key={index} index={index} item={dt} lng={lng} />
                             ))
-                        ) : (
+                    ) : (
                             <tr>
                                 <td colSpan="4">
                                     <Text />

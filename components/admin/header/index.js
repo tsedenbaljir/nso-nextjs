@@ -1,8 +1,10 @@
+"use client"
 import React from 'react';
 import Link from 'next/link';
-import Image from "next/image";
+import { Path } from '@/utils/path';
 
 export default function componentName(props) {
+    var pth = Path().split("/")[3];
     return (
         <>
             <header className="sticky top-0 z-999 flex w-full border-b border-stroke dark:border-stroke-dark dark:bg-gray-dark bg-gray-1">
@@ -17,13 +19,17 @@ export default function componentName(props) {
                     </div>
                     <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
                         <ul className="flex items-center gap-2 2xsm:gap-4">
-                            <Link href={"/admin/news/new"}>
+                            {pth !== "dashboard" && <Link href={
+                                pth === "news" ? "/admin/news/new" :
+                                    pth === "dissemination" ? "/admin/dissemination/new" :
+                                        ""
+                            }>
                                 <div
                                     className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out dark:bg-white/10 text-white bg-blue-600`}
                                 >
                                     Шинээр үүсгэх
                                 </div>
-                            </Link>
+                            </Link>}
                         </ul>
                     </div>
                 </div>

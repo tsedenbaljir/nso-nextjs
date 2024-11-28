@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 export default function Tr({ item, lng, index }) {
     const router = useRouter();
     // Create a Date object once and reuse
-    const publishedDate = new Date(item.publishedDate);
+    const published_date = new Date(item.published_date);
     const formattedDate = lng === "mn"
-        ? `${publishedDate.getMonth() + 1} сарын ${publishedDate.getDate()}`
-        : new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' }).format(publishedDate);
-    const formattedTime = `${publishedDate.getHours()}:${publishedDate.getMinutes().toString().padStart(2, '0')}`;
+        ? `${published_date.getMonth() + 1} сарын ${published_date.getDate()}`
+        : new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' }).format(published_date);
+    const formattedTime = `${published_date.getHours()}:${published_date.getMinutes().toString().padStart(2, '0')}`;
 
     return (<tr key={index}>
         <td>{item.slug}</td>
@@ -24,7 +24,7 @@ export default function Tr({ item, lng, index }) {
                 item.name
             )}
             <div className="__table_spec">
-                <span>{item.publishedDate.substr(0, 10)}</span>
+                <span>{item.published_date.substr(0, 10)}</span>
                 {item.body === "<p></p>" && (
                     <span className="__table_views">
                         {lng === "mn" ? 'Хугацаа болоогүй' : 'Soon'}

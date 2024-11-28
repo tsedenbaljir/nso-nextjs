@@ -1,5 +1,4 @@
 "use client"
-
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -31,11 +30,11 @@ export default function Sidebar() {
                 ҮНДСЭН ЦЭС
               </h3>
               <ul className="mb-6 flex flex-col gap-2">
-                <MenuItems name={"Үйл явдал"} isActive={pth === "news"} link={"/news"} />
-                <MenuItems name={"Бидний тухай"} isActive={pth === "about"} link={"/about"} />
-                <MenuItems name={"Цэсний тохиргоо"} isActive={pth === "menus"} link={"/menus"} />
-                <MenuItems name={"Ажлын байр"} isActive={pth === "workspace"} link={"/workspace"} />
-                <MenuItems name={"Хамтын ажиллагаа"} isActive={pth === "cooperation"} link={"/cooperation"} />
+                <MenuItems name={"Үйл явдал"} isActive={pth === "news"} link={"news"} />
+                <MenuItems name={"Тархаах хуваарь"} isActive={pth === "dissemination"} link={"dissemination"} />
+                <MenuItems name={"Цэсний тохиргоо"} isActive={pth === "menus"} link={"menus"} />
+                <MenuItems name={"Ажлын байр"} isActive={pth === "workspace"} link={"workspace"} />
+                <MenuItems name={"Хамтын ажиллагаа"} isActive={pth === "cooperation"} link={"cooperation"} />
               </ul>
             </div>
             <div >

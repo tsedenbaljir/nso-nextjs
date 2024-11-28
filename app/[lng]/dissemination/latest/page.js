@@ -16,7 +16,7 @@ export default function AboutUs({ params: { lng } }) {
     const page = parseInt(searchParams.get('page') || 1, 10); // Ensure page is a number
 
     const [articles, setArticles] = useState([]);
-    const [loading, setLoading] = useState(true); // Set loading to true initially
+    const [loading, setLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
 
     const articlesPerPage = 10;
@@ -30,7 +30,7 @@ export default function AboutUs({ params: { lng } }) {
 
     useEffect(() => {
         const fetchArticles = async () => {
-            setLoading(true); // Start loading
+            setLoading(false);
 
             try {
                 const response = await fetch(`/api/dissemination?page=${page}&pageSize=${articlesPerPage}&lng=${lng}&type=latest`, {
@@ -42,10 +42,12 @@ export default function AboutUs({ params: { lng } }) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
-                const articlesData = await response.json();
-                setArticles(articlesData.data);
-                setTotalPages(articlesData.pagination.total);
-                setLoading(false); // Stop loading after data is fetched
+                const result = await response.json();
+                if (result.status) {
+                    setArticles(result.data);
+                    setTotalPages(result.totalPage);
+                }
+                setLoading(true);
             } catch (error) {
                 console.error('Error fetching articles:', error);
                 setLoading(false); // Stop loading if there is an error
@@ -69,15 +71,15 @@ export default function AboutUs({ params: { lng } }) {
                     </thead>
                     <tbody className="p-datatable-tbody">
                         {loading ? (
+                            articles.map((dt, index) => (
+                                <Tr key={index} index={index} item={dt} lng={lng} />
+                            ))
+                        ) : (
                             <tr>
                                 <td colSpan="4">
                                     <Text />
                                 </td>
                             </tr>
-                        ) : (
-                            articles.map((dt, index) => (
-                                <Tr key={index} index={index} item={dt} lng={lng} />
-                            ))
                         )}
                     </tbody>
                 </table>
