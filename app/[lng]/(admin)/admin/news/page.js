@@ -1,159 +1,225 @@
 "use client"
-import { useState } from 'react';
-import Editor from '@/components/admin/Editor/editor'
-import InputItems from "@/components/admin/Edits/AddNew/InputItems";
-import SelectInput from "@/components/admin/Edits/Select/SelectInput";
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
-import Upload from "@/components/admin/Edits/UploadImages/Upload";
+import { useState, useEffect } from 'react'
+import AdminLayout from '@/components/admin/layouts/AdminLayout'
+import { useTranslation } from '@/app/i18n/client'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
+import { useRouter } from 'next/navigation'
+import "primereact/resources/themes/lara-light-indigo/theme.css"
+import "primereact/resources/primereact.min.css"
+import "primeicons/primeicons.css"
+import { confirmDialog } from 'primereact/confirmdialog';
+import { ConfirmDialog } from 'primereact/confirmdialog';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
-const Dashboard = () => {
-    const [body, setBody] = useState('');
-    const [headerImageFile, setHeaderImageFile] = useState(null);
-    const [title, setTitle] = useState('');
-    const [newsType, setNewsType] = useState(1);
-    const [language, setLanguage] = useState('mn');
-    const [published, setPublished] = useState(true);
+export default function AllNews({ params: { lng } }) {
+    const router = useRouter()
+    const { t } = useTranslation(lng)
+    const [articles, setArticles] = useState([])
+    const [loading, setLoading] = useState(true)
 
-    const uploadImage = async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
+    useEffect(() => {
+        fetchArticles()
+    }, [])
 
+    const handleUnauthorized = () => {
+        router.push('/auth/signin') // Redirect to login page
+    }
+
+    const fetchArticles = async () => {
+        setLoading(true)
         try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error('Image upload failed');
+            const response = await fetch('/api/articles/admin')
+            if (response.status === 401) {
+                handleUnauthorized()
+                return
             }
-
-            const data = await response.json();
-            return data.url;
+            const data = await response.json()
+            setArticles(data.data)
         } catch (error) {
-            console.error('Error uploading image:', error);
-            throw error;
+            console.error('Error fetching articles:', error)
+        } finally {
+            setLoading(false)
         }
+    }
+
+    // Template for status column
+    const statusBodyTemplate = (rowData) => {
+        return (
+            <button
+                className={`px-2 py-1 text-xs rounded-md text-white ${rowData.published
+                        ? 'bg-emerald-500'
+                        : 'bg-yellow-500'
+                    }`}
+            >
+                {rowData.published ? 'Идэвхтэй' : 'Идэвхгүй'}
+            </button>
+        )
+    }
+
+    // Template for language column
+    const languageBodyTemplate = (rowData) => {
+        return (
+            <img
+                src={rowData.language === 'MN' ? '/images/flag_MN.png' : '/images/flag_EN.png'}
+                alt={rowData.language}
+                className="w-5 h-4"
+            />
+        )
+    }
+
+    // Template for date columns
+    const dateBodyTemplate = (rowData, field) => {
+        try {
+            return rowData[field]?.substr(0, 10) || 'Date not available'
+        } catch (error) {
+            return 'Date not available'
+        }
+    }
+
+    // Add this template for the index column
+    const indexBodyTemplate = (rowData, props) => {
+        return props.rowIndex + 1;
+    }
+
+    const handleDelete = async (id) => {
+        confirmDialog({
+            message: 'Энэ мэдээг устгахдаа итгэлтэй байна уу?',
+            header: 'Устгах',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Тийм',
+            rejectLabel: 'Үгүй',
+            accept: async () => {
+                try {
+                    const response = await fetch(`/api/articles/admin/${id}`, {
+                        method: 'DELETE',
+                    });
+                    if (response.status === 401) {
+                        handleUnauthorized()
+                        return
+                    }
+                    const data = await response.json();
+                    if (data.status) {
+                        fetchArticles();
+                    }
+                } catch (error) {
+                    console.error('Error deleting article:', error);
+                }
+            }
+        });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        try {
-            let imageUrl = '';
-            if (headerImageFile) {
-                imageUrl = await uploadImage(headerImageFile);
-            }
-
-            const currentDate = new Date().toISOString();
-
-            const articleData = {
-                name: title,
-                language: language.toUpperCase(),
-                body: body,
-                published: published,
-                list_order: 0,
-                created_by: 1,
-                created_date: currentDate,
-                last_modified_date: currentDate,
-                content_type: 'NSONEWS',
-                news_type: newsType,
-                published_date: currentDate,
-                header_image: imageUrl,
-                views: 0
-            };
-
-            const response = await fetch('/api/articles', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(articleData),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Failed to create article');
-            }
-
-            alert('Мэдээ амжилттай нэмэгдлээ');
-
-        } catch (error) {
-            console.error('Error posting data:', error);
-            alert('Алдаа гарлаа: ' + error.message);
-        }
+    // Add action column template
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <>
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent row click
+                        router.push(`/admin/news/edit/${rowData.id}`)
+                    }}
+                    className="mr-2 px-2 py-1 text-xs text-white rounded-full bg-gray-5 hover:bg-gray-6"
+                >
+                    <i class="pi pi-pen-to-square" ></i>
+                </button>
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent row click
+                        handleDelete(rowData.id);
+                    }}
+                    className="px-2 py-1 text-xs text-white rounded-full  bg-red-100 hover:bg-red-500"
+                >
+                    <i class="pi pi-trash" ></i>
+                </button>
+            </>
+        );
     };
 
     return (
         <AdminLayout>
-            <div className="relative overflow-x-auto shadow-md pb-10">
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                    <main className='dark:bg-black h-full'>
-                        <div className="flex flex-grow items-center justify-between px-4 py-5 shadow-2 md:px-5 2xl:px-10">
-                            <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
-                                <div className="nso_btn nso_btn_default font-extrabold text-xl">
-                                    Мэдээ нэмэх
-                                </div>
-                            </div>
-                        </div>
-                    </main>
-                </div>
-                <div className="items-center justify-between px-4 md:px-5 2xl:px-10">
-                    <div className='flex flex-wrap gap-3 mb-4'>
-                        <SelectInput
-                            setFields={setNewsType}
-                            data={[
-                                { id: 1, name: "Шинэ мэдээ" },
-                                { id: 2, name: "Медиа мэдээ" }
-                            ]}
-                        />
-                        <SelectInput
-                            setFields={(value) => setLanguage(value === 1 ? 'mn' : 'en')}
-                            data={[
-                                { id: 1, name: "MN" },
-                                { id: 2, name: "EN" }
-                            ]}
-                        />
-                        <div className="flex items-center">
-                            <input
-                                type="checkbox"
-                                id="publishedCheckbox"
-                                checked={published}
-                                onChange={(e) => setPublished(e.target.checked)}
-                                className="mr-2"
+            <div className="w-full card">
+                <ConfirmDialog />
+                <DataTable
+                    value={articles}
+                    dataKey="id"
+                    paginator
+                    rows={15}
+                    selectionMode="single"
+                    rowsPerPageOptions={[15]}
+                    className="p-datatable-sm cursor-pointer"
+                    emptyMessage="No articles found."
+                    currentPageReportTemplate="Нийт {totalRecords} мэдээллээс {first}-{last}"
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+                    loading={loading}
+                    loadingIcon={() => (
+                        <div className="flex justify-center items-center h-32">
+                            <ProgressSpinner 
+                                style={{width: '50px', height: '50px'}} 
+                                strokeWidth="4" 
+                                animationDuration=".5s"
                             />
-                            <label htmlFor="publishedCheckbox">Нийтлэх</label>
                         </div>
-                    </div>
-                    <div className='flex flex-wrap gap-3 mb-4'>
-                        <InputItems name={"Гарчиг"} data={title} setData={setTitle} />
-                    </div>
-                    <div className='flex flex-wrap gap-3 mb-6'>
-                        <Upload 
-                            setHeaderImageFile={setHeaderImageFile}
-                        />
-                    </div>
-                    <Editor setBody={setBody} />
-                    <div className='float-right pt-4'>
-                        <button
-                            type="button"
-                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-black bg-gray hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Буцах
-                        </button>
-                        <button
-                            onClick={handleSubmit}
-                            type="submit"
-                            className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        >
-                            Хадгалах
-                        </button>
-                    </div>
-                </div>
+                    )}
+                >
+                    <Column
+                        header="#"
+                        body={indexBodyTemplate}
+                        style={{ width: '3rem' }}
+                    />
+                    <Column
+                        field="name"
+                        header="Гарчиг"
+                        sortable
+                        style={{ maxWidth: '300px', whiteSpace: 'normal' }}
+                        body={(rowData) => (
+                            <div className="whitespace-normal line-clamp-2" title={rowData.name}>
+                                {rowData.name}
+                            </div>
+                        )}
+                    />
+                    <Column
+                        field="language"
+                        header="Хэл"
+                        body={languageBodyTemplate}
+                        style={{ width: '5rem' }}
+                    />
+                    <Column
+                        field="published_date"
+                        header="Нийтлэгдсэн огноо"
+                        body={(rowData) => dateBodyTemplate(rowData, 'published_date')}
+                        sortable
+                    />
+                    <Column
+                        field="created_date"
+                        header="Хадгалсан огноо"
+                        body={(rowData) => dateBodyTemplate(rowData, 'created_date')}
+                        sortable
+                    />
+                    <Column
+                        field="last_modified_date"
+                        header="Өөрчилсөн огноо"
+                        body={(rowData) => dateBodyTemplate(rowData, 'last_modified_date')}
+                        sortable
+                    />
+                    <Column
+                        field="published"
+                        header="Төлөв"
+                        body={statusBodyTemplate}
+                        style={{ width: '7rem' }}
+                        sortable
+                    />
+                    <Column
+                        field="last_modified_by"
+                        header="Өөрчилсөн хэрэглэгч"
+                        style={{ width: '8rem' }}
+                    />
+                    <Column
+                        header="Үйлдэл"
+                        body={actionBodyTemplate}
+                        style={{ width: '6rem' }}
+                    />
+                </DataTable>
             </div>
         </AdminLayout>
-    );
-};
-
-export default Dashboard;
+    )
+}

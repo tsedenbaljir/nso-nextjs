@@ -4,13 +4,19 @@ import Image from 'next/image';
 
 export default function ArticleSideBar({ article }) {
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
+    const [errorImages, setErrorImages] = useState({});
+
 
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return '/images/default.jpg'; // Fallback image
-        if (imagePath.startsWith('http')) return imagePath;
-        if (imagePath.startsWith('/uploads/')) return imagePath;
+        if (!imagePath) return '/images/default.jpg';
         return `https://downloads.1212.mn/${imagePath}`;
+    };
+
+    const handleImageError = (articleId, imagePath) => {
+        setErrorImages(prev => ({
+            ...prev,
+            [articleId]: `/uploads/${imagePath}`
+        }));
     };
 
     return (
@@ -30,12 +36,12 @@ export default function ArticleSideBar({ article }) {
                             <div className="relative w-full h-[200px]">
                                 <Image
                                     className="object-cover rounded-lg"
-                                    src={getImageUrl(art.header_image)}
+                                    src={errorImages[art.id] || getImageUrl(art.header_image)}
                                     alt={art.name || 'News image'}
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    priority={false}
-                                    quality={75}
+                                    width={500}
+                                    height={500}
+                                    onError={() => handleImageError(art.id, art.header_image)}
+                                    priority
                                 />
                             </div>
                             <div className="__title overflow-hidden">

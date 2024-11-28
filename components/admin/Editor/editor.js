@@ -1,13 +1,23 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
 const tinymceKey = 'rvqf3lw6552if615zl9yqk7zqocgsgsy9wuok6az3ifba8uf';
 
-export default function WYSIWYGEditor({ setBody }) {
+export default function WYSIWYGEditor({ setBody, defaultValue = '' }) {
+    const [isEditorReady, setIsEditorReady] = useState(false);
+    const [editorContent, setEditorContent] = useState(defaultValue);
+
     const handleEditorChange = (content) => {
+        setEditorContent(content);
         setBody(content);
     };
+
+    useEffect(() => {
+        if (defaultValue) {
+            setEditorContent(defaultValue);
+        }
+    }, [defaultValue]);
 
     const handleFilePicker = async (callback, value, meta) => {
         const input = document.createElement('input');
@@ -54,7 +64,8 @@ export default function WYSIWYGEditor({ setBody }) {
             <div className="rounded-lg">
                 <Editor
                     apiKey={tinymceKey}
-                    initialValue="<p></p>"
+                    value={editorContent}
+                    onEditorChange={handleEditorChange}
                     init={{
                         height: 500,
                         skin: 'oxide',
@@ -99,6 +110,7 @@ export default function WYSIWYGEditor({ setBody }) {
                         `,
                         setup: (editor) => {
                             editor.on('init', () => {
+                                setIsEditorReady(true);
                                 if (document.documentElement.classList.contains('dark')) {
                                     editor.getBody().style.backgroundColor = '#1f2937';
                                     editor.getBody().style.color = '#f3f4f6';
@@ -106,7 +118,6 @@ export default function WYSIWYGEditor({ setBody }) {
                             });
                         }
                     }}
-                    onEditorChange={handleEditorChange}
                     className="min-h-[500px] w-full"
                 />
             </div>
