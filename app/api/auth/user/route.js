@@ -1,11 +1,11 @@
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../[...nextauth]/route";
+import { options } from "../[...nextauth]/options";
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request) {
     try {
-        const session = await getServerSession(authOptions);
+        const session = await getServerSession(options);
         
         if (!session) {
             return new Response(JSON.stringify({ 

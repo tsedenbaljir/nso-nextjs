@@ -3,10 +3,11 @@ import React from 'react';
 import { Modal } from 'antd';
 
 export default function NavbarDialog({ visible, onClose, type, data }) {
-    // Filter navitems based on navbarType
+    // Filter navitems based on 
     const getFilteredItems = () => {
-        const navData = data?.find(nav => nav.navbarType === type);
-        return navData?.navitems?.filter(item => item.published) || [];
+        return data?.filter(item => 
+            item.parent_id === type && 
+            item.is_active === true) || [];
     };
 
     const handleLinkClick = (link) => {
@@ -24,16 +25,16 @@ export default function NavbarDialog({ visible, onClose, type, data }) {
             footer={null}
             width={"70%"}
             zIndex={10000}
-            title={getFilteredItems()[0]?.parent === 0 ? <div className="text-xl font-semibold border-b-2 border-gray-200 pb-4">Холбоосууд</div> : ""}
+            title={<div className="text-xl font-semibold border-b-2 border-gray-200 pb-4">Холбоосууд</div>}
         >
             <div className="w-full flex flex-row flex-wrap gap-4 py-4">
-                {getFilteredItems().filter(item => item.parent !== 0).map((item) => (
+                {getFilteredItems().map((item) => (
                     <div
                         key={item.id}
                         className="flex-[0_0_calc(24%-1rem)] cursor-pointer hover:underline font-semibold"
                         onClick={() => handleLinkClick(item.link)}
                     >
-                        {item.name}
+                        {item.name_mn}
                     </div>
                 ))}
             </div>

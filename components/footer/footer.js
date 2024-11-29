@@ -20,17 +20,16 @@ export default function Footer({ lng }) {
             try {
                 const [analyticsResponse, navResponse] = await Promise.all([
                     fetch('/api/analytic'),
-                    fetch(`https://gateway.1212.mn/services/1212/api/public/navbars?size=100&page=0&sort=listOrder,asc&total=0&language.equals=${lng.toUpperCase()}`)
+                    fetch('/api/menus/admin')
                 ]);
 
                 const analyticsData = await analyticsResponse.json();
-                const navData = await navResponse.json();
-
-                const footerSocial = navData.find(nav => nav.navbarType === 'NEW_FOOTER_1');
+                const navDataS = await navResponse.json();
+                // const footerSocial = navData.find(nav => nav.parent_id === 'NEW_FOOTER_1');
                 
                 setData(analyticsData);
-                setNavData(navData);
-                setSocialLinks(footerSocial);
+                setNavData(navDataS.data);
+                // setSocialLinks(footerSocial);
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -57,7 +56,7 @@ export default function Footer({ lng }) {
                     <div className="col-12 md:col-4 lg:col-4">
                         <span className="__title">{t('footer.links')}</span>
                         <div className="__content">
-                            <div className="nso_add_item" onClick={() => getDialogShow('NEW_FLINK2')}>
+                            <div className="nso_add_item" onClick={() => getDialogShow(26)}>
                                 <div className="__plus">
                                     <i className="pi pi-plus"></i>
                                 </div>
@@ -65,7 +64,7 @@ export default function Footer({ lng }) {
                                     {t('footer.government')}
                                 </span>
                             </div>
-                            <div className="nso_add_item" onClick={() => getDialogShow('NEW_FLINK3')}>
+                            <div className="nso_add_item" onClick={() => getDialogShow(33)}>
                                 <div className="__plus">
                                     <i className="pi pi-plus"></i>
                                 </div>
@@ -73,7 +72,7 @@ export default function Footer({ lng }) {
                                     {t('footer.otherSites')}
                                 </span>
                             </div>
-                            <div className="nso_add_item" onClick={() => getDialogShow('NEW_FLINK1')}>
+                            <div className="nso_add_item" onClick={() => getDialogShow(41)}>
                                 <div className="__plus">
                                     <i className="pi pi-plus"></i>
                                 </div>
@@ -153,7 +152,7 @@ export default function Footer({ lng }) {
                                     <span className="__text">© {new Date().getFullYear()}. {t('footer.copyright')}</span>
                                 </div>
                                 <div>
-                                    {socialLinks && socialLinks.navitems && (
+                                    {/* {socialLinks && socialLinks.navitems && (
                                         <ul>
                                             {socialLinks.navitems.map((item, index) => (
                                                 <li key={item.id}>
@@ -164,7 +163,7 @@ export default function Footer({ lng }) {
                                                 </li>
                                             ))}
                                         </ul>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>
