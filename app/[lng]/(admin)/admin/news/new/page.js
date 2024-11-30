@@ -1,10 +1,15 @@
 "use client"
 import { useState, useEffect } from 'react';
-import Editor from '@/components/admin/Editor/editor'
+import dynamic from 'next/dynamic';
 import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
 import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import Upload from "@/components/admin/Edits/UploadImages/Upload";
+
+const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
+    ssr: false,
+    loading: () => <p>Уншиж байна...</p>
+});
 
 const Dashboard = () => {
     const [body, setBody] = useState('');

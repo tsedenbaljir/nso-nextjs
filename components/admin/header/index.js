@@ -22,7 +22,9 @@ export default function componentName(props) {
                             {pth !== "dashboard" && <Link href={
                                 pth === "news" ? "/admin/news/new" :
                                     pth === "dissemination" ? "/admin/dissemination/new" :
-                                        ""
+                                        pth === "workspace" ? "/admin/workspace/new" :
+                                            pth === "menus" ? "/admin/menus/new" :
+                                                ""
                             }>
                                 <div
                                     className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out dark:bg-white/10 text-white bg-blue-600`}

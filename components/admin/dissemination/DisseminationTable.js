@@ -1,12 +1,13 @@
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-export default function DisseminationTable({ 
-    data = [], 
-    loading = false, 
-    onEdit, 
-    onDelete 
+export default function DisseminationTable({
+    data = [],
+    loading = false,
+    onEdit,
+    onDelete
 }) {
     const indexBodyTemplate = (rowData, props) => {
         return props.rowIndex + 1;
@@ -24,9 +25,8 @@ export default function DisseminationTable({
 
     const statusBodyTemplate = (rowData) => {
         return (
-            <button className={`px-2 py-1 text-xs rounded-md text-white ${
-                rowData.published ? 'bg-emerald-500' : 'bg-yellow-500'
-            }`}>
+            <button className={`px-2 py-1 text-xs rounded-md text-white ${rowData.published ? 'bg-emerald-500' : 'bg-yellow-500'
+                }`}>
                 {rowData.published ? 'Идэвхтэй' : 'Идэвхгүй'}
             </button>
         );
@@ -42,26 +42,24 @@ export default function DisseminationTable({
 
     const actionBodyTemplate = (rowData) => {
         return (
-            <>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onEdit(rowData.id);
-                    }}
-                    className="mr-2 px-2 py-1 text-xs text-white rounded-full bg-gray-5 hover:bg-gray-6"
-                >
-                    <i className="pi pi-pencil"></i>
-                </button>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(rowData.id);
-                    }}
-                    className="px-2 py-1 text-xs text-white rounded-full bg-red-100 hover:bg-red-500"
-                >
-                    <i className="pi pi-trash"></i>
-                </button>
-            </>
+            <div className="flex gap-2">
+                <Button
+                    icon="pi pi-pencil"
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() =>
+                        onEdit(rowData.id)
+                    }
+                />
+                <Button
+                    icon="pi pi-trash"
+                    rounded
+                    outlined
+                    severity="danger"
+                    onClick={() => onEdit(rowData.id)}
+                />
+            </div>
         );
     };
 
@@ -79,23 +77,23 @@ export default function DisseminationTable({
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
             loadingIcon={() => (
                 <div className="flex justify-center items-center h-32">
-                    <ProgressSpinner 
-                        style={{width: '50px', height: '50px'}} 
-                        strokeWidth="4" 
+                    <ProgressSpinner
+                        style={{ width: '50px', height: '50px' }}
+                        strokeWidth="4"
                         animationDuration=".5s"
                     />
                 </div>
             )}
         >
-            <Column 
-                header="#" 
-                body={indexBodyTemplate} 
-                style={{ width: '3rem' }} 
+            <Column
+                header="#"
+                body={indexBodyTemplate}
+                style={{ width: '3rem' }}
             />
-            <Column 
-                field="name" 
-                header="Гарчиг" 
-                sortable 
+            <Column
+                field="name"
+                header="Гарчиг"
+                sortable
                 style={{ maxWidth: '400px', whiteSpace: 'normal' }}
                 body={(rowData) => (
                     <div className="whitespace-normal line-clamp-2" title={rowData.name}>
@@ -103,29 +101,29 @@ export default function DisseminationTable({
                     </div>
                 )}
             />
-            <Column 
-                field="language" 
-                header="Хэл" 
-                body={languageBodyTemplate} 
-                style={{ width: '5rem' }} 
+            <Column
+                field="language"
+                header="Хэл"
+                body={languageBodyTemplate}
+                style={{ width: '5rem' }}
             />
-            <Column 
-                field="published_date" 
-                header="Огноо" 
-                body={(rowData) => dateBodyTemplate(rowData, 'published_date')} 
-                sortable 
+            <Column
+                field="published_date"
+                header="Огноо"
+                body={(rowData) => dateBodyTemplate(rowData, 'published_date')}
+                sortable
             />
-            <Column 
-                field="published" 
-                header="Төлөв" 
-                body={statusBodyTemplate} 
-                style={{ width: '7rem' }} 
-                sortable 
+            <Column
+                field="published"
+                header="Төлөв"
+                body={statusBodyTemplate}
+                style={{ width: '7rem' }}
+                sortable
             />
-            <Column 
-                header="Үйлдэл" 
-                body={actionBodyTemplate} 
-                style={{ width: '8rem' }} 
+            <Column
+                header="Үйлдэл"
+                body={actionBodyTemplate}
+                style={{ width: '8rem' }}
             />
         </DataTable>
     );

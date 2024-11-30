@@ -1,13 +1,17 @@
 "use client"
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation'
 import LoaderText from '@/components/Loading/Text/Index'
 import AdminLayout from '@/components/admin/layouts/AdminLayout'
-import Editor from '@/components/admin/Editor/editor'
 import InputItems from "@/components/admin/Edits/AddNew/InputItems"
 import SelectInput from "@/components/admin/Edits/Select/SelectInput"
 import Upload from "@/components/admin/Edits/UploadImages/Upload"
 
+const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
+    ssr: false,
+    loading: () => <p>Уншиж байна...</p>
+});
 export default function EditNews({ params: { lng, id } }) {
     const router = useRouter()
     const [loading, setLoading] = useState(true)

@@ -12,14 +12,18 @@ export default function Home({ params: { lng } }) {
     const router = useRouter();
 
     const searchParams = useSearchParams();
-    const page = searchParams.get('page') || 0;
+    const page = searchParams.get('page') || 1;
 
     // States
-    const [list, setList] = useState([]);
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [totalPages, setTotalPages] = useState(1);
 
-    const articlesPerPage = 5;
+    const [pagination, setPagination] = useState({
+        page: page,
+        pageSize: 5,
+        total: 0,
+        totalPages: 0
+    });
 
     const location = [
         { "id": 41515, "namemn": "Архангай", "nameen": "Arkhangai", "code": "65", "order": 1, "configValues": [] },
@@ -45,32 +49,30 @@ export default function Home({ params: { lng } }) {
         { "id": 41517, "namemn": "Хөвсгөл", "nameen": "Khuvsgul", "code": "67", "order": 20, "configValues": [] },
         { "id": 41507, "namemn": "Хэнтий", "nameen": "Khentii", "code": "23", "order": 21, "configValues": [] },
         { "id": 37301, "namemn": "Улаанбаатар", "nameen": "Ulaanbaatar", "code": "11", "order": 22, "configValues": [] }
-    ]
+    ];
 
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        redirect: 'follow'
-    };
 
     const fetchArticles = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`/api/job-postings?page=${page}&pageSize=${articlesPerPage}&lng=${lng}`, {
-                ...requestOptions,
-                cache: 'no-store',
-            });
+            const response = await fetch(
+                `/api/workspace?page=${pagination.page}&pageSize=${pagination.pageSize}&language=${lng}`
+            );
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const res = await response.json();
-
-            setList(res.data);
-            setTotalPages(res.pagination.total);
+            const result = await response.json();
+            
+            if (result.status) {
+                setData(result.data);
+                setPagination(prev => ({
+                    ...prev,
+                    total: result.pagination.total,
+                    totalPages: result.pagination.totalPages
+                }));
+            }
             setLoading(false);
         } catch (error) {
             console.error('Error fetching articles:', error);
@@ -80,8 +82,11 @@ export default function Home({ params: { lng } }) {
 
     useEffect(() => {
         fetchArticles();
-    }, []);
+    }, [pagination.page]);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
     return (
         <Layout lng={lng}>
             <div className="nso_about_us mt-40">
@@ -93,7 +98,7 @@ export default function Home({ params: { lng } }) {
                         <div className="__jf flex items-center">
                             <div className="__jobs-count float-right mr-5">
                                 {lng === "mn" ? "Нийт" : "A total of"}
-                                <strong>{" " + 10}</strong> {lng === "mn" ? "ажлын байр" : "jobs"}
+                                <strong>{" " + pagination.total}</strong> {lng === "mn" ? "ажлын байр" : "jobs"}
                             </div>
                         </div>
                     </div>
@@ -102,7 +107,7 @@ export default function Home({ params: { lng } }) {
                     <div className="nso_tab_content">
                         <div className="__table">
                             {
-                                list.map((dt, index) => {
+                                data.map((dt, index) => {
                                     return <div onClick={() => {
                                         router.push(`/workspace/${dt.id}`);
                                     }} key={index} className="ws_body mt-2 text-main border-b-2 border-dotted border-gray-400 cursor-pointer">
@@ -114,7 +119,7 @@ export default function Home({ params: { lng } }) {
                                             }}
                                         ></div>
                                         <ul className='flex'>
-                                            <li className="ws_desc my-4 text-base">{dt.createdDate.substr(0, 10)}</li>
+                                            <li className="ws_desc my-4 text-base">{dt.created_date.substr(0, 10)}</li>
                                             <li className="ws_desc my-4 text-base ml-10">
                                                 {
                                                     lng === "mn" ? location.filter(item => item.code === dt.location)[0].namemn : location.filter(item => item.code === dt.location)[0].nameen
@@ -125,7 +130,7 @@ export default function Home({ params: { lng } }) {
                                 })
                             }
                             <div className="nso_container mt-5 mb-5">
-                                <Pagination page={parseInt(page)} mainPath={"workspace"} articlesPerPage={articlesPerPage} totalPages={totalPages} path={"/"} lng={lng} />
+                                <Pagination page={parseInt(pagination.page)} mainPath={"workspace"} articlesPerPage={pagination.pageSize} totalPages={pagination.total} path={"/"} lng={lng} />
                             </div>
                         </div>
                     </div>

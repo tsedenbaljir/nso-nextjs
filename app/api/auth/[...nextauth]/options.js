@@ -1,20 +1,36 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/app/api/config/db_csweb.config.js";
 
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error(
+    "please provide process.env.NEXTAUTH_SECRET environment variable"
+  );
+}
+
 export const options = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" }
+        name: {
+          label: "name:",
+          type: "text",
+          placeholder: "your-name",
+        },
+        password: {
+          label: "password:",
+          type: "password",
+          placeholder: "your-password",
+        },
       },
       async authorize(credentials) {
+        console.log("credentials", credentials);
+        
         try {
-          const user = await db("users")
-            .where("username", credentials.username)
+          const user = await db("user")
+            .where("username", credentials.name)
             .first();
-
+          
           if (!user) {
             return null;
           }
@@ -52,7 +68,7 @@ export const options = {
     }
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/admin/dashboard",
   },
   session: {
     strategy: "jwt",

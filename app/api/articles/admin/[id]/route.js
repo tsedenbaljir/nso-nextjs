@@ -54,7 +54,7 @@ export async function PUT(req, { params }) {
             published_date: body.published_date,
             header_image: body.header_image,
             last_modified_date: new Date().toISOString(),
-            last_modified_by: auth.user.id // Use authenticated user's ID
+            last_modified_by: auth.user.name // Use authenticated user's ID
         };
 
         // Update the article

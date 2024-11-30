@@ -4,6 +4,7 @@ import AdminLayout from '@/components/admin/layouts/AdminLayout'
 import { useTranslation } from '@/app/i18n/client'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
+import { Button } from 'primereact/button';
 import { useRouter } from 'next/navigation'
 import "primereact/resources/themes/lara-light-indigo/theme.css"
 import "primereact/resources/primereact.min.css"
@@ -48,8 +49,8 @@ export default function AllNews({ params: { lng } }) {
         return (
             <button
                 className={`px-2 py-1 text-xs rounded-md text-white ${rowData.published
-                        ? 'bg-emerald-500'
-                        : 'bg-yellow-500'
+                    ? 'bg-emerald-500'
+                    : 'bg-yellow-500'
                     }`}
             >
                 {rowData.published ? 'Идэвхтэй' : 'Идэвхгүй'}
@@ -113,24 +114,24 @@ export default function AllNews({ params: { lng } }) {
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation(); // Prevent row click
-                        router.push(`/admin/news/edit/${rowData.id}`)
-                    }}
-                    className="mr-2 px-2 py-1 text-xs text-white rounded-full bg-gray-5 hover:bg-gray-6"
-                >
-                    <i class="pi pi-pen-to-square" ></i>
-                </button>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation(); // Prevent row click
-                        handleDelete(rowData.id);
-                    }}
-                    className="px-2 py-1 text-xs text-white rounded-full  bg-red-100 hover:bg-red-500"
-                >
-                    <i class="pi pi-trash" ></i>
-                </button>
+                <div className="flex gap-2">
+                    <Button
+                        icon="pi pi-pencil"
+                        rounded
+                        outlined
+                        className="mr-2"
+                        onClick={() =>
+                            router.push(`/admin/news/edit/${rowData.id}`)
+                        }
+                    />
+                    <Button
+                        icon="pi pi-trash"
+                        rounded
+                        outlined
+                        severity="danger"
+                        onClick={() => handleDelete(rowData.id)}
+                    />
+                </div>
             </>
         );
     };
@@ -153,9 +154,9 @@ export default function AllNews({ params: { lng } }) {
                     loading={loading}
                     loadingIcon={() => (
                         <div className="flex justify-center items-center h-32">
-                            <ProgressSpinner 
-                                style={{width: '50px', height: '50px'}} 
-                                strokeWidth="4" 
+                            <ProgressSpinner
+                                style={{ width: '50px', height: '50px' }}
+                                strokeWidth="4"
                                 animationDuration=".5s"
                             />
                         </div>

@@ -38,6 +38,7 @@ export async function GET(req) {
 export async function POST(req) {
     // Check authentication
     const auth = await checkAdminAuth(req);
+    
     if (!auth.isAuthenticated) {
         return NextResponse.json({
             status: false,
@@ -51,8 +52,8 @@ export async function POST(req) {
         // Add the authenticated user's info to the article data
         const articleData = {
             ...body,
-            created_by: auth.user.id,
-            last_modified_by: auth.user.id
+            created_by: auth.user.name,
+            last_modified_by: auth.user.name
         };
 
         const result = await db('web_1212_content').insert(articleData);
