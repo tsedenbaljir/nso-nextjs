@@ -1,42 +1,70 @@
 "use client"
 import React from 'react';
+import Link from 'next/link';
+import Layout from '@/components/baseLayout';
 import { useTranslation } from '@/app/i18n/client';
-import BaseLayout from '@/components/baseLayout';
 
 export default function Transparency({ params: { lng } }) {
-    const { t } = useTranslation(lng);
+    const { t } = useTranslation(lng, "lng", "");
+
+    const categories = [
+        {
+            title: t('tran1'),
+            icon: 'pi pi-file'
+        },
+        {
+            title: t('tran2'),
+            icon: 'pi pi-shield'
+        },
+        {
+            title: t('tran3'),
+            icon: 'pi pi-users'
+        },
+        {
+            title: t('tran4'),
+            icon: 'pi pi-building'
+        },
+        {
+            title: t('law'),
+            icon: 'pi pi-book'
+        },
+        {
+            title: t('TENDER'),
+            icon: 'pi pi-briefcase'
+        },
+        {
+            title: 'Мэдээллийн аюулгүй байдлын бодлого',
+            icon: 'pi pi-shield'
+        },
+        {
+            title: 'Мэдээллийн аюулгүй байдлын зөрчил мэдээлэх',
+            icon: 'pi pi-exclamation-triangle'
+        }
+    ];
 
     return (
-        <BaseLayout lng={lng}>
-            <div className="nso_transparency">
+        <Layout lng={lng}>
+            <div className="nso_transparency mt-40">
                 <div className="nso_container">
-                    <div className="transparency_header">
-                        <h1>{t('transparency.title')}</h1>
-                    </div>
-                    <div className="transparency_content">
-                        <div className="content_section">
-                            <h2>{t('transparency.financial.title')}</h2>
-                            <div className="section_content">
-                                {/* Financial transparency content */}
-                            </div>
+                    <div className="w-full">
+                        <div className="transparency_header text-left">
+                            <h1>{t('transparency.title')}</h1>
                         </div>
-                        
-                        <div className="content_section">
-                            <h2>{t('transparency.procurement.title')}</h2>
-                            <div className="section_content">
-                                {/* Procurement transparency content */}
-                            </div>
-                        </div>
-                        
-                        <div className="content_section">
-                            <h2>{t('transparency.humanResource.title')}</h2>
-                            <div className="section_content">
-                                {/* Human resource transparency content */}
-                            </div>
+                        <div className="transparency_grid">
+                            {categories.map((category, index) => (
+                                <Link href={`/${lng}/transparency/` + category.title} key={index} className="transparency_card">
+                                    <div className="card_content">
+                                        <span className="card_title">{category.title}</span>
+                                    </div>
+                                    <div className="card_arrow">
+                                        <i className="pi pi-arrow-right"></i>
+                                    </div>
+                                </Link>
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
-        </BaseLayout>
+        </Layout>
     );
-} 
+}

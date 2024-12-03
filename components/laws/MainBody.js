@@ -8,7 +8,7 @@ export default function Body({ dt }) {
             className="__post"
             target="blank"
             onClick={() => {
-                router.push("https://downloads.1212.mn/" + JSON.parse(dt.file_info).pathName);
+                router.push(dt.file_path);
             }}
         >
             <img

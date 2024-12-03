@@ -34,7 +34,8 @@ export default function Sidebar() {
                 <MenuItems name={"Тархаах хуваарь"} isActive={pth === "dissemination"} link={"dissemination"} />
                 <MenuItems name={"Цэсний тохиргоо"} isActive={pth === "menus"} link={"menus"} />
                 <MenuItems name={"Ажлын байр"} isActive={pth === "workspace"} link={"workspace"} />
-                <MenuItems name={"Хамтын ажиллагаа"} isActive={pth === "cooperation"} link={"cooperation"} />
+                <MenuItems name={"Ил тод байдал"} isActive={pth === "transparency"} link={"transparency"} />
+                <MenuItems name={"Хууль эрхзүй"} isActive={pth === "laws"} link={"laws"} />
               </ul>
             </div>
             <div >
@@ -49,14 +50,14 @@ export default function Sidebar() {
                     }`}
                 >Жижиг цэс</div>
               </Link>
-              <Link href="/settings">
+              {/* <Link href="/settings">
                 <div
                   className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out ${pth === ""
                     ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white"
                     : "text-dark-4 hover:bg-gray-2 hover:text-dark dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"
                     }`}
                 >Тархаах хуваарь</div>
-              </Link>
+              </Link> */}
             </div>
           </nav>
         </div>

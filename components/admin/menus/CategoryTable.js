@@ -1,5 +1,6 @@
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 export default function CategoryTable({ 
@@ -22,26 +23,24 @@ export default function CategoryTable({
 
     const actionBodyTemplate = (rowData) => {
         return (
-            <>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onEdit(rowData.id);
-                    }}
-                    className="mr-2 px-2 py-1 text-xs text-white rounded-full bg-gray-5 hover:bg-gray-6"
-                >
-                    <i className="pi pi-pencil"></i>
-                </button>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(rowData.id);
-                    }}
-                    className="px-2 py-1 text-xs text-white rounded-full bg-red-100 hover:bg-red-500"
-                >
-                    <i className="pi pi-trash"></i>
-                </button>
-            </>
+            <div className="flex gap-2">
+                <Button
+                    icon="pi pi-pencil"
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() =>
+                        onEdit(rowData.id)
+                    }
+                />
+                <Button
+                    icon="pi pi-trash"
+                    rounded
+                    outlined
+                    severity="danger"
+                    onClick={() => onDelete(rowData.id)}
+                />
+            </div>
         );
     };
 

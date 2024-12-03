@@ -38,7 +38,6 @@ export default function MenusContent() {
                 setMenus(data.data);
             }
         } catch (error) {
-            console.error('Error fetching menus:', error);
             alert('Цэс татахад алдаа гарлаа');
         } finally {
             setLoading(false);
@@ -71,18 +70,11 @@ export default function MenusContent() {
                 formData.parent_id = parentId;
             }
 
-            console.log('Sending menu update:', {
-                url,
-                method,
-                formData
-            });
-
             const response = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
-
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Server error:', errorData);
@@ -90,8 +82,6 @@ export default function MenusContent() {
             }
             
             const data = await response.json();
-            console.log('Server response:', data);
-
             if (data.status) {
                 alert(editingMenu ? 'Цэс амжилттай засагдлаа' : 'Цэс амжилттай нэмэгдлээ');
                 setShowDialog(false);
@@ -100,7 +90,6 @@ export default function MenusContent() {
                 setParentId(null);
             }
         } catch (error) {
-            console.error('Error saving menu:', error);
             alert('Цэс хадгалахад алдаа гарлаа');
         }
     };
@@ -129,7 +118,6 @@ export default function MenusContent() {
                 setEditingCategory(null);
             }
         } catch (error) {
-            console.error('Error saving category:', error);
             alert('Ангилал хадгалахад алдаа гарлаа');
         }
     };
@@ -150,12 +138,10 @@ export default function MenusContent() {
 
                     if (!response.ok) {
                         const errorData = await response.json();
-                        console.error('Server error:', errorData);
                         throw new Error(errorData.message || 'Failed to delete');
                     }
                     
                     const data = await response.json();
-                    console.log('Delete response:', data);
                     
                     if (data.status) {
                         alert('Цэс амжилттай устгагдлаа');

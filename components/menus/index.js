@@ -10,7 +10,7 @@ const Dropdown = ({ menu, lng, pth }) => {
     <li key={menu.id} className="dropdown">
       {menu.url ? (
         <Link
-          className={`${pth === menu.url && 'active-link'} __stat_cat_title`}
+          className={`${pth.includes(menu.url) && 'active-link'} __stat_cat_title`}
           href={menu.url}
         >
           {lng === 'mn' ? menu.name_mn : menu.name_en}
@@ -129,14 +129,6 @@ export default function Index({ lng }) {
 
     fetchMenus();
   }, []);
-
-  const switchLanguage = () => {
-    if (!mounted) return;
-    const currentLang = pathname.split('/')[1];
-    const newLang = currentLang === 'mn' ? 'en' : 'mn';
-    const newPathname = pathname.replace(`/${currentLang}`, `/${newLang}`);
-    router.push(newPathname);
-  }
 
   if (!mounted) {
     return null;

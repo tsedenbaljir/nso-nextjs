@@ -1,11 +1,12 @@
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-export default function MenuTable({ 
-    data = [], 
-    loading = false, 
-    onEdit, 
+export default function MenuTable({
+    data = [],
+    loading = false,
+    onEdit,
     onDelete,
     onAddSubmenu,
     categories = []
@@ -48,11 +49,10 @@ export default function MenuTable({
 
     const statusTemplate = (rowData) => {
         return (
-            <span className={`px-2 py-1 text-xs rounded-full ${
-                rowData.is_active ? 
-                'bg-green-100 text-green-800' : 
-                'bg-gray-100 text-gray-800'
-            }`}>
+            <span className={`px-2 py-1 text-xs rounded-full ${rowData.is_active ?
+                    'bg-green-100 text-green-800' :
+                    'bg-gray-100 text-gray-800'
+                }`}>
                 {rowData.is_active ? 'Идэвхтэй' : 'Идэвхгүй'}
             </span>
         );
@@ -60,35 +60,31 @@ export default function MenuTable({
 
     const actionBodyTemplate = (rowData) => {
         return (
-            <>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onEdit(rowData.id);
-                    }}
-                    className="mr-2 px-2 py-1 text-xs text-white rounded-full bg-gray-5 hover:bg-gray-6"
-                >
-                    <i className="pi pi-pencil"></i>
-                </button>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onAddSubmenu(rowData.id);
-                    }}
-                    className="mr-2 px-2 py-1 text-xs text-white rounded-full bg-blue-500 hover:bg-blue-600"
-                >
-                    <i className="pi pi-plus"></i>
-                </button>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(rowData.id);
-                    }}
-                    className="px-2 py-1 text-xs text-white rounded-full bg-red-100 hover:bg-red-500"
-                >
-                    <i className="pi pi-trash"></i>
-                </button>
-            </>
+            <div className="flex gap-2">
+                <Button
+                    icon="pi pi-pencil"
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() =>
+                        onEdit(rowData.id)
+                    }
+                />
+                <Button
+                    icon="pi pi-plus"
+                    rounded
+                    outlined
+                    severity="info"
+                    onClick={() => onAddSubmenu(rowData.id)}
+                />
+                <Button
+                    icon="pi pi-trash"
+                    rounded
+                    outlined
+                    severity="danger"
+                    onClick={() => onDelete(rowData.id)}
+                />
+            </div>
         );
     };
 
@@ -106,56 +102,56 @@ export default function MenuTable({
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
             loadingIcon={() => (
                 <div className="flex justify-center items-center h-32">
-                    <ProgressSpinner 
-                        style={{width: '50px', height: '50px'}} 
-                        strokeWidth="4" 
+                    <ProgressSpinner
+                        style={{ width: '50px', height: '50px' }}
+                        strokeWidth="4"
                         animationDuration=".5s"
                     />
                 </div>
             )}
         >
-            <Column 
-                header="#" 
-                body={indexBodyTemplate} 
-                style={{ width: '3rem' }} 
+            <Column
+                header="#"
+                body={indexBodyTemplate}
+                style={{ width: '3rem' }}
             />
-            <Column 
-                field="name" 
-                header="Цэсний нэр" 
+            <Column
+                field="name"
+                header="Цэсний нэр"
                 body={nameTemplate}
-                sortable 
+                sortable
                 style={{ minWidth: '300px' }}
             />
-            <Column 
-                field="url" 
-                header="URL" 
+            <Column
+                field="url"
+                header="URL"
                 body={urlTemplate}
-                sortable 
+                sortable
             />
-            <Column 
-                field="category_id" 
-                header="Ангилал" 
+            <Column
+                field="category_id"
+                header="Ангилал"
                 body={categoryTemplate}
-                sortable 
+                sortable
             />
-            <Column 
-                field="list_order" 
-                header="Дараалал" 
+            <Column
+                field="list_order"
+                header="Дараалал"
                 body={orderTemplate}
-                sortable 
+                sortable
                 style={{ width: '8rem' }}
             />
-            <Column 
-                field="is_active" 
-                header="Төлөв" 
+            <Column
+                field="is_active"
+                header="Төлөв"
                 body={statusTemplate}
-                sortable 
+                sortable
                 style={{ width: '8rem' }}
             />
-            <Column 
-                header="Үйлдэл" 
-                body={actionBodyTemplate} 
-                style={{ width: '12rem' }} 
+            <Column
+                header="Үйлдэл"
+                body={actionBodyTemplate}
+                style={{ width: '12rem' }}
             />
         </DataTable>
     );

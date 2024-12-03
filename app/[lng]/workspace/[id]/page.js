@@ -1,15 +1,14 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Layout from '@/components/baseLayout';
-import { useTranslation } from '@/app/i18n/client';
-import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import Text from '@/components/Loading/Text/Index';
+import ReactMarkdown from 'react-markdown';
+import Layout from '@/components/baseLayout';
+import { useTranslation } from '@/app/i18n/client';
 
 export default function WorkspaceDetail({ params: { id, lng } }) {
     const { t } = useTranslation(lng, "lng", "");
-    const router = useRouter();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -33,10 +32,6 @@ export default function WorkspaceDetail({ params: { id, lng } }) {
         }
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
     if (!data && !loading) {
         return (
             <Layout lng={lng}>
@@ -56,7 +51,7 @@ export default function WorkspaceDetail({ params: { id, lng } }) {
             <div className="nso_about_us mt-40">
                 <div className="nso_container">
                     <div className="__info_detail_page">
-                        <div className="w-full my-16 mb-8 items-center justify-between text-main __info_detail_page">
+                        {!loading ? <div className="w-full my-16 mb-8 items-center justify-between text-main">
                             <div className="text-2xl font-bold __header">
                                 {data.name}
                             </div>
@@ -67,12 +62,14 @@ export default function WorkspaceDetail({ params: { id, lng } }) {
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[rehypeRaw]}
                                 >
-                                    {data.body || 'No content available'}
+                                    {data.body}
                                 </ReactMarkdown>
                             </div>
-                        </div>
+                        </div> : <>
+                            <Text />
+                            <Text />
+                        </>}
                     </div>
-
                     <div className="r_side">
                         <div className="right_side_top">
                             <h2 className='uppercase text-xl font-bold'>{t('Phone')}</h2>

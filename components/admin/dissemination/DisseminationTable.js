@@ -57,7 +57,7 @@ export default function DisseminationTable({
                     rounded
                     outlined
                     severity="danger"
-                    onClick={() => onEdit(rowData.id)}
+                    onClick={() => onDelete(rowData.id)}
                 />
             </div>
         );
