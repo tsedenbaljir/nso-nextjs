@@ -25,7 +25,7 @@ export default function AdminTransparency() {
 
     const fetchItems = async () => {
         try {
-            const response = await fetch(`/api/transparency?lng=${selectedLang}`);
+            const response = await fetch(`/api/transparency/admin`);
             const result = await response.json();
             if (result.status && Array.isArray(result.data)) {
                 setItems(result.data);

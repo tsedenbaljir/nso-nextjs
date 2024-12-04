@@ -30,20 +30,6 @@ export default function TransparencyCategory({ params: { lng, name } }) {
         }
     };
 
-    // Helper function to format date
-    const formatDate = (dateString) => {
-        try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('mn-MN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            });
-        } catch (error) {
-            return dateString;
-        }
-    };
-
     return (
         <Layout lng={lng}>
             <div className="nso_transparency mt-40">
@@ -60,10 +46,10 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                                     <div key={item.id} className="transparency_item">
                                         <div className="item_content">
                                             <h3>{item.title}</h3>
-                                            {item.description && (
+                                            {/* {item.description && (
                                                 <p>{item.description}</p>
-                                            )}
-                                            {item.file_path && (
+                                            )} */}
+                                            {/* {item.file_path && (
                                                 <a
                                                     href={item.file_path}
                                                     target="_blank"
@@ -73,12 +59,7 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                                                     <i className="pi pi-file-pdf"></i>
                                                     <span>PDF татах</span>
                                                 </a>
-                                            )}
-                                        </div>
-                                        <div className="item_meta">
-                                            <span className="date">
-                                                {formatDate(item.created_date)}
-                                            </span>
+                                            )} */}
                                         </div>
                                     </div>
                                 ))
