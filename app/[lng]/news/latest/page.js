@@ -9,7 +9,7 @@ export default function Home({ params: { lng } }) {
 
     return (
         <Layout lng={lng}>
-            <MainArticle name={t('LASTNEWS')} path="latest" lng={lng} />
+            <MainArticle name={t('LASTNEWS')} path="latest" mainPath="news" lng={lng} />
         </Layout>
     );
 }

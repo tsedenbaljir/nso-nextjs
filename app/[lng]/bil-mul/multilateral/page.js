@@ -116,7 +116,7 @@ export default function AboutUs({ params: { lng } }) {
                                 </p>
                                 <div className='pl-5'>
                                     <p>Үүнд:</p>
-                                    <ul>
+                                    <ul className='list-disc pl-5'>
                                         <li>
                                             НҮБ-ын статистикийн комиссын “Тогтвортой хөгжлийн
                                             зорилго-2030” хөтөлбөрийг хэрэгжүүлэх Дээд түвшний бүлгийн

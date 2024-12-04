@@ -25,21 +25,9 @@ export default function Transparency({ params: { lng } }) {
             icon: 'pi pi-building'
         },
         {
-            title: t('law'),
-            icon: 'pi pi-book'
-        },
-        {
-            title: t('TENDER'),
-            icon: 'pi pi-briefcase'
-        },
-        {
             title: 'Мэдээллийн аюулгүй байдлын бодлого',
             icon: 'pi pi-shield'
         },
-        {
-            title: 'Мэдээллийн аюулгүй байдлын зөрчил мэдээлэх',
-            icon: 'pi pi-exclamation-triangle'
-        }
     ];
 
     return (
@@ -61,6 +49,30 @@ export default function Transparency({ params: { lng } }) {
                                     </div>
                                 </Link>
                             ))}
+                            <Link href={`/${lng}/laws/rules`} className="transparency_card">
+                                <div className="card_content">
+                                    <span className="card_title">{t('law')}</span>
+                                </div>
+                                <div className="card_arrow">
+                                    <i className="pi pi-arrow-right"></i>
+                                </div>
+                            </Link>
+                            <Link href={`/mn/transparency/tender`} className="transparency_card">
+                                <div className="card_content">
+                                    <span className="card_title">{t('TENDER')}</span>
+                                </div>
+                                <div className="card_arrow">
+                                    <i className="pi pi-arrow-right"></i>
+                                </div>
+                            </Link>
+                            <Link href={`/mn/violation`} className="transparency_card">
+                                <div className="card_content">
+                                    <span className="card_title">Мэдээллийн аюулгүй байдлын зөрчил мэдээлэх</span>
+                                </div>
+                                <div className="card_arrow">
+                                    <i className="pi pi-arrow-right"></i>
+                                </div>
+                            </Link>
                         </div>
                     </div>
                 </div>

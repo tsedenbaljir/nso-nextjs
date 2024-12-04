@@ -24,7 +24,7 @@ export default function AboutUs({ params: { lng } }) {
                     <div className="nso_about_us_body">
                         <div className="nso_container">
                             <div className="__nso_desc">
-                                <div className="__about">
+                                <div className="__about h-[300px]">
                                     <div className="__top_text">
                                         Үндэсний Статистикийн Хороо
                                     </div>
@@ -65,8 +65,8 @@ export default function AboutUs({ params: { lng } }) {
                                     </div>
                                 </div>
                                 <img
-                                    height="auto"
                                     width="500px"
+                                    height="300px"
                                     className="__about_img"
                                     src="/about.png"
                                     alt="About Us"

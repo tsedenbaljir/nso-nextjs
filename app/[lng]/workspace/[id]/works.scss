@@ -1,0 +1,57 @@
+.nso_about_us {
+    a {
+        text-decoration: none;
+    }
+
+    .__header {
+        width: 100%;
+        display: flex;
+        margin-bottom: 30px;
+        align-items: center;
+        flex-direction: row;
+        color: var(--text-main);
+        justify-content: space-between;
+
+        .__title {
+            font-size: var(--font-size24);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .__jf {
+            display: flex;
+            align-items: center;
+
+            .__filter_buttons {
+                //float: right;
+                display: flex;
+                align-items: center;
+            }
+
+            .__jobs-count {
+                float: right;
+                margin-right: 20px;
+            }
+        }
+    }
+
+    .right_side_top {
+        width: 470px;
+        height: 400px;
+        padding: 60px;
+        margin-top: 60px;
+        margin-left: 60px;
+        text-align: justify;
+        background-color: var(--surface-b);
+    }
+
+    .right_side_bottom {
+        width: 470px;
+        padding: 60px;
+        margin-top: 20px;
+        margin-left: 60px;
+        text-align: justify;
+        background-color: var(--surface-b);
+    }
+
+}

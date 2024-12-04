@@ -5,7 +5,7 @@ import Pagination from '@/components/articles/Pagination';
 import Allarticles from '@/components/articles/Allarticles';
 import "@/components/styles/latest-list.component.scss";
 
-export default function MainArticle({ name, path, lng }) {
+export default function MainArticle({ name, path, mainPath, lng }) {
     // search params
     const searchParams = useSearchParams();
     const page = searchParams.get('page') || 1;
@@ -61,11 +61,11 @@ export default function MainArticle({ name, path, lng }) {
                             {name}
                         </div>
                     </div>
-                    <Allarticles loading={loading} Articles={Articles} />
+                    <Allarticles loading={loading} Articles={Articles} mainPath={mainPath}/>
                 </div>
             </div >
             <div className="nso_container">
-                <Pagination page={parseInt(page)} mainPath={"news"} articlesPerPage={articlesPerPage} totalPages={totalPages} path={path} lng={lng} />
+                <Pagination page={parseInt(page)} mainPath={mainPath} articlesPerPage={articlesPerPage} totalPages={totalPages} path={path} lng={lng} />
             </div>
             <br />
         </div>

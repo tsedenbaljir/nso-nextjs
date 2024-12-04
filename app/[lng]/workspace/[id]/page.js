@@ -6,6 +6,7 @@ import Text from '@/components/Loading/Text/Index';
 import ReactMarkdown from 'react-markdown';
 import Layout from '@/components/baseLayout';
 import { useTranslation } from '@/app/i18n/client';
+import './works.scss';
 
 export default function WorkspaceDetail({ params: { id, lng } }) {
     const { t } = useTranslation(lng, "lng", "");

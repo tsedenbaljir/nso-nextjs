@@ -43,7 +43,10 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                                 <div className="loading">Уншиж байна...</div>
                             ) : items.length > 0 ? (
                                 items.map((item, index) => (
-                                    <div key={item.id} className="transparency_item">
+                                    <a key={item.id} 
+                                    href={item.file_path} 
+                                    target="_blank"
+                                    className="transparency_item">
                                         <div className="item_content">
                                             <h3>{item.title}</h3>
                                             {/* {item.description && (
@@ -61,7 +64,7 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                                                 </a>
                                             )} */}
                                         </div>
-                                    </div>
+                                    </a>
                                 ))
                             ) : (
                                 <div className="no_data">

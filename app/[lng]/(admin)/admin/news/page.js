@@ -12,12 +12,21 @@ import "primeicons/primeicons.css"
 import { confirmDialog } from 'primereact/confirmdialog';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { InputText } from 'primereact/inputtext';
+import { FilterMatchMode } from 'primereact/api';
+import { Dropdown } from 'primereact/dropdown';
 
 export default function AllNews({ params: { lng } }) {
     const router = useRouter()
     const { t } = useTranslation(lng)
     const [articles, setArticles] = useState([])
     const [loading, setLoading] = useState(true)
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [filters, setFilters] = useState({
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        name: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        news_type: { value: null, matchMode: FilterMatchMode.EQUALS }
+    });
 
     useEffect(() => {
         fetchArticles()
@@ -77,11 +86,19 @@ export default function AllNews({ params: { lng } }) {
             return 'Date not available'
         }
     }
+    const dataNewsType = (rowData) => {
+        const types = {
+            'LATEST': 'Шинэ мэдээ',
+            'MEDIA': 'Медиа мэдээ',
+            'TENDER': 'Тендер'
+        };
+        return types[rowData.news_type] || rowData.news_type;
+    };
 
     // Add this template for the index column
-    const indexBodyTemplate = (rowData, props) => {
-        return props.rowIndex + 1;
-    }
+    const indexBodyTemplate = (rowData, options) => {
+        return options.rowIndex + 1;
+    };
 
     const handleDelete = async (id) => {
         confirmDialog({
@@ -136,6 +153,56 @@ export default function AllNews({ params: { lng } }) {
         );
     };
 
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+        
+        _filters['global'].value = value;
+
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-between items-center">
+                <h5 className="m-0">Мэдээ мэдээлэл</h5>
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText
+                        value={globalFilterValue}
+                        onChange={onGlobalFilterChange}
+                        placeholder="Хайх..."
+                    />
+                </span>
+            </div>
+        );
+    };
+
+    // Add news type options
+    const newsTypeOptions = [
+        { label: 'Бүгд', value: null },
+        { label: 'Шинэ мэдээ', value: 'LATEST' },
+        { label: 'Медиа мэдээ', value: 'MEDIA' },
+        { label: 'Тендер', value: 'TENDER' }
+    ];
+
+    // Add news type filter template
+    const newsTypeFilterTemplate = (options) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={newsTypeOptions}
+                onChange={(e) => {
+                    options.filterCallback(e.value);
+                }}
+                placeholder="Сонгох"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     return (
         <AdminLayout>
             <div className="w-full card">
@@ -161,6 +228,9 @@ export default function AllNews({ params: { lng } }) {
                             />
                         </div>
                     )}
+                    header={renderHeader}
+                    filters={filters}
+                    globalFilterFields={['name']}
                 >
                     <Column
                         header="#"
@@ -170,7 +240,8 @@ export default function AllNews({ params: { lng } }) {
                     <Column
                         field="name"
                         header="Гарчиг"
-                        sortable
+                        filter
+                        filterPlaceholder="Хайх..."
                         style={{ maxWidth: '300px', whiteSpace: 'normal' }}
                         body={(rowData) => (
                             <div className="whitespace-normal line-clamp-2" title={rowData.name}>
@@ -191,10 +262,9 @@ export default function AllNews({ params: { lng } }) {
                         sortable
                     />
                     <Column
-                        field="created_date"
-                        header="Хадгалсан огноо"
-                        body={(rowData) => dateBodyTemplate(rowData, 'created_date')}
-                        sortable
+                        field="news_type"
+                        header="Төрөл"
+                        body={dataNewsType}
                     />
                     <Column
                         field="last_modified_date"

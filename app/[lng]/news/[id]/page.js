@@ -4,6 +4,7 @@ import "@/components/styles/news.scss";
 import { useRouter } from "next/navigation";
 import Layout from '@/components/baseLayout';
 import Articles from '@/components/articles/Articles';
+import TextLoading from '@/components/Loading/Text/Index';
 import ArticleSideBar from '@/components/articles/ArticleSideBar';
 
 export default function Home({ params: { lng }, params }) {
@@ -50,7 +51,7 @@ export default function Home({ params: { lng }, params }) {
                 }
 
                 const res = await response.json();
-                
+
                 setSidebar(res.data);
             } catch (error) {
                 console.error('Error fetching articles:', error);
@@ -62,12 +63,18 @@ export default function Home({ params: { lng }, params }) {
 
     return (
         <Layout lng={lng}>
-            {loading && <div className='nso_about_us mt-35'>
+            {loading ? <div className='nso_about_us mt-35'>
                 <div className="nso_container">
                     <Articles article={article} />
                     <ArticleSideBar article={sidebar} />
                 </div>
-            </div>}
+            </div> : <div className='nso_about_us mt-35'>
+                <div className="nso_container">
+                    <TextLoading />
+                    <TextLoading />
+                </div>
+            </div>
+            }
             <br />
         </Layout>
     );

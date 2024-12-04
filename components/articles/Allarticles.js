@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import TextLoading from '@/components/Loading/Text/Index';
 
-export default function Index({ Articles, loading }) {
+export default function Index({ Articles, loading, mainPath }) {
     const router = useRouter();
     const [errorImages, setErrorImages] = useState({});
 
@@ -41,7 +41,7 @@ export default function Index({ Articles, loading }) {
                                 <div className="__list" key={index}>
                                     <div className="__posts"
                                         onClick={() => {
-                                            router.push(`/news/${art.id}`);
+                                            router.push(`/${mainPath !== "transparency" ? mainPath : 'transparency/tender'}/${art.id}`);
                                         }}
                                     >
                                         <div className="relative w-full h-[200px]">

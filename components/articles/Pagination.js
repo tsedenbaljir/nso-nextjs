@@ -7,7 +7,7 @@ export default function Index({ page, totalPages, mainPath, path, lng, articlesP
             <div className="nso_pagination">
                 <ul>
                     {totalPage > last && <li>
-                        <a href={`/${lng}/${mainPath}/${path}`}>{lng === "mn" ? "<< Эхэнд" : "<< First"}</a>
+                        <a href={`/${lng}${mainPath !== undefined ? '/' + mainPath:''}/${path}`}>{lng === "mn" ? "<< Эхэнд" : "<< First"}</a>
                     </li>}
                     {page > last &&
                         <li>
@@ -20,7 +20,7 @@ export default function Index({ page, totalPages, mainPath, path, lng, articlesP
                                 {index + 1 === parseInt(page) ? (
                                     <span>{index + 1}</span>
                                 ) : (
-                                    <a href={`/${lng}/${mainPath}/${path}?page=${index + 1}`}>{index + 1}</a>
+                                    <a href={`/${lng}${mainPath !== undefined ? '/' + mainPath:''}/${path}?page=${index + 1}`}>{index + 1}</a>
                                 )}
                             </li>
                         );
@@ -31,10 +31,10 @@ export default function Index({ page, totalPages, mainPath, path, lng, articlesP
                         </li>
                     }
                     {totalPage > last && <li>
-                        <a href={`/${lng}/${mainPath}/${path}?page=${totalPage}`}>{lng === "mn" ? "Сүүлд >>" : " Last >>"}</a>
+                        <a href={`/${lng}${mainPath !== undefined ? '/' + mainPath:''}/${path}?page=${totalPage}`}>{lng === "mn" ? "Сүүлд >>" : " Last >>"}</a>
                     </li>}
                 </ul>
-            </div>
+            </div >
         </>
     );
 }

@@ -157,7 +157,8 @@ export default function EditNews({ params: { lng, id } }) {
                             value={newsType}
                             data={[
                                 { id: 1, name: "Шинэ мэдээ" },
-                                { id: 2, name: "Медиа мэдээ" }
+                                { id: 2, name: "Медиа мэдээ" },
+                                { id: 3, name: "Тендер" }
                             ]}
                         />
                         <SelectInput

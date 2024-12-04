@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Pagination from '@/components/articles/Pagination';
 import { useTranslation } from '@/app/i18n/client';
 import { useRouter } from "next/navigation";
-import '@/components/styles/laws.scss';
+import './workspace.scss';
 
 export default function Home({ params: { lng } }) {
     const { t } = useTranslation(lng, "lng", "");

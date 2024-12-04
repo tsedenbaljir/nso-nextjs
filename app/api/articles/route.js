@@ -91,7 +91,7 @@ export async function POST(req) {
       last_modified_by: body.created_by,
       last_modified_date: body.last_modified_date,
       content_type: 'NSONEWS',
-      news_type: body.news_type === 1 ? 'LATEST' : 'MEDIA',
+      news_type: body.news_type === 1 ? 'LATEST' : body.news_type === 2 ? 'MEDIA' : 'TENDER',
       published_date: body.published_date,
       header_image: body.header_image,
       views: 0
