@@ -5,7 +5,7 @@ import Layout from '@/components/baseLayout';
 import { Paginator } from 'primereact/paginator';
 import { useTranslation } from '@/app/i18n/client';
 
-export default function Glossary({ params: { lng }, searchParams }) {
+export default function Glossary({ params: { lng } }) {
     const { t } = useTranslation(lng, "lng", "");
     const [list, setList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,42 +16,41 @@ export default function Glossary({ params: { lng }, searchParams }) {
     const [filterList, setFilterList] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState(null);
     const isMn = lng === 'mn';
-    const [searchTerm, setSearchTerm] = useState(searchParams?.search || '');
-    const [searchResult, setSearchResult] = useState(null);
 
     // Fetch filter counts
-    const fetchFilterCount = async (filterCode) => {
+    const fetchFilterCount = async (sectorType) => {
         try {
-            const response = await fetch(`https://gateway.1212.mn/services/1212/api/public/glossaries/count?language.equals=${lng.toUpperCase()}&sectorType.equals=${filterCode}`);
-            const count = await response.json();
-            return count;
+            const response = await fetch(`/api/glossary?sectorType=${sectorType}`);
+            const data = await response.json();
+            return data.pagination?.total || 0;
         } catch (error) {
             console.error('Error fetching filter count:', error);
             return 0;
         }
     };
 
-    // Get total count for "All" filter
-    const getAllCount = () => {
-        return filterList.reduce((sum, item) => sum + (item.count || 0), 0);
-    };
-
     useEffect(() => {
         const fetchFilters = async () => {
             try {
-                const response = await fetch('https://gateway.1212.mn/services/spsdm/api/public/sub-classification-codes/list-all/glossaries');
+                const response = await fetch('/api/glossary/sectors');
                 const data = await response.json();
-
-                // Fetch counts for each filter
-                const countsPromises = data.map(async (filter) => {
-                    const count = await fetchFilterCount(filter.code);
-                    return { ...filter, count };
-                });
-
-                const filtersWithCounts = await Promise.all(countsPromises);
-                setFilterList(filtersWithCounts.filter(filter => filter.count > 0));
+                
+                if (data && (Array.isArray(data) || typeof data === 'object')) {
+                    const dataArray = Array.isArray(data) ? data : [data];
+                    // Transform the data to match the expected format
+                    const formattedFilters = dataArray.map(filter => ({
+                        ...filter,
+                        name: filter.namemn,
+                        name_eng: filter.nameen,
+                        code: filter.code,
+                        count: filter.count || 0
+                    }));
+                    
+                    setFilterList(formattedFilters.filter(filter => filter.count > 0));
+                }
             } catch (error) {
                 console.error('Error fetching filters:', error);
+                setFilterList([]);
             }
         };
         fetchFilters();
@@ -61,24 +60,24 @@ export default function Glossary({ params: { lng }, searchParams }) {
         setFilterLoading(true);
         try {
             const params = new URLSearchParams({
-                size: rows,
                 page: Math.floor(first / rows),
-                sort: 'name,asc',
-                'language.equals': lng.toUpperCase(),
+                pageSize: rows
             });
 
             if (selectedFilter) {
-                params.append('sectorType.equals', selectedFilter.code);
+                params.append('sectorType', selectedFilter.code);
             }
 
-            const response = await fetch(`https://gateway.1212.mn/services/1212/api/public/glossaries-or?${params}`);
+            const response = await fetch(`/api/glossary?${params}`);
             const data = await response.json();
-            const totalCount = response.headers.get('x-total-count');
-
-            setList(data);
-            setTotalRecords(parseInt(totalCount || '0'));
+            
+            if (data.status) {
+                setList(Array.isArray(data.data) ? data.data : []);
+                setTotalRecords(data.pagination.total);
+            }
         } catch (error) {
             console.error('Error fetching glossary:', error);
+            setList([]);
         } finally {
             setLoading(false);
             setFilterLoading(false);
@@ -89,7 +88,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
         fetchGlossaryData();
     }, [first, rows, selectedFilter, lng]);
 
-    const handleFilterChange = async (filter) => {
+    const handleFilterChange = (filter) => {
         setSelectedFilter(filter);
         setFirst(0); // Reset to first page
         window.scrollTo(0, 0);
@@ -100,33 +99,6 @@ export default function Glossary({ params: { lng }, searchParams }) {
         setRows(e.rows);
         window.scrollTo(0, 0);
     };
-
-    // Add search functionality
-    useEffect(() => {
-        const fetchSearchResult = async () => {
-            if (searchTerm) {
-                setLoading(true);
-                try {
-                    const response = await fetch(`/api/glossary/search?search=${encodeURIComponent(searchTerm)}&lng=${lng}`);
-                    const data = await response.json();
-                    if (data.status && data.data) {
-                        setSearchResult(data.data);
-                        setList([data.data]); // Show only search result
-                        setTotalRecords(1);
-                    }
-                } catch (error) {
-                    console.error('Error fetching search result:', error);
-                } finally {
-                    setLoading(false);
-                }
-            } else {
-                setSearchResult(null);
-                fetchGlossaryData(); // Reset to normal list view
-            }
-        };
-
-        fetchSearchResult();
-    }, [searchTerm]);
 
     if (loading) {
         return (
@@ -157,15 +129,17 @@ export default function Glossary({ params: { lng }, searchParams }) {
                                             onClick={() => handleFilterChange(null)}
                                         >
                                             {t('filter.all')}
-                                            <span className="count font-bold">({getAllCount()})</span>
+                                            <span className="count font-bold">
+                                                ({filterList.reduce((sum, item) => sum + item.count, 0)})
+                                            </span>
                                         </li>
                                         {filterList.map((item) => (
                                             <li
-                                                key={item.id}
+                                                key={item.sector_type}
                                                 className={`cursor-pointer ${selectedFilter?.code === item.code ? 'active' : ''}`}
                                                 onClick={() => handleFilterChange(item)}
                                             >
-                                                {isMn ? item.namemn : item.nameen}
+                                                {isMn ? item.name : item.name_eng}
                                                 <span className="count font-bold">({item.count})</span>
                                             </li>
                                         ))}
@@ -189,24 +163,18 @@ export default function Glossary({ params: { lng }, searchParams }) {
                                                     <div key={item.id} className="__list">
                                                         <div className="__table_line"></div>
                                                         <a className="__list_header">
-                                                            {isMn ? item.name : item.nameEng || item.name}
+                                                            {isMn ? item.name : item.name_eng}
                                                         </a>
                                                         <div>
                                                             <span className="__list_content">
-                                                                {isMn ? item.info : item.infoEng || item.info}
+                                                                {isMn ? item.info : item.info_eng}
                                                             </span>
                                                         </div>
                                                         <div className="__list_details">
                                                             <span className="__list_date">
                                                                 <i className="pi pi-calendar-minus"></i>
-                                                                {item.lastModifiedDate.substring(0, 10)}
+                                                                {new Date(item.last_modified_date).toISOString().split('T')[0]}
                                                             </span>
-                                                            {item.version && (
-                                                                <span className="__list_view">
-                                                                    <i className="pi pi-tag"></i>
-                                                                    {item.version}
-                                                                </span>
-                                                            )}
                                                         </div>
                                                     </div>
                                                 ))}

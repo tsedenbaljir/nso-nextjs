@@ -1,52 +1,74 @@
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+import { db } from '@/app/api/config/db_csweb.config.js';
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '0', 10);
     const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
-    const lng = searchParams.get('lng') || 'MN';
-    const sort = searchParams.get('sort') || 'name,asc';
     const sectorType = searchParams.get('sectorType');
-
+    
     try {
-        const params = {
-            size: pageSize,
-            page: page,
-            sort: sort,
-            total: 0,
-            'language.equals': lng.toUpperCase(),
-        };
+        const offset = page * pageSize;
+        
+        // First, get total count with the same filters
+        const countQuery = `
+            SELECT COUNT(*) as total
+            FROM [NSOweb].[dbo].[web_1212_glossary] wg
+            LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc 
+                ON wg.[sector_type] = scc.[code]
+            WHERE wg.published = 1
+            ${sectorType ? 'AND wg.sector_type = ?' : ''}
+        `;
 
-        // Add sectorType filter if provided
-        if (sectorType) {
-            params['sectorType.equals'] = sectorType;
-        }
+        const countParams = sectorType ? [sectorType] : [];
+        const totalResult = await db.raw(countQuery, countParams);
+        const totalCount = totalResult[0]?.total || 0;
 
-        const response = await axios.get('http://10.0.10.211/services/1212/api/public/glossaries-or', {
-            params,
-            validateStatus: function (status) {
-                return status >= 200 && status < 300;
-            }
-        });
+        // Then get the paginated data
+        const query = `
+            SELECT 
+                wg.[id],
+                wg.[name],
+                wg.[sector_type],
+                wg.[source],
+                wg.[info],
+                wg.[published],
+                wg.[list_order],
+                wg.[created_by],
+                wg.[created_date],
+                wg.[last_modified_by],
+                wg.[last_modified_date],
+                wg.[name_eng],
+                wg.[source_eng],
+                wg.[info_eng],
+                scc.[namemn] as sector_name_mn,
+                scc.[nameen] as sector_name_en
+            FROM [NSOweb].[dbo].[web_1212_glossary] wg
+            LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc 
+                ON wg.[sector_type] = scc.[code]
+            WHERE wg.published = 1
+            ${sectorType ? 'AND wg.sector_type = ?' : ''}
+            ORDER BY wg.name ASC
+            OFFSET ? ROWS
+            FETCH NEXT ? ROWS ONLY
+        `;
 
-        const totalCount = response.headers['x-total-count'];
-        const results = response.data;
+        const params = [...countParams, offset, pageSize];
+        const results = await db.raw(query, params);
+        const data = Array.isArray(results) ? results : [results];
 
-        // Format response with pagination info
         const nextResponse = NextResponse.json({
             status: true,
-            data: results,
+            data: data,
             pagination: {
                 page,
                 pageSize,
-                total: parseInt(totalCount || '0', 10)
+                total: totalCount
             },
             message: ""
         });
 
-        // Set pagination headers
-        nextResponse.headers.set('X-Total-Count', totalCount || '0');
+        nextResponse.headers.set('X-Total-Count', totalCount.toString());
         nextResponse.headers.set('X-Page', page.toString());
         nextResponse.headers.set('X-Page-Size', pageSize.toString());
 
@@ -65,7 +87,7 @@ export async function GET(req) {
                 },
                 message: "Failed to fetch glossary"
             },
-            { status: error.response?.status || 500 }
+            { status: 500 }
         );
     }
 } 
