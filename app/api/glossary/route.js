@@ -6,25 +6,51 @@ export async function GET(req) {
     const page = parseInt(searchParams.get('page') || '0', 10);
     const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
     const sectorType = searchParams.get('sectorType');
-    
+    const search = searchParams.get('search');
+    const lng = searchParams.get('lng') || 'mn';
+    const role = searchParams.get('role');
+
     try {
         const offset = page * pageSize;
-        
-        // First, get total count with the same filters
+
+        // Build WHERE clause
+        let whereConditions = [];
+        const params = [];
+
+        // Add published condition
+        whereConditions.push(role === "admin" ? 'wg.published in(0,1)' : 'wg.published = 1');
+
+        // Add sector type condition if provided
+        if (sectorType) {
+            whereConditions.push('wg.sector_type = ?');
+            params.push(sectorType);
+        }
+
+        // Add search condition if provided
+        if (search) {
+            const searchCondition = lng === 'mn' 
+                ? '(wg.name LIKE ? OR wg.info LIKE ?)'
+                : '(wg.name_eng LIKE ? OR wg.info_eng LIKE ?)';
+            whereConditions.push(searchCondition);
+            const searchPattern = `%${decodeURIComponent(search)}%`;
+            params.push(searchPattern, searchPattern);
+        }
+
+        const whereClause = whereConditions.join(' AND ');
+
+        // Get total count
         const countQuery = `
             SELECT COUNT(*) as total
             FROM [NSOweb].[dbo].[web_1212_glossary] wg
             LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc 
                 ON wg.[sector_type] = scc.[code]
-            WHERE wg.published = 1
-            ${sectorType ? 'AND wg.sector_type = ?' : ''}
+            WHERE ${whereClause}
         `;
 
-        const countParams = sectorType ? [sectorType] : [];
-        const totalResult = await db.raw(countQuery, countParams);
+        const totalResult = await db.raw(countQuery, params);
         const totalCount = totalResult[0]?.total || 0;
 
-        // Then get the paginated data
+        // Get paginated data
         const query = `
             SELECT 
                 wg.[id],
@@ -33,7 +59,6 @@ export async function GET(req) {
                 wg.[source],
                 wg.[info],
                 wg.[published],
-                wg.[list_order],
                 wg.[created_by],
                 wg.[created_date],
                 wg.[last_modified_by],
@@ -46,48 +71,36 @@ export async function GET(req) {
             FROM [NSOweb].[dbo].[web_1212_glossary] wg
             LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc 
                 ON wg.[sector_type] = scc.[code]
-            WHERE wg.published = 1
-            ${sectorType ? 'AND wg.sector_type = ?' : ''}
-            ORDER BY wg.name ASC
+            WHERE ${whereClause}
+            ORDER BY ${role === "admin" ? 'wg.created_date DESC' : 'wg.name ASC'}
             OFFSET ? ROWS
             FETCH NEXT ? ROWS ONLY
         `;
 
-        const params = [...countParams, offset, pageSize];
-        const results = await db.raw(query, params);
+        const results = await db.raw(query, [...params, offset, pageSize]);
         const data = Array.isArray(results) ? results : [results];
 
-        const nextResponse = NextResponse.json({
+        return NextResponse.json({
             status: true,
             data: data,
             pagination: {
                 page,
                 pageSize,
                 total: totalCount
-            },
-            message: ""
+            }
         });
-
-        nextResponse.headers.set('X-Total-Count', totalCount.toString());
-        nextResponse.headers.set('X-Page', page.toString());
-        nextResponse.headers.set('X-Page-Size', pageSize.toString());
-
-        return nextResponse;
 
     } catch (error) {
         console.error('Error fetching glossary:', error);
-        return NextResponse.json(
-            {
-                status: false,
-                data: null,
-                pagination: {
-                    page,
-                    pageSize,
-                    total: 0
-                },
-                message: "Failed to fetch glossary"
+        return NextResponse.json({
+            status: false,
+            data: null,
+            pagination: {
+                page,
+                pageSize,
+                total: 0
             },
-            { status: 500 }
-        );
+            message: "Failed to fetch glossary"
+        }, { status: 500 });
     }
 } 

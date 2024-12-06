@@ -7,9 +7,29 @@ import { Path } from '@/utils/path';
 import { signOut } from "next-auth/react";
 import MenuItems from './MenuItems';
 import { LogoutOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 export default function Sidebar() {
   var pth = Path().split("/")[3];
+
+  const handleElasticIndex = async () => {
+    try {
+      const response = await fetch('/api/elastic_index', {
+        method: 'POST'
+      });
+      const result = await response.json();
+      
+      if (result.status) {
+        message.success('Хайлт амжилттай индекслэгдлээ');
+      } else {
+        message.error(result.message || 'Алдаа гарлаа');
+      }
+    } catch (error) {
+      console.error('Error indexing:', error);
+      message.error('Индекслэх үед алдаа гарлаа');
+    }
+  };
+
   return (
     <>
       <aside className="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden border-r border-stroke  dark:border-stroke-dark dark:bg-gray-dark lg:static lg:translate-x-0">
@@ -40,24 +60,19 @@ export default function Sidebar() {
             </div>
             <div >
               <h3 className="mb-3 text-sm font-medium text-dark-4 dark:text-dark-6 border-b">
-                ТУСЛАХ ХЭСЭГ
+                ТУСЛАХ ЦЭС
               </h3>
-              <Link href="/submenus">
-                <div
-                  className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out ${pth === ""
-                    ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white"
-                    : "text-dark-4 hover:bg-gray-2 hover:text-dark dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"
-                    }`}
-                >Жижиг цэс</div>
-              </Link>
-              {/* <Link href="/settings">
-                <div
-                  className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out ${pth === ""
-                    ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white"
-                    : "text-dark-4 hover:bg-gray-2 hover:text-dark dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"
-                    }`}
-                >Тархаах хуваарь</div>
-              </Link> */}
+              <ul className="mb-6 flex flex-col gap-2">
+                <MenuItems name={"Нэр, томьёоны тайлбар"} isActive={pth === "glossary"} link={"glossary"} />
+                <li>
+                  <div
+                    className={`cursor-pointer relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out dark:bg-white/10 text-white bg-orange-500 hover:bg-orange-600`}
+                    onClick={handleElasticIndex}
+                  >
+                    Хайлт индекслэх
+                  </div>
+                </li>
+              </ul>
             </div>
           </nav>
         </div>

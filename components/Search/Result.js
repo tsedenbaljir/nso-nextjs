@@ -42,6 +42,24 @@ export default function Result({ showResult, t, loading, data, lng }) {
                             ))}
                         </div>
                     )}
+                    {data.tender && data.tender.length > 0 && (
+                        <div className="result_col">
+                            <span className="group_title">{t('TENDER')}</span>
+                            {data.tender.map((dt, i) => (
+                                <Link
+                                    href={`/${lng}/transparency/tender/${dt._source.id}`}
+                                    key={`tender-${dt._source.id}-${i}`}
+                                    className="group_item"
+                                >
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: dt?.highlight?.name || dt._source.name
+                                        }}
+                                    />
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                     {data.download && data.download.length > 0 && (
                         <div className="result_col">
                             <span className="group_title">{t('dissemination.title')}</span>
