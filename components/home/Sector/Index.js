@@ -1,7 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from '@/app/i18n/client';
 
-export default function Index() {
+export default function Index({ lng }) {
+    const { t } = useTranslation(lng, "lng", "");
     return (
         <>
             <div className="nso_home_statistic">
@@ -14,27 +16,27 @@ export default function Index() {
                             <div className="__statistics">
                                 <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
                                     <span className="__icon"></span>
-                                    <span className="__name">Хүн ам, өрх</span>
+                                    <span className="__name">{t('statCate.populationHousehold')}</span>
                                 </Link>
                                 <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
                                     <span className="__icon"></span>
-                                    <span className="__name">Үйлдвэрлэл, үйлчилгээ</span>
+                                    <span className="__name">{t('statCate.business')}</span>
                                 </Link>
                                 <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
                                     <span className="__icon"></span>
-                                    <span className="__name">Нийгэм, хөгжил</span>
+                                    <span className="__name">{t('statCate.society')}</span>
                                 </Link>
                                 <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
                                     <span className="__icon"></span>
-                                    <span className="__name">Эдийн засаг, байгаль орчин</span>
+                                    <span className="__name">{t('statCate.economy')}</span>
                                 </Link>
                                 <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
                                     <span className="__icon"></span>
-                                    <span className="__name">Боловсрол, эрүүл мэнд</span>
+                                    <span className="__name">{t('statCate.environment')}</span>
                                 </Link>
                                 <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
                                     <span className="__icon"></span>
-                                    <span className="__name">Хөдөлмөр, бизнес</span>
+                                    <span className="__name">{t('statCate.labourForce')}</span>
                                 </Link>
                             </div>
                         </div>

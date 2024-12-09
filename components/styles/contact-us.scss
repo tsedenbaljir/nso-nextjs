@@ -1,0 +1,150 @@
+.nso_statistic_section {
+  padding-top: 161px;
+}
+
+.__map {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.__contact_form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: center;
+  flex-direction: column;
+
+  .__form {
+    width: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+    overflow: hidden;
+    clear: both;
+
+    .__submit {
+      flex: auto;
+    }
+
+    input.__submit_button {
+      background: var(--surface-success-grad);
+      width: 89px;
+      height: 38px;
+      border-radius: 42px;
+      float: right;
+      text-align: center;
+      color: white;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+  }
+
+  .__input_group {
+    width: 50%;
+    display: table;
+    padding: 0 10px 0px 10px;
+  }
+
+  .__input {
+    color: var(--text-main);
+    width: 100%;
+    max-width: 100%;
+    height: 50px;
+    background-color: var(--surface-a);
+    padding: 0 10px 0px 20px;
+    margin: 10px 10px 0px 10px;
+    border: 2px solid var(--devide);
+
+    &:focus {
+      border: 2px solid var(--devide) !important;
+    }
+  }
+
+  ::placeholder {
+    color: var(--text-main);
+    opacity: .7;
+  }
+
+  h3 {
+    padding-left: 20px;
+    width: 250px;
+    height: 40px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: var(--font-size24);
+    line-height: 40px;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+
+    color: var(--text-main);
+  }
+}
+
+.nso_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.__contact_form {
+  .__input_group {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    .__input {
+      width: calc(50% - 20px);
+      outline: none;
+      font-size: var(--font-size14);
+
+      &:focus {
+        border: 2px solid #005baa48;
+      }
+
+      &._message {
+        width: 100%;
+        height: 150px;
+        padding-top: 15px;
+        font-family: sf-pro-text, roboto;
+        font-weight: 300;
+      }
+    }
+  }
+
+  .__form {
+    input.__submit_button {
+      border: none;
+      margin-right: 30px;
+      font-size: var(--font-size12);
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+}
+
+.contact_tab {
+  margin: 10px 0;
+
+  .ant-tabs-nav {
+    .ant-tabs-tab {
+      font-weight: 600;
+      font-size: 16px;
+      
+      &.ant-tabs-tab-active {
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+.contact_tab_item {
+  font-weight: 600;
+}
+
+.contact_tab_item table tr td,
+.contact_tab_item table tr th {
+  padding: 0 10px;
+  border-width: 1px !important;
+  border-style: solid rgb(0, 0, 0);
+}

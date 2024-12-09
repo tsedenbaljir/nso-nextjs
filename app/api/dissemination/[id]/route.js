@@ -3,14 +3,12 @@ import { db } from '@/app/api/config/db_csweb.config';
 
 export async function GET(req, { params }) {
   const { id } = params;
-  const { searchParams } = new URL(req.url);
-  const lng = searchParams.get('lng') || 'MN';
 
   try {
     const [result] = await db.raw(`
       SELECT * FROM web_1212_content 
-      WHERE id = ? AND language = ? AND content_type = 'NEWS'
-    `, [id, lng]);
+      WHERE id = ?
+    `, [id]);
 
     if (!result || result.length === 0) {
       return NextResponse.json({ 

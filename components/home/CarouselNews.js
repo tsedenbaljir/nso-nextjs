@@ -86,7 +86,7 @@ export default function CarouselNews({ lng }) {
                             <Link href="/news/latest"
                                 className="__action_area"
                             >
-                                <button className="nso_btn success">Дэлгэрэнгүй</button>
+                                <button className="nso_btn success">{lng === 'en' ? 'Read More' : 'Дэлгэрэнгүй'}</button>
                             </Link>
                         </div>
                     </div>

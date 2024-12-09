@@ -26,6 +26,10 @@ export default function GlossaryAdmin({ params: { lng } }) {
         total: 0
     });
 
+    const indexBodyTemplate = (rowData, props) => {
+        return props.rowIndex + 1;
+    };
+
     // Fetch glossary data
     const fetchData = async (page = 1, pageSize = 10) => {
         try {
@@ -226,8 +230,12 @@ export default function GlossaryAdmin({ params: { lng } }) {
                     className="p-datatable-sm"
                     emptyMessage="Мэдээлэл олдсонгүй"
                 >
-                    <Column field="name" header="Нэр" style={{ width: '15%' }} />
-                    <Column field="name_eng" header="Англи нэр" style={{ width: '15%' }} />
+                    <Column
+                        header="#"
+                        body={indexBodyTemplate}
+                        style={{ width: 20 }}
+                    />
+                    <Column field="name" header="Нэр" style={{ width: '40%' }} />
                     <Column field="sector_name_mn" header="Ангилал" style={{ width: '10%' }} />
                     <Column 
                         field="info" 

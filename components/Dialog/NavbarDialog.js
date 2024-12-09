@@ -11,7 +11,9 @@ export default function NavbarDialog({ visible, onClose, type, data }) {
     };
 
     const handleLinkClick = (link) => {
-        if (link.startsWith('http')) {
+        if (!link) return;
+        
+        if (typeof link === 'string' && link.startsWith('http')) {
             window.open(link, '_blank');
         } else {
             window.location.href = link;

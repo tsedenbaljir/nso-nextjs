@@ -1,0 +1,183 @@
+.nso_news_groups {
+  padding: 60px 0;
+
+  .__section_title {
+    text-transform: uppercase;
+    font-size: var(--font-size20);
+    font-weight: 500;
+    color: var(--text-main);
+  }
+
+  .__news_groups {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    padding-top: 30px;
+
+    .__main_news {
+      width: 66%;
+      display: flex;
+      cursor: pointer;
+      max-width: 770px;
+      flex-direction: column;
+
+      img {
+        width: 100%;
+        max-height: 500px;
+      }
+
+      .__name {
+        font-weight: bold;
+        padding-top: 30px;
+        line-height: 30px;
+        color: var(--text-main);
+        font-size: var(--font-size20);
+      }
+
+      .__text {
+        padding-top: 20px;
+        font-size: var(--font-size15);
+        font-weight: 400;
+        color: var(--text-desc);
+        line-height: 22px;
+      }
+
+      .__info {
+        padding-top: 18px;
+        display: flex;
+        align-items: center;
+
+        .__view {
+          display: flex;
+          align-items: center;
+          font-size: var(--font-size15);
+          font-weight: 400;
+          color: var(--text-main);
+
+          &::before {
+            content: '';
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            background-image: url('/assets/images/view.png');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+          }
+        }
+
+        .__comment {
+          margin-left: 10px;
+          display: flex;
+          align-items: center;
+          font-size: var(--font-size15);
+          font-weight: 400;
+          color: var(--text-main);
+
+          &::before {
+            content: '';
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            background-image: url('/assets/images/comment.png');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+          }
+        }
+      }
+    }
+
+    .__other_news {
+      margin-top: -20px;
+      flex: 99;
+      max-width: 400px;
+      padding-left: 30px;
+      padding-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+
+      .__card {
+        clear: both;
+        cursor: pointer;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:hover {
+          .__other {
+            .__name {
+              color: var(--text-accent);
+            }
+          }
+        }
+
+        img {
+          float: left;
+          width: 100px;
+          height: 80px;
+        }
+
+        .__other {
+          float: left;
+          width: calc(100% - 100px);
+          display: flex;
+          flex-direction: column;
+          padding-left: 24px;
+
+          .__name {
+            font-weight: bold;
+            color: var(--text-main);
+            font-size: var(--font-size14);
+          }
+
+          .__info {
+            display: flex;
+            align-items: center;
+            padding-top: 8px;
+
+            .__view {
+              display: flex;
+              align-items: center;
+              font-size: var(--font-size15);
+              font-weight: 400;
+              color: var(--text-main);
+
+              &::before {
+                content: '';
+                width: 15px;
+                height: 15px;
+                margin-right: 6px;
+                background-image: url('/assets/images/view.png');
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+              }
+            }
+
+            .__comment {
+              margin-left: 10px;
+              display: flex;
+              align-items: center;
+              font-size: var(--font-size15);
+              font-weight: 400;
+              color: var(--text-main);
+
+              &::before {
+                content: '';
+                width: 15px;
+                height: 15px;
+                margin-right: 6px;
+                background-image: url('/assets/images/comment.png');
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

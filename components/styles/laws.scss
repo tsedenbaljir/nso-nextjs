@@ -95,6 +95,7 @@
             .__laws {
                 .__post {
                     display: flex;
+                    margin-top: 20px;
                     padding: 10px 20px;
                     cursor: pointer;
                     text-decoration: none;
@@ -173,15 +174,9 @@
                         }
                     }
 
-                    // & div {
-                    //     width: 870px;
-                    // }
-
-                    &:hover {
-                        border-radius: 10px;
-                        transition: box-shadow 500ms;
-                        box-shadow: 0px 15px 25px #0011ff15;
-                    }
+                    border-radius: 10px;
+                    transition: box-shadow 500ms;
+                    box-shadow: 0px 3px 5px #05094969;
                 }
             }
 
@@ -271,6 +266,7 @@
         }
 
         .__laws {
+            margin-top: 20px;
             margin-left: 20px;
             padding: 0 0 40px 20px;
 
@@ -356,15 +352,9 @@
                     }
                 }
 
-                // & div {
-                //     width: 870px;
-                // }
-
-                &:hover {
-                    border-radius: 10px;
-                    transition: box-shadow 500ms;
-                    box-shadow: 0px 15px 25px #0011ff15;
-                }
+                border-radius: 10px;
+                transition: box-shadow 500ms;
+                box-shadow: 0px 3px 5px #05094969;
             }
         }
 
