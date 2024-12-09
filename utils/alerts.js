@@ -1,21 +1,23 @@
+import { confirmDialog } from 'primereact/confirmdialog';
+import { Toast } from 'primereact/toast';
+
 export const showConfirm = (options) => {
     confirmDialog({
         message: options.message || 'Та энэ үйлдлийг хийхдээ итгэлтэй байна уу?',
         header: options.header || 'Баталгаажуулах',
         icon: 'pi pi-exclamation-triangle',
-        acceptClassName: 'p-button-danger',
-        acceptLabel: options.acceptLabel || 'Тийм',
-        rejectLabel: options.rejectLabel || 'Үгүй',
+        acceptLabel: 'Тийм',
+        rejectLabel: 'Үгүй',
         accept: options.accept,
-        reject: options.reject || (() => {})
+        reject: options.reject
     });
 };
 
-export const showToast = (toast, type, message) => {
-    toast.current.show({
-        severity: type,
-        summary: type === 'success' ? 'Амжилттай' : 'Алдаа',
-        detail: message,
+export const showToast = (toastRef, severity, summary, detail) => {
+    toastRef.current?.show({
+        severity: severity,
+        summary: summary,
+        detail: detail,
         life: 3000
     });
 }; 

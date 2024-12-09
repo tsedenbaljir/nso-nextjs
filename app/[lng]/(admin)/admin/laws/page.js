@@ -92,25 +92,37 @@ export default function AdminLaws() {
   };
 
   const handleDelete = async (id, type) => {
+    if (!id) {
+      showToast(toast, 'error', 'Алдаа', 'ID олдсонгүй');
+      return;
+    }
+    console.log(id);
+    
     showConfirm({
       message: 'Та энэ хуулийг устгахдаа итгэлтэй байна уу?',
       header: 'Устгах',
       accept: async () => {
         try {
-          const response = await fetch(`/api/laws?id=${id}`, {
+          const response = await fetch('/api/laws', {
             method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+              id: parseInt(id) // Ensure ID is a number
+            })
           });
 
           const result = await response.json();
           if (result.status) {
-            fetchLawsByType(type);
-            showToast(toast, 'success', 'Амжилттай устгагдлаа');
+            await fetchLawsByType(type);
+            showToast(toast, 'success', 'Амжилттай', 'Амжилттай устгагдлаа');
           } else {
-            showToast(toast, 'error', 'Устгахад алдаа гарлаа');
+            showToast(toast, 'error', 'Алдаа', result.message || 'Устгахад алдаа гарлаа');
           }
         } catch (error) {
           console.error('Error deleting law:', error);
-          showToast(toast, 'error', 'Устгахад алдаа гарлаа');
+          showToast(toast, 'error', 'Алдаа', 'Устгахад алдаа гарлаа');
         }
       }
     });

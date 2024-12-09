@@ -111,8 +111,15 @@ export async function POST(req) {
 
 export async function DELETE(req) {
   try {
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get('id');
+    const body = await req.json();
+    const { id } = body;
+    
+    if (!id) {
+      return NextResponse.json({ 
+        status: false, 
+        message: "ID is required" 
+      }, { status: 400 });
+    }
 
     await db.raw(`
       DELETE FROM web_1212_downloadnew 
