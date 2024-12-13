@@ -100,6 +100,16 @@ export default function Footer({ lng }) {
                                     </a>
                                 </span>
                             </div>
+                            <div className="nso_add_item">
+                                <div className="__plus">
+                                    <i className="pi pi-check"></i>
+                                </div>
+                                <span className="__text">
+                                    <a href={lng+'/terms_of_use'} target="_blank" rel="noopener noreferrer">
+                                        {lng === "mn"?"Ашиглах нөхцөл":"terms of use"}
+                                    </a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div className="col-12 md:col-4 lg:col-4">
