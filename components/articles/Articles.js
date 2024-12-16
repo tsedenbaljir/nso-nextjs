@@ -35,14 +35,13 @@ export default function Articles({ article }) {
         <article className="__about_post">
             <div className="__info_detail_page">
                 <div className="bg-gray">
-                    <Image
+                    <img
                         src={imageError ? `/uploads/${article.header_image}` : getImageUrl(article.header_image)}
                         alt={article.name || 'Article image'}
                         width={500}
                         height={500}
                         className="__header_image"
                         onError={handleImageError}
-                        priority
                     />
                 </div>
 

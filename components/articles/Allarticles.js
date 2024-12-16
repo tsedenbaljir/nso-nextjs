@@ -45,15 +45,12 @@ export default function Index({ Articles, loading, mainPath }) {
                                             router.push(`/${mainPath !== "transparency" ? mainPath : 'transparency/tender'}/${art.id}`);
                                         }}
                                     >
-                                        <div className="relative w-full h-[200px]">
-                                            <Image
+                                        <div className="relative w-full h-[200px] overflow-hidden">
+                                            <img
                                                 src={errorImages[art.id] || getImageUrl(art.header_image)}
                                                 alt={art.name || 'Article image'}
-                                                fill
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                className="object-cover rounded-lg"
-                                                priority={false}
-                                                quality={75}
+                                                className="absolute inset-0 w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
                                                 onError={() => handleImageError(art.id, art.header_image)}
                                             />
                                         </div>

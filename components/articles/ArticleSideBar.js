@@ -34,15 +34,12 @@ export default function ArticleSideBar({ article }) {
                             router.push("/news/" + art.id);
                         }}>
                         <a className="__posts">
-                            <div className="relative w-full h-[200px]">
-                                <Image
-                                    className="object-cover rounded-lg"
+                            <div className="relative w-full h-[200px] overflow-hidden">
+                                <img
+                                    className="absolute inset-0 w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
                                     src={errorImages[art.id] || getImageUrl(art.header_image)}
                                     alt={art.name || 'News image'}
-                                    width={500}
-                                    height={500}
                                     onError={() => handleImageError(art.id, art.header_image)}
-                                    priority
                                 />
                             </div>
                             <div className="__title overflow-hidden">

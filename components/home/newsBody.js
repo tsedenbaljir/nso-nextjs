@@ -26,16 +26,13 @@ export default function index(product) {
                 router.push("/news/" + product.id);
             }}
         >
-            <div className="relative w-full h-[200px]">
-                <Image
+            <div className="relative w-full h-[200px] overflow-hidden">
+                <img
                     src={imageError ? `/uploads/${product.header_image}` : getImageUrl(product.header_image)}
                     alt={product.name || 'News image'}
-                    fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover rounded-lg"
-                    priority={false}
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
                     onError={handleImageError}
-                    quality={75}
                 />
             </div>
             <div className="__title overflow-hidden">
