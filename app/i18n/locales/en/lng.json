@@ -9,6 +9,15 @@
     "empty": "Not found",
     "other": "Other"
   },
+  "mainWelcome": {
+    "mainSite": "WEB SITE",
+    "news": "NEWS INFORMATION",
+    "statistics": "STATISTICAL DATA",
+    "publications": "PUBLICATIONS",
+    "reports": "REPORTS & ANALYSIS",
+    "dataNation": "DATA NATIONAL",
+    "metaData": "META DATA"
+  },
   "aboutUsJson": {
     "VSZ": "National <br />Council",
     "DZ": "Board of <br /> Directors",
