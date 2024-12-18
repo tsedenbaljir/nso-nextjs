@@ -36,6 +36,9 @@ const nextConfig = {
         ELASTIC_SEARCH: process.env.ELASTIC_SEARCH,
         API_URL: process.env.API_URL,
     },
+    experimental: {
+        appDir: true,
+    },
     output: "standalone",
     async headers() {
         return [

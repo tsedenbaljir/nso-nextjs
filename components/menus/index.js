@@ -41,7 +41,7 @@ const Dropdown = ({ menu, lng, pth }) => {
 const MainMenu = ({ menus, loading, lng, pth }) => {
   return (
     <div className="__menu">
-      <Link className="__logo lg:col-3 md:col-3 sm:col-12" href='/home'></Link>
+      <Link className="__logo lg:col-3 md:col-3 sm:col-12" href='/'></Link>
       <ul>
         {loading ?
           menus.map((menu) => (

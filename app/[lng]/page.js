@@ -1,13 +1,13 @@
 "use client"
 import ServiceGrid from '@/components/home/ServiceGrid';
 import { useTranslation } from '@/app/i18n/client';
-import { 
-  HomeOutlined, 
-  BarChartOutlined, 
+import {
+  HomeOutlined,
+  BarChartOutlined,
   NotificationOutlined,
   BookOutlined,
   DatabaseOutlined,
-  ApiOutlined,
+  FileSearchOutlined,
   FileTextOutlined,
   SmileOutlined,
   TeamOutlined
@@ -19,64 +19,64 @@ export default function Home({ params: { lng } }) {
   const services = [
     {
       id: 1,
-      icon: <HomeOutlined style={{ fontSize: '28px' }} />,
+      icon: <HomeOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('mainWelcome.mainSite'),
-      link: '/home'
+      link: lng + '/home'
     },
     {
       id: 2,
-      icon: <BarChartOutlined style={{ fontSize: '28px' }} />,
+      icon: <BarChartOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('mainWelcome.statistics'),
       link: 'http://10.0.1.55/pxweb/pxweb/mn/NSO/'
     },
     {
       id: 3,
-      icon: <NotificationOutlined style={{ fontSize: '28px' }} />,
+      icon: <NotificationOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('mainWelcome.news'),
-      link: '/news/latest'
+      link: lng + '/news/latest'
     },
     {
       id: 4,
-      icon: <BookOutlined style={{ fontSize: '28px' }} />,
+      icon: <BookOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('mainWelcome.publications'),
-      link: '/publications'
+      link: lng + '/dissemination/future'
     },
     {
       id: 5,
-      icon: <DatabaseOutlined style={{ fontSize: '28px' }} />,
+      icon: <DatabaseOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('mainWelcome.dataNation'),
       link: 'https://data.nso.mn'
     },
     {
       id: 6,
-      icon: <ApiOutlined style={{ fontSize: '28px' }} />,
+      icon: <FileSearchOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('mainWelcome.metaData'),
       link: 'https://metadata.nso.mn'
     },
     {
       id: 7,
-      icon: <FileTextOutlined style={{ fontSize: '28px' }} />,
-      title: t('mainWelcome.reports'),
-      link: '/dissemination/future'
+      icon: <FileTextOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
+      title: t('TENDER'),
+      link: lng + '/transparency/tender'
     },
     {
       id: 8,
-      icon: <SmileOutlined style={{ fontSize: '28px' }} />,
+      icon: <SmileOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('funStatistic.name'),
       link: 'http://funstatistic.app.nso.mn'
     },
     {
       id: 9,
-      icon: <TeamOutlined style={{ fontSize: '28px' }} />,
+      icon: <TeamOutlined style={{ fontSize: '28px', color: '#0076de' }} />,
       title: t('menuAboutUs.workspace'),
-      link: '/workspace'
+      link: lng + '/workspace'
     }
   ];
 
   return (
     <div className="home-container">
       <div className="nso_container">
-        <div className="home-content py-22">
+        <div className="home-content py-22 w-full">
           <div className="logo-section">
             <img src="/logo.png" alt="Logo" className="main-logo" />
           </div>
