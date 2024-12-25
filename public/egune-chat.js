@@ -11,7 +11,7 @@ var isOpen = false;
 var responsiveType = false;
 
 var chatBoxStyle = `
-  z-index:1999; 
+  z-index:10000; 
   overflow:auto;
   visibility:hidden;
   border-radius: 30px;
@@ -46,7 +46,7 @@ var chatBtnStyle = `
   background: #87ceeb`;
 
 var full_screen_style = `
-  z-index: 1999; 
+  z-index: 10000; 
   position: fixed; 
   width: 100%; 
   max-width: unset; 
@@ -141,6 +141,7 @@ function greetingBoxCreater() {
           bottom: 108px;
           box-sizing:border-box;
           box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.16);
+          z-index: 1;
         }
         .egune-greeting-box .egune-bot-header {
           display: flex;
