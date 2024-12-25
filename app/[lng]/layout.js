@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-9DGLNDV1MB"></Script>
+        <Script async src="/egune-chat.js"></Script>
         <Script>
           {`
             window.dataLayer = window.dataLayer || [];
