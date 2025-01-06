@@ -38,6 +38,7 @@
     "oci-objectstorage": "^2.91.0",
     "oci-secrets": "^2.91.0",
     "oracledb": "^6.6.0",
+    "pdfjs-dist": "^4.10.38",
     "pg": "^8.12.0",
     "pg-query-stream": "^4.6.0",
     "primeflex": "^3.3.1",
