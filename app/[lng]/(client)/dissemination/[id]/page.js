@@ -8,14 +8,15 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import Text from '@/components/Loading/Text/Index';
+import PdfViewer from '@/components/PdfViewer/index';
 
 // Dynamically import PdfViewer with no SSR
-const PdfViewer = dynamic(() => import('@/components/PdfViewer'), {
-    ssr: false,
-    loading: () => <div className="w-full h-[800px] flex items-center justify-center">
-        <Text />
-    </div>
-});
+// const PdfViewer = dynamic(() => import('@/components/PdfViewer/index'), {
+//     ssr: false,
+//     loading: () => <div className="w-full h-[800px] flex items-center justify-center">
+//         <Text />
+//     </div>
+// });
 
 export default function Home({ params: { lng, id } }) {
     const [article, setArticle] = useState(null);
@@ -110,7 +111,7 @@ export default function Home({ params: { lng, id } }) {
                                             </div>
                                             {pdfUrl && (
                                                 <div className="pdf-container w-full h-[800px] overflow-hidden">
-                                                    <PdfViewer pdfUrl={pdfUrl} />
+                                                    <PdfViewer fileUrl={pdfUrl} />
                                                 </div>
                                             )}
                                         </div>
