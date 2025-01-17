@@ -4,6 +4,7 @@ const nextConfig = {
     webpack: (config, { isServer }) => {
         if (isServer) {
             config.externals.push('oracledb');
+            config.externals.push('canvas');
         }
         return config;
     },

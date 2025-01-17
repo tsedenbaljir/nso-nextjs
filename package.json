@@ -23,6 +23,7 @@
     "accept-language": "^3.0.18",
     "antd": "^5.22.2",
     "axios": "^1.7.7",
+    "canvas": "^3.0.1",
     "formidable": "^3.5.2",
     "https": "^1.0.0",
     "i18next": "^23.12.2",
@@ -54,7 +55,6 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "sass": "^1.77.8",
-    "sqlite3": "^5.1.7",
     "tedious": "^18.3.0"
   },
   "devDependencies": {
