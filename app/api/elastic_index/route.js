@@ -64,7 +64,7 @@ export async function POST() {
     ];
 
     // 🔽 Fetch data from external API using absolute URL 🔽
-    const apiResponse = await fetch(`http://localhost:3000/api/tablename`);
+    const apiResponse = await fetch(`https://nso1212.app.nso.mn/api/tablename`);
     const { response: apiData } = await apiResponse.json();
 
     if (!Array.isArray(apiData)) {
