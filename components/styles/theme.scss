@@ -4285,7 +4285,7 @@ p-togglebutton.ng-dirty.ng-invalid>.p-togglebutton.p-button {
 
 .p-tabview .p-tabview-panels {
   background: var(--surface-a);
-  padding: 1rem;
+  padding: 1.5rem 0;
   border: 0 none;
   color: var(--text-color-secondary);
   border-bottom-right-radius: 3px;
@@ -5364,7 +5364,7 @@ p-togglebutton.ng-dirty.ng-invalid>.p-togglebutton.p-button {
 
 .p-panelmenu .p-panelmenu-content {
   padding: 0.25rem 0;
-  border: 1px solid #dee2e6;
+  // border: 1px solid #dee2e6;
   background: var(--surface-a);
   color: var(--text-color-secondary);
   margin-bottom: 0;

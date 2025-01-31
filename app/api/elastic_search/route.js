@@ -15,11 +15,11 @@ export async function POST(req) {
     }
 
     const searchQuery = {
-      "_source": ["_type", "id", "name", "body", "file_info", "source", "info", "slug"],
+      "_source": ["_type", "id", "name", "body", "file_info", "source", "info", "slug", "sector", "category"],
       "query": {
         "multi_match": {
           "query": values,
-          "fields": ["id^2", "name^3", "body", "file_info", "source", "info", "slug"],
+          "fields": ["id^2", "name^3", "body", "file_info", "source", "info", "slug", "sector", "category"],
           "type": "best_fields",
           "fuzziness": "AUTO"
         }
@@ -27,7 +27,7 @@ export async function POST(req) {
       "sort": [
         { "_score": { "order": "desc" } }
       ],
-      "size": 100,
+      "size": 20,
       "highlight": {
         "pre_tags": ["<span style='background: #ffe700;border-radius: 4px;padding-inline: 4px;'>"],
         "post_tags": ["</span>"],

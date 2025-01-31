@@ -14,27 +14,27 @@ export default function Index({ lng }) {
                     <div className="__statistic_groups">
                         <div className="__group">
                             <div className="__statistics">
-                                <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
+                                <Link className="__card" href={`/${lng}/statecate/Pop/pop6`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.populationHousehold')}</span>
                                 </Link>
-                                <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
+                                <Link className="__card" href={`/${lng}/statecate/Industry_service/Service_industrial`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.business')}</span>
                                 </Link>
-                                <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
+                                <Link className="__card" href={`/${lng}/statecate/Society%20and%20development/Gender`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.society')}</span>
                                 </Link>
-                                <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
+                                <Link className="__card" href={`/${lng}/statecate/Economy,%20environment/economy_env`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.economy')}</span>
                                 </Link>
-                                <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
+                                <Link className="__card" href={`/${lng}/statecate/Education,%20health/Edu_main`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.environment')}</span>
                                 </Link>
-                                <Link className="__card" href="http://10.0.1.55/pxweb/pxweb/mn/NSO/">
+                                <Link className="__card" href={`/${lng}/statecate/Labor/Labor3`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.labourForce')}</span>
                                 </Link>

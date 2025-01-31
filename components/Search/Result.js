@@ -6,7 +6,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
     if (!showResult) return null;
 
     const hasResults = data && Object.keys(data).length > 0;
-
+    
     return (
         <div className="search_result">
             {loading ? (
@@ -24,6 +24,24 @@ export default function Result({ showResult, t, loading, data, lng }) {
                 </div>
             ) : (
                 <>
+                    {data.tablename && data.tablename.length > 0 && (
+                        <div className="result_col">
+                            <span className="group_title">{t('elastic.table')}</span>
+                            {data.tablename.map((dt, i) => (
+                                <Link
+                                    href={`/${lng}/news/${dt._source.id}`}
+                                    key={`tablename-${dt._source.id}-${i}`}
+                                    className="group_item"
+                                >
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: dt?.highlight?.name || dt._source.name
+                                        }}
+                                    />
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                     {data.content && data.content.length > 0 && (
                         <div className="result_col">
                             <span className="group_title">{t('menuAboutUs.news')}</span>

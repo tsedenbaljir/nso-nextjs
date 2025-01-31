@@ -1,0 +1,102 @@
+:host {
+  ::ng-deep .p-autocomplete .p-autocomplete-panel {
+    top: 38px !important;
+
+    ul {
+      li {
+        a {
+          text-decoration: none;
+          color: var(--text-main);
+        }
+
+        &:hover {
+          a {
+            color: var(--accent) !important;
+          }
+        }
+      }
+    }
+  }
+
+  ::ng-deep .p-inputtext:enabled {
+    border-color: var(--surface-c);
+
+    &:hover {
+      border-color: var(--surface-c);
+    }
+  }
+
+  ::ng-deep .p-menuitem {
+    .p-disabled {
+      color: var(--surface-c) !important;
+      opacity: 1 !important;
+
+      &::before {
+        width: 5px;
+        height: 5px;
+        content: "";
+        display: block;
+        position: absolute;
+        right: -2.5px;
+        border-radius: 50%;
+        background: var(--surface-c);
+      }
+    }
+  }
+
+  ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+    padding: 14px 32px;
+  }
+
+  ::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon {
+    color: var(--surface-c) !important;
+  }
+
+  ::ng-deep .p-datatable .p-datatable-tbody>tr>td {
+    border-bottom: 1px dashed rgba(90, 90, 90, 0.1);
+  }
+}
+
+.__cate_search {
+  margin: 30px 0;
+}
+
+.left-bar {
+  max-width: 270px;
+  margin-bottom: 50px;
+}
+
+.pi-search {
+  z-index: 1;
+  margin-right: 10px;
+  color: var(--accent) !important;
+}
+
+.hide-left-bar {
+  display: none;
+}
+
+.full_cate_body {
+  padding: 0;
+}
+
+._click_active {
+  background: #d6d6d6 !important;
+}
+
+.nso_cate_body {
+  padding: 20px 0 0 0;
+
+  .nso_tab {
+    padding: 20px 0;
+  }
+}
+
+.classRm {
+  padding: 0px !important;
+  padding-left: 0px !important;
+}
+
+.__cate_groups {
+  padding-top: 30px;
+}

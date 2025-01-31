@@ -28,6 +28,7 @@
         padding-left: 7px;
         padding-right: 7px;
         font-size: var(--font-size14);
+
         a {
             color: var(--text-sub);
             padding-left: 7px;
@@ -71,6 +72,7 @@
                         text-transform: uppercase;
 
                     }
+
                     .p-highlight {
                         color: var(--surface-c);
                         background: var(--surface-d);
@@ -130,12 +132,15 @@
         background: var(--surface-success-grad);
         color: var(--text-sub);
     }
+
     &.back_fullscreen {
         background: var(--surface-success-grad);
         color: var(--text-sub);
+
         span {
             display: none;
         }
+
         &::after {
             content: "Хураах";
         }
@@ -277,6 +282,7 @@
 
 .__cate_search {
     margin: 20px 0;
+
     .p-input-icon-right {
         width: 100%;
 
@@ -293,9 +299,11 @@
             //padding-right: 40px;
         }
     }
-    p-autocomplete{
+
+    p-autocomplete {
         .p-autocomplete {
             display: inline;
+
             .p-autocomplete-dropdown {
                 display: none;
             }
@@ -305,73 +313,83 @@
 
 .nso_cate_selection {
     width: 100%;
+    border-right: .5px solid var(--border-g);
+
     &.min_cate {
         max-width: 270px;
     }
 
-    .p-panelmenu {
-        border-right: .5px solid var(--border-g);
-        .p-panelmenu-panel {
-            .p-panelmenu-header {
-                .p-panelmenu-header-link {
-                    font-size: var(--font-size16);
-                    font-weight: 500;
-                    color: var(--text-main);
-                    background: none;
-                    background-color: transparent;
-                    border-top: none;
-                    border-bottom: none;
-                    border-right: none;
-                    border-radius: 0px;
+    .p-toggleable-content {
+        // padding-left: 20px;
 
-                    .p-panelmenu-icon {
-                        display: none;
+        .p-panelmenu-content {
+            border: none;
+
+            .p-menuitem-link {
+                .p-menuitem-text {
+                    color: var(--text-accent) !important;
+                }
+            }
+
+            .active-link {
+                position: relative;
+
+                .p-menuitem-link {
+                    span {
+                        display: flex;
+                        align-items: center;
                     }
-                }
-            }
 
-            .p-highlight {
-                .p-panelmenu-header-link {
-                    background: var(--surface-b);
-                    background-color: var(--surface-b);
-                    border-left: 2px solid var(--text-main);
-                }
-            }
+                    span {
+                        color: var(--surface-c) !important;
 
-            .p-toggleable-content {
-                padding-left: 20px;
-
-                .p-panelmenu-content {
-                    border: none;
-
-                    .p-menuitem {
-                        position: relative;
-
-                        .p-menuitem-link {
-                            span {
-                                display: flex;
-                                align-items: center;
-                            }
-                            &.p-menuitem-link-active {
-                                span {
-                                    color: var(--text-accent);
-    
-                                    &::before {
-                                        width: 5px;
-                                        height: 5px;
-                                        content: "";
-                                        display: block;
-                                        position: absolute;
-                                        right: -2.5px;
-                                        border-radius: 50%;
-                                        background: var(--surface-c);
-                                    }
-                                }
-                            }
+                        &::before {
+                            width: 5px;
+                            height: 5px;
+                            content: "";
+                            display: block;
+                            position: absolute;
+                            right: -0px;
+                            border-radius: 50%;
+                            background: var(--surface-c);
                         }
                     }
                 }
             }
+        }
+    }
+
+    // .p-panelmenu {
+
+    .p-panelmenu-panel {
+        .p-panelmenu-header {
+            .p-panelmenu-header-link {
+                background-color: white !important;
+                border-left: .5px solid var(--border-g);
+                font-size: var(--font-size16);
+                font-weight: 500;
+                color: var(--text-accent);
+                background: none;
+                background-color: transparent;
+                border-top: none;
+                border-bottom: none;
+                border-right: none;
+                border-radius: 0px;
+
+                .p-submenu-icon {
+                    display: none;
+                }
+            }
+        }
+
+        .p-highlight {
+            .p-panelmenu-header-link {
+                background: var(--surface-b);
+                background-color: var(--surface-b) !important;
+                border-left: 2px solid var(--text-main);
+            }
+
+            // }
         }
     }
 }

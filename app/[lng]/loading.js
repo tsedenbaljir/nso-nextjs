@@ -9,7 +9,7 @@ export default function Loading() {
                 <div className='nso_container text-center items-center justify-center'>
                     <div className="mt-4 text-lg">Уншиж байна...</div>
                     <Spin size="large" />
-                    </div>
+                </div>
             </div>
         </div>
     );

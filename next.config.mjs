@@ -36,8 +36,11 @@ const nextConfig = {
         GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,
         ELASTIC_SEARCH: process.env.ELASTIC_SEARCH,
         API_URL: process.env.API_URL,
+        BASE_API_URL: process.env.BASE_API_URL,
+        X_API_KEY: process.env.X_API_KEY,
     },
     output: "standalone",
+    crossOrigin: "anonymous",
     async headers() {
         return [
             {
