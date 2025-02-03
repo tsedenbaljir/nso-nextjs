@@ -1,34 +1,42 @@
 "use client";
 import { useEffect, useState } from "react";
-import { TabView, TabPanel } from "primereact/tabview";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import Link from 'next/link';
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import { TabView, TabPanel } from "primereact/tabview";
+import LoadingDiv from '@/components/Loading/Text/Index';
 
 export default function Tabs({ sector, subsector }) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [data, setData] = useState([]); // Store API data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [name, setName] = useState(null);
 
-    const API_URL = `${process.env.BASE_API_URL}/mn/NSO/${sector}/${subsector}`;
-
-    useEffect(() => {   
+    useEffect(() => {
+        // Fetch subcategories for each category
+        const fetchSubcategories = async (categoryId) => {
+            try {
+                const response = await fetch(`/api/subsectorname?subsectorname=${categoryId}`);
+                const result = await response.json();    
+                setName(result.data.filter(e => e.id === decodeURIComponent(subsector)))
+                
+                if (!Array.isArray(result.data)) {
+                    return [];
+                }
+            } catch (error) {
+                console.error(`Error fetching subcategories for ${categoryId}:`, error);
+                return [];
+            }
+        };
+        fetchSubcategories(sector)
         const fetchData = async () => {
             try {
-                const response = await fetch(API_URL);
-                const textData = await response.text();
-                const validJson = textData.replace(/^{.*?}\[/, "[");
-                const parsedData = JSON.parse(validJson);
-
-                if (!Array.isArray(parsedData)) {
-                    console.error("Unexpected API response format:", parsedData);
-                    setError("Unexpected API response format.");
-                    return;
-                }
+                const res = await fetch(`/api/sectortablename?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}`);
+                const response = await res.json();
 
                 // Format API data for DataTable
-                const formattedData = parsedData.map((item, index) => ({
+                const formattedData = response.data.map((item, index) => ({
                     id: index + 1,
                     link: item.id,
                     name: item.text,
@@ -51,14 +59,20 @@ export default function Tabs({ sector, subsector }) {
     return (
         <div id="stat_cate" className="nso_cate_body">
             {/* Title */}
-            <span className="__cate_title">Хүн ам, өрх</span>
+            <span className="__cate_title">{name && name[0].text}</span>
             {/* PrimeReact Tabs */}
             <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
                 {/* Хүснэгт Tab */}
                 <TabPanel header="Хүснэгт">
                     <div className="bg-white">
                         {loading ? (
-                            <p className="p-4 text-gray-500">Loading data...</p>
+                            <div className="text-center py-4">
+                                <LoadingDiv />
+                                <br />
+                                <LoadingDiv />
+                                <br />
+                                <LoadingDiv />
+                            </div>
                         ) : error ? (
                             <p className="p-4 text-red-500">{error}</p>
                         ) : (

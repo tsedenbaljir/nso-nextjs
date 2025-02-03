@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { PanelMenu } from "primereact/panelmenu";
 import { useRouter } from "next/navigation";
+import { PanelMenu } from "primereact/panelmenu";
+import LoadingDiv from '@/components/Loading/Text/Index';
 
 export default function DynamicSidebar({ subsector }) {
     const [menuItems, setMenuItems] = useState([]); // Stores categories & subcategories
@@ -10,25 +11,22 @@ export default function DynamicSidebar({ subsector }) {
 
     const router = useRouter();// Get active sector from URL
 
-    const BASE_API_URL = process.env.BASE_API_URL;
-
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 // Fetch main categories
-                const response = await fetch(`${BASE_API_URL}/mn/NSO`);
-                const textData = await response.text();
-                const validJson = textData.replace(/^{.*?}\[/, "[");
-                const categories = JSON.parse(validJson);
+                const response = await fetch(`/api/sectorname`);
+                const result = await response.json();
+
                 var convert = [];
 
-                convert.push(categories[5]);
-                convert.push(categories[4]);
-                convert.push(categories[1]);
-                convert.push(categories[3]);
-                convert.push(categories[6]);
-                convert.push(categories[0]);
-                convert.push(categories[2]);
+                convert.push(result.data[5]);
+                convert.push(result.data[4]);
+                convert.push(result.data[1]);
+                convert.push(result.data[3]);
+                convert.push(result.data[6]);
+                convert.push(result.data[0]);
+                // convert.push(result.data[2]); түүхэн статистик
 
                 if (!Array.isArray(convert)) {
                     setError("Unexpected API response format. Check console.");
@@ -37,26 +35,21 @@ export default function DynamicSidebar({ subsector }) {
 
                 // Fetch subcategories for each category
                 const fetchSubcategories = async (categoryId) => {
-                    console.log("categoryId===>", categoryId);
-
                     try {
-                        const res = await fetch(`${BASE_API_URL}/mn/NSO/${encodeURIComponent(categoryId)}`);
-                        const subText = await res.text();
-                        const subValidJson = subText.replace(/^{.*?}\[/, "[");
-                        const dt = JSON.parse(subValidJson);
+                        const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}`);
+                        const result = await response.json();
 
-                        if (!Array.isArray(dt)) {
-                            console.error("Subcategory response is not an array:", dt);
+                        if (!Array.isArray(result.data)) {
                             return [];
                         }
 
                         // ✅ Add `command` to update URL when clicked
-                        return dt.map((item) => ({
+                        return result.data.map((item) => ({
                             id: item.id,
                             label: item.text,
-                            className: item.id === subsector ? "active-link" : "",
+                            className: item.id === decodeURIComponent(subsector) ? "active-link" : "",
                             command: () => {
-                                router.push(`/mn/statecate/${categoryId}/${encodeURIComponent(item.id)}`);
+                                router.push(`/mn/statecate/${categoryId}/${decodeURIComponent(item.id)}`);
                             }
                         }));
 
@@ -74,12 +67,11 @@ export default function DynamicSidebar({ subsector }) {
                             label: category.text,
                             id: category.id,
                             items: subItems,
-                            className: category.id === subsector ? "active-header-link" : "",
-                            expanded: subItems.some((sub) => sub.id === subsector) // Auto-expand active submenu
+                            className: category.id === decodeURIComponent(subsector) ? "active-header-link" : "",
+                            expanded: subItems.some((sub) => sub.id === decodeURIComponent(subsector)) // Auto-expand active submenu
                         };
                     })
                 );
-
                 setMenuItems(menuWithSubcategories);
             } catch (err) {
                 console.error("Error fetching data:", err);
@@ -95,7 +87,15 @@ export default function DynamicSidebar({ subsector }) {
     return (
         <div className="nso_cate_section left-bar">
             {loading ? (
-                <p className="text-gray-500">Loading...</p>
+                <div className="text-center py-4">
+                    <LoadingDiv />
+                    <br />
+                    <LoadingDiv />
+                    <br />
+                    <LoadingDiv />
+                    <br />
+                    <LoadingDiv />
+                </div>
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (

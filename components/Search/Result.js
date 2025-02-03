@@ -6,6 +6,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
     if (!showResult) return null;
 
     const hasResults = data && Object.keys(data).length > 0;
+    console.log(data);
     
     return (
         <div className="search_result">
@@ -29,7 +30,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                             <span className="group_title">{t('elastic.table')}</span>
                             {data.tablename.map((dt, i) => (
                                 <Link
-                                    href={`/${lng}/news/${dt._source.id}`}
+                                    href={`http://10.0.1.39/pxweb/${lng}/NSO/NSO__${encodeURIComponent(dt._source.sector)}__${encodeURIComponent(dt._source.category)}/${encodeURIComponent(dt._source.link)}`}
                                     key={`tablename-${dt._source.id}-${i}`}
                                     className="group_item"
                                 >

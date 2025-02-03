@@ -15,11 +15,11 @@ export async function POST(req) {
     }
 
     const searchQuery = {
-      "_source": ["_type", "id", "name", "body", "file_info", "source", "info", "slug", "sector", "category"],
+      "_source": ["_type", "id", "name", "body", "file_info", "source", "info", "slug", "sector", "category", "link"],
       "query": {
         "multi_match": {
           "query": values,
-          "fields": ["id^2", "name^3", "body", "file_info", "source", "info", "slug", "sector", "category"],
+          "fields": ["id^2", "name^3", "body", "file_info", "source", "info", "slug", "sector", "category", "link"],
           "type": "best_fields",
           "fuzziness": "AUTO"
         }
