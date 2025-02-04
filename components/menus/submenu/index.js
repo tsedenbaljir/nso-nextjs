@@ -62,8 +62,8 @@ export default function Index({ lng }) {
                 <ul className="__sub_header_list">
                     {loading ?
                         menus.map((menu, index) => (
-                            <li key={menu.id} className={`${pth.includes(menu.path) && 'active-link-top'}`}>
-                                <Link 
+                            <li key={index} className={`${pth.includes(menu.path) && 'active-link-top'}`}>
+                                <Link
                                     className="__stat_top_title text-xs font-normal" 
                                     href={menu.url || "#"}
                                 >

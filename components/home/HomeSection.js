@@ -18,7 +18,7 @@ const HomeSection = ({ lng }) => {
                 <div className="__home_groups">
                     <div className="__info_area">
                         <div className="__title" >
-                            {t("nsoTitle")}
+                            {t("menu.title")}
                         </div>
                         <div className="__main_search current_space">
                             <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoading} />

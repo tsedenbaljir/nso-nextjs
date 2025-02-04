@@ -93,7 +93,7 @@ export default function Tabs({ sector, subsector }) {
                                     sortable
                                     className="nso_table_col"
                                     body={(rowData) => (
-                                        <Link href={`http://10.0.1.39/pxweb/mn/NSO/NSO__${sector}__${subsector}/` + rowData.link}
+                                        <Link href={`${process.env.BASE_API_URL}/pxweb/mn/NSO/NSO__${sector}__${subsector}/` + rowData.link}
                                             className="hover:text-blue-700 hover:underline text-gray-900 font-medium">
                                             {rowData.name}
                                         </Link>

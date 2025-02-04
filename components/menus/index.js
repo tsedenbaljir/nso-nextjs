@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Path } from '@/utils/path';
-import { useRouter, usePathname } from "next/navigation";
 import OneField from '@/components/Loading/OneField/Index';
 
 // Dropdown component for submenu
@@ -41,7 +40,7 @@ const Dropdown = ({ menu, lng, pth }) => {
 const MainMenu = ({ menus, loading, lng, pth }) => {
   return (
     <div className="__menu">
-      <Link className="__logo lg:col-3 md:col-3 sm:col-12" href='/'></Link>
+      <Link className="__logo lg:col-3 md:col-3 sm:col-12 _en" href='/'></Link>
       <ul>
         {loading ?
           menus.map((menu) => (
@@ -64,8 +63,6 @@ const MainMenu = ({ menus, loading, lng, pth }) => {
 // Main component
 export default function Index({ lng }) {
   var pth = Path();
-  const router = useRouter();
-  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(false);
