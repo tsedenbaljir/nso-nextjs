@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useTranslation } from '../i18n'
+import { useTranslation } from '../../i18n'
 import '@/components/styles/not-found.scss'
 
 export default async function NotFound({ params }) {

@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/i18n/client';
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Modal, Form, Input, Select, message } from 'antd';
 import { DataTable } from 'primereact/datatable';
@@ -200,7 +199,6 @@ export default function GlossaryAdmin({ params: { lng } }) {
     };
 
     return (
-        <AdminLayout lng={lng}>
             <div className="">
                 <ConfirmDialog />
                 <div className="flex justify-between mb-4 pt-3 px-3">
@@ -364,6 +362,5 @@ export default function GlossaryAdmin({ params: { lng } }) {
                     </Form>
                 </Modal>
             </div>
-        </AdminLayout>
     );
 } 

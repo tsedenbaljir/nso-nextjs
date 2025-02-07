@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LoadingDiv from '@/components/Loading/Text/Index';
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import { Table, Button, Modal, Form, Input, Select, message } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import dynamic from 'next/dynamic';
@@ -150,7 +149,6 @@ export default function WebpageAdmin({ params: { lng } }) {
     ];
 
     return (
-        <AdminLayout lng={lng}>
             <div className="p-6">
                 <div className="flex justify-between mb-4">
                     <h1 className="text-2xl font-bold">Хуудасын бүртгэл</h1>
@@ -235,6 +233,5 @@ export default function WebpageAdmin({ params: { lng } }) {
                     </Form>
                 </Modal>
             </div>
-        </AdminLayout>
     );
 }

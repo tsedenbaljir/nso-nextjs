@@ -60,7 +60,7 @@ export default function Home({ params: { lng, id } }) {
 
     if (loading) {
         return (
-            <Layout lng={lng}>
+            <>
                 <div className='nso_about_us mt-10'>
                     <div className="nso_container">
                         <div className="flex justify-center items-center w-full min-h-[400px]">
@@ -68,13 +68,13 @@ export default function Home({ params: { lng, id } }) {
                         </div>
                     </div>
                 </div>
-            </Layout>
+            </>
         );
     }
 
     if (!article) {
         return (
-            <Layout lng={lng}>
+            <>
                 <div className='nso_about_us mt-10'>
                     <div className="nso_container">
                         <div className="flex justify-center items-center min-h-[400px]">
@@ -82,12 +82,12 @@ export default function Home({ params: { lng, id } }) {
                         </div>
                     </div>
                 </div>
-            </Layout>
+            </>
         );
     }
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className='nso_about_us mt-10'>
                 <div className="nso_container">
                     <div className="nso_page_content_wrap">
@@ -122,6 +122,6 @@ export default function Home({ params: { lng, id } }) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

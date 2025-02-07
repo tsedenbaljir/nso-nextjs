@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import Image from 'next/image';
 
 export default function Articles({ article }) {
     const [imageError, setImageError] = useState(false);

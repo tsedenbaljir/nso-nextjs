@@ -342,7 +342,7 @@ export default function AboutUs({ params: { lng } }) {
     const timelineEvents = lng === "mn" ? events : events_en;
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_about_us_body mt-44">
                 <div className="nso_container">
                     <div>
@@ -371,6 +371,6 @@ export default function AboutUs({ params: { lng } }) {
                 </div>
             </div>
             <br />
-        </Layout>
+        </>
     );
 }

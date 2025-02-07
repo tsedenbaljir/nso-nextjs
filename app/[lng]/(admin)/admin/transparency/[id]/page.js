@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import styles from '../styles.module.scss';
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import { useRouter } from 'next/navigation';
 import { FileUpload } from 'primereact/fileupload';
 import ClientStyles from '../ClientStyles';
@@ -116,17 +115,17 @@ export default function EditTransparency({ params }) {
 
     if (loading) {
         return (
-            <AdminLayout>
+            <>
                 <ClientStyles />
                 <div className={styles.formContainer}>
                     <h1>Loading...</h1>
                 </div>
-            </AdminLayout>
+            </>
         );
     }
 
     return (
-        <AdminLayout>
+        <>
             <ClientStyles />
             <Toast ref={toast} />
             <div className={styles.formContainer}>
@@ -195,6 +194,6 @@ export default function EditTransparency({ params }) {
                     </div>
                 </form>
             </div>
-        </AdminLayout>
+        </>
     );
 } 

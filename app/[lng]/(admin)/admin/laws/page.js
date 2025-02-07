@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import styles from './styles.module.scss';
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import { TabView, TabPanel } from 'primereact/tabview';
 import ClientStyles from './ClientStyles';
 import { FileUpload } from 'primereact/fileupload';
@@ -181,7 +180,7 @@ export default function AdminLaws() {
   };
 
   return (
-    <AdminLayout>
+    <>
       <ClientStyles />
       <Toast ref={toast} />
       <ConfirmDialog />
@@ -329,6 +328,6 @@ export default function AdminLaws() {
           )}
         </div>
       </div>
-    </AdminLayout>
+    </>
   );
 } 

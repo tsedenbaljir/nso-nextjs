@@ -30,7 +30,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                             <span className="group_title">{t('elastic.table')}</span>
                             {data.tablename.map((dt, i) => (
                                 <Link
-                                    href={`${process.env.BASE_API_URL}/pxweb/${lng}/NSO/NSO__${encodeURIComponent(dt._source.sector)}__${encodeURIComponent(dt._source.category)}/${encodeURIComponent(dt._source.link)}`}
+                                    href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__${encodeURIComponent(dt._source.sector)}__${encodeURIComponent(dt._source.category)}/${encodeURIComponent(dt._source.link)}`}
                                     key={`tablename-${dt._source.id}-${i}`}
                                     className="group_item"
                                 >

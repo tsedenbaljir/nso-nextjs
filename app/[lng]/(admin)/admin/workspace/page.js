@@ -7,8 +7,6 @@ import { useRouter } from 'next/navigation';
 import { DataTable } from 'primereact/datatable';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
-
 export default function AdminWorkspace({ params: { lng } }) {
     const router = useRouter();
     const toast = useRef(null);
@@ -134,7 +132,6 @@ export default function AdminWorkspace({ params: { lng } }) {
     };
 
     return (
-        <AdminLayout lng={lng}>
             <div className="card">
                 <Toast ref={toast} />
                 <ConfirmDialog />
@@ -170,6 +167,5 @@ export default function AdminWorkspace({ params: { lng } }) {
                     />
                 </DataTable>
             </div>
-        </AdminLayout>
     );
 } 

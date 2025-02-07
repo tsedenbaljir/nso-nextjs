@@ -1,6 +1,5 @@
 "use client"
 import { useState, useEffect } from 'react'
-import AdminLayout from '@/components/admin/layouts/AdminLayout'
 import { useTranslation } from '@/app/i18n/client'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
@@ -205,7 +204,6 @@ export default function AllNews({ params: { lng } }) {
     };
 
     return (
-        <AdminLayout>
             <div className="w-full card">
                 <ConfirmDialog />
                 <DataTable
@@ -292,6 +290,5 @@ export default function AllNews({ params: { lng } }) {
                     />
                 </DataTable>
             </div>
-        </AdminLayout>
     )
 }

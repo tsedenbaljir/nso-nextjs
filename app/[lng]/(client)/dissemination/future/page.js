@@ -55,7 +55,7 @@ export default function AboutUs({ params: { lng } }) {
     }, [page, lng]);
 
     return (
-        <Layout lng={lng}>
+        <>
             <Main type="future" lng={lng}>
                 <table className="w-full">
                     <thead className="p-datatable-thead">
@@ -95,6 +95,6 @@ export default function AboutUs({ params: { lng } }) {
                     </div>
                 </div>
             </Main>
-        </Layout>
+        </>
     );
 }

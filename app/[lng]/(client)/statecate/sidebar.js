@@ -9,7 +9,7 @@ export default function DynamicSidebar({ subsector }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const router = useRouter();// Get active sector from URL
+    const router = useRouter();
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -49,7 +49,7 @@ export default function DynamicSidebar({ subsector }) {
                             label: item.text,
                             className: item.id === decodeURIComponent(subsector) ? "active-link" : "",
                             command: () => {
-                                router.push(`/mn/statecate/${categoryId}/${decodeURIComponent(item.id)}`);
+                                router.push(`/mn/statecate/table/${categoryId}/${decodeURIComponent(item.id)}`);
                             }
                         }));
 

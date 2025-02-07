@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "components/Loader.js"  ],
+, "components/Loader.js", "app/[lng]/(admin)/layout.js"  ],
   "exclude": [
     "node_modules"
   ]

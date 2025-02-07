@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import Editor from '@/components/admin/Editor/editor'
 import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import Upload from "@/components/admin/Edits/UploadImages/Upload";
 
 export default function NewDissemination() {
@@ -103,7 +102,6 @@ export default function NewDissemination() {
     };
 
     return (
-        <AdminLayout>
             <div className="relative overflow-x-auto shadow-md pb-10">
                 <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                     <main className='dark:bg-black h-full'>
@@ -182,6 +180,5 @@ export default function NewDissemination() {
                     </div>
                 </div>
             </div>
-        </AdminLayout>
     );
 }

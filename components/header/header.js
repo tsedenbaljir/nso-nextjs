@@ -1,15 +1,189 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Submenu from '../menus/submenu/index';
-import MainMenu from '../menus/index';
+import Link from 'next/link';
+import { Path } from '@/utils/path';
+import OneField from '@/components/Loading/OneField/Index';
 
 const Header = ({ lng }) => {
 
+    var pth = Path();
+    const [selectedMenu, setSelectedMenu] = useState(null);
+    const [menuShow, setMenuShow] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    const [menus, setMenus] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [verticalOffset, setVerticalOffset] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const offset =
+                window.pageYOffset ||
+                document.documentElement.scrollTop ||
+                document.body.scrollTop ||
+                0;
+            setVerticalOffset(offset);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const setDropDownActive = (menuIs) => {
+        const newSelectedMenu = menus.find(e => e.id === menuIs).subMenus || null;
+        setSelectedMenu(newSelectedMenu);
+        setMenuShow(!menuShow)
+    };
+
+
+    const Dropdown = ({ menu, lng, pth }) => {
+        return (
+            <li key={menu.id} className="dropdown">
+                {menu.url ? (
+                    <Link
+                        className={`${pth.includes(menu.url) && 'active-link'} __stat_cat_title`}
+                        href={menu.url}
+                        onClick={() => {
+                            setDropDownActive(menu.id)
+                        }}
+                    >
+                        {lng === 'mn' ? menu.name_mn : menu.name_en}
+                    </Link>
+                ) : (
+                    <div className={`${pth.includes(menu.path) && 'active-link'} __stat_cat_title`}
+                        onClick={() => {
+                            setDropDownActive(menu.id)
+                        }}
+                    >
+                        {lng === 'mn' ? menu.name_mn : menu.name_en}
+                    </div>
+                )}
+            </li>
+        );
+    };
+
+    // Main menu component
+    const MainMenu = ({ menus, loading, lng, pth }) => {
+        return (
+            <div className="__menu">
+                <Link className={`__logo lg:col-3 md:col-3 sm:col-12 ${lng === "en" && '_en'}`} href='/'></Link>
+                <ul>
+                    {loading ?
+                        menus.map((menu) => (
+                            <Dropdown
+                                key={menu.id}
+                                menu={menu}
+                                lng={lng}
+                                pth={pth}
+                            />
+                        )) :
+                        <>
+                            <OneField /><OneField /><OneField />
+                        </>
+                    }
+                </ul>
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        const fetchMenus = async () => {
+            try {
+                const response = await fetch('/api/menus/admin');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const res = await response.json();
+
+                // Get main menus with category_id = 2
+                const mainMenus = res.data.filter(menu =>
+                    menu.category_id === 2 &&
+                    menu.is_active === true &&
+                    !menu.parent_id
+                );
+
+                // Get all submenus
+                const subMenus = res.data.filter(menu =>
+                    menu.category_id === 2 &&
+                    menu.is_active === true &&
+                    menu.parent_id
+                );
+
+                const subMenusTools = res.data.filter(menu =>
+                    menu.is_active === true
+                );
+
+                // Attach submenus to their parent menus
+                const menusWithSubs = mainMenus.map(menu => ({
+                    ...menu,
+                    subMenus: subMenus.filter(sub => sub.parent_id === menu.id).map(sub => ({
+                        ...sub,
+                        subway: subMenusTools.filter(tool => tool.parent_id === sub.id)
+                    }))
+                }));
+                console.log(menusWithSubs);
+
+                setMenus(menusWithSubs);
+                setLoading(true);
+            } catch (error) {
+                console.error('Error fetching menus:', error);
+            }
+        };
+
+        fetchMenus();
+    }, []);
+
+    if (!mounted) {
+        return null;
+    }
     return (
         <>
             <div className="nso_header">
                 <Submenu lng={lng} />
-                <MainMenu lng={lng} />
+                <div className={`__main_header ${verticalOffset && 'small'}`}>
+                    <div className="nso_container">
+                        <MainMenu
+                            menus={menus}
+                            loading={loading}
+                            lng={lng}
+                            pth={pth}
+                        />
+                    </div>
+                </div>
+                <div className={`__dropdown ${menuShow && 'show'}`}>
+                    <div className="nso_container">
+                        <div className="__groups">
+                            {
+                                selectedMenu && selectedMenu.sort((a, b) => a.list_order - b.list_order).map(dts => {
+                                    return <div className='__group'>
+                                        <div className='__title'>
+                                            <a href={dts.url} className='__stat_cat_title'>{dts.name_mn}</a>
+                                        </div>
+
+                                        <div className='__items'>
+                                            {dts.subway.map(sw => {
+                                                return <span> <a href={sw.url} className='__stat_cat_title'>{sw.name_mn}</a></span>
+                                            })}
+                                        </div>
+
+                                    </div>
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <div className={`__drop_back ${menuShow && 'show'}`} onClick={() => { setMenuShow(!menuShow) }}>
+                    </div>
+                </div>
             </div>
         </>
     );

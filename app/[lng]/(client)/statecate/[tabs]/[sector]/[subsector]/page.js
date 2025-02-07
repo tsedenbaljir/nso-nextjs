@@ -1,12 +1,12 @@
 "use client";
-import Tabs from "../../tabs";
-import Sidebar from "../../sidebar";
+import Tabs from "../../../tabs";
+import Sidebar from "../../../sidebar";
 
 export default function StateCate({ params }) {
-    const { sector, subsector } = params;
+    const { tabs, sector, subsector } = params;
 
     return (
-        <div className="nso_container ">
+        <div className="nso_container statisctic_body">
             {/* Sidebar */}
             <div className="nso_cate_section left-bar">
                 <div className='__cate_groups'>
@@ -14,7 +14,7 @@ export default function StateCate({ params }) {
                 </div>
             </div>
             {/* Main Content */}
-            <Tabs sector={sector} subsector={subsector} />
+            <Tabs tabs={tabs} sector={sector} subsector={subsector} />
         </div>
     );
 }

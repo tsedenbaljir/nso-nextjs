@@ -1,4 +1,3 @@
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import Items from "@/components/admin/Edits/MenusEdit/Items";
 
 const Dashboard = () => {
@@ -12,7 +11,6 @@ const Dashboard = () => {
         { id: 7, name: 'Хөлны цэс', typeMenu: 'Silver', order: 6, active: 1 },
     ];
     return (
-        <AdminLayout>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 {/* counts */}
                 <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
@@ -31,7 +29,6 @@ const Dashboard = () => {
                     <Items menus={menus} />
                 </div>
             </div >
-        </AdminLayout >
     );
 };
 

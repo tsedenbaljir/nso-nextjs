@@ -4,8 +4,6 @@ import { useRouter } from 'next/navigation';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { ConfirmDialog } from 'primereact/confirmdialog';
-
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import DisseminationTable from '@/components/admin/dissemination/DisseminationTable';
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
@@ -113,7 +111,6 @@ export default function Dissemination() {
     }
 
     return (
-        <AdminLayout>
             <div className="w-full card">
                 <ConfirmDialog />
                 <TabView>
@@ -141,6 +138,5 @@ export default function Dissemination() {
                     </TabPanel>
                 </TabView>
             </div>
-        </AdminLayout>
     )
 }

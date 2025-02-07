@@ -1,5 +1,4 @@
 'use client';
-import Layout from '@/components/baseLayout';
 import { useState, useRef } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import { Toast } from 'primereact/toast';
@@ -104,7 +103,7 @@ export default function ViolationPage({ params: { lng } }) {
     };
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_statistic_section mt-10">
                 <div className="nso_statistic_category">
                     <div className="nso_container">
@@ -198,6 +197,6 @@ export default function ViolationPage({ params: { lng } }) {
                 </div>
                 <Toast ref={toast} position="top-right" baseZIndex={10000} />
             </div>
-        </Layout>
+        </>
     );
 }

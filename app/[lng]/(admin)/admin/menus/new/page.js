@@ -1,7 +1,6 @@
 "use client"
 import { useState } from 'react';
 import InputItems from "@/components/admin/Edits/AddNew/InputItems";
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import Items from "@/components/admin/Edits/MenusEdit/Items";
 
 const Dashboard = () => {
@@ -37,7 +36,6 @@ const Dashboard = () => {
     ];
 
     return (
-        <AdminLayout>
             <div className="relative overflow-x-auto shadow-md h-full">
                 {/* counts */}
                 <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
@@ -68,7 +66,6 @@ const Dashboard = () => {
                     <Items menus={menus} />
                 </div>
             </div >
-        </AdminLayout >
     );
 };
 

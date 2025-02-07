@@ -6,7 +6,7 @@ import "@/components/styles/cooperation.scss";
 export default function AboutUs({ params: { lng } }) {
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className='nso_about_us'>
                 <div className='nso_container'>
                     <div className="__statistic_groups" style={{ marginTop: 180 }}>
@@ -336,6 +336,6 @@ export default function AboutUs({ params: { lng } }) {
                     </div>
                 </div>
             </div>
-        </Layout >
+        </>
     );
 }

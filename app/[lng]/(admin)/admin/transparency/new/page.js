@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import styles from '../styles.module.scss';
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import { useRouter } from 'next/navigation';
 import { FileUpload } from 'primereact/fileupload';
 import ClientStyles from '../ClientStyles';
@@ -71,7 +70,7 @@ export default function NewTransparency() {
     };
 
     return (
-        <AdminLayout>
+        <>
             <ClientStyles />
             <div className={styles.formContainer}>
                 <h1>Шинэ мэдээлэл нэмэх</h1>
@@ -146,6 +145,6 @@ export default function NewTransparency() {
                     </div>
                 </form>
             </div>
-        </AdminLayout>
+        </>
     );
 } 

@@ -124,7 +124,7 @@ export default function Contact({ params: { lng } }) {
     ];
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className='nso_about_us mt-44'>
                 <div className='nso_statistic_category'>
                     <div className="nso_container">
@@ -136,6 +136,6 @@ export default function Contact({ params: { lng } }) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

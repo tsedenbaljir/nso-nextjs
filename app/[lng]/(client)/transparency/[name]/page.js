@@ -31,7 +31,7 @@ export default function TransparencyCategory({ params: { lng, name } }) {
     };
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_transparency mt-40">
                 <div className="nso_container">
                     <div className="w-full">
@@ -75,6 +75,6 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 } 

@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import LoaderText from '@/components/Loading/Text/Index'
-import AdminLayout from '@/components/admin/layouts/AdminLayout'
 import Editor from '@/components/admin/Editor/editor'
 import InputItems from "@/components/admin/Edits/AddNew/InputItems"
 import SelectInput from "@/components/admin/Edits/Select/SelectInput"
@@ -142,16 +141,13 @@ export default function EditDissemination({ params: { id } }) {
 
     if (loading) {
         return (
-            <AdminLayout>
                 <div className="items-center justify-between px-4 md:px-5 2xl:px-10 h-full">
                     <LoaderText />
                 </div>
-            </AdminLayout>
         )
     }
 
     return (
-        <AdminLayout>
             <div className="relative overflow-x-auto shadow-md pb-10">
                 <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                     <main className='dark:bg-black h-full'>
@@ -238,6 +234,5 @@ export default function EditDissemination({ params: { id } }) {
                     </div>
                 </div>
             </div>
-        </AdminLayout>
     )
 }

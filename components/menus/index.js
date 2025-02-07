@@ -3,6 +3,16 @@ import Link from 'next/link';
 import { Path } from '@/utils/path';
 import OneField from '@/components/Loading/OneField/Index';
 
+// МЭДЭЭЛЛИЙН САН
+//     -Мета мэдээллийн сан
+//         -Мэдээ
+//         -Тооллого
+//         -Судалгаа
+//         -Үзүүлэлт
+//         -Аргачлал, арга зүй
+//         -Ангилал код
+//         -Нэр, томьёоны тайлбар
+
 // Dropdown component for submenu
 const Dropdown = ({ menu, lng, pth }) => {
   return (
@@ -40,7 +50,7 @@ const Dropdown = ({ menu, lng, pth }) => {
 const MainMenu = ({ menus, loading, lng, pth }) => {
   return (
     <div className="__menu">
-      <Link className="__logo lg:col-3 md:col-3 sm:col-12 _en" href='/'></Link>
+      <Link className={`__logo lg:col-3 md:col-3 sm:col-12 ${lng === "en" && '_en'}`} href='/'></Link>
       <ul>
         {loading ?
           menus.map((menu) => (

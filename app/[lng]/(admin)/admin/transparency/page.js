@@ -6,7 +6,6 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { useRouter } from 'next/navigation';
 import { DataTable } from 'primereact/datatable';
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 import { confirmDialog } from 'primereact/confirmdialog';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
@@ -123,7 +122,7 @@ export default function AdminTransparency() {
         )
     }
     return (
-        <AdminLayout>
+        <>
             <ClientStyles />
             <Toast ref={toast} />
             <ConfirmDialog />
@@ -149,6 +148,6 @@ export default function AdminTransparency() {
                     <Column body={actionTemplate} header="Үйлдэл" style={{ width: '120px' }} />
                 </DataTable>
             </div>
-        </AdminLayout>
+        </>
     );
 } 

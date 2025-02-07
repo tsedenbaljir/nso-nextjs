@@ -58,7 +58,7 @@ export default function AboutUs({ params: { lng } }) {
     }, [page, articlesPerPage, lng]);
 
     return (
-        <Layout lng={lng}>
+        <>
             <Main type="latest" lng={lng}>
                 <table className="w-full">
                     <thead className="p-datatable-thead">
@@ -105,6 +105,6 @@ export default function AboutUs({ params: { lng } }) {
                     </div>
                 </div>
             </Main>
-        </Layout>
+        </>
     );
 }

@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import Layout from '@/components/baseLayout';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryFilter from '@/components/Glossary/GlossaryFilter';
 import GlossaryList from '@/components/Glossary/GlossaryList';
@@ -108,7 +107,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
 
     if (loading) {
         return (
-            <Layout lng={lng}>
+            <>
                 <div className="nso_about_us mt-40">
                     <div className="nso_container">
                         <div className="flex justify-center items-center min-h-[400px] w-full">
@@ -116,12 +115,12 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         </div>
                     </div>
                 </div>
-            </Layout>
+            </>
         );
     }
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_about_us mt-40">
                 <div className="nso_container">
                     <div className="sm:col-12 md:col-4 lg:col-3">
@@ -147,6 +146,6 @@ export default function Glossary({ params: { lng }, searchParams }) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

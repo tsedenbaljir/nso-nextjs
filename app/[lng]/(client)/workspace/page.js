@@ -88,7 +88,7 @@ export default function Home({ params: { lng } }) {
         return <div>Loading...</div>;
     }
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_about_us mt-40">
                 <div className="nso_container">
                     <div className="__header flex flex-wrap w-full my-16 mb-8 items-center justify-between text-main">
@@ -136,6 +136,6 @@ export default function Home({ params: { lng } }) {
                     </div>
                 </div>
             </div>
-        </Layout >
+        </>
     );
 }

@@ -6,7 +6,7 @@ export default function TermsOfUse({ params: { lng } }) {
     const { t } = useTranslation(lng, "lng", "");
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_transparency mt-40">
                 <div className="nso_container">
                     {/* Content Section */}
@@ -50,6 +50,6 @@ export default function TermsOfUse({ params: { lng } }) {
                         </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

@@ -47,7 +47,7 @@ export default function Home({ params: { lng }, params }) {
     }, []);
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_about_us mt-40">
                 <div className="nso_container">
                     <div className="__body">
@@ -72,6 +72,6 @@ export default function Home({ params: { lng }, params }) {
                     </div>
                 </div>
             </div>
-        </Layout >
+        </>
     );
 }

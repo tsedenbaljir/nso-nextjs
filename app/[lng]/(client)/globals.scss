@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import "@/components/styles/about-us-header.scss";
+@import "@/components/styles/element-design.scss";
+@import "@/components/styles/variable.scss";
+@import "@/components/styles/header.scss";
+@import "@/components/styles/footer.scss";
+@import "@/components/styles/theme.scss";
+@import "@/components/styles/welcome.scss";
+@import "@/components/styles/mainHome.scss";
+@import "@/components/styles/home.scss";
+@import "@/components/styles/latest-news.scss";
+@import "@/components/styles/glossary.scss";
+@import "@/components/styles/style.scss";
+// @import "@/components/styles/works.scss";
+@import "@/components/styles/statcate.scss";
+@import "@/components/styles/not-found.scss";
+@import "@/components/styles/responsive.scss";
+@import "@/components/styles/transparency.scss";
+
+.route-loading-overlay {
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease-in-out;
+    
+    .route-loading-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+}

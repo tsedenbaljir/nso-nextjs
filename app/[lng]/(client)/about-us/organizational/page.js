@@ -18,7 +18,7 @@ export default function AboutUs({ params: { lng } }) {
     };
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className='nso_main_section'>
                 <div className='nso_about_us'>
                     <div className="nso_about_us_body">
@@ -76,6 +76,6 @@ export default function AboutUs({ params: { lng } }) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

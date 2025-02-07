@@ -8,8 +8,8 @@ export default function Home({ params: { lng } }) {
     const { t } = useTranslation(lng, "lng", "");
 
     return (
-        <Layout lng={lng}>
+        <>
             <MainArticle name={t('MEDIANEWS')} path="media" mainPath="news" lng={lng} />
-        </Layout >
+        </>
     );
 }

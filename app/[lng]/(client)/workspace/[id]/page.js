@@ -35,7 +35,7 @@ export default function WorkspaceDetail({ params: { id, lng } }) {
 
     if (!data && !loading) {
         return (
-            <Layout lng={lng}>
+            <>
                 <div className="nso_about_us mt-40">
                     <div className="nso_container">
                         <div className="text-center text-xl">
@@ -43,12 +43,12 @@ export default function WorkspaceDetail({ params: { id, lng } }) {
                         </div>
                     </div>
                 </div>
-            </Layout>
+            </>
         );
     }
 
     return (
-        <Layout lng={lng}>
+        <>
             <div className="nso_about_us mt-40">
                 <div className="nso_container">
                     <div className="__info_detail_page">
@@ -88,6 +88,6 @@ export default function WorkspaceDetail({ params: { id, lng } }) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }
