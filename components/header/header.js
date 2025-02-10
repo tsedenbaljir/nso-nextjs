@@ -35,23 +35,28 @@ const Header = ({ lng }) => {
         setMounted(true);
     }, []);
 
-    const setDropDownActive = (menuIs) => {
-        const newSelectedMenu = menus.find(e => e.id === menuIs).subMenus || null;
-        setSelectedMenu(newSelectedMenu);
-        setMenuShow(!menuShow)
+    const setDropDownActive = (menuId) => {
+        const selectedSubMenu = menus.find(e => e.id === menuId)?.subMenus;
+
+        if (selectedMenu === selectedSubMenu) {
+            // If clicking the same menu, close it
+            setSelectedMenu(null);
+            setMenuShow(false);
+        } else {
+            // If clicking a different menu, show its submenus
+            setSelectedMenu(selectedSubMenu);
+            setMenuShow(true);
+        }
     };
 
 
     const Dropdown = ({ menu, lng, pth }) => {
         return (
             <li key={menu.id} className="dropdown">
-                {menu.url ? (
+                {menu.url !== "" ? (
                     <Link
                         className={`${pth.includes(menu.url) && 'active-link'} __stat_cat_title`}
                         href={menu.url}
-                        onClick={() => {
-                            setDropDownActive(menu.id)
-                        }}
                     >
                         {lng === 'mn' ? menu.name_mn : menu.name_en}
                     </Link>
@@ -62,12 +67,13 @@ const Header = ({ lng }) => {
                         }}
                     >
                         {lng === 'mn' ? menu.name_mn : menu.name_en}
+                        <i className={`pi pi-chevron-down ${selectedMenu && 'up'}`}></i>
                     </div>
                 )}
             </li>
         );
     };
-
+    
     // Main menu component
     const MainMenu = ({ menus, loading, lng, pth }) => {
         return (
@@ -171,7 +177,6 @@ const Header = ({ lng }) => {
                                                 return <span> <a href={sw.url} className='__stat_cat_title'>{sw.name_mn}</a></span>
                                             })}
                                         </div>
-
                                     </div>
                                 })
                             }

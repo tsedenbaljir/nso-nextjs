@@ -14,31 +14,29 @@ export default function Footer({ lng }) {
     const [loading, setLoading] = useState(true);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedType, setSelectedType] = useState(null);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [analyticsResponse, navResponse] = await Promise.all([
-                    fetch('/api/analytic'),
-                    fetch('/api/menus/admin')
+                    fetch('/api/analytic', { cache: "no-store" }), // No cache
+                    fetch('/api/menus/admin', { cache: "no-store" }) // No cache
                 ]);
-
+    
                 const analyticsData = await analyticsResponse.json();
                 const navDataS = await navResponse.json();
-                // const footerSocial = navData.find(nav => nav.parent_id === 'NEW_FOOTER_1');
                 
                 setData(analyticsData);
                 setNavData(navDataS.data);
-                // setSocialLinks(footerSocial);
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchData();
-    }, [lng]);
+    }, [lng]); 
 
     const getDialogShow = (dialogType) => {
         setSelectedType(dialogType);

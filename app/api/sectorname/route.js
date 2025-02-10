@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  try {
-    const BASE_API_URL = process.env.BASE_API_URL; // Ensure environment variable is set
-    const API_URL = `${BASE_API_URL}/mn/NSO`;
+    
+const BASE_API_URL = process.env.BASE_API_URL; // Ensure environment variable is set
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const lng = searchParams.get("lng");
+    
+    const API_URL = `${BASE_API_URL}/${lng}/NSO`;
+    
     // Fetch categories from API
     const response = await fetch(API_URL);
     const textData = await response.text();

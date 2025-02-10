@@ -4,6 +4,7 @@ export async function GET(req) {
   try {
     // Get query parameters
     const { searchParams } = new URL(req.url);
+    const lng = searchParams.get("lng");
     const sector = searchParams.get("sector");
     const subsector = searchParams.get("subsector");
 
@@ -16,8 +17,8 @@ export async function GET(req) {
     }
 
     // Construct the API URL
-    const API_URL = `${process.env.BASE_API_URL}/mn/NSO/${encodeURIComponent(sector)}/${encodeURIComponent(subsector)}`;
-
+    const API_URL = `${process.env.BASE_API_URL}/${lng}/NSO/${encodeURIComponent(sector)}/${encodeURIComponent(subsector)}`;
+    
     // Fetch data from the external API
     const response = await fetch(API_URL);
     
@@ -27,6 +28,7 @@ export async function GET(req) {
 
     // Convert response to JSON
     const textData = await response.text();
+    
     const validJson = textData.replace(/^{.*?}\[/, "[");
     const parsedData = JSON.parse(validJson);
 

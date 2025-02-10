@@ -5,8 +5,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import LoadingDiv from '@/components/Loading/Text/Index';
 
-export default function Main({ sector, subsector }) {
-
+export default function Main({ lng, sector, subsector }) {
     // Set initial active tab
     const [data, setData] = useState([]); // Store API data
     const [loading, setLoading] = useState(true);
@@ -44,6 +43,7 @@ export default function Main({ sector, subsector }) {
         };
         fetchSubcategories();
     }, [sector, subsector]);
+    
     return (
         <div className="bg-white">
             {loading ? (
@@ -62,7 +62,7 @@ export default function Main({ sector, subsector }) {
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw]}
                     >
-                        {data.info || 'No content available'}
+                        {lng === 'mn' ? data.info : data.info_eng || 'No content available'}
                     </ReactMarkdown>
                     <br />
                     {data.tableau && <ReactMarkdown

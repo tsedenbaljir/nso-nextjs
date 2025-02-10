@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { PanelMenu } from "primereact/panelmenu";
 import LoadingDiv from '@/components/Loading/Text/Index';
 
-export default function DynamicSidebar({ subsector }) {
+export default function DynamicSidebar({ subsector, lng }) {
     const [menuItems, setMenuItems] = useState([]); // Stores categories & subcategories
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ export default function DynamicSidebar({ subsector }) {
         const fetchCategories = async () => {
             try {
                 // Fetch main categories
-                const response = await fetch(`/api/sectorname`);
+                const response = await fetch(`/api/sectorname?lng=${lng}`);
                 const result = await response.json();
 
                 var convert = [];
@@ -36,7 +36,7 @@ export default function DynamicSidebar({ subsector }) {
                 // Fetch subcategories for each category
                 const fetchSubcategories = async (categoryId) => {
                     try {
-                        const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}`);
+                        const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
                         const result = await response.json();
 
                         if (!Array.isArray(result.data)) {
@@ -49,7 +49,7 @@ export default function DynamicSidebar({ subsector }) {
                             label: item.text,
                             className: item.id === decodeURIComponent(subsector) ? "active-link" : "",
                             command: () => {
-                                router.push(`/mn/statecate/table/${categoryId}/${decodeURIComponent(item.id)}`);
+                                router.push(`/mn/statcate/table/${categoryId}/${decodeURIComponent(item.id)}`);
                             }
                         }));
 
