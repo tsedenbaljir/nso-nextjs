@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import newsBody from './newsBody';
 import { Carousel } from 'primereact/carousel';
+import { useTranslation } from '@/app/i18n/client';
 import Text from '@/components/Loading/Text/Index';
 
 export default function CarouselNews({ lng }) {
+    const { t } = useTranslation(lng, "lng", "");
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -69,7 +71,7 @@ export default function CarouselNews({ lng }) {
                 <div className="__about_post_cr">
                     <div className="__header">
                         <div className="__title">
-                            ШИНЭ МЭДЭЭ
+                        {t('LASTNEWS')}
                         </div>
                     </div>
                     <div className="__post">

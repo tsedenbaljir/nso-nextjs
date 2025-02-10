@@ -31,6 +31,7 @@ const nextConfig = {
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
         FRONTEND: process.env.FRONTEND,
         BACKEND_URL: process.env.BACKEND_URL,
+        BASE_FRONT_URL: process.env.BASE_FRONT_URL,
         BACKEND_KEY: process.env.BACKEND_KEY,
         GOOGLE_SERVICE_ACCOUNT: process.env.GOOGLE_SERVICE_ACCOUNT,
         GOOGLE_PRIVATE_KEY: process.env.GOOGLE_PRIVATE_KEY,

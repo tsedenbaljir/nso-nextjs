@@ -9,6 +9,16 @@
     "empty": "Not found",
     "other": "Other"
   },
+  "stats": {
+    "pop1": "Population",
+    "pop2": "Inflation rate",
+    "pop3": "Gross domestic product",
+    "pop4": "Unemployment rate",
+    "pop5": "Livestock",
+    "pop6": "Household income per month",
+    "pop7": "Median wage",
+    "pop8": "Unemployment rate"
+  },
   "mainWelcome": {
     "mainSite": "WEB SITE",
     "news": "NEWS INFORMATION",

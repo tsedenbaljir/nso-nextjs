@@ -41,7 +41,7 @@ export default function DisseminationHome({ lng }) {
         <div style={{ background: 'var(--surface-bk3)' }}>
             <div className="nso_container">
                 <div className="nso_news_groups">
-                    <span className="__section_title">
+                    <span className="__section_title font-bold">
                         {t('statCate.statisticalData')}
                     </span>
 

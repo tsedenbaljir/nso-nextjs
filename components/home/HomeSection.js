@@ -26,7 +26,7 @@ const HomeSection = ({ lng }) => {
                             {/* <i className="p-autocomplete-loader pi pi-spinner pi-spin "></i> */}
                         </div>
                     </div >
-                    <Sidebar t={t} />
+                    <Sidebar t={t} lng={lng} />
                 </div >
             </div >
         </div >

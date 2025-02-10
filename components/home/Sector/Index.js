@@ -42,38 +42,38 @@ export default function Index({ lng }) {
                         </div>
                         <div className="__group">
                             <div className="__highlight">
-                                <div className="__card">
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Society%20and%20development__Household%20income%20and%20expenditure/DT_NSO_1900_018V1.px/`} target='blank' >
                                     <span className="__desc">2023-12-31</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/tIvK--fOd--8ycP-bO-TwA_mR6_O7-w67Rma2T-r.png")' }}></span>
-                                        Малын тоо*
+                                        {t('stats.pop5')}
                                     </span>
                                     <span className="__count">64.7 сая</span>
-                                </div>
-                                <div className="__card">
+                                </Link>
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Industry_service__service_livestock/DT_NSO_1001_021V1.px/`} target='blank' >
                                     <span className="__desc">2024-01-01</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
-                                        Голч цалин
+                                        {t('stats.pop6')}
                                     </span>
                                     <span className="__count">2.5 сая</span>
-                                </div>
-                                <div className="__card">
+                                </Link>
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor1/DT_NSO_0400_069V2.px/`} target='blank' >
                                     <span className="__desc">2024-12-01</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
-                                        Өрхийн сарын дундаж орлого
+                                        {t('stats.pop7')}
                                     </span>
                                     <span className="__count">2 сая</span>
-                                </div>
-                                <div className="__card">
+                                </Link>
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor/DT_NSO_0400_018V1.px/`} target='blank' >
                                     <span className="__desc">2023-12-20</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/6ULXrEi2_5d0-UAql-_DYpEx-Dn3TMi4rw6-pG-6.png")' }}></span>
-                                        Ажиллах хүчний оролцоо
+                                        {t('stats.pop8')}
                                     </span>
                                     <span className="__count">62.2 %</span>
-                                </div>
+                                </Link>
                             </div>
                         </div>
                     </div>
