@@ -6,7 +6,6 @@ export default function Result({ showResult, t, loading, data, lng }) {
     if (!showResult) return null;
 
     const hasResults = data && Object.keys(data).length > 0;
-    console.log(data);
     
     return (
         <div className="search_result">

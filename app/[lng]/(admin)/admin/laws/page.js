@@ -95,7 +95,6 @@ export default function AdminLaws() {
       showToast(toast, 'error', 'Алдаа', 'ID олдсонгүй');
       return;
     }
-    console.log(id);
     
     showConfirm({
       message: 'Та энэ хуулийг устгахдаа итгэлтэй байна уу?',

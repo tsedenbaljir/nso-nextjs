@@ -10,9 +10,9 @@ const Header = ({ lng }) => {
     var pth = Path();
     const [selectedMenu, setSelectedMenu] = useState(null);
     const [menuShow, setMenuShow] = useState(false);
-    const [mounted, setMounted] = useState(false);
     const [menus, setMenus] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [showUp, setShowUp] = useState(null);
     const [verticalOffset, setVerticalOffset] = useState(0);
 
     useEffect(() => {
@@ -31,72 +31,6 @@ const Header = ({ lng }) => {
         };
     }, []);
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    const setDropDownActive = (menuId) => {
-        const selectedSubMenu = menus.find(e => e.id === menuId)?.subMenus;
-
-        if (selectedMenu === selectedSubMenu) {
-            // If clicking the same menu, close it
-            setSelectedMenu(null);
-            setMenuShow(false);
-        } else {
-            // If clicking a different menu, show its submenus
-            setSelectedMenu(selectedSubMenu);
-            setMenuShow(true);
-        }
-    };
-
-
-    const Dropdown = ({ menu, lng, pth }) => {
-        return (
-            <li key={menu.id} className="dropdown">
-                {menu.url !== "" ? (
-                    <Link
-                        className={`${pth.includes(menu.url) && 'active-link'} __stat_cat_title`}
-                        href={menu.url}
-                    >
-                        {lng === 'mn' ? menu.name_mn : menu.name_en}
-                    </Link>
-                ) : (
-                    <div className={`${pth.includes(menu.path) && 'active-link'} __stat_cat_title`}
-                        onClick={() => {
-                            setDropDownActive(menu.id)
-                        }}
-                    >
-                        {lng === 'mn' ? menu.name_mn : menu.name_en}
-                        <i className={`pi pi-chevron-down ${selectedMenu && 'up'}`}></i>
-                    </div>
-                )}
-            </li>
-        );
-    };
-    
-    // Main menu component
-    const MainMenu = ({ menus, loading, lng, pth }) => {
-        return (
-            <div className="__menu">
-                <Link className={`__logo lg:col-3 md:col-3 sm:col-12 ${lng === "en" && '_en'}`} href='/'></Link>
-                <ul>
-                    {loading ?
-                        menus.map((menu) => (
-                            <Dropdown
-                                key={menu.id}
-                                menu={menu}
-                                lng={lng}
-                                pth={pth}
-                            />
-                        )) :
-                        <>
-                            <OneField /><OneField /><OneField />
-                        </>
-                    }
-                </ul>
-            </div>
-        );
-    };
 
     useEffect(() => {
         const fetchMenus = async () => {
@@ -133,8 +67,6 @@ const Header = ({ lng }) => {
                         subway: subMenusTools.filter(tool => tool.parent_id === sub.id)
                     }))
                 }));
-                console.log(menusWithSubs);
-
                 setMenus(menusWithSubs);
                 setLoading(true);
             } catch (error) {
@@ -144,10 +76,79 @@ const Header = ({ lng }) => {
 
         fetchMenus();
     }, []);
+    
+    const setDropDownActive = (menuId, index) => {
+        const selectedSubMenu = menus.find(e => e.id === menuId)?.subMenus;
 
-    if (!mounted) {
-        return null;
-    }
+        if (selectedMenu === selectedSubMenu) {
+            // If clicking the same menu, close it
+            setShowUp(null);
+            setMenuShow(false);
+            setSelectedMenu(null);
+        } else {
+            // If clicking a different menu, show its submenus
+            setShowUp(index)
+            setMenuShow(true);
+            setSelectedMenu(selectedSubMenu);
+        }
+    };
+    
+    const setDropDownClose = () => {
+        setMenuShow(!menuShow)
+        setShowUp(null);
+        setMenuShow(false);
+        setSelectedMenu(null);
+    };
+
+    const Dropdown = ({ menu, lng, pth, index }) => {
+        return (
+            <li key={menu.id} className="dropdown">
+                {menu.url !== "" ? (
+                    <Link
+                        className={`${pth.includes(menu.url) && 'active-link'} __stat_cat_title cursor-pointer`}
+                        href={menu.url}
+                    >
+                        {lng === 'mn' ? menu.name_mn : menu.name_en}
+                    </Link>
+                ) : (
+                    <div className={`${pth.includes(menu.path) && 'active-link'} __stat_cat_title cursor-pointer`}
+                        onClick={() => {
+                            setDropDownActive(menu.id, index)
+                        }}
+                    >
+                        {lng === 'mn' ? menu.name_mn : menu.name_en}
+                        <i className={`pi pi-chevron-down ${showUp === index && 'up'}`}></i>
+                    </div>
+                )}
+            </li>
+        );
+    };
+
+    // Main menu component
+    const MainMenu = ({ menus, loading, lng, pth }) => {
+        return (
+            <div className="__menu">
+                <Link className={`__logo lg:col-3 md:col-3 sm:col-12 ${lng === "en" && '_en'}`} href='/'></Link>
+                <ul>
+                    {loading ?
+                        menus.map((menu, index) => (
+                            <Dropdown
+                                key={menu.id}
+                                index={index}
+                                menu={menu}
+                                lng={lng}
+                                pth={pth}
+                            />
+                        )) :
+                        <>
+                            <OneField /><OneField /><OneField /><OneField /><OneField />
+                        </>
+                    }
+                </ul>
+            </div>
+        );
+    };
+
     return (
         <>
             <div className="nso_header">
@@ -166,15 +167,15 @@ const Header = ({ lng }) => {
                     <div className="nso_container">
                         <div className="__groups">
                             {
-                                selectedMenu && selectedMenu.sort((a, b) => a.list_order - b.list_order).map(dts => {
-                                    return <div className='__group'>
+                                selectedMenu && selectedMenu.sort((a, b) => a.list_order - b.list_order).map((dts, index) => {
+                                    return <div className='__group' key={index}>
                                         <div className='__title'>
                                             <a href={dts.url} className='__stat_cat_title'>{dts.name_mn}</a>
                                         </div>
 
                                         <div className='__items'>
-                                            {dts.subway.map(sw => {
-                                                return <span> <a href={sw.url} className='__stat_cat_title'>{sw.name_mn}</a></span>
+                                            {dts.subway.map((sw, idx) => {
+                                                return <span key={idx}> <a href={sw.url} className='__stat_cat_title'>{sw.name_mn}</a></span>
                                             })}
                                         </div>
                                     </div>
@@ -186,7 +187,7 @@ const Header = ({ lng }) => {
             </div>
             <div>
                 <div>
-                    <div className={`__drop_back ${menuShow && 'show'}`} onClick={() => { setMenuShow(!menuShow) }}>
+                    <div className={`__drop_back ${menuShow && 'show'}`} onClick={() => { setDropDownClose() }}>
                     </div>
                 </div>
             </div>

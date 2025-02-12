@@ -45,7 +45,6 @@ export default function EditDissemination({ params: { id } }) {
             
             if (data.status && data.data) {
                 const article = data.data;
-                console.log('Fetched article:', article); // For debugging
                 
                 setTitle(article.name || '');
                 setBody(article.body || "<p></p>");

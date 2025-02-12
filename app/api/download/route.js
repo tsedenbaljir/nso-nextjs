@@ -4,13 +4,14 @@ import { db } from '@/app/api/config/db_csweb.config';
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const lng = searchParams.get('lng');
-    const catalogue_id = searchParams.get('catalogue_id');
+    const info = searchParams.get('info');
+    const type = searchParams.get('type');
     try {
         const results = await db.raw(`
-            SELECT * FROM web_1212_methodology
-            WHERE catalogue_id = ? and language = ? and published = 1
-            order by approved_date desc
-        `, [catalogue_id, lng]);
+            SELECT * FROM web_1212_download
+            WHERE info = ? and language = ? and published = 1 and file_type = ?
+            order by published_date desc
+        `, [info, lng, type]);
             
         return NextResponse.json({
             status: true,

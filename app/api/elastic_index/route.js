@@ -22,7 +22,6 @@ export async function POST() {
     }
 
     // Create index with proper mappings
-    console.log("Index created");
     await client.indices.create({
       index: INDEX_NAME,
       body: {

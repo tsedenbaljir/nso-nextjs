@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import LoadingDiv from '@/components/Loading/Text/Index';
+import { useRouter } from "next/navigation";
+import Image from 'next/image';
 
 export default function Main({ sector, subsector, lng }) {
 
+    const router = useRouter();
     // Set initial active tab
     const [data, setData] = useState([]); // Store API data
     const [loading, setLoading] = useState(true);
@@ -15,9 +17,8 @@ export default function Main({ sector, subsector, lng }) {
         // Fetch subcategories
         const fetchSubcategories = async () => {
             try {
-                const response = await fetch(`/api/methodology?info=${subsector}&lng=${lng}`);
+                const response = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=report`);
                 const result = await response.json();
-                console.log(result);
 
                 setData(result.data)
                 if (!Array.isArray(result.data)) {
@@ -38,6 +39,8 @@ export default function Main({ sector, subsector, lng }) {
                 value={data}
                 paginator
                 rows={10}
+                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
+                currentPageReportTemplate={`Нийт: {totalRecords}`}
                 className="nso_table"
                 loading={loading}
             >
@@ -57,10 +60,15 @@ export default function Main({ sector, subsector, lng }) {
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
-                        <Link href={`https://downloads.1212.mn/${JSON.parse(rowData.file_info)?.pathName}`}
-                            className="hover:text-blue-700 hover:underline text-gray-900 font-medium text-nowrap">
+                        <div onClick={() => {
+                            const filePath = JSON.parse(rowData.file_info)?.pathName;
+                            if (filePath) {
+                                window.open(`https://downloads.1212.mn/${filePath}`, "_blank");
+                            }
+                        }}
+                            className="hover:text-blue-700 hover:underline text-gray-900 font-medium text-nowrap cursor-pointer">
                             {rowData.name}
-                        </Link>
+                        </div>
                     )}
                 />
                 <Column
@@ -114,10 +122,15 @@ export default function Main({ sector, subsector, lng }) {
                     header="Татах"
                     className="nso_table_col"
                     body={(rowData) => (
-                        <Link href={`https://downloads.1212.mn/${JSON.parse(rowData.file_info)?.pathName}`}
-                            className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap">
-                            PDF
-                        </Link>
+                        <div onClick={() => {
+                            const filePath = JSON.parse(rowData.file_info)?.pathName;
+                            if (filePath) {
+                                window.open(`https://downloads.1212.mn/${filePath}`, "_blank");
+                            }
+                        }}
+                            className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">
+                            <Image src="/images/file-download.png" width={15} height={15} className='float-left mt-1' alt='file-download' /> PDF
+                        </div>
                     )}
                 />
             </DataTable>

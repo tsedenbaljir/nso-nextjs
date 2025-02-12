@@ -15,23 +15,23 @@ export default function Sidebar({ t, lng }) {
             name: t('stats.pop2'),
             link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Economy,%20environment__economy_consumerPrice/DT_NSO_0600_010V1.px/`,
             desc: "2024-07-31",
-            phone: "5.5",
-            success: " % ",
+            phone: "9",
+            success: "%",
             url: "https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png"
         },
         {
             name: t('stats.pop3'),
             link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Economy,%20environment__economy_national_acc/DT_NSO_0500_022V1.px/`,
             desc: "2024-06-30",
-            phone: " 37.4 их наяд ",
-            success: " 5.6 % ",
+            phone: "56.2 их наяд",
+            success: " 5.0 % ",
             url: "https://downloads.1212.mn/YY2lPbolIQMlEAC8QFiHSuj7fQtYwi7YgNdTfyhi.png"
         },
         {
             name: t('stats.pop4'),
             link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor/DT_NSO_0400_020V2.px/`,
             desc: "2024-03-31",
-            phone: "5.2",
+            phone: "6.1",
             success: "%",
             url: "https://downloads.1212.mn/Soxj74qhkwXV_xUwebd_XFnwa_-vVaH05-T-XoYJ.png"
         },
@@ -52,7 +52,7 @@ export default function Sidebar({ t, lng }) {
                             <div className="__phone">
                                 <span style={{ marginTop: 10, fontSize: index === 2 && 14 }}> {dt.phone} </span>
                                 <div className="ng-star-inserted">
-                                    <span className="success">{dt.success}</span>
+                                    {dt.success === "%" ? <span className="text-lg">{dt.success}</span> : <span className="success">{dt.success}</span>}
                                 </div>
                             </div>
                         </Link>

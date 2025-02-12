@@ -11,7 +11,7 @@ const HomeSection = ({ lng }) => {
     const [search, setSearching] = useState({});
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(true);
-    
+
     return (
         <div className="nso_main_section" style={{ background: 'var(--surface-bk)' }}>
             <div className="nso_container">
@@ -25,8 +25,33 @@ const HomeSection = ({ lng }) => {
                             {search.length > 2 && <Result showResult={showResult} t={t} loading={loading} data={data} lng={lng} />}
                             {/* <i className="p-autocomplete-loader pi pi-spinner pi-spin "></i> */}
                         </div>
+                        <div class="__metadata">
+                            <a href="https://data.nso.mn" class="__dock_item leading-4" target="_blank">
+                                <img src="/images/metaIcon.png" height="30px" width="30px"
+                                    style={{ marginRight: '20px', height: 30 }} />
+                                ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН
+                            </a>
+                            <a href="https://metadata.nso.mn" class="__dock_item leading-4" target="_blank">
+                                <img src="/images/dataIcon.png" height="30px" width="30px"
+                                    style={{ marginRight: '5px', height: 30 }} />
+                                ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН
+                            </a>
+                        </div>
                     </div >
+                    <div class="__metadataphone">
+                        <a href="https://data.nso.mn" class="__dock_item" target="_blank">
+                            <img src="/images/metaIcon.png" height="30px" width="30px"
+                                style={{ marginRight: '9px', height: 30 }} />
+                            <span>ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН</span>
+                        </a>
+                        <a href="https://metadata.nso.mn" class="__dock_item" target="_blank">
+                            <img src="/images/dataIcon.png" height="30px" width="30px"
+                                style={{ marginRight: '6px', height: 30 }} />
+                            <span>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</span>
+                        </a>
+                    </div>
                     <Sidebar t={t} lng={lng} />
+                    <img class="mb" src="/images/mbBle.png" />
                 </div >
             </div >
         </div >

@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import TablesData from "./table/tables";
 import MainIndicator from "./indicator/main";
 import Report from "./reports/main";
+import Methodology from "./methodology/main";
+import Qualityreport from "./qualityreport/main";
 import { TabView, TabPanel } from "primereact/tabview";
+import LoadingDiv from '@/components/Loading/OneField/Index';
 
 export default function Tabs({ lng, tabs, sector, subsector }) {
     const router = useRouter();
@@ -59,37 +62,42 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     return (
         <div id="stat_cate" className="nso_cate_body">
             {/* Title */}
-            <span className="__cate_title">{name && name[0]?.text}</span>
+            <span className="__cate_title">{name ? name[0]?.text : <LoadingDiv />}</span>
 
             {/* PrimeReact Tabs */}
             <TabView
                 activeIndex={activeIndex}
                 onTabChange={(e) => {
                     const newTab = getIndexTab(e.index);
-                    router.push(`/statcate/${newTab}/${sector}/${subsector}`); // ✅ Navigate to new tab
+                    router.push(`/statcate/${newTab}/${sector}/${subsector}`);
                 }}
             >
-                {/* Хүснэгт Tab */}
+
+                {/* ✅ Хүснэгт Tab */}
                 <TabPanel header="Хүснэгт">
                     <TablesData sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
 
-                {/* Other Tabs */}
+                {/* ✅ Танилцуулга */}
                 <TabPanel header="Танилцуулга">
-                    <MainIndicator sector={sector} subsector={subsector} lng={lng}  />
+                    <MainIndicator sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
 
+                {/* ✅ Тайлан */}
                 <TabPanel header="Тайлан">
                     <Report sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
 
+                {/* ✅ Аргачлал */}
                 <TabPanel header="Аргачлал">
-                    <Report sector={sector} subsector={subsector} lng={lng} />
+                    <Methodology sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
 
+                {/* ✅ Чанарын тайлан */}
                 <TabPanel header="Чанарын тайлан">
-                    <p className="p-4">Энэ бол Чанарын тайлангийн хэсэг.</p>
+                    <Qualityreport sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
+
             </TabView>
         </div>
     );

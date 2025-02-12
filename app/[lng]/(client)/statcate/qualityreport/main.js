@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from 'next/link';
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-import { useRouter } from "next/navigation";
 import Image from 'next/image';
+import { Column } from "primereact/column";
+import { useRouter } from "next/navigation";
+import { DataTable } from "primereact/datatable";
 
 export default function Main({ sector, subsector, lng }) {
 
@@ -17,7 +16,7 @@ export default function Main({ sector, subsector, lng }) {
         // Fetch subcategories
         const fetchSubcategories = async () => {
             try {
-                const response = await fetch(`/api/methodology?catalogue_id=${subsector}&lng=${lng}`);
+                const response = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=reportSector`);
                 const result = await response.json();
 
                 setData(result.data)
@@ -66,7 +65,7 @@ export default function Main({ sector, subsector, lng }) {
                                 window.open(`https://downloads.1212.mn/${filePath}`, "_blank");
                             }
                         }}
-                            className="hover:text-blue-700 hover:underline text-gray-900 font-medium cursor-pointer">
+                            className="hover:text-blue-700 hover:underline text-gray-900 font-medium text-nowrap cursor-pointer">
                             {rowData.name}
                         </div>
                     )}
@@ -102,7 +101,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <span className="text-black font-normal">
-                            {rowData.approved_date.substr(0, 10)}
+                            {rowData.created_date.substr(0, 10)}
                         </span>
                     )}
                 />

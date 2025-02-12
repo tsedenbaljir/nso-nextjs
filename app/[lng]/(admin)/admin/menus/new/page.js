@@ -21,7 +21,6 @@ const Dashboard = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form data submitted:', formData);
         // Here you can send data to the server or an API
     };
 

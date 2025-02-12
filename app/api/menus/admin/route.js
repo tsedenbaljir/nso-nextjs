@@ -77,11 +77,6 @@ export async function PUT(req) {
         const data = await req.json();
         const currentDate = new Date().toISOString();
 
-        console.log('Updating menu:', {
-            data,
-            currentDate
-        });
-
         await db.raw(`
             UPDATE web_menus 
             SET name_mn = ?,

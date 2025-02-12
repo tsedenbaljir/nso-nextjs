@@ -131,7 +131,6 @@ export default function MenusContent() {
             rejectLabel: 'Үгүй',
             accept: async () => {
                 try {
-                    console.log('Deleting menu with ID:', id);
                     const response = await fetch(`/api/menus/admin/${id}`, {
                         method: 'DELETE',
                     });

@@ -24,7 +24,6 @@ export const options = {
         },
       },
       async authorize(credentials) {
-        console.log("credentials", credentials);
         
         try {
           const user = await db("user")

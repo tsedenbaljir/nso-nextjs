@@ -22,7 +22,6 @@ export async function GET(req) {
     const textData = await response.text();
     const validJson = textData.replace(/^{.*?}\[/, "[");
     const subcategories = JSON.parse(validJson);
-    console.log(subcategories);
     
     if (!Array.isArray(subcategories)) {
       return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });

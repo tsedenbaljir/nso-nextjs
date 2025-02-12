@@ -39,12 +39,6 @@ export async function PUT(req, { params }) {
         const data = await req.json();
         const currentDate = new Date().toISOString();
 
-        console.log('Updating menu:', {
-            id,
-            data,
-            currentDate
-        });
-
         await db.raw(`
             UPDATE web_menus 
             SET name_mn = ?,
@@ -90,7 +84,6 @@ export async function PUT(req, { params }) {
 export async function DELETE(req, { params }) {
     try {
         const { id } = params;
-        console.log('Deleting menu:', id);
 
         await db.raw(`
             DELETE FROM web_menus 

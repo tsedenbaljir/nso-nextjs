@@ -55,12 +55,16 @@ export default function Table({ sector, subsector, lng }) {
 
         fetchData();
     }, [sector, subsector]);
+
     return (
         <div className="bg-white">
             <DataTable
                 value={data}
                 paginator
                 rows={10}
+                // rowsPerPageOptions={[10, 25, 50]} 
+                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
+                currentPageReportTemplate={`Нийт: {totalRecords}`}
                 className="nso_table"
                 loading={loading}
             >

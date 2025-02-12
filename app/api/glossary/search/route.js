@@ -50,15 +50,10 @@ export async function GET(req) {
         const searchPattern = `%${decodedSearchTerm}%`;
         const params = [searchPattern, searchPattern];
 
-        console.log('Search Term:', decodedSearchTerm); // For debugging
-        console.log('Query:', query); // For debugging
-
         const results = await db.raw(query, params);
         const data = results[0];
 
         // Log the number of results found
-        console.log('Results found:', Array.isArray(data) ? data.length : (data ? 1 : 0));
-
         return NextResponse.json({
             status: true,
             data: Array.isArray(data) ? data : (data ? [data] : []),
