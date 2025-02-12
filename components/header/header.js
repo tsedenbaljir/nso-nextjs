@@ -92,7 +92,7 @@ const Header = ({ lng }) => {
             setSelectedMenu(selectedSubMenu);
         }
     };
-    
+
     const setDropDownClose = () => {
         setMenuShow(!menuShow)
         setShowUp(null);
@@ -128,7 +128,7 @@ const Header = ({ lng }) => {
     const MainMenu = ({ menus, loading, lng, pth }) => {
         return (
             <div className="__menu">
-                <Link className={`__logo lg:col-3 md:col-3 sm:col-12 ${lng === "en" && '_en'}`} href='/'></Link>
+                <a className={`__logo lg:col-3 md:col-3 sm:col-12 ${lng === "en" && '_en'}`} href='/'></a>
                 <ul>
                     {loading ?
                         menus.map((menu, index) => (

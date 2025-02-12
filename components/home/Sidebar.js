@@ -5,7 +5,7 @@ export default function Sidebar({ t, lng }) {
     const menus = [
         {
             name: t('stats.pop1'),
-            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Pop__pop1/DT_NSO_3300_044V1.px/`,
+            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Pop__pop1/DT_NSO_0300_004V5.px/`,
             desc: "2023-12-31",
             phone: "3 504 741",
             success: "1.4 % ",
