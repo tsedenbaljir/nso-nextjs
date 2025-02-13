@@ -5,7 +5,7 @@ import { PanelMenu } from "primereact/panelmenu";
 import LoadingDiv from '@/components/Loading/Text/Index';
 
 export default function DynamicSidebar({ subsector, lng }) {
-    const [menuItems, setMenuItems] = useState([]); // Stores categories & subcategories
+    const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -14,7 +14,7 @@ export default function DynamicSidebar({ subsector, lng }) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                // Fetch main categories
+                // Fetch main Sectors
                 const response = await fetch(`/api/sectorname?lng=${lng}`);
                 const result = await response.json();
 
@@ -33,7 +33,7 @@ export default function DynamicSidebar({ subsector, lng }) {
                     return;
                 }
 
-                // Fetch subcategories for each category
+                // Fetch subSectors
                 const fetchSubcategories = async (categoryId) => {
                     try {
                         const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);

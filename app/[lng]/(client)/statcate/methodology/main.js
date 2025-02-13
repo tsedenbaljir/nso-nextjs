@@ -60,15 +60,10 @@ export default function Main({ sector, subsector, lng }) {
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
-                        <div onClick={() => {
-                            const filePath = JSON.parse(rowData.file_info)?.pathName;
-                            if (filePath) {
-                                window.open(`https://downloads.1212.mn/${filePath}`, "_blank");
-                            }
-                        }}
+                        <a href={`/${lng}/methodology/list/${rowData.id}`}
                             className="hover:text-blue-700 hover:underline text-gray-900 font-medium cursor-pointer">
                             {rowData.name}
-                        </div>
+                        </a>
                     )}
                 />
                 <Column

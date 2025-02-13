@@ -26,3 +26,44 @@ export async function GET(req) {
         }, { status: 500 });
     }
 }
+
+export async function POST(req) {
+    try {
+        const { id } = await req.json();
+        console.log(id);
+        
+        if (!id) {
+            return NextResponse.json({
+                status: false,
+                message: "Missing required parameters (id, lng)"
+            }, { status: 400 });
+        }
+
+        const results = await db.raw(`
+            SELECT * FROM web_1212_methodology
+            WHERE id = ? AND published = 1
+        `, [id]);
+
+        if (!results || results.length === 0) {
+            return NextResponse.json({
+                status: false,
+                message: "Methodology not found",
+                data: null
+            }, { status: 404 });
+        }
+
+        return NextResponse.json({
+            status: true,
+            data: results[0], // ✅ Return only one item
+            message: "Methodology retrieved successfully"
+        });
+
+    } catch (error) {
+        console.error('Error processing request:', error);
+        return NextResponse.json({
+            status: false,
+            data: null,
+            message: "Internal server error"
+        }, { status: 500 });
+    }
+}
