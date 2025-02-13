@@ -23,9 +23,9 @@ export default function GlossaryList({
                             </div>
                         ) : (
                             <div className="_group_list">
-                                {list.map((item) => (
+                                {list.map((item, index) => (
                                     <GlossaryItem 
-                                        key={item.id} 
+                                        key={index} 
                                         item={item} 
                                         isMn={isMn} 
                                     />

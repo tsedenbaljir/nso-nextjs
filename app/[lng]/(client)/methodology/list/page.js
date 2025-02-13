@@ -91,33 +91,43 @@ export default function Glossary({ params: { lng } }) {
   }, [lng]);
 
   // Fetch methodology data instead of glossary data
-  useEffect(() => {
-    const fetchMethodology = async () => {
+// Fetch methodology data based on selected filter, page, and search
+useEffect(() => {
+  const fetchMethodology = async () => {
       setFilterLoading(true);
       try {
-        const response = await fetch(`/api/methodology/list?catalogue_id=${selectedFilter?.id || ''}&lng=${lng}`);
-        const result = await response.json();
+          // Prepare query parameters
+          const params = new URLSearchParams({
+              page: Math.floor(first / rows),  // ✅ Proper pagination calculation
+              pageSize: rows,
+              lng: lng
+          });
 
-        if (!Array.isArray(result.data)) {
-          setList([]);
-        } else {
-          setList(result.data);
-        }
+          if (selectedFilter?.id) {
+              params.append("catalogue_id", selectedFilter.id);
+          }
 
-        setTotalRecords(result.data?.length || 0);
+          const response = await fetch(`/api/methodology/list?${params.toString()}`);
+          const result = await response.json();
+
+          if (result.status) {
+              setList(Array.isArray(result.data) ? result.data : []);
+              setTotalRecords(result.pagination?.total || 0);
+          } else {
+              setList([]);
+              setTotalRecords(0);
+          }
       } catch (error) {
-        console.error('Error fetching methodology data:', error);
-        setList([]);
-        setTotalRecords(0);
+          console.error("Error fetching methodology data:", error);
+          setList([]);
+          setTotalRecords(0);
       } finally {
-        setFilterLoading(false);
+          setFilterLoading(false);
       }
-    };
+  };
 
-    // if (selectedFilter) {
-    fetchMethodology();
-    // }
-  }, [selectedFilter, lng]);
+  fetchMethodology();
+}, [first, rows, selectedFilter, lng]); // ✅ `first` and `rows` are now working properly!
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
