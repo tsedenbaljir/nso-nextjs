@@ -32,7 +32,7 @@ export default function TransparencyCategory({ params: { lng, name } }) {
 
     return (
         <>
-            <div className="nso_transparency mt-40">
+            <div className="nso_statistic_section">
                 <div className="nso_container">
                     <div className="w-full">
                         <div className="transparency_header text-left">

@@ -5,9 +5,9 @@ import Sidebar from "../../sidebar";
 export default function StateCate({ params: { lng }, params }) {
     const { type } = params;
     return (
-        <div className="nso_container statisctic_body">
+        <div className="nso_container">
             {/* Sidebar */}
-            <div className="nso_cate_section mt-60 left-bar">
+            <div className="nso_cate_section mt-6 left-bar">
                 <div className='__cate_groups'>
                     <Sidebar lng={lng} type={type} />
                 </div>

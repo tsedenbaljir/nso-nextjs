@@ -72,7 +72,7 @@ export default function Tabs({ lng, type }) {
     };
 
     return (
-        <div id="stat_cate" className="nso_cate_body mt-52">
+        <div id="stat_cate" className="nso_cate_body">
             <div className="nso_tab_content">
                 <div className="nso_tab">
                     <div className="__table_desktop">

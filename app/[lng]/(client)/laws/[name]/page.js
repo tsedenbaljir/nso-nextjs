@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Layout from '@/components/baseLayout';
 import { useTranslation } from '@/app/i18n/client';
 import Text from '@/components/Loading/Text/Index';
 import MainBody from '@/components/laws/MainBody';

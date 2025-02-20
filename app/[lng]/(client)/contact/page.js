@@ -2,17 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tabs } from 'antd';
-import Layout from '@/components/baseLayout';
-import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
 
 export default function Contact({ params: { lng } }) {
-    const { t } = useTranslation(lng, "lng", "");
-    const [contactData, setContactData] = useState(null);
-    const [contactDataProvince, setContactDataProvince] = useState(null);
-    const [webpageData, setWebpageData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [contactData, setContactData] = useState(null);
+    const [webpageData, setWebpageData] = useState(null);
+    const [contactDataProvince, setContactDataProvince] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {

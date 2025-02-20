@@ -4,8 +4,10 @@ import { Spin } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryFilter from '../Glossary/GlossaryFilter';
 import GlossaryList from '../Glossary/GlossaryList';
+import Path from '@/components/path/Index';
 
-export default function Glossary({ params: { lng } }) {
+export default function Glossary({ params }) {
+  const { lng } = params;
   const { t } = useTranslation(lng, "lng", "");
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,43 +93,42 @@ export default function Glossary({ params: { lng } }) {
   }, [lng]);
 
   // Fetch methodology data instead of glossary data
-// Fetch methodology data based on selected filter, page, and search
-useEffect(() => {
-  const fetchMethodology = async () => {
+  useEffect(() => {
+    const fetchMethodology = async () => {
       setFilterLoading(true);
       try {
-          // Prepare query parameters
-          const params = new URLSearchParams({
-              page: Math.floor(first / rows),  // ✅ Proper pagination calculation
-              pageSize: rows,
-              lng: lng
-          });
+        // Prepare query parameters
+        const params = new URLSearchParams({
+          page: Math.floor(first / rows),  // ✅ Proper pagination calculation
+          pageSize: rows,
+          lng: lng
+        });
 
-          if (selectedFilter?.id) {
-              params.append("catalogue_id", selectedFilter.id);
-          }
+        if (selectedFilter?.id) {
+          params.append("catalogue_id", selectedFilter.id);
+        }
 
-          const response = await fetch(`/api/methodology/list?${params.toString()}`);
-          const result = await response.json();
+        const response = await fetch(`/api/methodology/list?${params.toString()}`);
+        const result = await response.json();
 
-          if (result.status) {
-              setList(Array.isArray(result.data) ? result.data : []);
-              setTotalRecords(result.pagination?.total || 0);
-          } else {
-              setList([]);
-              setTotalRecords(0);
-          }
-      } catch (error) {
-          console.error("Error fetching methodology data:", error);
+        if (result.status) {
+          setList(Array.isArray(result.data) ? result.data : []);
+          setTotalRecords(result.pagination?.total || 0);
+        } else {
           setList([]);
           setTotalRecords(0);
+        }
+      } catch (error) {
+        console.error("Error fetching methodology data:", error);
+        setList([]);
+        setTotalRecords(0);
       } finally {
-          setFilterLoading(false);
+        setFilterLoading(false);
       }
-  };
+    };
 
-  fetchMethodology();
-}, [first, rows, selectedFilter, lng]); // ✅ `first` and `rows` are now working properly!
+    fetchMethodology();
+  }, [first, rows, selectedFilter, lng]); // ✅ `first` and `rows` are now working properly!
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
@@ -153,8 +154,13 @@ useEffect(() => {
     );
   }
 
+  const breadMap = [
+    { label: t('home'), url: [lng ? 'mn' : 'en'] },
+    { label: t('statCate.methodologyText') }
+  ];
   return (
-    <div className="nso_about_us mt-40">
+    <div className="nso_statistic_section">
+      <Path params={params} name={'statCate.methodologyText'} />
       <div className="nso_container">
         <div className="sm:col-12 md:col-4 lg:col-3">
           <GlossaryFilter
@@ -166,6 +172,7 @@ useEffect(() => {
           />
         </div>
         <div className="sm:col-12 md:col-8 lg:col-9">
+          {/* <h2>АРГА ЗҮЙ</h2> */}
           <GlossaryList
             filterLoading={filterLoading}
             list={list}

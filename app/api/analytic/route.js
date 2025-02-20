@@ -55,6 +55,9 @@ async function fetchAnalyticsReport(token) {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
+            "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(reportRequest)
@@ -66,13 +69,13 @@ async function fetchAnalyticsReport(token) {
 
 export async function GET() {
     const now = Date.now();
-    
+
     // Check if we need to refresh the token (older than 60 minutes)
     if (!applicationScopedBean.attribute || (applicationScopedBean.creationTime + 6600000) < now) {
         try {
             // Get new token
             const token = await getGoogleAnalyticsToken();
-            
+
             // Fetch report
             const report = await fetchAnalyticsReport(token);
 

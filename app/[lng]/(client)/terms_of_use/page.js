@@ -7,7 +7,7 @@ export default function TermsOfUse({ params: { lng } }) {
 
     return (
         <>
-            <div className="nso_transparency mt-40">
+            <div className="nso_statistic_section">
                 <div className="nso_container">
                     {/* Content Section */}
                         <div className="mx-auto bg-white rounded-lg shadow-md">

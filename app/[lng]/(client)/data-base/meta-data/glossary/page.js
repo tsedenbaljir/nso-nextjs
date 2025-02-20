@@ -1,22 +1,30 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
+import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
-import GlossaryFilter from '@/components/Glossary/GlossaryFilter';
 import GlossaryList from '@/components/Glossary/GlossaryList';
+import GlossaryFilter from '@/components/Glossary/GlossaryFilter';
 
 export default function Glossary({ params: { lng }, searchParams }) {
     const { t } = useTranslation(lng, "lng", "");
+    
     const [list, setList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [filterLoading, setFilterLoading] = useState(false);
-    const [first, setFirst] = useState(0);
     const [rows, setRows] = useState(10);
-    const [totalRecords, setTotalRecords] = useState(0);
+    const [first, setFirst] = useState(0);
+    const [loading, setLoading] = useState(true);
     const [filterList, setFilterList] = useState([]);
+    const [totalRecords, setTotalRecords] = useState(0);
+    const [filterLoading, setFilterLoading] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState(null);
 
     const isMn = lng === 'mn';
+
+    const breadMap = [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('statistic'), url: [(lng === 'mn' ? '/mn' : '/en') + '/statcate'] },
+        { label: t('metadata.title') }
+    ];
 
     // Fetch filters
     useEffect(() => {
@@ -24,7 +32,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
             try {
                 const response = await fetch('/api/glossary/sectors');
                 const data = await response.json();
-                
+
                 if (data && (Array.isArray(data) || typeof data === 'object')) {
                     const dataArray = Array.isArray(data) ? data : [data];
                     const formattedFilters = dataArray.map(filter => ({
@@ -34,7 +42,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         code: filter.code,
                         count: filter.count || 0
                     }));
-                    
+
                     setFilterList(formattedFilters.filter(filter => filter.count > 0));
                 }
             } catch (error) {
@@ -54,7 +62,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
                     // If search parameter exists, use search API
                     const response = await fetch(`/api/glossary/search?search=${searchParams.search}&lng=${lng}`);
                     const data = await response.json();
-                    
+
                     if (data.status) {
                         setList(Array.isArray(data.data) ? data.data : [data.data]);
                         setTotalRecords(data.data.length);
@@ -72,7 +80,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
 
                     const response = await fetch(`/api/glossary?${params}`);
                     const data = await response.json();
-                    
+
                     if (data.status) {
                         setList(Array.isArray(data.data) ? data.data : []);
                         setTotalRecords(data.pagination.total);
@@ -121,10 +129,11 @@ export default function Glossary({ params: { lng }, searchParams }) {
 
     return (
         <>
-            <div className="nso_about_us mt-40">
+            <div className="nso_statistic_section">
+                <Path name={t('metadata.title')} breadMap={breadMap} />
                 <div className="nso_container">
                     <div className="sm:col-12 md:col-4 lg:col-3">
-                        <GlossaryFilter 
+                        <GlossaryFilter
                             filterList={filterList}
                             selectedFilter={selectedFilter}
                             handleFilterChange={handleFilterChange}
@@ -133,7 +142,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         />
                     </div>
                     <div className="sm:col-12 md:col-8 lg:col-9">
-                        <GlossaryList 
+                        <GlossaryList
                             filterLoading={filterLoading}
                             list={list}
                             isMn={isMn}

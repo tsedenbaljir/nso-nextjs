@@ -10,7 +10,6 @@ export default function Footer({ lng }) {
 
     const [data, setData] = useState(null);
     const [navData, setNavData] = useState(null);
-    const [socialLinks, setSocialLinks] = useState(null);
     const [loading, setLoading] = useState(true);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedType, setSelectedType] = useState(null);

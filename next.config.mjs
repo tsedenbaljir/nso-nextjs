@@ -12,8 +12,6 @@ const nextConfig = {
         minimumCacheTTL: 60,
         domains: [
             "images.unsplash.com",
-            "xaa2.app.nso.mn",
-            "medee.app.nso.mn",
             "os.alipayobjects.com",
             "api.ipify.org",
             "downloads.1212.mn",
