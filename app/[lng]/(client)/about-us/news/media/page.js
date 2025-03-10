@@ -9,7 +9,7 @@ export default function Home({ params: { lng } }) {
 
     return (
         <>
-            <MainArticle name={t('MEDIANEWS')} path="media" mainPath="news" lng={lng} />
+            <MainArticle name={t('MEDIANEWS')} path="media" mainPath="about-us/news" lng={lng} />
         </>
     );
 }

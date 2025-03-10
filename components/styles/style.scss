@@ -116,11 +116,11 @@ body {
 
     .__page_name {
       color: var(--text-main);
-      font-family: "sf-pro-text";
-      font-weight: 700;
+      font-family: sf-pro-text, roboto;
+      font-weight: 800;
       font-size: var(--font-size24);
       text-transform: uppercase;
-      letter-spacing: -1px;
+      letter-spacing: 0px !important;
     }
   }
 }
@@ -842,15 +842,15 @@ body {
   }
 }
 
-.p-breadcrumb.p-component {
+.p-menuitem.p-component {
   overflow-x: auto;
 
-  ul li {
+  ol li {
     white-space: nowrap;
   }
 }
 
-.p-breadcrumb.p-component::-webkit-scrollbar {
+.p-menuitem.p-component::-webkit-scrollbar {
   display: none;
 }
 

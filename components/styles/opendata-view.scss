@@ -1,0 +1,155 @@
+$imp: !important;
+$cw: #fff;
+$br4: 4;
+$br8: $br4+4;
+$br10: $br8+2;
+$br12: $br8+4;
+$br20: $br12+$br8;
+$cd: #252525;
+$c7: #777;
+
+.__opendata_header {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+
+  h1 {
+    margin: 0;
+    color: $cd;
+    font-size: var(--font-size40) $imp;
+    font-weight: 600 $imp;
+    line-height: 1.1 $imp;
+    letter-spacing: -1px;
+  }
+
+  p {
+    color: $c7;
+    font-size: var(--font-size16);
+    font-weight: 300;
+    line-height: 1.1;
+    margin: 0 $imp;
+  }
+}
+
+.__request_name {
+    display: inline;
+    color: $cw $imp;
+    font-size: var(--font-size12);
+    text-transform: uppercase;
+    padding: 5px 10px;
+    margin-right: 6px;
+    border-radius: $br4 + px;
+
+&.__post {
+     background-color: #4070ec;
+ }
+
+&.__get {
+     background-color: green;
+ }
+}
+
+
+.__opendata_main_block {
+  .__open_section {
+    margin-top: 40px;
+
+    h1 {
+      font-weight: 300 !important;
+      margin-bottom: 18px !important;
+    }
+
+    pre {
+      overflow: auto;
+      margin-top: 1em !important;
+      border-radius: 8px !important;
+    }
+
+    .__opendata_item {
+      h2 {
+        font-weight: 300 !important;
+        margin-top: 50px !important;
+      }
+    }
+  }
+}
+
+.__open_section {
+  margin-top: 20px;
+
+  h1 {
+    color: rgba(0, 0, 0, .8) $imp;
+    font-size: var(--font-size24) $imp;
+    margin-bottom: 10px $imp;
+  }
+
+  h2 {
+    color: rgba(0, 0, 0, .8) $imp;
+    font-size: var(--font-size20) $imp;
+    line-height: 1 $imp;
+    margin-top: 30px $imp;
+    margin-bottom: 15px $imp;
+  }
+}
+.__shiffer {
+  position: absolute;
+  left: 14px;
+  color: var(--accent);
+}
+.__opendata_item {
+  font-size: var(--font-size15);
+
+  &~.__opendata_item {
+    margin-top: 30px;
+  }
+
+  h3,
+  h4,
+  h5 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px !important;
+  }
+
+  .__margin-top {
+    margin-top: 30px !important;
+  }
+}
+
+
+pre {
+  margin: 0px;
+}
+.__pre {
+  padding: 0px;
+}
+pre {
+  color: $cw $imp;
+  padding: 10px 13px $imp;
+  background-color: rgb(34, 34, 34) $imp;
+  border-radius: $br12 + px $imp;
+  margin: 5px 0 0 $imp;
+  border: none $imp;
+
+  code {
+    padding: 0 $imp;
+    background-color: transparent $imp;
+  }
+
+  .hljs {
+    color: $cw $imp;
+  }
+
+  .hljs-string,
+  .hljs-doctag {
+    color: #65B042;
+  }
+
+  .hljs-tag,
+  .hljs-name,
+  .hljs-attribute {
+    color: #559AD3;
+    font-weight: normal;
+  }
+}
+

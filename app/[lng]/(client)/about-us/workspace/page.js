@@ -1,14 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Layout from '@/components/baseLayout';
-import { useSearchParams } from 'next/navigation';
-import Pagination from '@/components/articles/Pagination';
-import { useTranslation } from '@/app/i18n/client';
 import { useRouter } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
+import TextLoading from '@/components/Loading/Text/Index';
+import Pagination from '@/components/articles/Pagination';
+import OneField from '@/components/Loading/OneField/Index';
 import './workspace.scss';
 
 export default function Home({ params: { lng } }) {
-    const { t } = useTranslation(lng, "lng", "");
     const router = useRouter();
 
     const searchParams = useSearchParams();
@@ -64,7 +63,7 @@ export default function Home({ params: { lng } }) {
             }
 
             const result = await response.json();
-            
+
             if (result.status) {
                 setData(result.data);
                 setPagination(prev => ({
@@ -84,54 +83,55 @@ export default function Home({ params: { lng } }) {
         fetchArticles();
     }, [pagination.page]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
     return (
         <>
-            <div className="nso_about_us mt-40">
-                <div className="nso_container">
-                    <div className="__header flex flex-wrap w-full my-16 mb-8 items-center justify-between text-main">
-                        <div className="__title text-2xl font-semibold uppercase">
-                            {lng === "mn" ? "Нээлттэй ажлын байр" : "OPEN JOB VACANCY"}
-                        </div>
-                        <div className="__jf flex items-center">
-                            <div className="__jobs-count float-right mr-5">
-                                {lng === "mn" ? "Нийт" : "A total of"}
-                                <strong>{" " + pagination.total}</strong> {lng === "mn" ? "ажлын байр" : "jobs"}
-                            </div>
+            <div className="nso_container">
+                <div className="__header flex flex-wrap w-full my-16 mb-8 items-center justify-between text-main">
+                    <div className="__title text-2xl font-semibold uppercase">
+                        {lng === "mn" ? "Нээлттэй ажлын байр" : "OPEN JOB VACANCY"}
+                    </div>
+                    <div className="__jf flex items-center">
+                        <div className="__jobs-count float-right mr-5">
+                            {lng === "mn" ? "Нийт" : "A total of"}
+                            <strong>{loading ? "..." : " " + pagination.total}</strong> {lng === "mn" ? "ажлын байр" : "jobs"}
                         </div>
                     </div>
                 </div>
-                <div className="nso_container">
-                    <div className="nso_tab_content">
-                        <div className="__table">
-                            {
-                                data.map((dt, index) => {
-                                    return <div onClick={() => {
-                                        router.push(`/workspace/${dt.id}`);
-                                    }} key={index} className="ws_body mt-2 text-main border-b-2 border-dotted border-gray-400 cursor-pointer">
-                                        <div className="ws_title text-2xl font-semibold hover:text-blue-300">{dt.name}</div>
-                                        <div
-                                            className="ws_desc my-4 text-base"
-                                            dangerouslySetInnerHTML={{
-                                                __html: dt.body.length > 300 ? dt.body.substr(0, 300) + '...' : dt.body
-                                            }}
-                                        ></div>
-                                        <ul className='flex'>
-                                            <li className="ws_desc my-4 text-base">{dt.created_date.substr(0, 10)}</li>
-                                            <li className="ws_desc my-4 text-base ml-10">
-                                                {
-                                                    lng === "mn" ? location.filter(item => item.code === dt.location)[0].namemn : location.filter(item => item.code === dt.location)[0].nameen
-                                                }
-                                            </li>
-                                        </ul>
-                                    </div>
-                                })
-                            }
-                            <div className="nso_container mt-5 mb-5">
-                                <Pagination page={parseInt(pagination.page)} mainPath={"workspace"} articlesPerPage={pagination.pageSize} totalPages={pagination.total} path={"/"} lng={lng} />
-                            </div>
+            </div>
+            <div className="nso_container">
+                <div className="nso_tab_content">
+                    <div className="__table">
+                        {loading ? <>
+                            <TextLoading />
+                            <br/>
+                            <TextLoading />
+                            <br/>
+                            <TextLoading />
+                        </> :
+                            data.map((dt, index) => {
+                                return <div onClick={() => {
+                                    router.push(`/${lng}/about-us/workspace/${dt.id}`);
+                                }} key={index} className="ws_body mt-2 text-main border-b-2 border-dotted border-gray-400 cursor-pointer">
+                                    <div className="ws_title text-2xl font-semibold hover:text-blue-300">{dt.name}</div>
+                                    <div
+                                        className="ws_desc my-4 text-base"
+                                        dangerouslySetInnerHTML={{
+                                            __html: dt.body.length > 300 ? dt.body.substr(0, 300) + '...' : dt.body
+                                        }}
+                                    ></div>
+                                    <ul className='flex'>
+                                        <li className="ws_desc my-4 text-base">{dt.created_date.substr(0, 10)}</li>
+                                        <li className="ws_desc my-4 text-base ml-10">
+                                            {
+                                                lng === "mn" ? location.filter(item => item.code === dt.location)[0].namemn : location.filter(item => item.code === dt.location)[0].nameen
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            })
+                        }
+                        <div className="nso_container mt-5 mb-5">
+                            {loading ? <><OneField /><OneField /><OneField /></> : <Pagination page={parseInt(pagination.page)} mainPath={"workspace"} articlesPerPage={pagination.pageSize} totalPages={pagination.total} path={"/"} lng={lng} />}
                         </div>
                     </div>
                 </div>

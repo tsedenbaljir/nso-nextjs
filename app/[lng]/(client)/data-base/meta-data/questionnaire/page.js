@@ -4,8 +4,7 @@ import { Spin } from 'antd';
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryList from '@/components/Glossary/GlossaryList';
-import GlossaryFilter from '@/components/Glossary/GlossaryFilter';
-import SideBar from '../sidebar';
+import Sidebar from '../sidebar';
 
 export default function Glossary({ params: { lng }, searchParams }) {
     const { t } = useTranslation(lng, "lng", "");
@@ -14,10 +13,8 @@ export default function Glossary({ params: { lng }, searchParams }) {
     const [rows, setRows] = useState(10);
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [filterList, setFilterList] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [filterLoading, setFilterLoading] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState(null);
 
     const isMn = lng === 'mn';
 
@@ -27,33 +24,6 @@ export default function Glossary({ params: { lng }, searchParams }) {
         { label: t('metadata.title') }
     ];
 
-    // Fetch filters
-    useEffect(() => {
-        const fetchFilters = async () => {
-            try {
-                const response = await fetch('/api/glossary/sectors');
-                const data = await response.json();
-
-                if (data && (Array.isArray(data) || typeof data === 'object')) {
-                    const dataArray = Array.isArray(data) ? data : [data];
-                    const formattedFilters = dataArray.map(filter => ({
-                        ...filter,
-                        name: filter.namemn,
-                        name_eng: filter.nameen,
-                        code: filter.code,
-                        count: filter.count || 0
-                    }));
-
-                    setFilterList(formattedFilters.filter(filter => filter.count > 0));
-                }
-            } catch (error) {
-                console.error('Error fetching filters:', error);
-                setFilterList([]);
-            }
-        };
-        fetchFilters();
-    }, [lng]);
-
     // Fetch data based on search or normal view
     useEffect(() => {
         const fetchData = async () => {
@@ -61,7 +31,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
             try {
                 if (searchParams?.search) {
                     // If search parameter exists, use search API
-                    const response = await fetch(`/api/glossary/search?search=${searchParams.search}&lng=${lng}`);
+                    const response = await fetch(`/api/questionnaire/search?search=${searchParams.search}&lng=${lng}`);
                     const data = await response.json();
 
                     if (data.status) {
@@ -75,13 +45,10 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         pageSize: rows
                     });
 
-                    if (selectedFilter) {
-                        params.append('sectorType', selectedFilter.code);
-                    }
-
-                    const response = await fetch(`/api/glossary?${params}`);
+                    const response = await fetch(`/api/questionnaire?${params}`);
                     const data = await response.json();
-
+                    console.log(data);
+                    
                     if (data.status) {
                         setList(Array.isArray(data.data) ? data.data : []);
                         setTotalRecords(data.pagination.total);
@@ -98,14 +65,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
         };
 
         fetchData();
-    }, [searchParams?.search, first, rows, selectedFilter, lng]);
-
-    const handleFilterChange = (filter) => {
-        if (searchParams?.search) return; // Disable filters during search
-        setSelectedFilter(filter);
-        setFirst(0);
-        window.scrollTo(0, 0);
-    };
+    }, [searchParams?.search, first, rows, lng]);
 
     const onPageChange = (e) => {
         if (searchParams?.search) return; // Disable pagination during search
@@ -135,14 +95,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
                 <div className="nso_container">
                     <div className="sm:col-12 md:col-4 lg:col-3">
                         <br/>
-                        <SideBar lng={lng} />
-                        <GlossaryFilter
-                            filterList={filterList}
-                            selectedFilter={selectedFilter}
-                            handleFilterChange={handleFilterChange}
-                            t={t}
-                            isMn={isMn}
-                        />
+                        <Sidebar lng={lng} />
                     </div>
                     <div className="sm:col-12 md:col-8 lg:col-9">
                         <GlossaryList

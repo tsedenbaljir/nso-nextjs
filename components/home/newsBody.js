@@ -23,7 +23,7 @@ export default function index(product) {
         <div key={product.id}
             className="__posts cursor-pointer pr-2"
             onClick={() => {
-                router.push("/news/" + product.id);
+                router.push("/about-us/news/" + product.id);
             }}
         >
             <div className="relative w-full h-[200px] overflow-hidden">

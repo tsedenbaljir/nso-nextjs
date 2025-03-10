@@ -47,24 +47,22 @@ export default function Home({ params: { lng }, params }) {
 
     return (
         <>
-            <div className="nso_about_us mt-40">
-                <div className="nso_container">
-                    <div className="__body">
-                        <div className="__menu">
-                            <div className="__title">
-                                {t('legalMenu.LEGALFUND')}
-                            </div>
-                            <div className="main">
-                                <div className="__laws">
-                                    <div className="__info_detail_page">
-                                        {
-                                            loading ? Articles.map((dt) => {
-                                                return <MainBody dt={dt} />
-                                            }) : <div className='w-full'>
-                                                <Text />
-                                            </div>
-                                        }
-                                    </div>
+            <div className="nso_container">
+                <div className="__body">
+                    <div className="__menu">
+                        <div className="__title">
+                            {t('legalMenu.LEGALFUND')}
+                        </div>
+                        <div className="main">
+                            <div className="__laws">
+                                <div className="__info_detail_page">
+                                    {
+                                        loading ? Articles.map((dt) => {
+                                            return <MainBody dt={dt} />
+                                        }) : <div className='w-full'>
+                                            <Text />
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>

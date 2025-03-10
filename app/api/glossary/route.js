@@ -11,96 +11,73 @@ export async function GET(req) {
     const role = searchParams.get('role');
 
     try {
-        const offset = page * pageSize;
-
-        // Build WHERE clause
-        let whereConditions = [];
-        const params = [];
-
-        // Add published condition
-        whereConditions.push(role === "admin" ? 'wg.published in(0,1)' : 'wg.published = 1');
-
-        // Add sector type condition if provided
-        if (sectorType) {
-            whereConditions.push('wg.sector_type = ?');
-            params.push(sectorType);
-        }
-
-        // Add search condition if provided
-        if (search) {
-            const searchCondition = lng === 'mn' 
-                ? '(wg.name LIKE ? OR wg.info LIKE ?)'
-                : '(wg.name_eng LIKE ? OR wg.info_eng LIKE ?)';
-            whereConditions.push(searchCondition);
-            const searchPattern = `%${decodeURIComponent(search)}%`;
-            params.push(searchPattern, searchPattern);
-        }
-
-        const whereClause = whereConditions.join(' AND ');
-
-        // Get total count
-        const countQuery = `
-            SELECT COUNT(*) as total
-            FROM [NSOweb].[dbo].[web_1212_glossary] wg
-            LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc 
-                ON wg.[sector_type] = scc.[code]
-            WHERE ${whereClause}
-        `;
-
-        const totalResult = await db.raw(countQuery, params);
-        const totalCount = totalResult[0]?.total || 0;
-
-        // Get paginated data
-        const query = `
-            SELECT 
-                wg.[id],
-                wg.[name],
-                wg.[sector_type],
-                wg.[source],
-                wg.[info],
-                wg.[published],
-                wg.[created_by],
-                wg.[created_date],
-                wg.[last_modified_by],
-                wg.[last_modified_date],
-                wg.[name_eng],
-                wg.[source_eng],
-                wg.[info_eng],
-                scc.[namemn] as sector_name_mn,
-                scc.[nameen] as sector_name_en
-            FROM [NSOweb].[dbo].[web_1212_glossary] wg
-            LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc 
-                ON wg.[sector_type] = scc.[code]
-            WHERE ${whereClause}
-            ORDER BY ${role === "admin" ? 'wg.created_date DESC' : 'wg.name ASC'}
-            OFFSET ? ROWS
-            FETCH NEXT ? ROWS ONLY
-        `;
-
-        const results = await db.raw(query, [...params, offset, pageSize]);
-        const data = Array.isArray(results) ? results : [results];
-
+        const { data, totalCount } = await fetchDataFromDatabase({
+            page, pageSize, sectorType, search, lng, role
+        });
         return NextResponse.json({
             status: true,
-            data: data,
+            data,
             pagination: {
                 page,
                 pageSize,
                 total: totalCount
             }
         });
-
     } catch (error) {
         console.error('Error fetching glossary:', error);
         return NextResponse.json({
             status: false,
-            data: null,
-            pagination: {
-                page,
-                pageSize,
-                total: 0
-            },
-            message: "Failed to fetch glossary"
+            message: "Failed to fetch glossary",
+            pagination: { page, pageSize, total: 0 },
+            data: null
         }, { status: 500 });
     }
-} 
+}
+
+async function fetchDataFromDatabase({ page, pageSize, sectorType, search, lng, role }) {
+    const offset = page * pageSize;
+    const { whereClause, params } = buildWhereClause(sectorType, search, lng, role);
+
+    const countQuery = `
+        SELECT COUNT(*) as total
+        FROM [NSOweb].[dbo].[web_1212_glossary] wg
+        LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc ON wg.sector_type = scc.code
+        WHERE ${whereClause}
+    `;
+    const totalCount = (await db.raw(countQuery, params))[0]?.total || 0;
+
+    const query = `
+        SELECT wg.id, wg.name, wg.sector_type, wg.source, wg.info, wg.published,
+            wg.created_by, wg.created_date, wg.last_modified_by, wg.last_modified_date,
+            wg.name_eng, wg.source_eng, wg.info_eng,
+            scc.namemn as sector_name_mn, scc.nameen as sector_name_en
+        FROM [NSOweb].[dbo].[web_1212_glossary] wg
+        LEFT JOIN [NSOweb].[dbo].[sub_classification_code] scc ON wg.sector_type = scc.code
+        WHERE ${whereClause}
+        ORDER BY ${role === "admin" ? 'wg.created_date DESC' : 'wg.name ASC'}
+        OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+    `;
+    const results = await db.raw(query, [...params, offset, pageSize]);
+
+    return { data: results, totalCount };
+}
+
+function buildWhereClause(sectorType, search, lng, role) {
+    let whereConditions = [role === "admin" ? 'wg.published IN (0, 1)' : 'wg.published = 1'];
+    const params = [];
+
+    if (sectorType) {
+        whereConditions.push('wg.sector_type = ?');
+        params.push(sectorType);
+    }
+
+    if (search) {
+        const searchField = lng === 'mn' ? 'wg.name' : 'wg.name_eng';
+        const infoField = lng === 'mn' ? 'wg.info' : 'wg.info_eng';
+        whereConditions.push(`(${searchField} LIKE ? OR ${infoField} LIKE ?)`);
+        const searchPattern = `%${decodeURIComponent(search)}%`;
+        params.push(searchPattern, searchPattern);
+    }
+
+    return { whereClause: whereConditions.join(' AND '), params };
+}

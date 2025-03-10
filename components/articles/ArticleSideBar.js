@@ -31,7 +31,7 @@ export default function ArticleSideBar({ article }) {
                 article.slice(0, 6).map((art) => {
                     return <div className="__post cursor-pointer"
                         onClick={() => {
-                            router.push("/news/" + art.id);
+                            router.push("/about-us/news/" + art.id);
                         }}>
                         <a className="__posts">
                             <div className="relative w-full h-[200px] overflow-hidden">

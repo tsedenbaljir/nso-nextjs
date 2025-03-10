@@ -4617,10 +4617,16 @@ p-togglebutton.ng-dirty.ng-invalid>.p-togglebutton.p-button {
 }
 
 .p-breadcrumb {
-  background: var(--surface-a);
-  border: 1px solid #dee2e6;
-  border-radius: 3px;
-  padding: 1rem;
+  border: none;
+  background: transparent;
+  font-size: var(--font-size13);
+  color: var(--text-main);
+  padding: 0;
+
+  svg {
+    width: 10px;
+  }
+
 }
 
 .p-breadcrumb ul li .p-menuitem-link {

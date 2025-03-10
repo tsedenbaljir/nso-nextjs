@@ -13,7 +13,7 @@ export default function GlossaryList({
     onPageChange 
 }) {
     return (
-        <div className="__table_container">
+        <div className="__table_container -mt-22">
             <div className="nso_cate_body">
                 <div className="nso_tab">
                     <div className="nso_tab_content">

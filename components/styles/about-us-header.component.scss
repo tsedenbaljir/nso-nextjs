@@ -1,19 +1,14 @@
-.__header {
-    color: var(--text-main);
-    font-weight: 700;
-    font-size: var(--font-size24);
-    text-transform: uppercase;
-    letter-spacing: -1px;
-}
 
-.__logo {
-    width: clamp(200px, 75%, 300px) !important;
-    height: 100px;
-    background-image: url('/logo.png');
-    background-position: 50%;
-    background-size: contain;
-    background-repeat: no-repeat;
-    transition: .5s;
+.__header {
+    span {
+        color: var(--text-main);
+        font-family: sf-pro-text;
+        font-weight: 700;
+        font-size: var(--font-size24);
+        text-transform: uppercase;
+        letter-spacing: -1px;
+    }
+
 }
 
 .nso_about_us_menu {
@@ -41,9 +36,9 @@
 
 .about_us_header {
     display: flex;
-    // height: 124px;
+    height: 124px;
     margin-top: 162px;
-    background-image: url('/images/about_us/Vector.png');
+    // background-image: url('~src/assets/images/about_us/Vector.png');
 
     .nso_container {
         color: var(--text-main);
@@ -60,7 +55,6 @@
     }
 
 }
-
 
 .sub_menu {
     height: 100%;
@@ -79,10 +73,10 @@
         padding-inline-start: 0px;
 
         li {
-            font-size: var(--font-size15) !important;
+            font-size: var(--font-size15);
             font-weight: 500;
             padding: 20px 35px;
-            color: var(--text-main) !important;
+            color: var(--text-main);
             cursor: pointer;
 
             &:hover {
@@ -96,10 +90,14 @@
         }
 
         .active {
-            background-color: var(--surface-c) !important;
+            background-color: var(--surface-c);
             color: white !important;
         }
     }
+}
+
+.nso_page_header {
+    background: #f9fafb00;
 }
 
 @media only screen and (max-device-width: 480px) {

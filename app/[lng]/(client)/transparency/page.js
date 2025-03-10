@@ -1,7 +1,6 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
-import Layout from '@/components/baseLayout';
 import { useTranslation } from '@/app/i18n/client';
 
 export default function Transparency({ params: { lng } }) {

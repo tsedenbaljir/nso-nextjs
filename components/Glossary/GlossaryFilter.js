@@ -16,9 +16,9 @@ export default function GlossaryFilter({ filterList, selectedFilter, handleFilte
                                 ({filterList.reduce((sum, item) => sum + item.count, 0)})
                             </span>
                         </li>
-                        {filterList.map((item) => (
+                        {filterList.map((item, index) => (
                             <li
-                                key={item.sector_type}
+                                key={index}
                                 className={`cursor-pointer ${selectedFilter?.code === item.code ? 'active' : ''}`}
                                 onClick={() => handleFilterChange(item)}
                             >

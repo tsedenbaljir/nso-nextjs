@@ -21,9 +21,16 @@
 @import "@/components/styles/responsive.scss";
 @import "@/components/styles/transparency.scss";
 @import "@/components/styles/file-library.scss";
+@import "@/components/styles/statistic.scss";
 @import "@/components/styles/methodology-view.scss";
 @import "@/components/styles/file-library-list.scss";
+@import "@/components/styles/open-data.scss";
+@import "@/components/styles/opendata-view.scss";
+@import "@/components/styles/opendata-table.scss";
 
+// body{
+//     font-family: "sf-pro-text", roboto !important;
+// }
 // .route-loading-overlay {
 //     backdrop-filter: blur(5px);
 //     transition: all 0.3s ease-in-out;

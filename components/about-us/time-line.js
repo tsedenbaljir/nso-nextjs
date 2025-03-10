@@ -1,12 +1,8 @@
 "use client"
 import React, { useState } from 'react';
 import "@/components/styles/time-line.scss";
-import Layout from '@/components/baseLayout';
-import { useTranslation } from 'react-i18next';
-import { Timeline } from 'primereact/timeline';
 
-export default function AboutUs({ params: { lng } }) {
-    const { t } = useTranslation(lng, "lng", "");
+export default function TimeLine({ lng }) {
     const events = [
         { date: `1911`, desc: `Дотоод хэргийг бүгд захиран шийтгэдэг яамны Төв хэлтэс нь хүн ам, малын бүртгэл мэдээг эрхлэх  чиг үүрэгтэй байжээ. Төв хэлтэс байгуулагдсаны дараа 1911 оны өвлийн сүүл сарын 25-нд аймаг хошуудад хүн амын тоо, нутаглан буй газрын хэмжээ зураг бэлтгэн ирүүлэх тухай албан бичиг хүргүүлсэн байна.  Богд Жавзандамба хутагтын буулгасан зарлигт: “Хүн ам, үнэн хөрөнгийг магадлан тоолуулах нь олон шавь боолчуудын ахуй байдлыг тунгалаг толинд үзэх адил илэрхий толилох” зорилготой болохыг тэмдэглэжээ.` },
         { date: `1918`, desc: `Хүн ам, малын тооллого явуулсан.` },

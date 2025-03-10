@@ -12,9 +12,9 @@ export async function GET() {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Cache-Control": "no-store", // Ensures no caching
+                    "Cache-Control": "no-store", // Prevent caching at all levels
                     "Pragma": "no-cache", // HTTP 1.0
-                    "Expires": "0" // Proxies
+                    "Expires": "0" // Prevent caching by proxies
                 },
             }
         );
@@ -25,8 +25,15 @@ export async function GET() {
 
         const data = await response.json();
         
-        // Return response with no-cache headers
-        return NextResponse.json(data, { status: 200 });
+        // Return the response from Next.js API with no-cache headers
+        const apiResponse = NextResponse.json(data, { status: 200 });
+
+        // Prevent caching for the API response
+        apiResponse.headers.set('Cache-Control', 'no-store'); // no-store prevents any caching
+        apiResponse.headers.set('Pragma', 'no-cache'); // Disable caching in HTTP/1.0
+        apiResponse.headers.set('Expires', '0'); // Expired immediately
+
+        return apiResponse;
     } catch (error) {
         console.error("Error fetching Tableau key:", error);
         return NextResponse.json({ error: 'Failed to fetch Tableau key' }, { status: 500 });

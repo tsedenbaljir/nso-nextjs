@@ -53,7 +53,7 @@ export default function MainArticle({ name, path, mainPath, lng }) {
     }, []);
 
     return (
-        <div className="nso_about_us mt-35">
+        <>
             <div className="nso_container">
                 <div className="__about_post_cr">
                     <div className="__header">
@@ -68,6 +68,6 @@ export default function MainArticle({ name, path, mainPath, lng }) {
                 <Pagination page={parseInt(page)} mainPath={mainPath} articlesPerPage={articlesPerPage} totalPages={totalPages} path={path} lng={lng} />
             </div>
             <br />
-        </div>
+        </>
     );
 }

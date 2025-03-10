@@ -72,6 +72,8 @@ export default function DynamicSidebar({ subsector, lng }) {
                         };
                     })
                 );
+                console.log(menuWithSubcategories);
+                
                 setMenuItems(menuWithSubcategories);
             } catch (err) {
                 console.error("Error fetching data:", err);

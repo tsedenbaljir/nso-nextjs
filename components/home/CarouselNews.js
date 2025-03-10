@@ -18,10 +18,10 @@ export default function CarouselNews({ lng }) {
         },
         redirect: 'follow'
     };
+
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                // articles?job-postings=${page}&pageSize=${articlesPerPage}&lng=${lng}&type=${path}
                 const response = await fetch(`/api/articles?page=1&pageSize=24&lng=${lng}&type=latest`, {
                     ...requestOptions,
                     cache: 'no-store',
@@ -71,7 +71,7 @@ export default function CarouselNews({ lng }) {
                 <div className="__about_post_cr">
                     <div className="__header">
                         <div className="__title">
-                        {t('LASTNEWS')}
+                            {t('LASTNEWS')}
                         </div>
                     </div>
                     <div className="__post">
@@ -85,7 +85,7 @@ export default function CarouselNews({ lng }) {
                                 responsiveOptions={responsiveOptions}
                                 itemTemplate={newsBody}
                             /> : <Text />}
-                            <Link href="/news/latest"
+                            <Link href={`/${lng}/about-us/news/latest`}
                                 className="__action_area"
                             >
                                 <button className="nso_btn success">{lng === 'en' ? 'Read More' : 'Дэлгэрэнгүй'}</button>
