@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from '@/app/i18n/client';
-import Layout from '@/components/baseLayout';
 import Link from 'next/link';
 
 export default function TransparencyCategory({ params: { lng, name } }) {
@@ -31,50 +30,40 @@ export default function TransparencyCategory({ params: { lng, name } }) {
     };
 
     return (
-        <>
-            <div className="nso_statistic_section">
-                <div className="nso_container">
-                    <div className="w-full">
-                        <div className="transparency_header text-left">
-                            <h1>{categoryTitle}</h1>
-                        </div>
-                        <div className="transparency_list">
-                            {loading ? (
-                                <div className="loading">Уншиж байна...</div>
-                            ) : items.length > 0 ? (
-                                items.map((item, index) => (
-                                    <a key={item.id} 
-                                    href={item.file_path} 
+        <div className="nso_statistic_category" style={{ background: 'white' }}>
+            <div className="nso_container">
+                <div className="w-full">
+                    <div className="transparency_header">
+                        <div className="font-bold text-2xl">{categoryTitle}</div>
+                    </div>
+                    <div className="__card_groups">
+                        {loading ? (
+                            <div className="loading">Уншиж байна...</div>
+                        ) : items.length > 0 ? (
+                            items.map((item, index) => (
+                                <div key={index}
+                                    onClick={() => {
+                                        window.open(item.file_path, '_blank');
+                                    }}
                                     target="_blank"
-                                    className="transparency_item">
-                                        <div className="item_content">
-                                            <h3>{item.title}</h3>
-                                            {/* {item.description && (
-                                                <p>{item.description}</p>
-                                            )} */}
-                                            {/* {item.file_path && (
-                                                <a
-                                                    href={item.file_path}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="download_link"
-                                                >
-                                                    <i className="pi pi-file-pdf"></i>
-                                                    <span>PDF татах</span>
-                                                </a>
-                                            )} */}
-                                        </div>
-                                    </a>
-                                ))
-                            ) : (
-                                <div className="no_data">
-                                    Мэдээлэл олдсонгүй
+                                    className="__card"
+                                    style={{ background: 'var(--surface-bk2)' }}>
+                                    <div className="__category_group">
+                                        <h3>{item.title}</h3>
+                                    </div>
+                                    <div className="circle">
+                                        <i className="pi pi-arrow-right"></i>
+                                    </div>
                                 </div>
-                            )}
-                        </div>
+                            ))
+                        ) : (
+                            <div className="no_data">
+                                Мэдээлэл олдсонгүй
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 } 

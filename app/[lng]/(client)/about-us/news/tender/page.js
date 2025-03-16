@@ -9,7 +9,7 @@ export default function Home({ params: { lng } }) {
 
     return (
         <>
-            <MainArticle name={t('TENDER')} path="tender" mainPath="transparency" lng={lng} />
+            <MainArticle name={t('TENDER')} path="tender" mainPath="about-us/news" lng={lng} />
         </>
     );
 }
