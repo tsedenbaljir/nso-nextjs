@@ -43,23 +43,23 @@ export default function Index({ lng }) {
                         <div className="__group">
                             <div className="__highlight">
                                 <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Industry_service__service_livestock/DT_NSO_1001_021V1.px/`} target='blank' >
-                                    <span className="__desc">2023-12-31</span>
+                                    <span className="__desc">2024-12-30</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/tIvK--fOd--8ycP-bO-TwA_mR6_O7-w67Rma2T-r.png")' }}></span>
                                         {t('stats.pop5')}
                                     </span>
-                                    <span className="__count">64.7 сая</span>
+                                    <span className="__count">57.6 сая</span>
                                 </Link>
                                 <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Society%20and%20development__Household%20income%20and%20expenditure/DT_NSO_1900_018V1.px/`} target='blank' >
-                                    <span className="__desc">2024-01-01</span>
+                                    <span className="__desc">2024-12-31</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
                                         {t('stats.pop6')}
                                     </span>
-                                    <span className="__count">2.5 сая</span>
+                                    <span className="__count">2.6 сая</span>
                                 </Link>
                                 <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor1/DT_NSO_0400_069V2.px/`} target='blank' >
-                                    <span className="__desc">2024-12-01</span>
+                                    <span className="__desc">2024-09-30</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
                                         {t('stats.pop7')}
@@ -67,7 +67,7 @@ export default function Index({ lng }) {
                                     <span className="__count">2 сая</span>
                                 </Link>
                                 <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor/DT_NSO_0400_018V1.px/`} target='blank' >
-                                    <span className="__desc">2023-12-20</span>
+                                    <span className="__desc">2024-12-31</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/6ULXrEi2_5d0-UAql-_DYpEx-Dn3TMi4rw6-pG-6.png")' }}></span>
                                         {t('stats.pop8')}
