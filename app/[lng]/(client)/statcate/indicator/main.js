@@ -6,6 +6,8 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import LoadingDiv from "@/components/Loading/Text/Index";
 
+export const dynamic = "force-dynamic";
+
 export default function Main({ lng, sector, subsector }) {
     const [data, setData] = useState(null); // Store API data
     const [iframeSrc, setIframeSrc] = useState(""); // Store iframe URL

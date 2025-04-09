@@ -58,7 +58,7 @@ export default function Index({ lng }) {
                                     </span>
                                     <span className="__count">2.6 сая</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor1/DT_NSO_0400_069V2.px/`} target='blank' >
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labour_business__Wages/DT_NSO_0400_069V2.px/`} target='blank' >
                                     <span className="__desc">2024-09-30</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
@@ -66,7 +66,7 @@ export default function Index({ lng }) {
                                     </span>
                                     <span className="__count">2 сая</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor/DT_NSO_0400_018V1.px/`} target='blank' >
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labour_business__labour/DT_NSO_0400_018V1.px/`} target='blank' >
                                     <span className="__desc">2024-12-31</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/6ULXrEi2_5d0-UAql-_DYpEx-Dn3TMi4rw6-pG-6.png")' }}></span>

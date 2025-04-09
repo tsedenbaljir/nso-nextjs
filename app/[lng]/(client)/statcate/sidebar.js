@@ -54,7 +54,7 @@ export default function DynamicSidebar({ subsector, lng }) {
                         }));
 
                     } catch (error) {
-                        console.error(`Error fetching subcategories for ${categoryId}:`, error);
+                        // console.error(`Error fetching subcategories for ${categoryId}:`, error);
                         return [];
                     }
                 };
@@ -72,7 +72,7 @@ export default function DynamicSidebar({ subsector, lng }) {
                         };
                     })
                 );
-                console.log(menuWithSubcategories);
+                // console.log(menuWithSubcategories);
                 
                 setMenuItems(menuWithSubcategories);
             } catch (err) {

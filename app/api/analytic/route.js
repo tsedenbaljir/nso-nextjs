@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 
+export const dynamic = "force-dynamic";
+
 // Environment variables
 const serviceAccount = process.env.GOOGLE_SERVICE_ACCOUNT;
 const privateKey = process.env.GOOGLE_PRIVATE_KEY.replace('', '\n');
@@ -33,7 +35,8 @@ async function getGoogleAnalyticsToken() {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: data
-    });
+    },
+    { cache: "no-store" });
 
     const result = await tokenResponse.json();
     return result.access_token;
@@ -61,7 +64,8 @@ async function fetchAnalyticsReport(token) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(reportRequest)
-    });
+    },
+    { cache: "no-store" });
 
     const result = await response.json();
     return result;

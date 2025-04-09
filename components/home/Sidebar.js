@@ -5,7 +5,7 @@ export default function Sidebar({ t, lng }) {
     const menus = [
         {
             name: t('stats.pop1'),
-            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Pop__pop1/DT_NSO_0300_004V5.px/`,
+            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Population_Household__population_household/DT_NSO_0300_003V1.px/`,
             desc: "2024-12-31",
             phone: "3 544 835",
             success: "1.1 % ",
@@ -29,7 +29,7 @@ export default function Sidebar({ t, lng }) {
         },
         {
             name: t('stats.pop4'),
-            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labor__Labor/DT_NSO_0400_020V2.px/`,
+            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labour_business__labour/DT_NSO_0400_020V2.px/`,
             desc: "2024-12-31",
             phone: "5.3",
             success: "%",

@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from 'next/link';
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useRouter } from "next/navigation";
@@ -22,10 +21,11 @@ export default function Main({ sector, subsector, lng }) {
 
                 setData(result.data)
                 if (!Array.isArray(result.data)) {
-                    return [];
+                    return []; // Handle non-array result
                 }
+
             } catch (error) {
-                return [];
+                return []; // Handle error
             } finally {
                 setLoading(false);
             }

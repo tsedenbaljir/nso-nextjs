@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
+import axios from 'axios';
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
     const params = new URLSearchParams();
     params.append('key', 'value');
 
     try {
-        // Fetch data from the external API using `fetch`
-        const response = await fetch(
+        // Fetch data using axios instead of fetch
+        const response = await axios.get(
             `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${params.toString()}`,
             {
-                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Cache-Control": "no-store", // Prevent caching at all levels
@@ -19,14 +21,8 @@ export async function GET() {
             }
         );
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch Tableau key');
-        }
-
-        const data = await response.json();
-        
-        // Return the response from Next.js API with no-cache headers
-        const apiResponse = NextResponse.json(data, { status: 200 });
+        // With axios, the data is already parsed (no need for .json())
+        const apiResponse = NextResponse.json(response.data, { status: 200 });
 
         // Prevent caching for the API response
         apiResponse.headers.set('Cache-Control', 'no-store'); // no-store prevents any caching

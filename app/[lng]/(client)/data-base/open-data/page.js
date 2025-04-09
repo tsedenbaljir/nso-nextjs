@@ -92,7 +92,7 @@ export default function OpenData({ params: { lng } }) {
         setSelectedData({
             name: "Statistical API Endpoint",
             apiType: "POST",
-            api: "http://45.117.34.241/api/v1/mn/NSO/Pop/pop6/DT_NSO_0100_001V1.px",
+            api: process.env.BASE_API_URL + "/mn/NSO/Pop/pop6/DT_NSO_0100_001V1.px",
             urlInput: exampleTableData.urlInput,
             input: exampleTableData.input,
             output: exampleTableData.output,

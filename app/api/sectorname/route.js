@@ -13,6 +13,7 @@ export async function GET(req) {
     
     // Fetch categories from API
     const response = await fetch(API_URL);
+    
     const textData = await response.text();
     
     // Ensure JSON is valid by removing unexpected wrapping object

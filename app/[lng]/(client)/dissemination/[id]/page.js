@@ -1,22 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import "@/components/styles/news.scss";
-import Layout from '@/components/baseLayout';
-import dynamic from 'next/dynamic';
-import "@/components/styles/dissemination-view.scss";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import Text from '@/components/Loading/Text/Index';
 import PdfViewer from '@/components/PdfViewer/index';
 
-// Dynamically import PdfViewer with no SSR
-// const PdfViewer = dynamic(() => import('@/components/PdfViewer/index'), {
-//     ssr: false,
-//     loading: () => <div className="w-full h-[800px] flex items-center justify-center">
-//         <Text />
-//     </div>
-// });
+import "@/components/styles/news.scss";
+import "@/components/styles/dissemination-view.scss";
 
 export default function Home({ params: { lng, id } }) {
     const [article, setArticle] = useState(null);

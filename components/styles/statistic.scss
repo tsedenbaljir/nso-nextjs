@@ -2,12 +2,12 @@
 	width: 6px;
 }
 
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
 	background: var(--surface-b);
 	border-radius: 10px;
 	margin: 90px 0 20px 0;
 }
-   
+
 ::-webkit-scrollbar-thumb {
 	background: var(--surface-dark);
 	border-radius: 10px;
@@ -40,7 +40,7 @@
 	}
 }
 
-.nso_statistic_category {
+.statcatebody {
 	width: 100%;
 	background: var(--surface-bk3);
 	padding: 80px 0;
@@ -55,25 +55,25 @@
 			margin-bottom: 30px;
 			margin-left: 0px;
 			width: calc(33.333% - 30px);
-     		max-width: 370px;
-     		height: 300px;
-     		background: var(--surface-a);
-     		padding: 30px;
-     		display: flex;
-     		flex-direction: column;
-     		border-top: 1px solid var(--surface-c);
-			overflow:auto;
+			max-width: 370px;
+			height: 300px;
+			background: var(--surface-a);
+			padding: 30px;
+			display: flex;
+			flex-direction: column;
+			border-top: 1px solid var(--surface-c);
+			overflow: auto;
 			word-wrap: break-word;
 
 			// --surface-b?
 			background-image: linear-gradient(to top, var(--surface-a), var(--surface-a)),
-  			  linear-gradient(to top, var(--surface-a), var(--surface-a)),
-  			  linear-gradient(to top, var(--surface-b), var(--surface-a)),
-  			  linear-gradient(to bottom,  var(--surface-a), var(--surface-a));
-  			background-position: bottom center, top center, bottom center, top center;
-  			background-repeat: no-repeat;
-  			background-size: 100% 0, 100% 0, 100% 20%, 100% 0;
-  			background-attachment: local, local, scroll, scroll;
+				linear-gradient(to top, var(--surface-a), var(--surface-a)),
+				linear-gradient(to top, var(--surface-b), var(--surface-a)),
+				linear-gradient(to bottom, var(--surface-a), var(--surface-a));
+			background-position: bottom center, top center, bottom center, top center;
+			background-repeat: no-repeat;
+			background-size: 100% 0, 100% 0, 100% 20%, 100% 0;
+			background-attachment: local, local, scroll, scroll;
 
 			.__title {
 				font-size: var(--font-size16);
@@ -87,6 +87,7 @@
 				display: flex;
 				flex-direction: column;
 				position: relative;
+
 				span {
 					font-size: var(--font-size15);
 					font-weight: 400;
@@ -101,6 +102,7 @@
 			}
 		}
 	}
+
 }
 
 .nso_statistic_news {
@@ -112,12 +114,15 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		width: 100%;
-		.nso_tab_content {	
+
+		.nso_tab_content {
 			.nso_news_cards {
-				display: flex;;
+				display: flex;
+				;
 				flex-wrap: wrap;
 				width: 100%;
 				justify-content: space-between;
+
 				.nso_news_card {
 					margin-top: 30px;
 					padding: 0 5px;
@@ -128,6 +133,7 @@
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
+
 					.__img {
 						width: 100%;
 						height: 152px;
@@ -136,6 +142,7 @@
 						background-size: contain;
 						background-repeat: no-repeat;
 					}
+
 					.__date {
 						margin-left: calc(-100% + 70px);
 					}
@@ -211,16 +218,17 @@
 
 .nso_statistic_intrest {
 	background-color: var(--surface-a);
-	
+
 	.__intrest_groups {
 		padding: 80px 0;
 		width: 100%;
 		background: var(--surface-a);
+
 		.__intrest_card_groups {
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-between;
-			
+
 			padding-top: 20px;
 			width: 100%;
 
@@ -243,6 +251,7 @@
 						background-image: url('/images/int1.png');
 					}
 				}
+
 				&:nth-child(1):hover {
 					.__icons {
 						background-image: url('/images/int1-1.png');
@@ -254,6 +263,7 @@
 						background-image: url('/images/int2.png');
 					}
 				}
+
 				&:nth-child(2):hover {
 					.__icons {
 						background-image: url('/images/int2-1.png');
@@ -265,6 +275,7 @@
 						background-image: url('/images/int3.png');
 					}
 				}
+
 				&:nth-child(3):hover {
 					.__icons {
 						background-image: url('/images/int3-1.png');
@@ -276,6 +287,7 @@
 						background-image: url('/images/int4.png');
 					}
 				}
+
 				&:nth-child(4):hover {
 					.__icons {
 						background-image: url('/images/int4-1.png');
@@ -287,6 +299,7 @@
 						background-image: url('/images/int5.png');
 					}
 				}
+
 				&:nth-child(5):hover {
 					.__icons {
 						background-image: url('/images/int5-1.png');
@@ -298,6 +311,7 @@
 						background-image: url('/images/int6.png');
 					}
 				}
+
 				&:nth-child(6):hover {
 					.__icons {
 						background-image: url('/images/int6-1.png');
@@ -318,6 +332,7 @@
 					font-weight: 500;
 					font-size: var(--font-size16);
 					color: var(--text-main);
+
 					a {
 						color: var(--text-main);
 						text-decoration: none;
@@ -330,36 +345,43 @@
 					font-size: var(--font-size16);
 					color: var(--text-desc);
 				}
+
 				button {
 					position: absolute;
 					bottom: 7%;
 					right: 9%;
 					width: 24px;
 					height: 24px;
-					border: none; 
+					border: none;
 					color: var(--accent);
 					background-color: Transparent;
 					cursor: pointer;
+
 					i {
-					  margin: 2px 0 0 -2px;
-					  font-size: var(--font-size15);
-					}	
+						margin: 2px 0 0 -2px;
+						font-size: var(--font-size15);
+					}
 				}
 			}
-			.__intrest_card:hover{
+
+			.__intrest_card:hover {
 				background: var(--surface-c);
 				color: #FFF;
+
 				.__name {
 					color: #FFF;
+
 					a {
 						color: #FFF;
 						text-decoration: none;
 					}
 				}
+
 				.__desc {
 					color: #FFF;
 					opacity: .5;
 				}
+
 				button {
 					color: #FFF;
 				}
