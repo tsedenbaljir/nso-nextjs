@@ -191,7 +191,7 @@ export default function MenusContent() {
             <TabView activeIndex={activeTab} onTabChange={(e) => setActiveTab(e.index)}>
                 <TabPanel header="Ангиал">
                     <div className="flex justify-between items-center mb-4">
-                        <h1 className="text-2xl font-bold">Ангилал</h1>
+                        <h1 className="text-2xl font-bold ml-5">Ангилал</h1>
                         <button
                             onClick={() => {
                                 setEditingCategory(null);
