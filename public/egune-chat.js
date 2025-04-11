@@ -84,7 +84,7 @@ if (document.body != null) {
 } else {
     const rootElement = document.documentElement;
     const firstTier = rootElement.childNodes;
-    firstTier[1].innerHTML = firstTier[0].innerHTML + `<div class="egune-chat" style="z-index: 999;position:fixed !important"><div class="egune-chat-box"></div><button class="floating-btn" onclick="buttonClick()"></button></div>`;
+    firstTier[1].innerHTML = firstTier[0].innerHTML + `<div className="egune-chat" style="z-index: 999;position:fixed !important"><div className="egune-chat-box"></div><button className="floating-btn" onclick="buttonClick()"></button></div>`;
 }
 
 const floatingBtn = document.getElementsByClassName("floating-btn")[0];

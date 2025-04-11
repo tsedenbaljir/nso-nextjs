@@ -154,13 +154,9 @@ export default function Glossary({ params }) {
     );
   }
 
-  const breadMap = [
-    { label: t('home'), url: [lng ? 'mn' : 'en'] },
-    { label: t('statCate.methodologyText') }
-  ];
   return (
     <div className="nso_statistic_section">
-      <Path params={params} name={'statCate.methodologyText'} />
+      <Path params={params} name={t('statCate.methodologyText')} />
       <div className="nso_container">
         <div className="sm:col-12 md:col-4 lg:col-3">
           <GlossaryFilter

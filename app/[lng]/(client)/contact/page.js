@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Tabs } from 'antd';
+import { useTranslation } from '@/app/i18n/client';
+import { BreadCrumb } from 'primereact/breadcrumb';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
 
@@ -10,6 +12,14 @@ export default function Contact({ params: { lng } }) {
     const [contactData, setContactData] = useState(null);
     const [webpageData, setWebpageData] = useState(null);
     const [contactDataProvince, setContactDataProvince] = useState(null);
+
+    const { t } = useTranslation(lng, "lng", "");
+    const isMn = lng === 'mn';
+
+    const breadMap = [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('footer.contact') },
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -122,9 +132,19 @@ export default function Contact({ params: { lng } }) {
 
     return (
         <>
-            <div className='nso_about_us mt-44'>
-                <div className='nso_statistic_category'>
+            <div className='nso_statistic_section'>
+                <div class="nso_page_header">
                     <div className="nso_container">
+                        <div className="__header">
+                            <span className="__page_name">
+                                {t("footer.contact")}
+                            </span>
+                            <BreadCrumb model={breadMap} />
+                        </div>
+                    </div>
+                </div>
+                <div class="nso_statistic_category" style={{ background: "var(--surface-a)" }}>
+                    <div class="nso_container">
                         <Tabs
                             defaultActiveKey="1"
                             items={items}

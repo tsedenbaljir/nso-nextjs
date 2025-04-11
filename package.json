@@ -55,6 +55,7 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "sass": "^1.77.8",
+    "styled-components": "^6.1.17",
     "tedious": "^18.3.0"
   },
   "devDependencies": {

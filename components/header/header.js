@@ -1,19 +1,29 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Submenu from '../menus/submenu/index';
 import Link from 'next/link';
 import { Path } from '@/utils/path';
+import { useRouter } from "next/navigation";
+import Submenu from '../menus/submenu/index';
+import { PanelMenu } from "primereact/panelmenu";
 import OneField from '@/components/Loading/OneField/Index';
 
 const Header = ({ lng }) => {
 
     var pth = Path();
+    const router = useRouter();
+
     const [selectedMenu, setSelectedMenu] = useState(null);
     const [menuShow, setMenuShow] = useState(false);
     const [menus, setMenus] = useState([]);
+    const [menusMobile, setMenusMobile] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showUp, setShowUp] = useState(null);
+
+    const [menusSub, setMenusSub] = useState([]);
+    const [loadingSub, setLoadingSub] = useState(false);
+
     const [verticalOffset, setVerticalOffset] = useState(0);
+    const [isShowMobile, setIsShowMobile] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -33,6 +43,26 @@ const Header = ({ lng }) => {
 
 
     useEffect(() => {
+        const fetchMenusSub = async () => {
+            try {
+                const response = await fetch('/api/menus/admin');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const res = await response.json();
+                const filteredMenus = res.data.filter(menu =>
+                    menu.category_id === 4 &&
+                    menu.is_active === true
+                );
+                setMenusSub(filteredMenus);
+                setLoadingSub(true);
+            } catch (error) {
+                console.error('Error fetching menus:', error);
+            }
+        };
+
+        fetchMenusSub();
+
         const fetchMenus = async () => {
             try {
                 const response = await fetch('/api/menus/admin');
@@ -67,6 +97,33 @@ const Header = ({ lng }) => {
                         subway: subMenusTools.filter(tool => tool.parent_id === sub.id)
                     }))
                 }));
+                // mobile menu
+                const menuWithSubcategories = await Promise.all(
+                    menusWithSubs.map(async (category) => {
+                        return {
+                            label: lng === 'mn' ? category.name_mn : category.name_en,
+                            id: category.id,
+                            items: category.subMenus.length > 0 && category.subMenus.map((item) => ({
+                                id: item.id,
+                                label: lng === 'mn' ? item.name_mn : item.name_en,
+                                items: item.subway.length > 0 && item.subway.map((subs) => ({
+                                    id: subs.id,
+                                    label: lng === 'mn' ? subs.name_mn : subs.name_en,
+                                    command: () => {
+                                        router.push(`/${lng}/${subs.url}`);
+                                    }
+                                })),
+                            })),
+                            command: () => {
+                                if (category?.url)
+                                    router.push(`/${lng}/${category?.url}`);
+                            }
+                        };
+                    })
+                );
+                // mobile menu set
+                setMenusMobile(menuWithSubcategories)
+                // desktop menu set
                 setMenus(menusWithSubs);
                 setLoading(true);
             } catch (error) {
@@ -76,7 +133,7 @@ const Header = ({ lng }) => {
 
         fetchMenus();
     }, []);
-    
+
     const setDropDownActive = (menuId, index) => {
         const selectedSubMenu = menus.find(e => e.id === menuId)?.subMenus;
 
@@ -124,6 +181,9 @@ const Header = ({ lng }) => {
         );
     };
 
+    const onShowMobileMenu = () => {
+        setIsShowMobile(!isShowMobile);
+    }
     // Main menu component
     const MainMenu = ({ menus, loading, lng, pth }) => {
         return (
@@ -145,6 +205,12 @@ const Header = ({ lng }) => {
                         </>
                     }
                 </ul>
+                <ul className="__mobile_menu">
+                    <li>
+                        {/* (click)="onShowMobileMenu($event)"  */}
+                        <a className="__mobile_menu_bar icon" onClick={() => { onShowMobileMenu() }}></a>
+                    </li>
+                </ul>
             </div>
         );
     };
@@ -162,6 +228,14 @@ const Header = ({ lng }) => {
                             pth={pth}
                         />
                     </div>
+                </div>
+                <div className={`__dropdown __mobile ${isShowMobile && 'show'}`}>
+                    {loading && <PanelMenu model={menusMobile} className="w-full nso_cate_selection" />}
+                    {loadingSub && menusSub.map((its) => {
+                        return <div className='pt-4'>
+                            <Link href={'/${lng}/' + its.url} className='font-semibold text-lg'>{its.name_mn}</Link>
+                        </div>
+                    })}
                 </div>
                 <div className={`__dropdown ${menuShow && 'show'}`}>
                     <div className="nso_container">

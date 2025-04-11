@@ -9,7 +9,7 @@ export default function Statecate({ children, params: { lng } }) {
 
     const breadMap = [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-        { label: t('transparency.title'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] },
+        { label: t('transparency'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] },
     ];
 
     return (
@@ -19,7 +19,7 @@ export default function Statecate({ children, params: { lng } }) {
                     <div className="nso_container">
                         <div className="__header">
                             <span className="__page_name">
-                                {t("transparency.title")}
+                                {t("transparency")}
                             </span>
                             <BreadCrumb model={breadMap} />
                         </div>

@@ -6,27 +6,6 @@
     max-height: calc(100vh - 110px);
     overflow-y: auto;
 
-    p-panelmenu {
-      .p-component.p-panelmenu-header {
-        a {
-          background: var(--surface-a);
-          border: none;
-          margin: 4px 0px;
-        }
-      }
-
-      .p-panelmenu-header.p-highlight {
-        color: var(--text-accent);
-      }
-
-      .p-panelmenu-panel .p-panelmenu-content {
-        border: none;
-      }
-
-      .p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover {
-        color: var(--text-accent);
-      }
-    }
   }
 
   .nso_header {
@@ -965,7 +944,7 @@
         .p-panelmenu-header {
           .p-panelmenu-header-link {
             padding: 0 !important;
-            border-bottom: 1px solid #dee2e6 !important;
+            // border-bottom: 1px solid #dee2e6 !important;
           }
         }
       }
@@ -1034,27 +1013,6 @@
     max-height: calc(100vh - 110px);
     overflow-y: auto;
 
-    p-panelmenu {
-      .p-component.p-panelmenu-header {
-        a {
-          background: var(--surface-a);
-          border: none;
-          margin: 4px 0px;
-        }
-      }
-
-      .p-panelmenu-header.p-highlight {
-        color: var(--text-accent);
-      }
-
-      .p-panelmenu-panel .p-panelmenu-content {
-        border: none;
-      }
-
-      .p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover {
-        color: var(--text-accent);
-      }
-    }
   }
 
   .nso_header {
@@ -2055,28 +2013,6 @@
   .__mobile {
     max-height: calc(100vh - 110px);
     overflow-y: auto;
-
-    p-panelmenu {
-      .p-component.p-panelmenu-header {
-        a {
-          background: var(--surface-a);
-          border: none;
-          margin: 4px 0px;
-        }
-      }
-
-      .p-panelmenu-header.p-highlight {
-        color: var(--text-accent);
-      }
-
-      .p-panelmenu-panel .p-panelmenu-content {
-        border: none;
-      }
-
-      .p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover {
-        color: var(--text-accent);
-      }
-    }
   }
 
   .nso_header {

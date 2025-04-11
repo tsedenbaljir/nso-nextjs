@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import Text from '@/components/Loading/Text/Index';
 import MainBody from '@/components/laws/MainBody';
+import { useRouter, usePathname } from 'next/navigation'
 import '@/components/styles/laws.scss';
 
 export default function Home({ params: { lng }, params }) {
     const { t } = useTranslation(lng, "lng", "");
-
+    const router = useRouter();
+    const path = usePathname();
     // States
     const [Articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -22,7 +24,7 @@ export default function Home({ params: { lng }, params }) {
 
     const fetchArticles = async () => {
         try {
-            const response = await fetch(`/api/laws?type=${params.name}`, {
+            const response = await fetch(`/api/laws?type=${params.name === "main" ? "legal" : params.name}`, {
                 ...requestOptions,
                 cache: 'no-store',
             });
@@ -32,6 +34,7 @@ export default function Home({ params: { lng }, params }) {
             }
 
             const articlesData = await response.json();
+            console.log(articlesData);
 
             setArticles(articlesData.data);
             setLoading(true);
@@ -45,6 +48,10 @@ export default function Home({ params: { lng }, params }) {
         fetchArticles();
     }, []);
 
+    function direct(parameter) {
+        router.push(parameter);
+    }
+
     return (
         <>
             <div className="nso_container">
@@ -53,17 +60,43 @@ export default function Home({ params: { lng }, params }) {
                         <div className="__title">
                             {t('legalMenu.LEGALFUND')}
                         </div>
-                        <div className="main">
-                            <div className="__laws">
-                                <div className="__info_detail_page">
-                                    {
-                                        loading ? Articles.map((dt) => {
-                                            return <MainBody dt={dt} />
-                                        }) : <div className='w-full'>
-                                            <Text />
-                                        </div>
-                                    }
-                                </div>
+                        <ul>
+                            <li
+                                onClick={() => { direct('main') }}
+                                className={`${path.includes('main') ? 'active' : ''}`}
+                            >
+                                {t('legalMenu.Legal')}
+                            </li>
+                            <li
+                                onClick={() => { direct('rules') }}
+                                className={`${path.includes('rules') ? 'active' : ''}`}
+                            >
+                                {t('legalMenu.Rules')}
+                            </li>
+                            <li
+                                onClick={() => { direct('command') }}
+                                className={`${path.includes('command') ? 'active' : ''}`}
+                            >
+                                {t('legalMenu.Command')}
+                            </li>
+                            <li
+                                onClick={() => { direct('documents') }}
+                                className={`${path.includes('documents') ? 'active' : ''}`}
+                            >
+                                {t('legalMenu.Documents')}
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="main">
+                        <div className="__laws">
+                            <div className="__info_detail_page">
+                                {
+                                    loading ? Articles.map((dt) => {
+                                        return <MainBody dt={dt} />
+                                    }) : <div className='w-full'>
+                                        <Text />
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

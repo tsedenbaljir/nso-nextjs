@@ -24,8 +24,8 @@ export default function Index({ lng }) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const res = await response.json();
-                const filteredMenus = res.data.filter(menu => 
-                    menu.category_id === 4 && 
+                const filteredMenus = res.data.filter(menu =>
+                    menu.category_id === 4 &&
                     menu.is_active === true
                 );
                 setMenus(filteredMenus);
@@ -64,17 +64,35 @@ export default function Index({ lng }) {
                         menus.map((menu, index) => (
                             <li key={index} className={`${pth.includes(menu.path) && 'active-link-top'}`}>
                                 <Link
-                                    className="__stat_top_title text-xs font-normal" 
+                                    className="__stat_top_title text-xs font-normal"
                                     href={menu.url || "#"}
                                 >
                                     {lng === 'mn' ? menu.name_mn : menu.name_en}
                                 </Link>
                             </li>
-                        )) : 
+                        )) :
                         <div>
                             <OneField /><OneField /><OneField />
                         </div>
                     }
+                    <li className='font-medium' onClick={switchLanguage}>
+                        {lng === 'mn' ? 'EN' : 'MN'}
+                    </li>
+                </ul>
+
+                <ul className="__dock_menu">
+                    <li className="__dock_item">
+                        <span className="dock1"></span>
+                    </li>
+                    <li className="__dock_item">
+                        <span className="dock2"></span>
+                    </li>
+                    <li className="__dock_item">
+                        <span className="dock3"></span>
+                    </li>
+                    <li className="__dock_item">
+                        <a href="tel:19001212"><span className="dock4"></span></a>
+                    </li>
                     <li className='font-medium' onClick={switchLanguage}>
                         {lng === 'mn' ? 'EN' : 'MN'}
                     </li>

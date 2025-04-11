@@ -6,7 +6,7 @@ import { Carousel } from 'primereact/carousel';
 import { useTranslation } from '@/app/i18n/client';
 import Text from '@/components/Loading/Text/Index';
 
-export default function CarouselNews({ lng }) {
+export default function CarouselTender({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default function CarouselNews({ lng }) {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(`/api/articles?page=1&pageSize=24&lng=${lng}&type=media`, {
+                const response = await fetch(`/api/articles?page=1&pageSize=24&lng=${lng}&type=tender`, {
                     ...requestOptions,
                     cache: 'no-store',
                 });
@@ -71,7 +71,7 @@ export default function CarouselNews({ lng }) {
                 <div className="__about_post_cr">
                     <div className="__header">
                         <div className="__title">
-                            {t('MEDIANEWS')}
+                            {t('TENDER')}
                         </div>
                     </div>
                     <div className="__post">
@@ -85,7 +85,7 @@ export default function CarouselNews({ lng }) {
                                 responsiveOptions={responsiveOptions}
                                 itemTemplate={newsBody}
                             /> : <Text />}
-                            <Link href={`/${lng}/about-us/news/media`}
+                            <Link href={`/${lng}/about-us/news/tender`}
                                 className="__action_area"
                             >
                                 <button className="nso_btn success">{lng === 'en' ? 'Read More' : 'Дэлгэрэнгүй'}</button>

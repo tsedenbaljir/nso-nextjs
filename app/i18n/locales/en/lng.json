@@ -9,25 +9,6 @@
     "empty": "Not found",
     "other": "Other"
   },
-  "stats": {
-    "pop1": "Population",
-    "pop2": "Inflation rate",
-    "pop3": "Gross domestic product",
-    "pop4": "Unemployment rate",
-    "pop5": "Livestock",
-    "pop6": "Household income per month",
-    "pop7": "Median wage",
-    "pop8": "Unemployment rate"
-  },
-  "mainWelcome": {
-    "mainSite": "WEB SITE",
-    "news": "NEWS INFORMATION",
-    "statistics": "STATISTICAL DATA",
-    "publications": "PUBLICATIONS",
-    "reports": "REPORTS & ANALYSIS",
-    "dataNation": "DATA NATIONAL",
-    "metaData": "META DATA"
-  },
   "aboutUsJson": {
     "VSZ": "National <br />Council",
     "DZ": "Board of <br /> Directors",
@@ -43,11 +24,11 @@
     "G2x1": "Price Statistics Division",
     "G2x2": "Agriculture, Environment and Industrial Statistics Division",
     "G2x3": "Money, Finance and Service Statistics Division",
-    "G3": "Social statistics department<br /><br />",
+    "G3": "Social Statistics department<br /><br />",
     "G3x1": "Household-based survey division",
-    "G3x2": "Social statistics division",
+    "G3x2": "Social Statistics division",
     "G4": "Census and Data Analysis Department<br /><br />",
-    "G4x1": "Division of Research, Analysis and Sampling",
+    "G4x1": "Research, Analysis and Sampling Division",
     "G4x2": "Population and housing Census Division",
     "G4x3": "Business Registration and Census Division",
     "G5": "Information and Technology Department",
@@ -122,7 +103,6 @@
   "nsoNews": "News of NSO",
   "law": "Law",
   "legal": "Legal",
-  "warning": "Warning",
   "legalMenu": {
     "Legal": "Legal",
     "Command": "Command",
@@ -164,7 +144,6 @@
   },
   "Objective": "Objective",
   "menuAboutUs": {
-    "education":"Education",
     "news": "News",
     "legal": "Legal",
     "workspace": "Job vacancy",

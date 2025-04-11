@@ -64,7 +64,7 @@ export default function Index({ lng }) {
                                         <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
                                         {t('stats.pop7')}
                                     </span>
-                                    <span className="__count">2 сая</span>
+                                    <span className="__count">2.2 сая</span>
                                 </Link>
                                 <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labour_business__labour/DT_NSO_0400_018V1.px/`} target='blank' >
                                     <span className="__desc">2024-12-31</span>

@@ -56,7 +56,7 @@ export default function Statecate({ children, params: { lng } }) {
                                     {t('menuAboutUs.workspace')}
                                 </li>
                                 <li
-                                    onClick={() => router.push('/' + lng + '/about-us/news/latest')}
+                                    onClick={() => router.push('/' + lng + '/about-us/news/home')}
                                     className={`${pathname.includes('/about-us/news/') ? 'active' : ''}`}
                                 >
                                     {t('menuAboutUs.news')}

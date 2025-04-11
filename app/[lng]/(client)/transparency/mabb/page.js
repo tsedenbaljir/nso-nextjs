@@ -11,7 +11,7 @@ export default function componentName() {
             <div className="nso_statistic_category" style={{ background: 'white' }}>
                 <div className="nso_container">
                     <div style={{ width: '70%', height: 'auto', overflow: 'hidden', textAlign: 'justify' }}>
-                        <div id="__one" class="one" style={{ textAlign: 'justify' }}>
+                        <div id="__one" className="one" style={{ textAlign: 'justify' }}>
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}

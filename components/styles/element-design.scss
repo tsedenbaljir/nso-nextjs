@@ -313,7 +313,7 @@
 
 .nso_cate_selection {
     width: 100%;
-    border-right: .5px solid var(--border-g);
+    // border-right: .5px solid var(--border-g);
 
     &.min_cate {
         max-width: 270px;
@@ -376,8 +376,10 @@
                 border-right: none;
                 border-radius: 0px;
 
-                .p-submenu-icon {
-                    display: none;
+                @media only screen and (min-device-width: 480px) {
+                    .p-submenu-icon {
+                        display: none;
+                    }
                 }
             }
         }

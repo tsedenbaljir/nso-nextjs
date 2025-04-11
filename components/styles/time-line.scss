@@ -22,24 +22,6 @@
 .card {
     left: 0;
 }
-@media only screen and (max-width: 1000px) {
-    .card {
-        width: 900px;
-        overflow-x: scroll;
-    }
-}
-@media only screen and (max-width: 700px) {
-    .card {
-        width: 576px;
-        overflow-x: scroll;
-    }
-}
-@media only screen and (max-width: 400px) {
-    .card {
-        width: 366px;
-        overflow-x: scroll;
-    }
-}
 
 .__middlecircle {
     border-radius: 100%;
@@ -108,4 +90,34 @@
 
 .__about_img {
     margin-left: 40px;
+}
+
+.desc-timeline {
+    width: 100%;
+    display: block;
+}
+
+@media only screen and (max-width: 1000px) {
+    .card {
+        width: 900px;
+        overflow-x: scroll;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .card {
+        width: 576px;
+        overflow-x: scroll;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .card {
+        width: 366px;
+        overflow-x: scroll;
+    }
+
+    .desc-timeline {
+        width: 180px !important;
+    }
 }
