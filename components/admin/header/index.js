@@ -19,7 +19,7 @@ export default function componentName(props) {
                     </div>
                     <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
                         <ul className="flex items-center gap-2 2xsm:gap-4">
-                            {pth !== "dashboard" && pth !== "laws" && pth !== "glossary"
+                            {pth !== "dashboard" && pth !== "laws" && pth !== "glossary" && pth !== "contact"
                                 && <Link href={
                                     pth === "news" ? "/mn/admin/news/new" :
                                         pth === "transparency" ? "/mn/admin/transparency/new" :
