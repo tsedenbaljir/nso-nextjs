@@ -1,6 +1,10 @@
+import React, { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 export default function MenuTable({
@@ -11,6 +15,8 @@ export default function MenuTable({
     onAddSubmenu,
     categories = []
 }) {
+    const [globalFilter, setGlobalFilter] = useState('');
+
     const indexBodyTemplate = (rowData, props) => {
         return props.rowIndex + 1;
     };
@@ -50,8 +56,8 @@ export default function MenuTable({
     const statusTemplate = (rowData) => {
         return (
             <span className={`px-2 py-1 text-xs rounded-full ${rowData.is_active ?
-                    'bg-green-100 text-green-800' :
-                    'bg-gray-100 text-gray-800'
+                'bg-green-100 text-green-800' :
+                'bg-gray-100 text-gray-800'
                 }`}>
                 {rowData.is_active ? 'Идэвхтэй' : 'Идэвхгүй'}
             </span>
@@ -88,71 +94,89 @@ export default function MenuTable({
         );
     };
 
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-start">
+                <IconField iconPosition="right">
+                    <InputIcon className="pi pi-search" />
+                    <InputText className='w-[300px]' value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Хайх ..." />
+                </IconField>
+            </div>
+        );
+    };
+
+    const header = renderHeader();
+
     return (
-        <DataTable
-            value={data}
-            dataKey="id"
-            paginator
-            rows={15}
-            loading={loading}
-            rowsPerPageOptions={[15]}
-            className="p-datatable-sm"
-            emptyMessage="Цэс олдсонгүй"
-            currentPageReportTemplate="Нийт {totalRecords} цэснээс {first}-{last}"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
-            loadingIcon={() => (
-                <div className="flex justify-center items-center h-32">
-                    <ProgressSpinner
-                        style={{ width: '50px', height: '50px' }}
-                        strokeWidth="4"
-                        animationDuration=".5s"
-                    />
-                </div>
-            )}
-        >
-            <Column
-                header="#"
-                body={indexBodyTemplate}
-                style={{ width: '3rem' }}
-            />
-            <Column
-                field="name"
-                header="Цэсний нэр"
-                body={nameTemplate}
-                sortable
-                style={{ minWidth: '300px' }}
-            />
-            <Column
-                field="url"
-                header="URL"
-                body={urlTemplate}
-                sortable
-            />
-            <Column
-                field="category_id"
-                header="Ангилал"
-                body={categoryTemplate}
-                sortable
-            />
-            <Column
-                field="list_order"
-                header="Дараалал"
-                body={orderTemplate}
-                sortable
-                style={{ width: '8rem' }}
-            />
-            <Column
-                field="is_active"
-                header="Төлөв"
-                body={statusTemplate}
-                sortable
-                style={{ width: '8rem' }}
-            />
-            <Column
-                header="Үйлдэл"
-                body={actionBodyTemplate}
-                style={{ width: '12rem' }}
-            />
-        </DataTable>
+        <>
+            <DataTable
+                value={data}
+                dataKey="id"
+                paginator
+                rows={15}
+                header={header}
+                loading={loading}
+                rowsPerPageOptions={[15]}
+                className="p-datatable-sm"
+                emptyMessage="Цэс олдсонгүй"
+                currentPageReportTemplate="Нийт {totalRecords} цэснээс {first}-{last}"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+                loadingIcon={() => (
+                    <div className="flex justify-center items-center h-32">
+                        <ProgressSpinner
+                            style={{ width: '50px', height: '50px' }}
+                            strokeWidth="4"
+                            animationDuration=".5s"
+                        />
+                    </div>
+                )}
+                filters={{ 'name_mn': { value: globalFilter, matchMode: 'contains' } }}
+                globalFilterFields={['name_mn', 'name_en']}
+            >
+                <Column
+                    header="#"
+                    body={indexBodyTemplate}
+                    style={{ width: '3rem' }}
+                />
+                <Column
+                    field="name"
+                    header="Цэсний нэр"
+                    body={nameTemplate}
+                    sortable
+                    style={{ minWidth: '300px' }}
+                />
+                <Column
+                    field="url"
+                    header="URL"
+                    body={urlTemplate}
+                    sortable
+                />
+                <Column
+                    field="category_id"
+                    header="Ангилал"
+                    body={categoryTemplate}
+                    sortable
+                />
+                <Column
+                    field="list_order"
+                    header="Дараалал"
+                    body={orderTemplate}
+                    sortable
+                    style={{ width: '8rem' }}
+                />
+                <Column
+                    field="is_active"
+                    header="Төлөв"
+                    body={statusTemplate}
+                    sortable
+                    style={{ width: '8rem' }}
+                />
+                <Column
+                    header="Үйлдэл"
+                    body={actionBodyTemplate}
+                    style={{ width: '12rem' }}
+                />
+            </DataTable>
+        </>
     );
 } 

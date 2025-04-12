@@ -27,9 +27,10 @@ export default function AdminLaws() {
   const toast = useRef(null);
 
   const categories = [
-    { label: 'Legal', value: 'legal' },
-    { label: 'Command', value: 'command' },
-    { label: 'Law', value: 'law' }
+    { label: 'Хууль', value: 'legal' },
+    { label: 'Дүрэм журам', value: 'rules' },
+    { label: 'Тушаал', value: 'command' },
+    { label: 'Баримт бичиг', value: 'documents' }
   ];
 
   useEffect(() => {
@@ -95,7 +96,7 @@ export default function AdminLaws() {
       showToast(toast, 'error', 'Алдаа', 'ID олдсонгүй');
       return;
     }
-    
+
     showConfirm({
       message: 'Та энэ хуулийг устгахдаа итгэлтэй байна уу?',
       header: 'Устгах',
@@ -106,7 +107,7 @@ export default function AdminLaws() {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
               id: parseInt(id) // Ensure ID is a number
             })
           });
@@ -140,7 +141,7 @@ export default function AdminLaws() {
 
   const handleSubmitNew = async (e) => {
     e.preventDefault();
-    
+
     if (!newLaw.file) {
       alert('Please select a file');
       return;
@@ -187,7 +188,7 @@ export default function AdminLaws() {
         <div className={styles.adminLawsContainer}>
           {isAdding ? (
             <div className={styles.addForm}>
-              <h2>Хууль эрхзүй нэмэнх</h2>
+              <h2>Хууль эрхзүй нэмэх</h2>
               <form onSubmit={handleSubmitNew}>
                 <div>
                   <label>Нэр:</label>

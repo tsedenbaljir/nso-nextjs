@@ -21,12 +21,12 @@ export default function componentName(props) {
                         <ul className="flex items-center gap-2 2xsm:gap-4">
                             {pth !== "dashboard" && pth !== "laws" && pth !== "glossary"
                                 && <Link href={
-                                    pth === "news" ? "/admin/news/new" :
-                                        pth === "transparency" ? "/admin/transparency/new" :
-                                            pth === "dissemination" ? "/admin/dissemination/new" :
-                                                pth === "workspace" ? "/admin/workspace/new" :
-                                                    pth === "menus" ? "/admin/menus/new" :
-                                                        pth === "menus" ? "/admin/menus/new" :
+                                    pth === "news" ? "/mn/admin/news/new" :
+                                        pth === "transparency" ? "/mn/admin/transparency/new" :
+                                            pth === "dissemination" ? "/mn/admin/dissemination/new" :
+                                                pth === "workspace" ? "/mn/admin/workspace/new" :
+                                                    pth === "menus" ? "/mn/admin/menus/new" :
+                                                        pth === "indicator" ? "/mn/admin/indicator/new" :
                                                             ""
                                 }>
                                     <div

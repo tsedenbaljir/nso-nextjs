@@ -1,6 +1,10 @@
+import React, { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import { InputText } from 'primereact/inputtext';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 export default function DisseminationTable({
@@ -9,6 +13,8 @@ export default function DisseminationTable({
     onEdit,
     onDelete
 }) {
+    const [globalFilter, setGlobalFilter] = useState('');
+
     const indexBodyTemplate = (rowData, props) => {
         return props.rowIndex + 1;
     };
@@ -63,68 +69,86 @@ export default function DisseminationTable({
         );
     };
 
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-start">
+                <IconField iconPosition="right">
+                    <InputIcon className="pi pi-search" />
+                    <InputText className='w-[300px]' value={globalFilter} onChange={(e) => setGlobalFilter(e.target.value)} placeholder="Хайх ..." />
+                </IconField>
+            </div>
+        );
+    };
+
+    const header = renderHeader();
+
     return (
-        <DataTable
-            value={data}
-            dataKey="id"
-            paginator
-            rows={15}
-            loading={loading}
-            rowsPerPageOptions={[15]}
-            className="p-datatable-sm"
-            emptyMessage="Мэдээлэл олдсонгүй"
-            currentPageReportTemplate="Нийт {totalRecords} мэдээллээс {first}-{last}"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
-            loadingIcon={() => (
-                <div className="flex justify-center items-center h-32">
-                    <ProgressSpinner
-                        style={{ width: '50px', height: '50px' }}
-                        strokeWidth="4"
-                        animationDuration=".5s"
-                    />
-                </div>
-            )}
-        >
-            <Column
-                header="#"
-                body={indexBodyTemplate}
-                style={{ width: '3rem' }}
-            />
-            <Column
-                field="name"
-                header="Гарчиг"
-                sortable
-                style={{ maxWidth: '400px', whiteSpace: 'normal' }}
-                body={(rowData) => (
-                    <div className="whitespace-normal line-clamp-2" title={rowData.name}>
-                        {rowData.name}
+        <div>
+            <DataTable
+                value={data}
+                dataKey="id"
+                paginator
+                rows={15}
+                header={header}
+                loading={loading}
+                rowsPerPageOptions={[15]}
+                className="p-datatable-sm"
+                emptyMessage="Мэдээлэл олдсонгүй"
+                currentPageReportTemplate="Нийт {totalRecords} мэдээллээс {first}-{last}"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+                loadingIcon={() => (
+                    <div className="flex justify-center items-center h-32">
+                        <ProgressSpinner
+                            style={{ width: '50px', height: '50px' }}
+                            strokeWidth="4"
+                            animationDuration=".5s"
+                        />
                     </div>
                 )}
-            />
-            <Column
-                field="language"
-                header="Хэл"
-                body={languageBodyTemplate}
-                style={{ width: '5rem' }}
-            />
-            <Column
-                field="published_date"
-                header="Огноо"
-                body={(rowData) => dateBodyTemplate(rowData, 'published_date')}
-                sortable
-            />
-            <Column
-                field="published"
-                header="Төлөв"
-                body={statusBodyTemplate}
-                style={{ width: '7rem' }}
-                sortable
-            />
-            <Column
-                header="Үйлдэл"
-                body={actionBodyTemplate}
-                style={{ width: '8rem' }}
-            />
-        </DataTable>
+                filters={{ 'name': { value: globalFilter, matchMode: 'contains' } }}
+                globalFilterFields={['name']}
+            >
+                <Column
+                    header="#"
+                    body={indexBodyTemplate}
+                    style={{ width: '3rem' }}
+                />
+                <Column
+                    field="name"
+                    header="Гарчиг"
+                    sortable
+                    style={{ maxWidth: '400px', whiteSpace: 'normal' }}
+                    body={(rowData) => (
+                        <div className="whitespace-normal line-clamp-2" title={rowData.name}>
+                            {rowData.name}
+                        </div>
+                    )}
+                />
+                <Column
+                    field="language"
+                    header="Хэл"
+                    body={languageBodyTemplate}
+                    style={{ width: '5rem' }}
+                />
+                <Column
+                    field="published_date"
+                    header="Огноо"
+                    body={(rowData) => dateBodyTemplate(rowData, 'published_date')}
+                    sortable
+                />
+                <Column
+                    field="published"
+                    header="Төлөв"
+                    body={statusBodyTemplate}
+                    style={{ width: '7rem' }}
+                    sortable
+                />
+                <Column
+                    header="Үйлдэл"
+                    body={actionBodyTemplate}
+                    style={{ width: '8rem' }}
+                />
+            </DataTable>
+        </div>
     );
 } 

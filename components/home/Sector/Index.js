@@ -1,9 +1,28 @@
-import React from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslation } from '@/app/i18n/client';
 
 export default function Index({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
+
+    const [indicators, setIndicatos] = useState([]);
+
+    useEffect(() => {
+        fetchLawsByType();
+    }, []);
+
+    const fetchLawsByType = async () => {
+        try {
+            const response = await fetch(`/api/mainIndicators?type=body`);
+            const result = await response.json();
+            if (result.status && Array.isArray(result.data)) {
+                setIndicatos(result.data)
+            }
+        } catch (error) {
+            console.error('Error fetching laws:', error);
+        }
+    };
     return (
         <>
             <div className="nso_home_statistic">
@@ -42,37 +61,37 @@ export default function Index({ lng }) {
                         </div>
                         <div className="__group">
                             <div className="__highlight">
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Industry_service__service_livestock/DT_NSO_1001_021V1.px/`} target='blank' >
-                                    <span className="__desc">2024-12-30</span>
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                    <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/tIvK--fOd--8ycP-bO-TwA_mR6_O7-w67Rma2T-r.png")' }}></span>
-                                        {t('stats.pop5')}
+                                        <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[4]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[4]?.name : indicators[4]?.nameEng || "..."}
                                     </span>
-                                    <span className="__count">57.6 сая</span>
+                                    <span className="__count">{indicators[4]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[4]?.info : indicators[4]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Society%20and%20development__Household%20income%20and%20expenditure/DT_NSO_1900_018V1.px/`} target='blank' >
-                                    <span className="__desc">2024-12-31</span>
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                    <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
-                                        {t('stats.pop6')}
+                                        <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[3]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[3]?.name : indicators[3]?.nameEng || "..."}
                                     </span>
-                                    <span className="__count">2.6 сая</span>
+                                    <span className="__count">{indicators[3]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[3]?.info : indicators[3]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labour_business__Wages/DT_NSO_0400_069V2.px/`} target='blank' >
-                                    <span className="__desc">2024-09-30</span>
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                    <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png")' }}></span>
-                                        {t('stats.pop7')}
+                                        <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[2]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[2]?.name : indicators[2]?.nameEng || "..."}
                                     </span>
-                                    <span className="__count">2.2 сая</span>
+                                    <span className="__count">{indicators[2]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[2]?.info : indicators[2]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labour_business__labour/DT_NSO_0400_018V1.px/`} target='blank' >
-                                    <span className="__desc">2024-12-31</span>
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                    <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: 'url("https://downloads.1212.mn/6ULXrEi2_5d0-UAql-_DYpEx-Dn3TMi4rw6-pG-6.png")' }}></span>
-                                        {t('stats.pop8')}
+                                        <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[1]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[1]?.name : indicators[1]?.nameEng || "..."}
                                     </span>
-                                    <span className="__count">62.2 %</span>
+                                    <span className="__count">{indicators[1]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng}</span>
                                 </Link>
                             </div>
                         </div>

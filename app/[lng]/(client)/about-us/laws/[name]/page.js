@@ -91,9 +91,11 @@ export default function Home({ params: { lng }, params }) {
                         <div className="__laws">
                             <div className="__info_detail_page">
                                 {
-                                    loading ? Articles.map((dt) => {
+                                    loading ? Articles.length > 0 ? Articles.map((dt) => {
                                         return <MainBody dt={dt} />
-                                    }) : <div className='w-full'>
+                                    }) : <>
+                                        Хоосон байна.
+                                    </> : <div className='w-full'>
                                         <Text />
                                     </div>
                                 }

@@ -1,63 +1,91 @@
-import React from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Sidebar({ t, lng }) {
-    const menus = [
-        {
-            name: t('stats.pop1'),
-            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Population_Household__population_household/DT_NSO_0300_003V1.px/`,
-            desc: "2024-12-31",
-            phone: "3 544 835",
-            success: "1.1 % ",
-            url: "https://downloads.1212.mn/n_OG4sC53x9SPZs-4JwinE0c-wRpZ_--_mls2-Zw.png"
-        },
-        {
-            name: t('stats.pop2'),
-            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Economy,%20environment__economy_consumerPrice/DT_NSO_0600_010V1.px/`,
-            desc: "2025-02-28",
-            phone: "9.6",
-            success: "%",
-            url: "https://downloads.1212.mn/508Md-xy_eD-WNdyAJ_5jxjuJ5XOw-G37RFVast_.png"
-        },
-        {
-            name: t('stats.pop3'),
-            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Economy,%20environment__economy_national_acc/DT_NSO_0500_022V1.px/`,
-            desc: "2024-12-31",
-            phone: "80 их наяд",
-            success: " 5.0 % ",
-            url: "https://downloads.1212.mn/YY2lPbolIQMlEAC8QFiHSuj7fQtYwi7YgNdTfyhi.png"
-        },
-        {
-            name: t('stats.pop4'),
-            link: `${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__Labour_business__labour/DT_NSO_0400_020V2.px/`,
-            desc: "2024-12-31",
-            phone: "5.3",
-            success: "%",
-            url: "https://downloads.1212.mn/Soxj74qhkwXV_xUwebd_XFnwa_-vVaH05-T-XoYJ.png"
-        },
-    ];
+    const [indicators, setIndicatos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        fetchLawsByType();
+    }, []);
+
+    const fetchLawsByType = async () => {
+        try {
+            const response = await fetch(`/api/mainIndicators?type=main`);
+            const result = await response.json();
+            if (result.status && Array.isArray(result.data)) {
+                setIndicatos(result.data)
+            }
+        } catch (error) {
+            console.error('Error fetching laws:', error);
+        } finally {
+            setLoading(false)
+        }
+    };
+
     return (
         <div className="__group">
             <div className="__card_area">
-                {
-                    menus.map((dt, index) => {
-                        return <Link href={dt.link} key={index} target='blank' className="__card">
-                            <span className="__icon"
-                                style={{
-                                    backgroundImage: `url('${dt.url}')`,
-                                }}
-                            ></span>
-                            <span className="__desc">{dt.desc}</span>
-                            <span className="__name">{dt.name}</span>
-                            <div className="__phone">
-                                <span style={{ marginTop: 10, fontSize: index === 2 && 14 }}> {dt.phone} </span>
-                                <div className="ng-star-inserted">
-                                    {dt.success === "%" ? <span className="text-lg">{dt.success}</span> : <span className="success">{dt.success}</span>}
-                                </div>
-                            </div>
-                        </Link>
-                    })
-                }
+                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[3]?.tableau || ""} target='blank' className="__card">
+                    <span className="__icon"
+                        style={{
+                            backgroundImage: `url(https://downloads.1212.mn/'${indicators[3]?.image}')`,
+                        }}
+                    ></span>
+                    <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[3]?.name : indicators[3]?.nameEng || "..."}</span>
+                    <div className="__phone">
+                        <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[3]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} </span>
+                        <div className="ng-star-inserted">
+                            {indicators[3]?.indicator_perc <= 0 ? <span className="text-lg">{indicators[3]?.indicator_perc.toFixed(1) || "..."}%</span> : <span className="success">{indicators[3]?.indicator_perc.toFixed(1) || "..."}%</span>}
+                        </div>
+                    </div>
+                </Link>
+                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[2]?.tableau || ""} target='blank' className="__card">
+                    <span className="__icon"
+                        style={{
+                            backgroundImage: `url(https://downloads.1212.mn/'${indicators[2]?.image}')`,
+                        }}
+                    ></span>
+                    <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[2]?.name : indicators[2]?.nameEng || "..."}</span>
+                    <div className="__phone">
+                        <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[2]?.phone} </span>
+                        <div className="ng-star-inserted">
+                            <span className="text-lg">{indicators[2]?.indicator.toFixed(1) || "..."}%</span>
+                        </div>
+                    </div>
+                </Link>
+                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[1]?.tableau || ""} target='blank' className="__card">
+                    <span className="__icon"
+                        style={{
+                            backgroundImage: `url(https://downloads.1212.mn/'${indicators[1]?.image}')`,
+                        }}
+                    ></span>
+                    <span className="__desc">{indicators[1]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[1]?.name : indicators[1]?.nameEng || "..."}</span>
+                    <div className="__phone">
+                        <span style={{ marginTop: 10, fontSize: 14 }}>{indicators[1]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng} </span>
+                        <div className="ng-star-inserted">
+                            {indicators[1]?.indicator_perc <= 0 ? <span className="text-lg">{indicators[1]?.indicator_perc.toFixed(1) || "..."}%</span> : <span className="success">{indicators[1]?.indicator_perc.toFixed(1) || "..."}%</span>}
+                        </div>
+                    </div>
+                </Link>
+                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[0]?.tableau || ""} target='blank' className="__card">
+                    <span className="__icon"
+                        style={{
+                            backgroundImage: `url(https://downloads.1212.mn/'${indicators[0]?.image}')`,
+                        }}
+                    ></span>
+                    <span className="__desc">{indicators[0]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[0]?.name : indicators[0]?.nameEng || "..."}</span>
+                    <div className="__phone">
+                        <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[0]?.phone} </span>
+                        <div className="ng-star-inserted">
+                            <span className="text-lg">{indicators[0]?.indicator.toFixed(1) || "..."}%</span>
+                        </div>
+                    </div>
+                </Link>
             </div>
         </div>
     );

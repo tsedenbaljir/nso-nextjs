@@ -197,7 +197,7 @@ export default function MenusContent() {
                                 setEditingCategory(null);
                                 setShowCategoryDialog(true);
                             }}
-                            className="nso_btn nso_btn_primary"
+                            className="nso_btn nso_btn_primary bg-blue-500 text-white"
                         >
                             Шинэ ангилал нэмэх
                         </button>
@@ -219,14 +219,14 @@ export default function MenusContent() {
 
                 <TabPanel header="Цэс">
                     <div className="flex justify-between items-center mb-4">
-                        <h1 className="text-2xl font-bold">Цэс</h1>
+                        <h1 className="text-2xl font-bold ml-5">Цэс</h1>
                         <button
                             onClick={() => {
                                 setEditingMenu(null);
                                 setParentId(null);
                                 setShowDialog(true);
                             }}
-                            className="nso_btn nso_btn_primary"
+                            className="nso_btn nso_btn_primary bg-blue-500 text-white"
                         >
                             Шинэ цэс нэмэх
                         </button>

@@ -1,0 +1,186 @@
+.adminLawsContainer {
+  padding: 2rem;
+  background: white;
+  // border-radius: 8px;
+  // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  :global {
+    .p-tabview .p-tabview-nav {
+      border: none;
+      background: transparent;
+    }
+
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+      background: transparent;
+      border: none;
+      color: #6b7280;
+      padding: 1rem 1.5rem;
+      font-weight: 500;
+      
+      &:not(.p-disabled):focus {
+        box-shadow: none;
+      }
+    }
+
+    .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+      background: #3b82f6;
+      color: white;
+      border-radius: 6px;
+    }
+
+    .p-tabview .p-tabview-panels {
+      padding: 1.5rem 0;
+    }
+  }
+
+  .lawsList {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    .lawItem {
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background: white;
+      transition: all 0.2s;
+
+      &:hover {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      h3 {
+        margin: 0 0 0.5rem 0;
+        color: #1f2937;
+        font-size: 1.1rem;
+      }
+
+      p {
+        color: #6b7280;
+        font-size: 0.9rem;
+      }
+
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+
+        button {
+          padding: 0.4rem 1rem;
+          border: none;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:first-child {
+            background: #3b82f6;
+            color: white;
+
+            &:hover {
+              background: #2563eb;
+            }
+          }
+
+          &:last-child {
+            background: #ef4444;
+            color: white;
+
+            &:hover {
+              background: #dc2626;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .noData {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+    font-size: 1rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    border: 1px dashed #d1d5db;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 1.5rem;
+      color: #1f2937;
+    }
+
+    .addButton {
+      padding: 0.5rem 1rem;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #059669;
+      }
+    }
+  }
+
+  .addForm {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #1f2937;
+      font-size: 1.5rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          color: #374151;
+          font-weight: 500;
+        }
+
+        input, textarea, select {
+          padding: 0.75rem;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          font-size: 1rem;
+          transition: all 0.2s;
+
+          &:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+          }
+        }
+
+        textarea {
+          min-height: 120px;
+          resize: vertical;
+        }
+
+        select {
+          background: white;
+        }
+      }
+    }
+  }
+} 
