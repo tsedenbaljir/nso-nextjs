@@ -10,7 +10,7 @@
     }
 
     .ws_body {
-        margin-top: 10px;
+        margin-top: 5px;
         color: var(--text-main);
         border-bottom: 2px dotted rgba(128, 128, 128, 0.37);
 
@@ -27,8 +27,8 @@
 
         .__ws_action_area {
             position: absolute;
-            right: 0;
-            margin-top: -60px;
+            right: 20%;
+            margin-top: 0px;
         }
 
         ul {
