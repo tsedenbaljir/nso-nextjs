@@ -9,11 +9,42 @@ export default function StateCate({ params: { lng }, params }) {
     const { t } = useTranslation(lng, "lng", "");
     const [searchTerm, setSearchTerm] = useState("");
 
+    const [menuItems, setMenuItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [pagination, setPagination] = useState({ total: 0, first: 0, rows: 10 });
+
+    const fetchSubcategories = async (value) => {
+        try {
+            const response = await fetch(`/api/file-library?lng=${lng}&type=${type}&searchTerm=${value || ""}`);
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            const result = await response.json();
+            console.log(result);
+            
+            if (Array.isArray(result.data)) {
+                setMenuItems(result.data);
+                setPagination((prev) => ({ ...prev, total: result.data.length }));
+            } else {
+                setMenuItems([]);
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchSubcategories();
+    }, [lng, type]);
+
     const handleSearchChange = (event) => {
         const value = event.target.value;
         setSearchTerm(value);
         if (value.length > 3 || value.length === 0) {
-            fetchArticles(value);
+            fetchSubcategories(value);
         }
     };
 
@@ -50,7 +81,7 @@ export default function StateCate({ params: { lng }, params }) {
                 {/* Sidebar */}
                 <div className="nso_cate_section mt-6 left-bar">
                     <div className='__cate_groups'>
-                        <Sidebar lng={lng} type={type} />
+                        <Sidebar lng={lng} type={type} menuItems={menuItems} loading={loading} pagination={pagination} setPagination={setPagination}/>
                     </div>
                 </div>
                 {/* Main Content */}
