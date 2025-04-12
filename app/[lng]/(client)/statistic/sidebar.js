@@ -1,32 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { sectors_list } from './sectors';
 
 export default function DynamicSidebar({ lng, type }) {
     const router = useRouter();
 
-    const [list, setList] = useState([
-        { "id": 0, "type": "all", "mnName": "Бүх файл", "enName": "All files" },
-        { "id": 18, "type": "nso-magazine", "mnName": "Үндэсний статистик сэтгүүл", "enName": "NSO Magazine" },
-        { "id": 12, "type": "magazine", "mnName": "Ном, товхимол", "enName": "Magazine" },
-        { "id": 3, "type": "census", "mnName": "Тооллого", "enName": "Census" },
-        { "id": 4, "type": "survey", "mnName": "Түүвэр судалгаа", "enName": "Survey" },
-        { "id": 13, "type": "infographic", "mnName": "Инфографик", "enName": "Infographic" },
-        { "id": 14, "type": "weekprice", "mnName": "7 хоногийн үнийн мэдээ", "enName": "Weekly Price" },
-        { "id": 15, "type": "foreigntrade", "mnName": "15 хоногийн гадаад худалдааны мэдээ", "enName": "Foreign Trade" },
-        { "id": 16, "type": "presentation", "mnName": "Сарын мэдээний презентац", "enName": "Presentation" },
-        { "id": 1, "type": "bulletin", "mnName": "Сарын танилцуулга", "enName": "Bulletin" },
-        { "id": 2, "type": "annual", "mnName": "Жилийн эмхэтгэл", "enName": "Annual Report" },
-        { "id": 17, "type": "livingstandart", "mnName": "Амьжиргааны доод түвшин", "enName": "Living Standard" },
-        { "id": 7, "type": "agricultural_census", "mnName": "ХААТ", "enName": "Agricultural Census" },
-        { "id": 8, "type": "enterprise_census", "mnName": "ААНБТ", "enName": "Enterprise Census" },
-        { "id": 9, "type": "livestock_census", "mnName": "Мал тооллого", "enName": "Livestock Census" },
-        { "id": 10, "type": "pahc", "mnName": "ХАОСТ", "enName": "PAHC Survey" },
-        // { "id": 5, "type": "research", "mnName": "Судалгааны тайлан", "enName": "Research Report" },
-        // { "id": 6, "type": "STindicators", "mnName": "Статистикийн үзүүлэлтүүд", "enName": "Statistical Indicators" },
-        // { "id": 11, "type": "aombulletin", "mnName": "AOM Товхимол", "enName": "AOM Bulletin" },
-    ]
-    );
+    const [list, setList] = useState(sectors_list);
 
     return (
         <div className="nso_cate_section left-bar">

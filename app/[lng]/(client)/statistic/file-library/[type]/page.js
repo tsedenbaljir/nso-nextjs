@@ -78,7 +78,7 @@ export default function StateCate({ params: { lng }, params }) {
             </div>
             <div className="nso_container">
                 {/* Sidebar */}
-                <div className="nso_cate_section mt-6 left-bar">
+                <div className="nso_cate_section left-bar">
                     <div className='__cate_groups'>
                         <Sidebar lng={lng} type={type} />
                     </div>

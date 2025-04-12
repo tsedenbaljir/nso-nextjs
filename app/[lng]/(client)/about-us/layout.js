@@ -21,13 +21,11 @@ export default function Statecate({ children, params: { lng } }) {
                     <div className="nso_container">
                         <div className="about_us_header_text">
                             <div className="nso_page_header" style={{ background: 'none' }}>
-                                <div className="nso_container">
-                                    <div className="__header">
-                                        <span>
-                                            {t("nso")}
-                                        </span>
-                                        <BreadCrumb model={breadMap} />
-                                    </div>
+                                <div className="__header">
+                                    <span>
+                                        {t("nso")}
+                                    </span>
+                                    <BreadCrumb model={breadMap} />
                                 </div>
                             </div>
                         </div>

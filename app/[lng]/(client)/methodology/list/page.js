@@ -32,7 +32,7 @@ export default function Glossary({ params }) {
           return;
         }
 
-        const selectedIndexes = [5, 4, 1, 3, 6, 0]; // Ordered selection
+        const selectedIndexes = [5, 4, 1, 3, 6, 0, 2, 7]; // Ordered selection
         const convert = selectedIndexes.map(index => result.data[index]).filter(Boolean);
 
         // Fetch subcategories
@@ -78,6 +78,7 @@ export default function Glossary({ params }) {
         const menuWithSubcategories = await Promise.all(
           convert.map(async (category) => fetchSubcategories(category.id))
         );
+        console.log(convert);
 
         // Flatten and set the data
         setFilterList(menuWithSubcategories.flat());
