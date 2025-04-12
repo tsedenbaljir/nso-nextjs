@@ -33,7 +33,7 @@ export default function Index({ lng }) {
                     <div className="__statistic_groups">
                         <div className="__group">
                             <div className="__statistics">
-                                <Link className="__card" href={`/${lng}/statcate/table/Pop/pop6`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Population_Household/adminstrative_units_territory`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.populationHousehold')}</span>
                                 </Link>
@@ -53,7 +53,7 @@ export default function Index({ lng }) {
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.environment')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Labor/Labor3`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Labour_business/Business_register`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.labourForce')}</span>
                                 </Link>
