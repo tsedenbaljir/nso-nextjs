@@ -58,6 +58,7 @@
         font-weight: 500;
       }
 
+
       .__input {
         padding: 20px 0;
 
@@ -83,7 +84,6 @@
             background-color: transparent;
             outline: none;
             border: none;
-            border-bottom: 1px solid #fff;
             border-radius: 0;
 
             &::placeholder {
@@ -92,6 +92,47 @@
           }
         }
       }
+      .p-input-icon-right {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid white;
+        padding: 8px;
+        width: 100%;
+        max-width: 320px;
+      
+        input {
+          flex: 1;
+          background: transparent;
+          outline: none;
+          color: white;
+          font-size: 16px;
+      
+          &::placeholder {
+            color: white;
+            opacity: 1;
+          }
+        }
+      
+        .arrow-button {
+          background-color: white;
+          border-radius: 50%;
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          cursor: pointer;
+          margin-left: 8px;
+      
+          i {
+            right: 0.5rem;
+            color: var(--text-color);
+          }
+        }
+      }
+      
+      
 
       .__menu {
         width: 100%;

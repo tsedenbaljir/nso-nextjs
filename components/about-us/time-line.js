@@ -387,7 +387,7 @@ export default function TimeLine({ lng }) {
                                         <div className="__middlecircle">
                                             <i className="pi pi-angle-down"></i>  {/* Custom marker */}
                                         </div>
-                                        <small className="p-text-secondary m-2 text-justify desc-timeline">
+                                        <small className="p-text-primary m-2 text-justify text-black font-bold desc-timeline font-family-roboto">
                                             {datas.desc}
                                             <br />
                                         </small>

@@ -135,10 +135,18 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <span className="__desc">{t('footer.suggestionForNewReport')}</span>
                             <div _ngcontent-lvi-c61="" className="__input">
-                                <span _ngcontent-lvi-c61="" className="p-input-icon-right">
-                                    {/* <i _ngcontent-lvi-c61="" className="pi pi-arrow-right"></i> */}
-                                    <input _ngcontent-lvi-c61="" type="email" name="email" autoComplete="off" formcontrolname="email" pinputtext="" placeholder="Имэйл хаяг" className="ng-untouched ng-pristine ng-invalid p-inputtext p-component" />
-                                </span>
+                                 <span className="p-input-icon-right">
+      <input
+        type="email"
+        name="email"
+        autoComplete="off"
+        placeholder="Имэйл хаяг"
+        className="p-inputtext p-component"
+      />
+      <button className="arrow-button">
+        <i className="pi pi-arrow-right"></i>
+      </button>
+    </span>
                             </div>
                             <div className="__input" style={{ display: 'flex' }}>
                                 <div className="__input">
