@@ -93,7 +93,7 @@ export default function Home({ params: { lng } }) {
                     <div className="__jf flex items-center">
                         <div className="__jobs-count float-right mr-5">
                             {lng === "mn" ? "Нийт" : "A total of"}
-                            <strong>{loading ? "..." : " " + pagination.total}</strong> {lng === "mn" ? "ажлын байр" : "jobs"}
+                            <>{loading ? "..." : " " + pagination.total}</> {lng === "mn" ? "ажлын байр" : "jobs"}
                         </div>
                     </div>
                 </div>

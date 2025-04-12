@@ -7,18 +7,37 @@ export async function GET(req) {
   const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
   const lng = searchParams.get('lng');
   const type = searchParams.get('type');
+  const searchTerm = searchParams.get('searchTerm');
 
   const offset = (page - 1) * pageSize;
 
+  let query = `
+    SELECT * FROM web_1212_content
+    WHERE content_type = 'NEWS'
+      AND language = ?
+      AND news_type = ?
+      AND published = 1
+  `;
   try {
     // Get paginated results
-    const results = await db.raw(`
-      SELECT * FROM web_1212_content
-      where content_type = 'NEWS' and language = ? and news_type = ? and published = 1
+    const queryParams = [lng, type];
+    
+    // Add search filter if applicable
+    if (searchTerm && searchTerm !== "") {
+      query += ` AND name LIKE ?`;
+      queryParams.push(`%${searchTerm}%`);
+    }
+
+    // Append ORDER BY and pagination at the end
+    query += `
       ORDER BY published_date ${type === "latest" ? 'DESC' : 'ASC'}
       OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
-    `, [lng, type, offset, pageSize]);
+    `;
 
+    queryParams.push(offset, pageSize);
+
+    // Run the query
+    const results = await db.raw(query, queryParams);
     // Get total count
     const [totalPage] = await db.raw(`
       SELECT count(1) as totalPage FROM web_1212_content 

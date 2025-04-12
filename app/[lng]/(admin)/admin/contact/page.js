@@ -62,8 +62,7 @@ export default function ContactAdmin({ params: { lng } }) {
     return (
         <div className="">
             
-            {console.log("hfgsdhjh")
-            }
+            {console.log("hfgsdhjh")}
             <DataTable
                 value={data}
                 lazy

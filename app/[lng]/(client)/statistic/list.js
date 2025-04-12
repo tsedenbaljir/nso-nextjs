@@ -7,11 +7,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Tabs({ lng, type }) {
-    const [menuItems, setMenuItems] = useState([]); // Stores categories & subcategories
+    const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [pagination, setPagination] = useState({ total: 0, first: 0, rows: 10 });
-    const router = useRouter();
 
     useEffect(() => {
         const fetchSubcategories = async () => {
@@ -30,7 +28,6 @@ export default function Tabs({ lng, type }) {
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setError("Failed to load data");
             } finally {
                 setLoading(false);
             }

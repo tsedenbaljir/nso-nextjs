@@ -2,12 +2,21 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PanelMenu } from "primereact/panelmenu";
+import { useTranslation } from '@/app/i18n/client';
+import Result from '@/components/Search/subMain/Result';
+import MainSearch from '@/components/Search/subMain/MainSearch';
 import LoadingDiv from '@/components/Loading/Text/Index';
 
 export default function DynamicSidebar({ subsector, lng }) {
+    const { t } = useTranslation(lng, "lng", "");
     const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [showResult, setShowResult] = useState(false);
+    const [search, setSearching] = useState({});
+    const [data, setData] = useState({});
+    const [loadingSearch, setLoadingSearch] = useState(true);
 
     const router = useRouter();
 
@@ -74,7 +83,7 @@ export default function DynamicSidebar({ subsector, lng }) {
                     })
                 );
                 // console.log(menuWithSubcategories);
-                
+
                 setMenuItems(menuWithSubcategories);
             } catch (err) {
                 console.error("Error fetching data:", err);
@@ -88,22 +97,30 @@ export default function DynamicSidebar({ subsector, lng }) {
     }, [subsector]); // Refetch when `sectors` changes
 
     return (
-        <div className="nso_cate_section left-bar">
-            {loading ? (
-                <div className="text-center py-4">
-                    <LoadingDiv />
-                    <br />
-                    <LoadingDiv />
-                    <br />
-                    <LoadingDiv />
-                    <br />
-                    <LoadingDiv />
+        <>
+            <div class="__cate_search">
+                <div className="__main_search">
+                    <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
+                    {search.length > 2 && <Result type={1} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
                 </div>
-            ) : error ? (
-                <p className="text-red-500">{error}</p>
-            ) : (
-                <PanelMenu model={menuItems} className="w-full nso_cate_selection" />
-            )}
-        </div>
+            </div>
+            <div className="nso_cate_section left-bar">
+                {loading ? (
+                    <div className="text-center py-4">
+                        <LoadingDiv />
+                        <br />
+                        <LoadingDiv />
+                        <br />
+                        <LoadingDiv />
+                        <br />
+                        <LoadingDiv />
+                    </div>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
+                ) : (
+                    <PanelMenu model={menuItems} className="w-full nso_cate_selection" />
+                )}
+            </div>
+        </>
     );
 }
