@@ -83,7 +83,7 @@ export default function Home({ params: { lng } }) {
     useEffect(() => {
         fetchArticles();
     }, [pagination.page]);
-    
+
 
     return (
         <>
@@ -105,9 +105,9 @@ export default function Home({ params: { lng } }) {
                     <div className="__table">
                         {loading ? <>
                             <TextLoading />
-                            <br/>
+                            <br />
                             <TextLoading />
-                            <br/>
+                            <br />
                             <TextLoading />
                         </> :
                             data.map((dt, index) => {
@@ -119,38 +119,38 @@ export default function Home({ params: { lng } }) {
                                         <div className="ws_title text-2xl font-semibold">
                                             {dt.name}
                                         </div>
-                            
+
                                         <div
                                             className="ws_desc my-4 text-base"
                                             dangerouslySetInnerHTML={{
-                                                __html: dt.body.length > 350 ? dt.body.substr(0, 350) + '...' : dt.body
+                                                __html: dt.body.length > 250 ? dt.body.substr(0, 250) + '...' : dt.body
                                             }}
                                         ></div>
-                            
+
                                         <ul>
-                                          <li className="ws_desc">* {dt.created_date.substr(0, 10)}</li>
-                                          <li className="ws_desc" style={{ marginLeft: '50px' }}>
-                                            * {
-                                              lng === "mn"
-                                                ? location.find(item => item.code === dt.location)?.namemn
-                                                : location.find(item => item.code === dt.location)?.nameen
-                                            }
-                                          </li>
-                                          <li className="__ws_action_area" >
-                                            <button
-                                              className="nso_btn success"
-                                              tabIndex="0"
-                                              onClick={() => router.push(`/${lng}/about-us/workspace/${dt.id}`)}
-                                            >
-                                              {lng === 'mn' ? 'Дэлгэрэнгүй' : 'Read more'}
-                                            </button>
-                                          </li>
+                                            <li className="ws_desc">* {dt.created_date.substr(0, 10)}</li>
+                                            <li className="ws_desc" style={{ marginLeft: '50px' }}>
+                                                * {
+                                                    lng === "mn"
+                                                        ? location.find(item => item.code === dt.location)?.namemn
+                                                        : location.find(item => item.code === dt.location)?.nameen
+                                                }
+                                            </li>
+                                            <li className="__ws_action_area" >
+                                                <button
+                                                    className="nso_btn success"
+                                                    tabIndex="0"
+                                                    onClick={() => router.push(`/${lng}/about-us/workspace/${dt.id}`)}
+                                                >
+                                                    {lng === 'mn' ? 'Дэлгэрэнгүй' : 'Read more'}
+                                                </button>
+                                            </li>
                                         </ul>
 
                                     </div>
                                 );
                             })
-                            
+
                         }
                         <div className="nso_container mt-5 mb-5">
                             {loading ? <><OneField /><OneField /><OneField /></> : <Pagination page={parseInt(pagination.page)} mainPath={"workspace"} articlesPerPage={pagination.pageSize} totalPages={pagination.total} path={"/"} lng={lng} />}
