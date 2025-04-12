@@ -68,7 +68,7 @@ export default function Main({ lng, sector, subsector }) {
                 <p className="p-4 text-red-500">{error}</p>
             ) : (
                 <>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}  className="text-black" >
                         {lng === "mn" ? data.info : data.info_eng || "No content available"}
                     </ReactMarkdown>
 
