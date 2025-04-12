@@ -14,7 +14,7 @@ export async function GET(req) {
     // Get paginated results
     const results = await db.raw(`
       SELECT * FROM web_1212_content
-      where content_type = 'NEWS' and language = ? and news_type = ?
+      where content_type = 'NEWS' and language = ? and news_type = ? and published = 1
       ORDER BY published_date ${type === "latest" ? 'DESC' : 'ASC'}
       OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
     `, [lng, type, offset, pageSize]);
@@ -22,7 +22,7 @@ export async function GET(req) {
     // Get total count
     const [totalPage] = await db.raw(`
       SELECT count(1) as totalPage FROM web_1212_content 
-      where language = ? and content_type = 'NEWS' and news_type = ?
+      where language = ? and content_type = 'NEWS' and news_type = ? and published = 1
     `, [lng, type]);
 
     return NextResponse.json({

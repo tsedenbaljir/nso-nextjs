@@ -14,25 +14,33 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
 
     // Function to determine the active tab index
     const getTabIndex = (tabs) => {
-        switch (tabs) {
-            case "table": return 0;
-            case "indicator": return 1;
-            case "report": return 2;
-            case "methodology": return 3;
-            case "qualityreport": return 4;
-            default: return 0; // Default to "table"
+        if (sector === "HistoricalData") {
+            return 0;
+        } else {
+            switch (tabs) {
+                case "table": return 0;
+                case "indicator": return 1;
+                case "report": return 2;
+                case "methodology": return 3;
+                case "qualityreport": return 4;
+                default: return 0; // Default to "table"
+            }
         }
     };
 
     // Function to get the tab name from the index
     const getIndexTab = (index) => {
-        switch (index) {
-            case 0: return "table";
-            case 1: return "indicator";
-            case 2: return "report";
-            case 3: return "methodology";
-            case 4: return "qualityreport";
-            default: return "table"; // Default to "table"
+        if (sector === "HistoricalData") {
+            return "table";
+        } else {
+            switch (index) {
+                case 0: return "table";
+                case 1: return "indicator";
+                case 2: return "report";
+                case 3: return "methodology";
+                case 4: return "qualityreport";
+                default: return "table"; // Default to "table"
+            }
         }
     };
 
@@ -79,24 +87,24 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 </TabPanel>
 
                 {/* ✅ Танилцуулга */}
-                <TabPanel header="Танилцуулга">
+                {sector !== "HistoricalData" && <TabPanel header="Танилцуулга">
                     <MainIndicator sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>
+                </TabPanel>}
 
                 {/* ✅ Тайлан */}
-                <TabPanel header="Тайлан">
+                {sector !== "HistoricalData" && <TabPanel header="Тайлан">
                     <Report sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>
+                </TabPanel>}
 
                 {/* ✅ Аргачлал */}
-                <TabPanel header="Аргачлал">
+                {sector !== "HistoricalData" && <TabPanel header="Аргачлал">
                     <Methodology sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>
+                </TabPanel>}
 
                 {/* ✅ Чанарын тайлан */}
-                <TabPanel header="Чанарын тайлан">
+                {sector !== "HistoricalData" && <TabPanel header="Чанарын тайлан">
                     <Qualityreport sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>
+                </TabPanel>}
 
             </TabView>
         </div>

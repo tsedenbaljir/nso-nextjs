@@ -20,13 +20,14 @@ export default function DynamicSidebar({ subsector, lng }) {
 
                 var convert = [];
 
-                convert.push(result.data[5]);
-                convert.push(result.data[4]);
-                convert.push(result.data[1]);
-                convert.push(result.data[3]);
                 convert.push(result.data[6]);
+                convert.push(result.data[5]);
+                convert.push(result.data[2]);
+                convert.push(result.data[4]);
+                convert.push(result.data[7]);
                 convert.push(result.data[0]);
-                // convert.push(result.data[2]); түүхэн статистик
+                convert.push(result.data[1]);
+                convert.push(result.data[3]); //түүхэн статистик
 
                 if (!Array.isArray(convert)) {
                     setError("Unexpected API response format. Check console.");

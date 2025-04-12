@@ -7,7 +7,7 @@ export async function GET(req) {
     try {
         const results = await db.raw(`
             SELECT top(7) * FROM web_1212_content
-            where content_type = 'NEWS' and language = ? and news_type = 'latest'
+            where content_type = 'NEWS' and language = ? and news_type = 'latest' and published = 1
             ORDER BY published_date DESC
         `, [lng]);
 
@@ -24,4 +24,4 @@ export async function GET(req) {
             message: 'Failed to fetch dissemination news'
         }, { status: 500 });
     }
-} 
+}
