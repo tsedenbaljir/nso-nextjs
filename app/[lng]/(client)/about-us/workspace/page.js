@@ -12,6 +12,7 @@ export default function Home({ params: { lng } }) {
 
     const searchParams = useSearchParams();
     const page = searchParams.get('page') || 1;
+    const [expandedIndex, setExpandedIndex] = useState(null);
 
     // States
     const [data, setData] = useState([]);
@@ -82,6 +83,7 @@ export default function Home({ params: { lng } }) {
     useEffect(() => {
         fetchArticles();
     }, [pagination.page]);
+    
 
     return (
         <>
@@ -109,26 +111,46 @@ export default function Home({ params: { lng } }) {
                             <TextLoading />
                         </> :
                             data.map((dt, index) => {
-                                return <div onClick={() => {
-                                    router.push(`/${lng}/about-us/workspace/${dt.id}`);
-                                }} key={index} className="ws_body mt-2 text-main border-b-2 border-dotted border-gray-400 cursor-pointer">
-                                    <div className="ws_title text-2xl font-semibold hover:text-blue-300">{dt.name}</div>
+                                return (
                                     <div
-                                        className="ws_desc my-4 text-base"
-                                        dangerouslySetInnerHTML={{
-                                            __html: dt.body.length > 300 ? dt.body.substr(0, 300) + '...' : dt.body
-                                        }}
-                                    ></div>
-                                    <ul className='flex'>
-                                        <li className="ws_desc my-4 text-base">{dt.created_date.substr(0, 10)}</li>
-                                        <li className="ws_desc my-4 text-base ml-10">
-                                            {
-                                                lng === "mn" ? location.filter(item => item.code === dt.location)[0].namemn : location.filter(item => item.code === dt.location)[0].nameen
+                                        key={index}
+                                        className="ws_body"
+                                    >
+                                        <div className="ws_title text-2xl font-semibold">
+                                            {dt.name}
+                                        </div>
+                            
+                                        <div
+                                            className="ws_desc my-4 text-base"
+                                            dangerouslySetInnerHTML={{
+                                                __html: dt.body.length > 350 ? dt.body.substr(0, 350) + '...' : dt.body
+                                            }}
+                                        ></div>
+                            
+                                        <ul>
+                                          <li className="ws_desc">* {dt.created_date.substr(0, 10)}</li>
+                                          <li className="ws_desc" style={{ marginLeft: '50px' }}>
+                                            * {
+                                              lng === "mn"
+                                                ? location.find(item => item.code === dt.location)?.namemn
+                                                : location.find(item => item.code === dt.location)?.nameen
                                             }
-                                        </li>
-                                    </ul>
-                                </div>
+                                          </li>
+                                          <li className="__ws_action_area" >
+                                            <button
+                                              className="nso_btn success"
+                                              tabIndex="0"
+                                              onClick={() => router.push(`/${lng}/about-us/workspace/${dt.id}`)}
+                                            >
+                                              {lng === 'mn' ? 'Дэлгэрэнгүй' : 'Read more'}
+                                            </button>
+                                          </li>
+                                        </ul>
+
+                                    </div>
+                                );
                             })
+                            
                         }
                         <div className="nso_container mt-5 mb-5">
                             {loading ? <><OneField /><OneField /><OneField /></> : <Pagination page={parseInt(pagination.page)} mainPath={"workspace"} articlesPerPage={pagination.pageSize} totalPages={pagination.total} path={"/"} lng={lng} />}
@@ -139,3 +161,4 @@ export default function Home({ params: { lng } }) {
         </>
     );
 }
+

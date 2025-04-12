@@ -64,7 +64,7 @@ export default function Index({ lng }) {
                         menus.map((menu, index) => (
                             <li key={index} className={`${pth.includes(menu.path) && 'active-link-top'}`}>
                                 <Link
-                                    className="__stat_top_title text-xs font-normal"
+                                    className="__stat_top_title text-xs font-medium"
                                     href={menu.url || "#"}
                                 >
                                     {lng === 'mn' ? menu.name_mn : menu.name_en}

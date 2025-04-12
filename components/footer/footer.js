@@ -13,7 +13,7 @@ export default function Footer({ lng }) {
     const [loading, setLoading] = useState(true);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedType, setSelectedType] = useState(null);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -21,10 +21,10 @@ export default function Footer({ lng }) {
                     fetch('/api/analytic', { cache: "no-store" }), // No cache
                     fetch('/api/menus/admin', { cache: "no-store" }) // No cache
                 ]);
-    
+
                 const analyticsData = await analyticsResponse.json();
                 const navDataS = await navResponse.json();
-                
+
                 setData(analyticsData);
                 setNavData(navDataS.data);
             } catch (error) {
@@ -33,9 +33,9 @@ export default function Footer({ lng }) {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
-    }, [lng]); 
+    }, [lng]);
 
     const getDialogShow = (dialogType) => {
         setSelectedType(dialogType);
@@ -102,8 +102,8 @@ export default function Footer({ lng }) {
                                     <i className="pi pi-check"></i>
                                 </div>
                                 <span className="__text">
-                                    <a href={lng+'/terms_of_use'} target="_blank" rel="noopener noreferrer">
-                                        {lng === "mn"?"Ашиглах нөхцөл":"terms of use"}
+                                    <a href={lng + '/terms_of_use'} target="_blank" rel="noopener noreferrer">
+                                        {lng === "mn" ? "Ашиглах нөхцөл" : "terms of use"}
                                     </a>
                                 </span>
                             </div>
@@ -135,9 +135,17 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <span className="__desc">{t('footer.suggestionForNewReport')}</span>
                             <div _ngcontent-lvi-c61="" className="__input">
-                                <span _ngcontent-lvi-c61="" className="p-input-icon-right">
-                                    {/* <i _ngcontent-lvi-c61="" className="pi pi-arrow-right"></i> */}
-                                    <input _ngcontent-lvi-c61="" type="email" name="email" autoComplete="off" formcontrolname="email" pinputtext="" placeholder="Имэйл хаяг" className="ng-untouched ng-pristine ng-invalid p-inputtext p-component" />
+                                <span className="p-input-icon-right">
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        autoComplete="off"
+                                        placeholder="Имэйл хаяг"
+                                        className="p-inputtext p-component"
+                                    />
+                                    <button className="arrow-button">
+                                        <i className="pi pi-arrow-right"></i>
+                                    </button>
                                 </span>
                             </div>
                             <div className="__input" style={{ display: 'flex' }}>
