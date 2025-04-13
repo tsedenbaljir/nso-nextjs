@@ -8,7 +8,7 @@ import Sidebar from '../sidebar';
 
 export default function Glossary({ params: { lng }, searchParams }) {
     const { t } = useTranslation(lng, "lng", "");
-    
+
     const [list, setList] = useState([]);
     const [rows, setRows] = useState(10);
     const [first, setFirst] = useState(0);
@@ -48,7 +48,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
                     const response = await fetch(`/api/questionnaire?${params}`);
                     const data = await response.json();
                     console.log(data);
-                    
+
                     if (data.status) {
                         setList(Array.isArray(data.data) ? data.data : []);
                         setTotalRecords(data.pagination.total);
@@ -92,9 +92,8 @@ export default function Glossary({ params: { lng }, searchParams }) {
         <>
             <div className="nso_statistic_section">
                 <Path name={t('metadata.title')} breadMap={breadMap} />
-                <div className="nso_container">
+                <div className="nso_container mt-4">
                     <div className="sm:col-12 md:col-4 lg:col-3">
-                        <br/>
                         <Sidebar lng={lng} />
                     </div>
                     <div className="sm:col-12 md:col-8 lg:col-9">

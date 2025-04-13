@@ -31,18 +31,18 @@ export default function ContactAdmin({ params: { lng } }) {
 
     const fetchData = async (page = 1, pageSize = 10) => {
         try {
-            const response = await fetch(`/api/contact`);
-            // const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`);
+            // const response = await fetch(`/api/contact`);
+            const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`);
             const result = await response.json();
-            // if (result.status) {
-            //     setData(result.data);
-            //     setPagination({
-            //         ...pagination,
-            //         total: result.pagination.total,
-            //         current: page,
-            //         pageSize: pageSize
-            //     });
-            // }
+            if (result.status) {
+                setData(result);
+                setPagination({
+                    ...pagination,
+                    total: result.pagination.total,
+                    current: page,
+                    pageSize: pageSize
+                });
+            }
             console.log("result", result);
             
         } catch (error) {
@@ -53,16 +53,19 @@ export default function ContactAdmin({ params: { lng } }) {
         }
     };
 
+
+    useEffect(() => {
+        return () => {
+            fetchData()
+        };
+    }, [])
+
     const onPage = (event) => {
         fetchData(event.page + 1, event.rows);
-        console.log("jjdfjsfshdf");
-        
     };
 
     return (
         <div className="">
-            
-            {console.log("hfgsdhjh")}
             <DataTable
                 value={data}
                 lazy
@@ -80,18 +83,8 @@ export default function ContactAdmin({ params: { lng } }) {
                     body={indexBodyTemplate}
                     style={{ width: 20 }}
                 />
-                <Column field="name" header="Нэр" style={{ width: '40%' }} />
-                <Column field="sector_name_mn" header="Ангилал" style={{ width: '10%' }} />
-                <Column 
-                    field="info" 
-                    header="Томьёоны тайлбар" 
-                    style={{ width: '25%' }}
-                    body={(rowData) => (
-                        <div className="truncate max-w-xs" title={rowData.info}>
-                            {rowData.info}
-                        </div>
-                    )}
-                />
+                <Column field="first_name" header="Нэр" style={{ width: '40%' }} />
+                <Column field="last_name" header="Ангилал" style={{ width: '10%' }} />
                 <Column 
                     field="published" 
                     header="Төлөв" 

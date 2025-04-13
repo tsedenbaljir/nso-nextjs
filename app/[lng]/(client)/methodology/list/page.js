@@ -1,10 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import { useTranslation } from '@/app/i18n/client';
-import GlossaryFilter from '../Glossary/GlossaryFilter';
-import GlossaryList from '../Glossary/GlossaryList';
 import Path from '@/components/path/Index';
+import { useTranslation } from '@/app/i18n/client';
+import GlossaryList from '../Glossary/GlossaryList';
+import GlossaryFilter from '../Glossary/GlossaryFilter';
+
+import Result from '@/components/Search/subMain/Result';
+import MainSearch from '@/components/Search/subMain/MainSearch';
 
 export default function Glossary({ params }) {
   const { lng } = params;
@@ -17,6 +20,12 @@ export default function Glossary({ params }) {
   const [totalRecords, setTotalRecords] = useState(0);
   const [filterList, setFilterList] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
+
+
+  const [showResult, setShowResult] = useState(false);
+  const [search, setSearching] = useState({});
+  const [data, setData] = useState({});
+  const [loadingSearch, setLoadingSearch] = useState(true);
 
   const isMn = lng === 'mn';
 
@@ -160,6 +169,12 @@ export default function Glossary({ params }) {
       <Path params={params} name={t('statCate.methodologyText')} />
       <div className="nso_container">
         <div className="sm:col-12 md:col-4 lg:col-3">
+          <div class="__cate_search">
+            <div className="__main_search">
+              <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
+              {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
+            </div>
+          </div>
           <GlossaryFilter
             filterList={filterList}
             selectedFilter={selectedFilter}

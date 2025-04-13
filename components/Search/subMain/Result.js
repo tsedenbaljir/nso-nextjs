@@ -101,7 +101,7 @@ export default function Result({ type, showResult, t, loading, data, lng }) {
                             <span className="group_title">{t('metadata.glossary')}</span>
                             {data.glossary.map((dt, i) => (
                                 <Link
-                                    href={`/${lng}/glossary?search=${dt._source.name}`}
+                                    href={`/${lng}/data-base/meta-data/glossary?search=${dt._source.name}`}
                                     key={`glossary-${dt._source.id}-${i}`}
                                     className="group_item"
                                 >
