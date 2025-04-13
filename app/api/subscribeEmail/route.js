@@ -5,18 +5,14 @@ export async function GET() {
     try {
         const query = `
             SELECT [id]
-                  ,[first_name]
-                  ,[last_name]
-                  ,[phone_number]
-                  ,[country]
-                  ,[city]
-                  ,[district]
-                  ,[khoroo]
-                  ,[letter]
+                  ,[email]
+                  ,[is_subscribe]
                   ,[created_by]
                   ,[created_date]
-            FROM [NSOweb].[dbo].[web_1212_contact_us]
-            ORDER BY [created_date]
+                  ,[last_modified_by]
+                  ,[last_modified_date]
+            FROM [NSOweb].[dbo].[web_1212_email_subscribe]
+            ORDER BY [id]
         `;
         
         const results = await db.raw(query);

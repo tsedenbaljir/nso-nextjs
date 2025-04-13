@@ -11,7 +11,7 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 const { TextArea } = Input;
 const { Option } = Select;
 
-export default function ContactAdmin({ params: { lng } }) {
+export default function subscribeEmailAdmin({ params: { lng } }) {
     const { t } = useTranslation(lng);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ export default function ContactAdmin({ params: { lng } }) {
     const [editingId, setEditingId] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 10,
+        pageSize: 20,
         total: 0
     });
 
@@ -29,19 +29,19 @@ export default function ContactAdmin({ params: { lng } }) {
         return props.rowIndex + 1;
     };
 
-    const fetchData = async (page = 1, pageSize = 10) => {
+    const fetchData = async (page = 1, pageSize = 20) => {
         try {
-            const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`);
+            const response = await fetch(`/api/subscribeEmail?page=${page - 1}&pageSize=${pageSize}`);
             const result = await response.json();
-            const contactList = Array.isArray(result.data) ? result.data : Array.isArray(result) ? result : [];
-            setData(contactList.map((item, index) => ({
+            const emailList = Array.isArray(result.data) ? result.data : Array.isArray(result) ? result : [];
+            setData(emailList.map((item, index) => ({
                 ...item,
                 id: (page - 1) * pageSize + index + 1
             })));
     
             setPagination(prev => ({
                 ...prev,
-                total: result.pagination?.total || contactList.length,
+                total: result.pagination?.total || emailList.length,
                 current: page,
                 pageSize: pageSize
             }));            
@@ -76,16 +76,9 @@ export default function ContactAdmin({ params: { lng } }) {
                 className="p-datatable-sm"
                 emptyMessage="Мэдээлэл олдсонгүй"
             >
-                <Column field="id" header="ID" style={{ width: '3%' }} />
-                <Column field="last_name" header="Овог" style={{ width: '8%' }} />
-                <Column field="first_name" header="Нэр" style={{ width: '8%' }} />
-                <Column field="country" header="Улс" style={{ width: '8%' }} />
-                <Column field="city" header="Хот" style={{ width: '8%' }} />
-                <Column field="khoroo" header="Хороо" style={{ width: '8%' }} />
-                <Column field="district" header="Дүүрэг" style={{ width: '8%' }} />
-                <Column field="phone_number" header="Утас" style={{ width: '8%' }} />
-                <Column field="created_date" header="Огноо" body={(rowData) => new Date(rowData.created_date).toLocaleDateString()} style={{ width: '8%' }} />
-                <Column field="letter" header="Захидал" style={{ width: '30%' }} />
+                <Column field="id" header="ID" style={{ width: '5%' }} />
+                <Column field="email" header="Цахим шуудан" style={{ width: '80%' }} />
+ 
             </DataTable>
         </div>
     );
