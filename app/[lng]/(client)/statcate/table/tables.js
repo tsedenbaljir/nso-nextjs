@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import LoadingDiv from '@/components/Loading/Text/Index';
 
 export default function Table({ sector, subsector, lng }) {
 

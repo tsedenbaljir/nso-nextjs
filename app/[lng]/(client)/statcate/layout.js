@@ -13,11 +13,9 @@ export default function Statecate({ children, params }) {
     ];
 
     return (
-        <>
-            <div className="nso_statistic_section statcate">
-                <Path params={params} name={t('statistic')} breadMap={breadMap} />
-                {children}
-            </div>
-        </>
+        <div className='nso_page_wrap'>
+            <Path params={params} name={t('statistic')} breadMap={breadMap} />
+            {children}
+        </div>
     );
 }
