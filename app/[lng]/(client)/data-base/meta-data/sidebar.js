@@ -56,13 +56,13 @@ export default function SideBar({ lng }) {
 
     return (
         <div>
-            <div class="__cate_search">
+            <div class="__cate_search -my-1">
                 <div className="__main_search">
                     <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
                     {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
                 </div>
             </div>
-            <PanelMenu model={menuItems} className="w-full nso_cate_selection my-8" />
+            <PanelMenu model={menuItems} className="w-full nso_cate_selection" />
         </div>
     );
 }

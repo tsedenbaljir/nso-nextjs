@@ -3,16 +3,6 @@ import Link from 'next/link';
 import { Path } from '@/utils/path';
 import OneField from '@/components/Loading/OneField/Index';
 
-// МЭДЭЭЛЛИЙН САН
-//     -Мета мэдээллийн сан
-//         -Мэдээ
-//         -Тооллого
-//         -Судалгаа
-//         -Үзүүлэлт
-//         -Аргачлал, арга зүй
-//         -Ангилал код
-//         -Нэр, томьёоны тайлбар
-
 // Dropdown component for submenu
 const Dropdown = ({ menu, lng, pth }) => {
   return (

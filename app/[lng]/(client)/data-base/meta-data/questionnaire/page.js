@@ -90,7 +90,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
 
     return (
         <>
-            <div className="nso_statistic_section">
+        <div className='nso_page_wrap'>
                 <Path name={t('metadata.title')} breadMap={breadMap} />
                 <div className="nso_container mt-4">
                     <div className="sm:col-12 md:col-4 lg:col-3">

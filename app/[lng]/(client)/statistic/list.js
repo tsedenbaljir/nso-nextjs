@@ -40,7 +40,7 @@ export default function Tabs({ lng, type, menuItems, loading, pagination, setPag
     };
 
     return (
-        <div id="stat_cate" className="nso_cate_body">
+        <div id="stat_cate" className="w-full">
             <div className="nso_tab_content">
                 <div className="__table_desktop">
                     <div className="__sector_list">

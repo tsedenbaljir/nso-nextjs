@@ -74,6 +74,7 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
         <span className="__search"
             style={{ border: "2px solid #005baa" }}>
             <input
+                className='border-none'
                 ref={searchRef}
                 // className="p-autocomplete-input p-inputtext p-component"
                 placeholder={t("download.search")}
