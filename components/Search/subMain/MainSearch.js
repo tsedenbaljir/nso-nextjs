@@ -72,7 +72,7 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
 
     return (
         <span className="__search"
-            style={{ border: "1px solid #005baa" }}>
+            style={{ border: "2px solid #005baa" }}>
             <input
                 ref={searchRef}
                 // className="p-autocomplete-input p-inputtext p-component"

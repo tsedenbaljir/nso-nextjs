@@ -66,7 +66,7 @@ export default function AboutUs({ params: { lng } }) {
     return (
         <>
             <div className="__main_search">
-                <span className="__search" style={{ border: "1px solid #005baa" }}>
+                <span className="__search" style={{ border: "2px solid #005baa" }}>
                     <input
                         className="p-autocomplete-input p-inputtext p-component"
                         placeholder={t("download.search")}
