@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { notification, ConfigProvider } from 'antd';
 
-
 const ContactForm = () => {
     const [formData, setFormData] = useState({
         lastName: '',
