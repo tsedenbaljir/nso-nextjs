@@ -35,7 +35,7 @@ export default function ContactAdmin({ params: { lng } }) {
             const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`);
             const result = await response.json();
             if (result.status) {
-                setData(result);
+                setData(result.data);
                 setPagination({
                     ...pagination,
                     total: result.pagination.total,
