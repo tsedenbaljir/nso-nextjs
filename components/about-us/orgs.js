@@ -6,8 +6,8 @@ import dataen from './json/data_en.json';
 import Path from '@/components/path/Index';
 import { Timeline } from 'primereact/timeline';
 
-import "@/components/styles/organizational.scss";
 import { Dialog } from 'primereact/dialog';
+import "@/components/styles/organizational.scss";
 
 export default function Orgs({ lng }) {
     const { t } = useTranslation(lng, "lng", "");

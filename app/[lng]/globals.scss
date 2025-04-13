@@ -14,7 +14,6 @@
 @import "@/components/styles/home.scss";
 @import "@/components/styles/latest-news.scss";
 @import "@/components/styles/glossary.scss";
-@import "@/components/styles/style.scss";
 // @import "@/components/styles/works.scss";
 @import "@/components/styles/statcate.scss";
 @import "@/components/styles/not-found.scss";
@@ -27,6 +26,7 @@
 @import "@/components/styles/opendata-view.scss";
 @import "@/components/styles/opendata-table.scss";
 @import "@/components/styles/responsive.scss";
+@import "@/components/styles/style.scss";
 @import "@/components/styles/suvda.scss";
 @import "@/components/styles/buyna.scss";
 
@@ -36,7 +36,7 @@
 // .route-loading-overlay {
 //     backdrop-filter: blur(5px);
 //     transition: all 0.3s ease-in-out;
-    
+
 //     .route-loading-content {
 //         background: white;
 //         padding: 2rem;
@@ -44,6 +44,10 @@
 //         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 //     }
 // }
+
+* {
+  font-family: sf-pro-text;
+}
 
 .__form_title {
   font-size: 2rem;
