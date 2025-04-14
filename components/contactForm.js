@@ -103,11 +103,11 @@ return (
     >
       <div className="__form">
         <h2 className="__form_title">Санал хүсэлт</h2>
-        <div className="__input_group two-column">
+        <div className="__input_form_group two-column">
           <input
             type="text"
             name="lastName"
-            className="__input"
+            className="__input_form"
             placeholder="Овог"
             value={formData.lastName}
             onChange={handleChange}
@@ -115,7 +115,7 @@ return (
           <input
             type="text"
             name="firstName"
-            className="__input"
+            className="__input_form"
             placeholder="Нэр"
             value={formData.firstName}
             onChange={handleChange}
@@ -123,7 +123,7 @@ return (
           <input
             type="text"
             name="country"
-            className="__input"
+            className="__input_form"
             placeholder="Улс"
             value={formData.country}
             onChange={handleChange}
@@ -131,7 +131,7 @@ return (
           <input
             type="text"
             name="phoneNumber"
-            className="__input"
+            className="__input_form"
             placeholder="Утасны дугаар"
             value={formData.phoneNumber}
             onChange={handleChange}
@@ -139,7 +139,7 @@ return (
           <input
             type="text"
             name="city"
-            className="__input"
+            className="__input_form"
             placeholder="Аймаг хот"
             value={formData.city}
             onChange={handleChange}
@@ -147,7 +147,7 @@ return (
           <input
             type="text"
             name="district"
-            className="__input"
+            className="__input_form"
             placeholder="Сум дүүрэг"
             value={formData.district}
             onChange={handleChange}
@@ -155,7 +155,7 @@ return (
           <input
             type="text"
             name="khoroo"
-            className="__input"
+            className="__input_form"
             placeholder="Хороо"
             value={formData.khoroo}
             onChange={handleChange}
@@ -163,14 +163,14 @@ return (
           <input
             type="text"
             name="apartment"
-            className="__input"
+            className="__input_form"
             placeholder="Байр, гудамж"
             value={formData.apartment}
             onChange={handleChange}
           />
           <textarea
             name="letter"
-            className="__input _message full-width"
+            className="__input_form _message full-width"
             placeholder="Захидал бичих:"
             value={formData.letter}
             onChange={handleChange}
