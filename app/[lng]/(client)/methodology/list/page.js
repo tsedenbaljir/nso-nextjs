@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryList from '../Glossary/GlossaryList';
 import GlossaryFilter from '../Glossary/GlossaryFilter';
@@ -165,36 +164,33 @@ export default function Glossary({ params }) {
   }
 
   return (
-    <div className="nso_statistic_section">
-      <Path params={params} name={t('statCate.methodologyText')} />
-      <div className="nso_container">
-        <div className="sm:col-12 md:col-4 lg:col-3">
-          <div class="__cate_search">
-            <div className="__main_search">
-              <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
-              {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
-            </div>
+    <div className="nso_container">
+      <div className="sm:col-12 md:col-4 lg:col-3">
+        <div class="__cate_search">
+          <div className="__main_search">
+            <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
+            {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
           </div>
-          <GlossaryFilter
-            filterList={filterList}
-            selectedFilter={selectedFilter}
-            handleFilterChange={handleFilterChange}
-            t={t}
-            isMn={isMn}
-          />
         </div>
-        <div className="sm:col-12 md:col-8 lg:col-9">
-          {/* <h2>АРГА ЗҮЙ</h2> */}
-          <GlossaryList
-            filterLoading={filterLoading}
-            list={list}
-            isMn={isMn}
-            totalRecords={totalRecords}
-            first={first}
-            rows={rows}
-            onPageChange={onPageChange}
-          />
-        </div>
+        <GlossaryFilter
+          filterList={filterList}
+          selectedFilter={selectedFilter}
+          handleFilterChange={handleFilterChange}
+          t={t}
+          isMn={isMn}
+        />
+      </div>
+      <div className="sm:col-12 md:col-8 lg:col-9">
+        {/* <h2>АРГА ЗҮЙ</h2> */}
+        <GlossaryList
+          filterLoading={filterLoading}
+          list={list}
+          isMn={isMn}
+          totalRecords={totalRecords}
+          first={first}
+          rows={rows}
+          onPageChange={onPageChange}
+        />
       </div>
     </div>
   );

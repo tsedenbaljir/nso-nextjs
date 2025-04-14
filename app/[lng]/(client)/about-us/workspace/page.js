@@ -153,7 +153,7 @@ export default function Home({ params: { lng } }) {
 
                         }
                         <div className="nso_container mt-5 mb-5">
-                            {loading ? <><OneField /><OneField /><OneField /></> : <Pagination page={parseInt(pagination.page)} mainPath={"workspace"} articlesPerPage={pagination.pageSize} totalPages={pagination.total} path={"/"} lng={lng} />}
+                            {loading ? <><OneField /><OneField /><OneField /></> : <Pagination page={parseInt(pagination.page)} mainPath={"about-us/workspace"} articlesPerPage={pagination.pageSize} totalPages={pagination.total} path={"/"} lng={lng} />}
                         </div>
                     </div>
                 </div>

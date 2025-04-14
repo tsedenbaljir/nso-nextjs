@@ -3,10 +3,8 @@ export default function Statistic({ children }) {
         <>
             <div className="nso_statistic_section">
                 <div className="nso_container">
-                    <div>
-                        <div className="__statistic_groups w-full">
-                            {children}
-                        </div>
+                    <div className="__statistic_groups w-full">
+                        {children}
                     </div>
                 </div>
             </div>

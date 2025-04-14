@@ -21,11 +21,13 @@ export default function Statecate({ children, params: { lng } }) {
                     <div className="nso_container">
                         <div className="about_us_header_text">
                             <div className="nso_page_header" style={{ background: 'none' }}>
-                                <div className="__header">
-                                    <span>
-                                        {t("nso")}
-                                    </span>
-                                    <BreadCrumb model={breadMap} />
+                                <div className="nso_container">
+                                    <div className="__header">
+                                        <span>
+                                            {t("nso")}
+                                        </span>
+                                        <BreadCrumb model={breadMap} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -37,31 +39,31 @@ export default function Statecate({ children, params: { lng } }) {
                             <ul>
                                 <li
                                     onClick={() => router.push('/' + lng + '/about-us/home')}
-                                    className={`${pathname.includes('/about-us/home') ? 'active' : ''}`}
+                                    className={`${pathname.includes('/about-us/home') ? 'active_about' : ''}`}
                                 >
                                     {t('home')}
                                 </li>
                                 <li
                                     onClick={() => router.push('/' + lng + '/about-us/cooperation')}
-                                    className={`${pathname.includes('/about-us/cooperation') ? 'active' : ''}`}
+                                    className={`${pathname.includes('/about-us/cooperation') ? 'active_about' : ''}`}
                                 >
                                     {t('menuAboutUs.cooperation')}
                                 </li>
                                 <li
                                     onClick={() => router.push('/' + lng + '/about-us/workspace')}
-                                    className={`${pathname.includes('/about-us/workspace') ? 'active' : ''}`}
+                                    className={`${pathname.includes('/about-us/workspace') ? 'active_about' : ''}`}
                                 >
                                     {t('menuAboutUs.workspace')}
                                 </li>
                                 <li
                                     onClick={() => router.push('/' + lng + '/about-us/news/home')}
-                                    className={`${pathname.includes('/about-us/news/') ? 'active' : ''}`}
+                                    className={`${pathname.includes('/about-us/news/') ? 'active_about' : ''}`}
                                 >
                                     {t('menuAboutUs.news')}
                                 </li>
                                 <li
                                     onClick={() => router.push('/' + lng + '/about-us/laws/main')}
-                                    className={`${pathname.includes('/about-us/laws') ? 'active' : ''}`}
+                                    className={`${pathname.includes('/about-us/laws') ? 'active_about' : ''}`}
                                 >
                                     {t('menuAboutUs.legal')}
                                 </li>

@@ -74,7 +74,7 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
         <span className="__search">
             <input
                 ref={searchRef}
-                className="p-autocomplete-input p-inputtext p-component"
+                className="p-autocomplete-input p-inputtext p-component border-none"
                 placeholder={t("download.search")}
                 value={searchTerm}
                 onChange={handleSearchChange}
@@ -89,7 +89,7 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
                     background: "var(--surface-c)"
                 }}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="size-7 font-bold">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
             </button>

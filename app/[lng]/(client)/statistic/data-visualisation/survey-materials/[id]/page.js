@@ -2,35 +2,50 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
 import styles from './styles.module.scss';
 
 export default function SurveyMaterials({ params }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 10;
+    const [lazyState, setLazyState] = useState({
+        first: 0,
+        rows: 10,
+        page: 1,
+        totalRecords: 0
+    });
 
     const router = useRouter();
 
+    const loadData = async (page = 1, pageSize = 10) => {
+        try {
+            setLoading(true);
+            const response = await fetch(`/api/data-visualisation/downloads?data_viz_id=${params.id}&page=${page}&pageSize=${pageSize}`);
+            if (!response.ok) throw new Error("Failed to fetch data");
+
+            const results = await response.json();
+            const transformedData = transformDownloadData(results.data);
+            
+            setData(transformedData);
+            setLazyState(prev => ({
+                ...prev,
+                totalRecords: results.total || transformedData.length
+            }));
+        } catch (err) {
+            console.error("Error fetching data:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const onPage = (event) => {
+        setLazyState(event);
+        loadData(event.page + 1, event.rows);
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`/api/data-visualisation/downloads?data_viz_id=${params.id}`);
-                if (!response.ok) throw new Error("Failed to fetch data");
-
-                const results = await response.json();
-                const transformedData = transformDownloadData(results);
-                setData(transformedData);
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setError("Failed to load data.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
+        loadData(lazyState.page, lazyState.rows);
     }, [params.id]);
 
     const transformDownloadData = (downloads) => {
@@ -60,11 +75,18 @@ export default function SurveyMaterials({ params }) {
     };
 
     const onDownload = (fileInfo) => {
-        if (!JSON.parse(fileInfo).pathName) return;
-        router.push(`https://gateway.1212.mn/services/fms/api/public/download/0/${JSON.parse(fileInfo)?.pathName}`);
+        if (!fileInfo) return;
+        try {
+            const parsedInfo = JSON.parse(fileInfo);
+            if (parsedInfo?.pathName) {
+                window.open(`https://gateway.1212.mn/services/fms/api/public/download/0/${parsedInfo.pathName}`, '_blank');
+            }
+        } catch (error) {
+            console.error('Error parsing file info:', error);
+        }
     };
 
-    const renderDownloadButton = (rowData, level) => {
+    const downloadButtonTemplate = (level) => (rowData) => {
         if (rowData[`lvl${level}`]?.available) {
             const fileType = rowData[`lvl${level}`].fileType?.toUpperCase() || 'PPT';
             return (
@@ -86,65 +108,33 @@ export default function SurveyMaterials({ params }) {
         return null;
     };
 
-    // Pagination
-    const totalPages = Math.ceil(data.length / rowsPerPage);
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const currentData = data.slice(startIndex, endIndex);
-
-    if (loading) return <div className={styles.loading}><LoadingDiv /></div>;
-    if (error) return <p className={styles.error}>Алдаа гарсан байна. Та түр хүлээнэ үү.</p>;
+    if (loading && !data.length) {
+        return <div className={styles.loading}><LoadingDiv /></div>;
+    }
 
     return (
         <div className="nso_container">
-            {data.length > 0 ? (
-                <>
-                    <div className={styles.tableWrapper}>
-                        <table className={styles.table}>
-                            <thead>
-                                <tr>
-                                    <th style={{ width: '50%' }}>Нэр</th>
-                                    <th style={{ width: '100px' }}>1-р үе</th>
-                                    <th style={{ width: '100px' }}>2-р үе</th>
-                                    <th style={{ width: '100px' }}>3-р үе</th>
-                                    <th style={{ width: '100px' }}>4-р үе</th>
-                                    <th style={{ width: '15%' }}>Багцалсан</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentData.map((row, index) => (
-                                    <tr key={index}>
-                                        <td>{row.name}</td>
-                                        <td className={styles.downloadCell}>{renderDownloadButton(row, 1)}</td>
-                                        <td className={styles.downloadCell}>{renderDownloadButton(row, 2)}</td>
-                                        <td className={styles.downloadCell}>{renderDownloadButton(row, 3)}</td>
-                                        <td className={styles.downloadCell}>{renderDownloadButton(row, 4)}</td>
-                                        <td className={styles.downloadCell}>{renderDownloadButton(row, 0)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                    {totalPages > 1 && (
-                        <div className={styles.pagination}>
-                            <span className={styles.total}>Нийт: {data.length}</span>
-                            <div className={styles.pageButtons}>
-                                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                                    <button
-                                        key={page}
-                                        onClick={() => setCurrentPage(page)}
-                                        className={`${styles.pageButton} ${currentPage === page ? styles.active : ''}`}
-                                    >
-                                        {page}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </>
-            ) : (
-                <div className={styles.noData}>Одоогоор мэдээлэл байхгүй байна.</div>
-            )}
+            <DataTable
+                value={data}
+                lazy
+                paginator
+                first={lazyState.first}
+                rows={lazyState.rows}
+                totalRecords={lazyState.totalRecords}
+                onPage={onPage}
+                loading={loading}
+                className="p-datatable-sm"
+                emptyMessage="Одоогоор мэдээлэл байхгүй байна."
+                currentPageReportTemplate="Нийт: {totalRecords}"
+                showCurrentPageReport
+            >
+                <Column field="name" header="Нэр" style={{ width: '50%' }} />
+                <Column header="1-р үе" body={downloadButtonTemplate(1)} style={{ width: '100px' }} />
+                <Column header="2-р үе" body={downloadButtonTemplate(2)} style={{ width: '100px' }} />
+                <Column header="3-р үе" body={downloadButtonTemplate(3)} style={{ width: '100px' }} />
+                <Column header="4-р үе" body={downloadButtonTemplate(4)} style={{ width: '100px' }} />
+                <Column header="Багцалсан" body={downloadButtonTemplate(0)} style={{ width: '15%' }} />
+            </DataTable>
         </div>
     );
 }

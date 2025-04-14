@@ -63,25 +63,25 @@ export default function Home({ params: { lng }, params }) {
                         <ul>
                             <li
                                 onClick={() => { direct('main') }}
-                                className={`${path.includes('main') ? 'active' : ''}`}
+                                className={`${path.includes('main') ? 'active_laws' : ''}`}
                             >
                                 {t('legalMenu.Legal')}
                             </li>
                             <li
                                 onClick={() => { direct('rules') }}
-                                className={`${path.includes('rules') ? 'active' : ''}`}
+                                className={`${path.includes('rules') ? 'active_laws' : ''}`}
                             >
                                 {t('legalMenu.Rules')}
                             </li>
                             <li
                                 onClick={() => { direct('command') }}
-                                className={`${path.includes('command') ? 'active' : ''}`}
+                                className={`${path.includes('command') ? 'active_laws' : ''}`}
                             >
                                 {t('legalMenu.Command')}
                             </li>
                             <li
                                 onClick={() => { direct('documents') }}
-                                className={`${path.includes('documents') ? 'active' : ''}`}
+                                className={`${path.includes('documents') ? 'active_laws' : ''}`}
                             >
                                 {t('legalMenu.Documents')}
                             </li>
