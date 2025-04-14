@@ -60,19 +60,15 @@ export default function Statcate({ params }) {
             ) : error ? (
                 <p className="text-red-500">Алдаа гарсан байна. Та түр хүлээнэ үү.</p>
             ) : (
-                <div>
+                <div className='w-full'>
                     {data.length === 0 && <p className="text-red-500">Одоогоор мэдээлэл байхгүй байна.</p>}
-                    <div className="__data_vis_cards" >
-                        {data.length > 0 ? data.map((dt, index) => {
+                    <div className="__data_vis_cards w-full" >
+                        {data.length > 0 && data.map((dt, index) => {
                             return <div index={index} onClick={() => { onSelectItem(dt.tableau) }} className="_card">
                                 <img className="cover" src={"/images/news1.png"} />
                                 <span className="title">{dt.name}</span>
                             </div>
-                        }) :
-                            <div className="__stat_detail_tableau">
-                                <iframe src="url" width="100%"></iframe>
-                            </div>
-                        }
+                        })}
                     </div>
                     {loadingDash && <p className="text-red-500">Уншиж байна...</p>}
                     {
