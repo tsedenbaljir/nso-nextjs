@@ -1,8 +1,6 @@
 import React from 'react';
 
 export default function GlossaryItem({ item, isMn }) {
-    console.log(item);
-    
     return (
         <div className="__list">
             <div className="__table_line"></div>

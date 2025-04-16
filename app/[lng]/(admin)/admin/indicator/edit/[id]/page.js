@@ -52,7 +52,6 @@ export default function EditIndicator() {
             router.push('/admin/indicator');
         }
     }, [id]);
-    console.log("id", id);
 
     const fetchIndicator = async (id) => {
         try {
@@ -60,8 +59,6 @@ export default function EditIndicator() {
             const result = await response.json();
             if (result.status) {
                 setIndicator(result.data[0]);
-                console.log("result.data", result.data);
-                
             } else {
                 toast.current.show({
                     severity: 'error',
@@ -107,8 +104,6 @@ export default function EditIndicator() {
                 method: 'PUT',
                 body: formData,
             });
-            console.log("formData", formData);
-
             const result = await response.json();
             if (result.status) {
                 toast.current.show({

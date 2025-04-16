@@ -21,8 +21,6 @@ export default function Statcate({ params }) {
                 const result = await response.json();
                 setData(result);
             } catch (err) {
-                console.log(err);
-
                 setError("Failed to load data.");
             } finally {
                 setLoading(false);

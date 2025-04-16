@@ -30,7 +30,6 @@ export async function GET(req) {
 export async function POST(req) {
     try {
         const { id } = await req.json();
-        console.log(id);
         
         if (!id) {
             return NextResponse.json({

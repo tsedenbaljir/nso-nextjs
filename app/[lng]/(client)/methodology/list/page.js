@@ -86,7 +86,6 @@ export default function Glossary({ params }) {
         const menuWithSubcategories = await Promise.all(
           convert.map(async (category) => fetchSubcategories(category.id))
         );
-        console.log(convert);
 
         // Flatten and set the data
         setFilterList(menuWithSubcategories.flat());

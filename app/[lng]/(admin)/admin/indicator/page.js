@@ -40,8 +40,6 @@ export default function AdminLaws() {
           [type]: result.data
         }));
       }
-      console.log("result", result);
-      
     } catch (error) {
       console.error('Error fetching laws:', error);
     }
@@ -110,7 +108,6 @@ export default function AdminLaws() {
                     laws[category.value].map((law) => (
                       <div key={law.id} className={styles.lawItem}>
                         {/* <h3>{law.id}</h3> */}
-                        {/* {console.log('Law ID:', law.id)} */}
                         <h3>{law.name}</h3>
                         {/* <p>{law.file_info}</p> */}
                         <div className={styles.actions}>

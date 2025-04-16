@@ -34,8 +34,6 @@ export default function Home({ params: { lng }, params }) {
             }
 
             const articlesData = await response.json();
-            console.log(articlesData);
-
             setArticles(articlesData.data);
             setLoading(true);
         } catch (error) {

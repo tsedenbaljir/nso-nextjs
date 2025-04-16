@@ -25,9 +25,9 @@ export async function PUT(req) {
   const last_modified_date = formData.get('last_modified_date');
   const indicator_perc = formData.get('indicator_perc');
 
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value);
-  }
+  // for (const [key, value] of formData.entries()) {
+  //   console.log(`${key}:`, value);
+  // }
 
   try {
     await db('web_1212_main_indicator')

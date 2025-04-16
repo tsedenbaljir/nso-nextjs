@@ -20,8 +20,10 @@ export default function AllNews({ params: { lng } }) {
     const router = useRouter()
     const { t } = useTranslation(lng)
     const [articles, setArticles] = useState([])
+    const [sector_types, setTypes] = useState([])
     const [loading, setLoading] = useState(true)
     const [globalFilterValue, setGlobalFilterValue] = useState('');
+
     const [filters, setFilters] = useState({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         name: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -29,6 +31,17 @@ export default function AllNews({ params: { lng } }) {
     });
 
     useEffect(() => {
+        async function data() {
+            const response = await fetch('/api/subsectorlist');
+            const sectors = await response.json();
+            const allSubsectors = [];
+
+            for (const sector of sectors.data) {
+                allSubsectors[sector.id] = sector.text;
+            }
+            setTypes(allSubsectors)
+        }
+        data();
         fetchArticles()
     }, [])
 
@@ -39,7 +52,7 @@ export default function AllNews({ params: { lng } }) {
     const fetchArticles = async () => {
         setLoading(true)
         try {
-            const response = await fetch('/api/articles/admin')
+            const response = await fetch('/api/methodology/admin')
             if (response.status === 401) {
                 handleUnauthorized()
                 return
@@ -86,13 +99,9 @@ export default function AllNews({ params: { lng } }) {
             return 'Date not available'
         }
     }
+
     const dataNewsType = (rowData) => {
-        const types = {
-            'LATEST': 'Шинэ мэдээ',
-            'MEDIA': 'Медиа мэдээ',
-            'TENDER': 'Тендер'
-        };
-        return types[rowData.news_type] || rowData.news_type;
+        return sector_types[rowData.catalogue_id] || rowData.catalogue_id;
     };
 
     // Add this template for the index column
@@ -109,7 +118,7 @@ export default function AllNews({ params: { lng } }) {
             rejectLabel: 'Үгүй',
             accept: async () => {
                 try {
-                    const response = await fetch(`/api/articles/admin/${id}`, {
+                    const response = await fetch(`/api/methodology/admin/${id}`, {
                         method: 'DELETE',
                     });
                     if (response.status === 401) {
@@ -138,7 +147,7 @@ export default function AllNews({ params: { lng } }) {
                         outlined
                         className="mr-2"
                         onClick={() =>
-                            router.push(`/admin/news/edit/${rowData.id}`)
+                            router.push(`/admin/methodology/edit/${rowData.id}`)
                         }
                     />
                     <Button
@@ -156,7 +165,7 @@ export default function AllNews({ params: { lng } }) {
     const onGlobalFilterChange = (e) => {
         const value = e.target.value;
         let _filters = { ...filters };
-        
+
         _filters['global'].value = value;
 
         setFilters(_filters);
@@ -180,91 +189,85 @@ export default function AllNews({ params: { lng } }) {
     };
 
     return (
-            <div className="w-full card">
-                <ConfirmDialog />
-                <DataTable
-                    value={articles}
-                    dataKey="id"
-                    paginator
-                    rows={15}
-                    selectionMode="single"
-                    rowsPerPageOptions={[15]}
-                    className="p-datatable-sm cursor-pointer"
-                    emptyMessage="No articles found."
-                    currentPageReportTemplate="Нийт {totalRecords} мэдээллээс {first}-{last}"
-                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
-                    loading={loading}
-                    loadingIcon={() => (
-                        <div className="flex justify-center items-center h-32">
-                            <ProgressSpinner
-                                style={{ width: '50px', height: '50px' }}
-                                strokeWidth="4"
-                                animationDuration=".5s"
-                            />
+        <div className="w-full card">
+            <ConfirmDialog />
+            <DataTable
+                value={articles}
+                dataKey="id"
+                paginator
+                rows={15}
+                selectionMode="single"
+                rowsPerPageOptions={[15]}
+                className="p-datatable-sm cursor-pointer"
+                emptyMessage="No articles found."
+                currentPageReportTemplate="Нийт {totalRecords} мэдээллээс {first}-{last}"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
+                loading={loading}
+                loadingIcon={() => (
+                    <div className="flex justify-center items-center h-32">
+                        <ProgressSpinner
+                            style={{ width: '50px', height: '50px' }}
+                            strokeWidth="4"
+                            animationDuration=".5s"
+                        />
+                    </div>
+                )}
+                header={renderHeader}
+                filters={filters}
+                globalFilterFields={['name']}
+            >
+                <Column
+                    header="#"
+                    body={indexBodyTemplate}
+                    style={{ width: '3rem' }}
+                />
+                <Column
+                    field="name"
+                    header="Гарчиг"
+                    filter
+                    filterPlaceholder="Хайх..."
+                    style={{ maxWidth: '300px', whiteSpace: 'normal' }}
+                    body={(rowData) => (
+                        <div className="whitespace-normal line-clamp-2" title={rowData.name}>
+                            {rowData.name}
                         </div>
                     )}
-                    header={renderHeader}
-                    filters={filters}
-                    globalFilterFields={['name']}
-                >
-                    <Column
-                        header="#"
-                        body={indexBodyTemplate}
-                        style={{ width: '3rem' }}
-                    />
-                    <Column
-                        field="name"
-                        header="Гарчиг"
-                        filter
-                        filterPlaceholder="Хайх..."
-                        style={{ maxWidth: '300px', whiteSpace: 'normal' }}
-                        body={(rowData) => (
-                            <div className="whitespace-normal line-clamp-2" title={rowData.name}>
-                                {rowData.name}
-                            </div>
-                        )}
-                    />
-                    <Column
-                        field="language"
-                        header="Хэл"
-                        body={languageBodyTemplate}
-                        style={{ width: '5rem' }}
-                    />
-                    <Column
-                        field="published_date"
-                        header="Нийтлэгдсэн огноо"
-                        body={(rowData) => dateBodyTemplate(rowData, 'published_date')}
-                        sortable
-                    />
-                    <Column
-                        field="news_type"
-                        header="Төрөл"
-                        body={dataNewsType}
-                    />
-                    <Column
-                        field="last_modified_date"
-                        header="Өөрчилсөн огноо"
-                        body={(rowData) => dateBodyTemplate(rowData, 'last_modified_date')}
-                        sortable
-                    />
-                    <Column
-                        field="published"
-                        header="Төлөв"
-                        body={statusBodyTemplate}
-                        style={{ width: '7rem' }}
-                        sortable
-                    />
-                    <Column
-                        field="last_modified_by"
-                        header="Өөрчилсөн хэрэглэгч"
-                        style={{ width: '8rem' }}
-                    />
-                    <Column
-                        header="Үйлдэл"
-                        body={actionBodyTemplate}
-                        style={{ width: '6rem' }}
-                    />
-                </DataTable>
-            </div>
+                />
+                <Column
+                    field="catalogue_id"
+                    header="Төрөл"
+                    body={dataNewsType}
+                />
+                <Column
+                    field="language"
+                    header="Хэл"
+                    body={languageBodyTemplate}
+                    style={{ width: '5rem' }}
+                />
+                <Column
+                    field="last_modified_date"
+                    header="Өөрчилсөн огноо"
+                    body={(rowData) => dateBodyTemplate(rowData, 'last_modified_date')}
+                    sortable
+                />
+                <Column
+                    field="published"
+                    header="Төлөв"
+                    body={statusBodyTemplate}
+                    style={{ width: '7rem' }}
+                    sortable
+                />
+                {/* <Column
+                    field="last_modified_by"
+                    header="Өөрчилсөн хэрэглэгч"
+                    style={{ width: '8rem' }}
+                /> */}
+                <Column
+                    header="Үйлдэл"
+                    body={actionBodyTemplate}
+                    style={{ width: '6rem' }}
+                />
+            </DataTable>
+        </div>
     )
 }

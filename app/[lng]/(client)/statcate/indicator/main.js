@@ -34,7 +34,6 @@ export default function Main({ lng, sector, subsector }) {
                     if (!tableauResponse.ok) throw new Error("Failed to fetch Tableau key");
 
                     const tableauResult = await tableauResponse.json();
-                    console.log("tableauResult", tableauResult);
                     
                     const tkt = tableauResult?.value;
 

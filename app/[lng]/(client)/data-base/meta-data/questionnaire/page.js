@@ -47,7 +47,6 @@ export default function Glossary({ params: { lng }, searchParams }) {
 
                     const response = await fetch(`/api/questionnaire?${params}`);
                     const data = await response.json();
-                    console.log(data);
 
                     if (data.status) {
                         setList(Array.isArray(data.data) ? data.data : []);
