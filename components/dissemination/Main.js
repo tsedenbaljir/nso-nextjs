@@ -12,7 +12,7 @@ export default function Main({ children, type, lng }) {
                 <div className="__section">
                     <div className="p-tabmenu p-component">
                         <ul className="p-tabmenu-nav p-reset flex">
-                            <li className={`p-tabmenuitem ${type === "future" && 'p-highlight'} cursor-pointer`}
+                            <li style={{fontFamily:'sans-serif'}} className={`p-tabmenuitem ${type === "future" && 'p-highlight'} cursor-pointer`}
                                 onClick={() => {
                                     router.push("/dissemination/future")
                                 }}>

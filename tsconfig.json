@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
     "lib": [
       "dom",
@@ -24,14 +26,17 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "components/Loader.js", "app/[lng]/(admin)/layout.js"  ],
+    "**/*.tsx",
+    "components/Loader.js",
+    "app/[lng]/(admin)/layout.js"
+  ],
   "exclude": [
     "node_modules"
   ]

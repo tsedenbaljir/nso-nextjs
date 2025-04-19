@@ -42,6 +42,24 @@
                 border-radius: 50px;
                 background: white;
             }
+            .arrow-button {
+                background-color: white;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                cursor: pointer;
+                margin-top: 8px;
+              }
+              
+              .arrow-button i {
+                color: #125eb4;
+                font-size: 14px;
+              }
+              
 
             .__category_group {
                 width: 100%;

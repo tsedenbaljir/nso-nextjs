@@ -6,6 +6,7 @@ import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
+import ContactForm from '@/components/contactForm';
 
 export default function Contact({ params: { lng } }) {
     const [loading, setLoading] = useState(true);
@@ -91,6 +92,8 @@ export default function Contact({ params: { lng } }) {
                             {webpageData && (
                                 <div dangerouslySetInnerHTML={{ __html: webpageData.body }} />
                             )}
+                            
+                             <ContactForm />
                         </>
                     )}
                 </div>
@@ -133,7 +136,7 @@ export default function Contact({ params: { lng } }) {
     return (
         <>
             <div className='nso_statistic_section'>
-                <div class="nso_page_header">
+                <div className="nso_page_header">
                     <div className="nso_container">
                         <div className="__header">
                             <span className="__page_name">
@@ -143,8 +146,8 @@ export default function Contact({ params: { lng } }) {
                         </div>
                     </div>
                 </div>
-                <div class="nso_statistic_category" style={{ background: "var(--surface-a)" }}>
-                    <div class="nso_container">
+                <div className="nso_statistic_category" style={{ background: "var(--surface-a)" }}>
+                    <div className="nso_container">
                         <Tabs
                             defaultActiveKey="1"
                             items={items}
