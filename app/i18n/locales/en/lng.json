@@ -416,5 +416,26 @@
     "survey": "Survey",
     "magazine": "Book, Magazine",
     "infographic": "Infographic"
-  }
+  },
+  "open-data": {
+  "title": "Open Statistical Data",
+  "description": "Provides users access to statistical indicators via online services.",
+  "api": "API link",
+  "method": "Method",
+  "inputTitle": "Input Parameters",
+  "inputName": "Name",
+  "inputDesc": "Description",
+  "inputType": "Type",
+  "inputNote": "Additional Notes",
+  "outputTitle": "Output Fields",
+  "outputName": "Name",
+  "outputDesc": "Description",
+  "outputType": "Type",
+  "exampleTitle": "Output Example",
+  "exampleJson": "application/json, text/json",
+  "exampleXml": "application/xml, text/xml",
+  "or": "or",
+  "notFound": "No data found."
+}
+
 }

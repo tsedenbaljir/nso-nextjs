@@ -41,8 +41,6 @@ export default function Layout({ params: { lng } }) {
                                 {/* Дэд салбарын агуулга нээгдсэн үед */}
                                 {selectedId === subId && (
                                   <ul className="__inner_ul">
-                                    <li><a href="#input">Оролтын утга</a></li>
-                                    <li><a href="#inputExample">Оролтын жишээ</a></li>
                                     <li><a href="#output">Гаралтын утга</a></li>
                                     <li><a href="#outputExample">Гаралтын жишээ</a></li>
                                   </ul>
