@@ -5,7 +5,13 @@ export default function SubsectorPage({ data }) {
   return (
     <div className="__opendata_main_block">
       {/* Ерөнхий гарчиг */}
-    
+      <div className="__opendata_header">
+        <h1>Статистикийн нээлттэй мэдээлэл</h1>
+        <p>
+          Статистикийн мэдээллийн нэгдсэн сангийн үзүүлэлтүүдийг онлайн сервисаар дамжуулан
+          ашиглах боломжийг хэрэглэгчдэд хүргэж байна.
+        </p>
+      </div>
 
       <div className="__open_section">
         {/* Subsector Title */}
