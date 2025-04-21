@@ -40,7 +40,6 @@ export const subsectorDataMap = {
   
     Subsector2: {
       title: "Дэд салбар доторх хүснэгтийн жагсаалтыг авах",
-      description: "Сонгосон дэд салбарт хамаарах хүснэгтүүдийн жагсаалтыг харуулна.",
       api: "https://data.1212.mn/api/v1/mn/NSO/Education,%20health/Disease/",
       output: [
         { Field: "id", Type: "string", Description: "Англи нэр" },
@@ -90,7 +89,6 @@ export const subsectorDataMap = {
   
     Subsector3: {
       title: "Статистикийн дэд салбарын мэдээллийг авах",
-      description: "Салбарын дэд ангиллуудын дэлгэрэнгүй мэдээллийг харуулна.",
       api: "https://data.1212.mn/api/v1/mn/NSO/Education,%20health",
       output: [
         { Field: "id", Type: "string", Description: "Англи нэр" },
@@ -111,7 +109,7 @@ export const subsectorDataMap = {
   
     Subsector4: {
       title: "Статистикийн үндсэн салбарын жагсаалт авах",
-      description: "Салбарын дэд ангиллуудыг харуулна.",
+
       api: "https://data.1212.mn/api/v1/mn/NSO/",
       output: [
         { Field: "id", Type: "string", Description: "Англи нэр" },

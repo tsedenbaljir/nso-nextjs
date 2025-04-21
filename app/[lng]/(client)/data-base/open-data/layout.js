@@ -9,8 +9,8 @@ export default function Layout({ params: { lng } }) {
   // Салбаруудыг ангилж өгнө
   const sectorStructure = {
     "СТАТИСТИК ТООН МЭДЭЭЛЭЛ": ["Subsector1"],
-    "ХҮСНЭГТ ": ["Subsector2"],
-    "ДЭД АНГИЛАЛ": ["Subsector3"],
+    "ХҮСНЭГТ": ["Subsector2"],
+    "ДЭД САЛБАР": ["Subsector3"],
     "ҮНДСЭН САЛБАР": ["Subsector4"]
   };
 
@@ -40,11 +40,13 @@ export default function Layout({ params: { lng } }) {
                                 </h3>
                                 {/* Дэд салбарын агуулга нээгдсэн үед */}
                                 {selectedId === subId && (
-                                  <ul className="__inner_ul">
-                                    <li><a href="#output">Гаралтын утга</a></li>
-                                    <li><a href="#outputExample">Гаралтын жишээ</a></li>
-                                  </ul>
-                                )}
+  <ul className="__inner_ul">
+    <li><a href="#output">Гаралтын утга</a></li>
+    <li><a href="#outputExample">Гаралтын жишээ</a></li>
+  </ul>
+)}
+
+
                               </li>
                             ))}
                           </ul>
