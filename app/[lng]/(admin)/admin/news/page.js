@@ -179,30 +179,6 @@ export default function AllNews({ params: { lng } }) {
         );
     };
 
-    // Add news type options
-    const newsTypeOptions = [
-        { label: 'Бүгд', value: null },
-        { label: 'Шинэ мэдээ', value: 'LATEST' },
-        { label: 'Медиа мэдээ', value: 'MEDIA' },
-        { label: 'Тендер', value: 'TENDER' }
-    ];
-
-    // Add news type filter template
-    const newsTypeFilterTemplate = (options) => {
-        return (
-            <Dropdown
-                value={options.value}
-                options={newsTypeOptions}
-                onChange={(e) => {
-                    options.filterCallback(e.value);
-                }}
-                placeholder="Сонгох"
-                className="p-column-filter"
-                showClear
-            />
-        );
-    };
-
     return (
             <div className="w-full card">
                 <ConfirmDialog />

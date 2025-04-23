@@ -31,39 +31,39 @@ export default function ContactAdmin({ params: { lng } }) {
 
     const fetchData = async (page = 1, pageSize = 10) => {
         try {
-            const response = await fetch(`/api/contact`);
-            // const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`);
+            const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`);
             const result = await response.json();
-            // if (result.status) {
-            //     setData(result.data);
-            //     setPagination({
-            //         ...pagination,
-            //         total: result.pagination.total,
-            //         current: page,
-            //         pageSize: pageSize
-            //     });
-            // }
-            console.log("result", result);
-            
+            const contactList = Array.isArray(result.data) ? result.data : Array.isArray(result) ? result : [];
+            setData(contactList.map((item, index) => ({
+                ...item,
+                id: (page - 1) * pageSize + index + 1
+            })));
+    
+            setPagination(prev => ({
+                ...prev,
+                total: result.pagination?.total || contactList.length,
+                current: page,
+                pageSize: pageSize
+            }));            
+    
         } catch (error) {
             console.error('Error fetching glossary:', error);
             message.error('Алдаа гарлаа');
         } finally {
             setLoading(false);
         }
-    };
+    };    
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+    
     const onPage = (event) => {
         fetchData(event.page + 1, event.rows);
-        console.log("jjdfjsfshdf");
-        
     };
 
     return (
         <div className="">
-            
-            {console.log("hfgsdhjh")
-            }
             <DataTable
                 value={data}
                 lazy
@@ -76,35 +76,16 @@ export default function ContactAdmin({ params: { lng } }) {
                 className="p-datatable-sm"
                 emptyMessage="Мэдээлэл олдсонгүй"
             >
-                <Column
-                    header="#"
-                    body={indexBodyTemplate}
-                    style={{ width: 20 }}
-                />
-                <Column field="name" header="Нэр" style={{ width: '40%' }} />
-                <Column field="sector_name_mn" header="Ангилал" style={{ width: '10%' }} />
-                <Column 
-                    field="info" 
-                    header="Томьёоны тайлбар" 
-                    style={{ width: '25%' }}
-                    body={(rowData) => (
-                        <div className="truncate max-w-xs" title={rowData.info}>
-                            {rowData.info}
-                        </div>
-                    )}
-                />
-                <Column 
-                    field="published" 
-                    header="Төлөв" 
-                    style={{ width: '10%' }}
-                    // body={publishedBodyTemplate}
-                    className="text-center"
-                />
-                <Column 
-                    // body={actionBodyTemplate}
-                    header="Үйлдэл"
-                    style={{ width: '10%' }}
-                />
+                <Column field="id" header="ID" style={{ width: '3%' }} />
+                <Column field="last_name" header="Овог" style={{ width: '8%' }} />
+                <Column field="first_name" header="Нэр" style={{ width: '8%' }} />
+                <Column field="country" header="Улс" style={{ width: '8%' }} />
+                <Column field="city" header="Хот" style={{ width: '8%' }} />
+                <Column field="khoroo" header="Хороо" style={{ width: '8%' }} />
+                <Column field="district" header="Дүүрэг" style={{ width: '8%' }} />
+                <Column field="phone_number" header="Утас" style={{ width: '8%' }} />
+                <Column field="created_date" header="Огноо" body={(rowData) => new Date(rowData.created_date).toLocaleDateString()} style={{ width: '8%' }} />
+                <Column field="letter" header="Захидал" style={{ width: '30%' }} />
             </DataTable>
         </div>
     );

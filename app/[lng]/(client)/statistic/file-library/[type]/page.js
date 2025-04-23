@@ -21,8 +21,12 @@ export default function StateCate({ params: { lng }, params }) {
             }
 
             const result = await response.json();
+<<<<<<< HEAD
             console.log(result);
             
+=======
+
+>>>>>>> 348110fab2f04ac67f6dcc7a04f5199ac1a4dbf0
             if (Array.isArray(result.data)) {
                 setMenuItems(result.data);
                 setPagination((prev) => ({ ...prev, total: result.data.length }));
@@ -79,6 +83,7 @@ export default function StateCate({ params: { lng }, params }) {
             </div>
             <div className="nso_container">
                 {/* Sidebar */}
+<<<<<<< HEAD
                 <div className="nso_cate_section mt-6 left-bar">
                     <div className='__cate_groups'>
                         <Sidebar lng={lng} type={type} menuItems={menuItems} loading={loading} pagination={pagination} setPagination={setPagination}/>
@@ -86,6 +91,15 @@ export default function StateCate({ params: { lng }, params }) {
                 </div>
                 {/* Main Content */}
                 <List lng={lng} type={type} />
+=======
+                <div className="nso_cate_section left-bar">
+                    <div className='__cate_groups_lib'>
+                        <Sidebar lng={lng} type={type} />
+                    </div>
+                </div>
+                {/* Main Content */}
+                <List lng={lng} type={type} menuItems={menuItems} loading={loading} pagination={pagination} setPagination={setPagination} />
+>>>>>>> 348110fab2f04ac67f6dcc7a04f5199ac1a4dbf0
             </div>
         </div>
     );

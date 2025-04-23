@@ -82,7 +82,10 @@ export default function DynamicSidebar({ subsector, lng }) {
                         };
                     })
                 );
+<<<<<<< HEAD
                 // console.log(menuWithSubcategories);
+=======
+>>>>>>> 348110fab2f04ac67f6dcc7a04f5199ac1a4dbf0
 
                 setMenuItems(menuWithSubcategories);
             } catch (err) {

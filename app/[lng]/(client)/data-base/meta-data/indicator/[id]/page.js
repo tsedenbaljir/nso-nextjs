@@ -36,7 +36,6 @@ export default function Glossary({ params: { lng, id } }) {
                     body: JSON.stringify({ id })
                 });
                 const data = await response.json();
-                console.log(data);
 
                 if (data.status) {
                     setList(data.data);

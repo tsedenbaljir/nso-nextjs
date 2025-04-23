@@ -7,9 +7,9 @@ export default function GlossaryItem({ item, isMn }) {
             <a className="__list_header">
                 {isMn ? item.name : item.name_eng}
             </a>
-            {item.descriptionmn && <div className="description">
+            {item.info && <div className="description">
                 <span className="__list_content">
-                    { isMn ? item.descriptionmn : item.descriptionen }
+                    { isMn ? item.info : item.info_eng }
                 </span>
             </div>}
             <div className="__list_details">

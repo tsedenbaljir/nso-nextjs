@@ -33,11 +33,11 @@ export default function Index({ lng }) {
                     <div className="__statistic_groups">
                         <div className="__group">
                             <div className="__statistics">
-                                <Link className="__card" href={`/${lng}/statcate/table/Population_Household/adminstrative_units_territory`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Population,%20household/Adminstrative%20units,%20territory`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.populationHousehold')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Industry_service/Service_industrial`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Industry,%20service/Industry`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.business')}</span>
                                 </Link>
@@ -45,15 +45,15 @@ export default function Index({ lng }) {
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.society')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Economy,%20environment/economy_env`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Economy,%20environment/Environment`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.economy')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Education,%20health/Edu_main`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Education,%20health/Edu main`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.environment')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Labour_business/Business_register`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Labour,%20business/Business%20Register`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.labourForce')}</span>
                                 </Link>
@@ -61,7 +61,7 @@ export default function Index({ lng }) {
                         </div>
                         <div className="__group">
                             <div className="__highlight">
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[4]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[4]?.image})` }}></span>
@@ -69,7 +69,7 @@ export default function Index({ lng }) {
                                     </span>
                                     <span className="__count">{indicators[4]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[4]?.info : indicators[4]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[3]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[3]?.image})` }}></span>
@@ -77,7 +77,7 @@ export default function Index({ lng }) {
                                     </span>
                                     <span className="__count">{indicators[3]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[3]?.info : indicators[3]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[2]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[2]?.image})` }}></span>
@@ -85,7 +85,7 @@ export default function Index({ lng }) {
                                     </span>
                                     <span className="__count">{indicators[2]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[2]?.info : indicators[2]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}//`} target='blank' >
+                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[1]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(https://downloads.1212.mn/${indicators[1]?.image})` }}></span>

@@ -25,7 +25,7 @@
 
 .__middlecircle {
     border-radius: 100%;
-    background-color: var(--surface-c);
+    background-color: #1c80cf !important;
 }
 
 .__middlecircle {
@@ -58,27 +58,27 @@
         text-align: left;
         font-weight: 800;
         padding-top: 5px;
-        color: var(--blue-600);
+        color:  #1c80cf !important;
     }
 
-    ::ng-deep .p-timeline-event-content {
+    .p-timeline-event-content {
         flex: none;
         width: 1000px;
         margin-bottom: 20px;
     }
 
-    ::ng-deep .p-timeline-event-connector {
+    .p-timeline-event-connector {
         margin: 4px;
         background-color: var(--blue-200);
     }
 
-    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
         color: var(--accent);
         border-top: 2px solid;
         background-color: var(--surface-water);
     }
 
-    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
         padding: 0;
         background: none;
 

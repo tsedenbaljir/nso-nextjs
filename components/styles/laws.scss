@@ -23,7 +23,7 @@
 
             .__menu {
                 font-weight: bold;
-                font-family: sf-pro-text, roboto;
+                font-family: sf-pro-text;
                 border-right: 1px solid hsl(205deg 11% 22% / 24%);
 
                 .__title {
@@ -31,7 +31,7 @@
                     padding: 10px 0;
                     color: var(--text-main);
                     font-size: var(--font-size18);
-                    font-family: sf-pro-text, roboto;
+                    font-family: sf-pro-text;
                     border-bottom: 1px solid hsl(205deg 11% 22% / 24%);
                 }
 
@@ -43,7 +43,7 @@
                     border: 1px solid white;
                     justify-content: flex-end;
                     padding-inline-start: 0px;
-                    font-family: sf-pro-text, roboto;
+                    font-family: sf-pro-text;
 
                     a {
 
@@ -53,7 +53,7 @@
                             font-weight: 230;
                             padding: 15px 35px;
                             position: relative;
-                            font-family: sf-pro-text, roboto;
+                            font-family: sf-pro-text;
 
                             &:hover {
                                 color: var(--accent);
@@ -79,7 +79,7 @@
 
                     }
 
-                    .active {
+                    .active_laws {
                         color: var(--accent);
 
                         &::before {
@@ -261,7 +261,7 @@
 
                 }
 
-                .active {
+                .active_laws {
                     color: var(--accent);
 
                     &::before {

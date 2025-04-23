@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client'
 import NavbarDialog from '../Dialog/NavbarDialog';
+import { message, notification  } from 'antd';
 
 export default function Footer({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
@@ -13,7 +14,62 @@ export default function Footer({ lng }) {
     const [loading, setLoading] = useState(true);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedType, setSelectedType] = useState(null);
+    const [email, setEmail] = useState('');
+    const [subscribed, setSubscribed] = useState(false);  
 
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+    notification.config({
+        placement: 'topRight',
+        top: 100, 
+      });
+    const handleSubscribe = async () => {
+        if (!email) {
+          notification.warning({
+            message: 'Анхааруулга',
+            description: 'Цахим шуудангийн хаяг оруулна уу.',
+            duration: 2,
+          });
+          return;
+        }
+      
+        try {
+          const response = await fetch('/api/insert/subscribeEmail', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+          });
+      
+          const result = await response.json();
+      
+          if (response.ok) {
+            notification.success({
+              message: 'Амжилттай',
+              description: 'Таны хүсэлтийг хүлээн авлаа.',
+              duration: 2,
+            });
+      
+            setTimeout(() => {
+              setEmail('');
+            }, 1000);
+          } else {
+            notification.error({
+              message: 'Алдаа',
+              description: result.error || 'Алдаа гарлаа',
+              duration: 3,
+            });
+          }
+        } catch (error) {
+          notification.error({
+            message: 'Алдаа',
+            description: 'Сүлжээний алдаа гарлаа',
+            duration: 3,
+          });
+        }
+      };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -135,7 +191,7 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <span className="__desc">{t('footer.suggestionForNewReport')}</span>
                             <div _ngcontent-lvi-c61="" className="__input">
-                                <span className="p-input-icon-right">
+                                {/* <span className="p-input-icon-right">
                                     <input
                                         type="email"
                                         name="email"
@@ -144,6 +200,20 @@ export default function Footer({ lng }) {
                                         className="p-inputtext p-component"
                                     />
                                     <button className="arrow-button">
+                                        <i className="pi pi-arrow-right"></i>
+                                    </button>
+                                </span> */}
+                                <span className="p-input-icon-right">
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        autoComplete="off"
+                                        placeholder={t('Имэйл хаяг')}
+                                        className="p-inputtext p-component"
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                    />
+                                    <button className="arrow-button" onClick={handleSubscribe}>
                                         <i className="pi pi-arrow-right"></i>
                                     </button>
                                 </span>

@@ -52,7 +52,6 @@ export async function GET(req) {
     return nextResponse;
 
   } catch (error) {
-    console.error('Error fetching articles:', error);
     return NextResponse.json(
       {
         status: false,
@@ -107,8 +106,6 @@ export async function POST(req) {
     }, { status: 201 });
 
   } catch (error) {
-    console.error('Error creating article:', error);
-
     return NextResponse.json({
       status: false,
       data: null,

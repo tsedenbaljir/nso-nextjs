@@ -31,6 +31,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 <Link
                                     href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/NSO/NSO__${encodeURIComponent(dt._source.sector)}__${encodeURIComponent(dt._source.category)}/${encodeURIComponent(dt._source.link)}`}
                                     key={`tablename-${dt._source.id}-${i}`}
+                                    target='_blank'
                                     className="group_item"
                                 >
                                     <span
@@ -47,8 +48,9 @@ export default function Result({ showResult, t, loading, data, lng }) {
                             <span className="group_title">{t('menuAboutUs.news')}</span>
                             {data.content.map((dt, i) => (
                                 <Link
-                                    href={`/${lng}/news/${dt._source.id}`}
+                                    href={`/${lng}/about-us/news/${dt._source.id}`}
                                     key={`content-${dt._source.id}-${i}`}
+                                    target='_blank'
                                     className="group_item"
                                 >
                                     <span
@@ -65,8 +67,9 @@ export default function Result({ showResult, t, loading, data, lng }) {
                             <span className="group_title">{t('TENDER')}</span>
                             {data.tender.map((dt, i) => (
                                 <Link
-                                    href={`/${lng}/transparency/tender/${dt._source.id}`}
+                                    href={`/${lng}/about-us/transparency/tender/${dt._source.id}`}
                                     key={`tender-${dt._source.id}-${i}`}
+                                    target='_blank'
                                     className="group_item"
                                 >
                                     <span
@@ -85,6 +88,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 <Link
                                     href={`/${lng}/dissemination/${dt._source.id}`}
                                     key={`download-${dt._source.id}-${i}`}
+                                    target='_blank'
                                     className="group_item"
                                 >
                                     <span
@@ -103,6 +107,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 <Link
                                     href={`/${lng}/glossary?search=${dt._source.name}`}
                                     key={`glossary-${dt._source.id}-${i}`}
+                                    target='_blank'
                                     className="group_item"
                                 >
                                     <span
@@ -119,8 +124,9 @@ export default function Result({ showResult, t, loading, data, lng }) {
                             <span className="group_title">{t('menuAboutUs.legal')}</span>
                             {data.laws.map((dt, i) => (
                                 <Link
-                                    href={`/${lng}/dissemination/${dt._source.id}`}
+                                    href={`/${lng}/${dt._source.file_path}`}
                                     key={`laws-${dt._source.id}-${i}`}
+                                    target='_blank'
                                     className="group_item"
                                 >
                                     <span

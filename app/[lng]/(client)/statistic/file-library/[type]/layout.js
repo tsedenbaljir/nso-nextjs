@@ -14,11 +14,9 @@ export default function Statistic({ children, params }) {
     ];
 
     return (
-        <>
-            <div className="nso_statistic_section bg-white magazines">
-                <Path name={t('fileLibrary.report')} breadMap={breadMap} />
-                {children}
-            </div>
-        </>
+        <div className='nso_page_wrap'>
+            <Path name={t('fileLibrary.report')} breadMap={breadMap} />
+            {children}
+        </div>
     );
 }

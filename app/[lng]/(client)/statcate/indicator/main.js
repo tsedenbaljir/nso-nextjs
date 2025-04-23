@@ -34,7 +34,7 @@ export default function Main({ lng, sector, subsector }) {
                     if (!tableauResponse.ok) throw new Error("Failed to fetch Tableau key");
 
                     const tableauResult = await tableauResponse.json();
-
+                    
                     const tkt = tableauResult?.value;
 
                     // Ensure `data.tableau` exists before setting `iframeSrc`

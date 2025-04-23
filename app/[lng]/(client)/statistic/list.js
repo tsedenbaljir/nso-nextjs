@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 "use client";
 import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Paginator } from "primereact/paginator";
+=======
+>>>>>>> 348110fab2f04ac67f6dcc7a04f5199ac1a4dbf0
 import Link from "next/link";
+import { sectors_list } from './sectors';
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import { Paginator } from "primereact/paginator";
 
 export default function Tabs({ lng, type, menuItems, loading, pagination, setPagination }) {
 
@@ -15,9 +22,9 @@ export default function Tabs({ lng, type, menuItems, loading, pagination, setPag
     // Function to handle file download
     const onDownloadDirect = async (fileInfo) => {
         const url = `https://downloads.1212.mn/${JSON.parse(fileInfo).pathName}`;
-        window.open(url, "_blank"); 
+        window.open(url, "_blank");
     };
-    
+
 
     // Function to get file extension
     const getExtension = (file_info) => {
@@ -29,7 +36,7 @@ export default function Tabs({ lng, type, menuItems, loading, pagination, setPag
             return "N/A"; // Fallback if JSON is invalid
         }
     };
-    
+
 
     // Pagination Handler
     const onPageChange = (event) => {
@@ -41,69 +48,67 @@ export default function Tabs({ lng, type, menuItems, loading, pagination, setPag
     };
 
     return (
-        <div id="stat_cate" className="nso_cate_body">
+        <div id="stat_cate" className="w-full">
             <div className="nso_tab_content">
-                <div className="nso_tab">
-                    <div className="__table_desktop">
-                        <div className="__sector_list">
-                            <span className="__sector_header">
-                                Бүх файл
-                            </span>
-                            <div className="__table">
-                                {/* PrimeReact DataTable */}
-                                <DataTable
-                                    value={menuItems.slice(pagination.first, pagination.first + pagination.rows)}
-                                    loading={loading}
-                                    paginator={false} // We use external paginator
-                                >
-                                    <Column
-                                        body={(item) => (
-                                            <div className="__file_table">
-                                                {/* Conditional Link or Clickable Div */}
-                                                {getCheckItemExtension(item, "pdf") ? (
-                                                    <Link href={`/view/${item.id}`} className="_file_name">
-                                                        {item.name}
-                                                    </Link>
-                                                ) : (
-                                                    <div className="_file_name" onClick={() => onDownloadDirect(item.file_info)}>
-                                                        {item.name}
-                                                    </div>
-                                                )}
+                <div className="__table_desktop">
+                    <div className="__sector_list">
+                        <span className="__sector_header">
+                            {sectors_list.find((e) => e.type === type)?.mnName}
+                        </span>
+                        <div className="__table">
+                            {/* PrimeReact DataTable */}
+                            <DataTable
+                                value={menuItems.slice(pagination.first, pagination.first + pagination.rows)}
+                                loading={loading}
+                                paginator={false} // We use external paginator
+                            >
+                                <Column
+                                    body={(item) => (
+                                        <div className="__file_table">
+                                            {/* Conditional Link or Clickable Div */}
+                                            {getCheckItemExtension(item, "pdf") ? (
+                                                <Link href={`/view/${item.id}`} className="_file_name">
+                                                    {item.name}
+                                                </Link>
+                                            ) : (
+                                                <div className="_file_name" onClick={() => onDownloadDirect(item.file_info)}>
+                                                    {item.name}
+                                                </div>
+                                            )}
 
-                                                <div className="_file_info">{item.info}</div>
+                                            <div className="_file_info">{item.info}</div>
 
-                                                {/* Footer Section */}
-                                                <div className="__file_table_foot">
-                                                    <div className="_file_publishedDate">
-                                                        {new Date(item.published_date).toISOString().split("T")[0]}
-                                                    </div>
-                                                    <div className="_file_view">
-                                                        <i className="pi pi-eye"></i> {item.views.toLocaleString()}
-                                                    </div>
-                                                    <div className="_file_type">
-                                                        <span>{getExtension(item.file_info)}</span>
-                                                    </div>
-                                                    <div className="_file_size">
-                                                        {lng === "mn" ? "Файлын хэмжээ:" : "File Size:"} {(item.file_size / 1024 / 1024).toFixed(2)} MB
-                                                    </div>
+                                            {/* Footer Section */}
+                                            <div className="__file_table_foot">
+                                                <div className="_file_publishedDate">
+                                                    {new Date(item.published_date).toISOString().split("T")[0]}
+                                                </div>
+                                                <div className="_file_view">
+                                                    <i className="pi pi-eye"></i> {item.views.toLocaleString()}
+                                                </div>
+                                                <div className="_file_type">
+                                                    <span>{getExtension(item.file_info)}</span>
+                                                </div>
+                                                <div className="_file_size">
+                                                    {lng === "mn" ? "Файлын хэмжээ:" : "File Size:"} {(item.file_size / 1024 / 1024).toFixed(2)} MB
                                                 </div>
                                             </div>
-                                        )}
-                                    />
-                                </DataTable>
+                                        </div>
+                                    )}
+                                />
+                            </DataTable>
 
-                                {/* Custom Pagination */}
-                                <div className="__pagination">
-                                    <span>
-                                        {lng === "mn" ? "Нийт:" : "A total of:"} <strong>{pagination.total}</strong>
-                                    </span>
-                                    <Paginator
-                                        first={pagination.first}
-                                        rows={pagination.rows}
-                                        totalRecords={pagination.total}
-                                        onPageChange={onPageChange}
-                                    />
-                                </div>
+                            {/* Custom Pagination */}
+                            <div className="__pagination">
+                                <span>
+                                    {lng === "mn" ? "Нийт:" : "A total of:"} <strong>{pagination.total}</strong>
+                                </span>
+                                <Paginator
+                                    first={pagination.first}
+                                    rows={pagination.rows}
+                                    totalRecords={pagination.total}
+                                    onPageChange={onPageChange}
+                                />
                             </div>
                         </div>
                     </div>

@@ -3,34 +3,12 @@ import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import LoadingDiv from '@/components/Loading/Text/Index';
 
 export default function Table({ sector, subsector, lng }) {
-
-    // Set initial active tab
-    const [data, setData] = useState([]); // Store API data
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [name, setName] = useState(null);
 
     useEffect(() => {
-        // Fetch subcategories
-        const fetchSubcategories = async (categoryId) => {
-            try {
-                const response = await fetch(`/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
-                const result = await response.json();
-                setName(result.data.filter(e => e.id === decodeURIComponent(subsector)));
-
-                if (!Array.isArray(result.data)) {
-                    return [];
-                }
-            } catch (error) {
-                console.error(`Error fetching subcategories for ${categoryId}:`, error);
-                return [];
-            }
-        };
-        fetchSubcategories(sector);
-
         // Fetch data for DataTable
         const fetchData = async () => {
             try {
@@ -47,7 +25,7 @@ export default function Table({ sector, subsector, lng }) {
 
                 setData(formattedData);
             } catch (err) {
-                setError("Failed to fetch data.");
+                console.log("Failed to fetch data.");
             } finally {
                 setLoading(false);
             }
@@ -72,9 +50,9 @@ export default function Table({ sector, subsector, lng }) {
                     field="id"
                     header="No."
                     className="nso_table_col"
-                    body={(rowData) => (
+                    body={(rowData, { rowIndex }) => (
                         <span className="hover:text-blue-700 hover:underline text-blue-400 font-bold">
-                            {rowData.id}
+                            {rowIndex + 1}
                         </span>
                     )}
                 />

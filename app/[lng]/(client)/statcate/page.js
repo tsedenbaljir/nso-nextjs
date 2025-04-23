@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
 import DynamicSidebar from "@/components/statcate/DynamicSidebar";
 
@@ -8,9 +7,6 @@ export default function Statcate({ params: { lng, subsector } }) {
     const [sectorData, setSectorData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const router = useRouter();
-
     useEffect(() => {
         const fetchSectorData = async () => {
             try {

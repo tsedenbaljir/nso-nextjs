@@ -150,6 +150,7 @@
 .p-breadcrumb {
     padding: 0;
     border: none;
+    text-transform: none !important;
     background: transparent;
     font-size: var(--font-size13);
     color: var(--text-main);

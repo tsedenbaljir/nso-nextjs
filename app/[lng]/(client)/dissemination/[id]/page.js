@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import ReactMarkdown from 'react-markdown';
 import Text from '@/components/Loading/Text/Index';
 import PdfViewer from '@/components/PdfViewer/index';
 
@@ -10,6 +10,7 @@ import "@/components/styles/news.scss";
 import "@/components/styles/dissemination-view.scss";
 
 export default function Home({ params: { lng, id } }) {
+
     const [article, setArticle] = useState(null);
     const [pdfUrl, setPdfUrl] = useState('');
     const [text, setText] = useState('');
@@ -79,33 +80,31 @@ export default function Home({ params: { lng, id } }) {
 
     return (
         <>
-            <div className='nso_about_us mt-10'>
-                <div className="nso_container">
-                    <div className="nso_page_content_wrap">
-                        <div className="__page_block">
-                            <div className="wrap_width">
-                                <div className="__page_main">
-                                    <div className="__page_main_header">
-                                        <h1 className='text-xl font-bold'>{article.name}</h1>
-                                        <em className='mt-3 mb-3'>{article.publishedDate.substr(0, 10)}</em>
-                                    </div>
-                                    <div className="__page_main_content">
-                                        <div className="__page_main_content_text">
-                                            <div id="__one" className="one mt-3 mb-3">
-                                                {text && (
-                                                    <ReactMarkdown
-                                                        remarkPlugins={[remarkGfm]}
-                                                        rehypePlugins={[rehypeRaw]}>
-                                                        {text}
-                                                    </ReactMarkdown>
-                                                )}
-                                            </div>
-                                            {pdfUrl && (
-                                                <div className="pdf-container w-full h-[800px] overflow-hidden">
-                                                    <PdfViewer fileUrl={pdfUrl} />
-                                                </div>
+            <div className="nso_container">
+                <div className="w-full">
+                    <div className="__page_block">
+                        <div className="wrap_width">
+                            <div className="__page_main my-3">
+                                <div className="__page_main_header">
+                                    <h1 className='text-xl font-bold'>{article.name}</h1>
+                                    <em className='mt-3 mb-3'>{article.publishedDate.substr(0, 10)}</em>
+                                </div>
+                                <div className="__page_main_content">
+                                    <div className="__page_main_content_text">
+                                        <div id="__one" className="one mt-3 mb-3">
+                                            {text && (
+                                                <ReactMarkdown
+                                                    remarkPlugins={[remarkGfm]}
+                                                    rehypePlugins={[rehypeRaw]}>
+                                                    {text}
+                                                </ReactMarkdown>
                                             )}
                                         </div>
+                                        {pdfUrl && (
+                                            <div className="pdf-container w-full h-[800px] overflow-hidden">
+                                                <PdfViewer fileUrl={pdfUrl} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -21,7 +21,7 @@ export default function Sidebar() {
       });
       const result = await response.json();
 
-      if (result.status) {
+      if (result.success) {
         message.success('Хайлт амжилттай индекслэгдлээ');
       } else {
         message.error(result.message || 'Алдаа гарлаа');
@@ -59,6 +59,7 @@ export default function Sidebar() {
                 <MenuItems name={"Ил тод байдал"} isActive={pth === "transparency"} link={"transparency"} />
                 <MenuItems name={"Хууль эрхзүй"} isActive={pth === "laws"} link={"laws"} />
                 <MenuItems name={"Онцлох үзүүлэлт"} isActive={pth === "indicator"} link={"indicator"} />
+                <MenuItems name={"Арга зүй"} isActive={pth === "methodology"} link={"methodology"} />
               </ul>
             </div>
             <div >
@@ -68,6 +69,7 @@ export default function Sidebar() {
               <ul className="mb-6 flex flex-col gap-2">
                 <MenuItems name={"Нэр, томьёоны тайлбар"} isActive={pth === "glossary"} link={"glossary"} />
                 <MenuItems name={"Санал хүсэлт"} isActive={pth === "contact"} link={"contact"} />
+                <MenuItems name={"Цахим шуудан"} isActive={pth === "subscribeEmail"} link={"subscribeEmail"} />
                 <li>
                   <div
                     className={`cursor-pointer relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out dark:bg-white/10 text-white bg-orange-500 hover:bg-orange-600`}

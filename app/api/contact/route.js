@@ -4,7 +4,12 @@ import { db } from '@/app/api/config/db_csweb.config.js';
 export async function GET() {
     try {
         const query = `
+<<<<<<< HEAD
             SELECT [first_name]
+=======
+            SELECT [id]
+                  ,[first_name]
+>>>>>>> 348110fab2f04ac67f6dcc7a04f5199ac1a4dbf0
                   ,[last_name]
                   ,[phone_number]
                   ,[country]

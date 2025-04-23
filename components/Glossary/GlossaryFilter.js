@@ -3,7 +3,7 @@ import React from 'react';
 export default function GlossaryFilter({ filterList, selectedFilter, handleFilterChange, t, isMn }) {
     return (
         <div className="nso_cate_section">
-            <div className="__cate_groups get_space">
+            <div className="__cate_groups_lib get_space">
                 <div className="__filter_sidebar_item">
                     <span className="filter-title">{t('metadata.sector')}</span>
                     <ul>
