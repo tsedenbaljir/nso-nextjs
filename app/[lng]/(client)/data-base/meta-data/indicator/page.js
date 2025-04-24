@@ -98,6 +98,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
                     </div>
                     <div className="sm:col-12 md:col-8 lg:col-9">
                         <GlossaryList
+                            path={"indicator"}
                             filterLoading={filterLoading}
                             list={list}
                             isMn={isMn}
