@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-"use client";
-import { useEffect, useState } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import { Paginator } from "primereact/paginator";
-=======
->>>>>>> 348110fab2f04ac67f6dcc7a04f5199ac1a4dbf0
 import Link from "next/link";
 import { sectors_list } from './sectors';
 import { Column } from "primereact/column";
