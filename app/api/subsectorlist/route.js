@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const BASE_API_URL = process.env.BASE_API_URL; // Use this in production instead of hardcoded localhost
-export const dynamicParams = true;
+// export const dynamicParams = true;
 
 // Helper function to fetch subsectors by ID
 const getSubsectors = async (subsectorId) => {
@@ -9,7 +9,7 @@ const getSubsectors = async (subsectorId) => {
     return [];
   }
 
-  const API_URL = `http://localhost:4231/api/subsectorname?subsectorname=${decodeURIComponent(subsectorId)}&lng=mn`;
+  const API_URL = `${BASE_API_URL}/api/subsectorname?subsectorname=${decodeURIComponent(subsectorId)}&lng=mn`;
 
   try {
     const response = await fetch(API_URL);
