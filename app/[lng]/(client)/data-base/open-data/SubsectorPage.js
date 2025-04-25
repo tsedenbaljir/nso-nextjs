@@ -22,39 +22,34 @@ export default function SubsectorPage({ data }) {
 
         {/* API Endpoint */}
         <div className="__opendata_item">
-  <span className={`api_method_tag api_method_${(data.method || "POST").toLowerCase()}`}>
-    {data.method || "POST"}
+  <span className={`api_method_tag api_method_${(data.method || "GET").toLowerCase()}`}>
+    {data.method || "GET"}
   </span>
   <pre className="code_block">{data.api}</pre>
 </div>
 
-
-        {/* Оролтын утга (input params) */}
-        {data.urlInput && (
-          <div className="__opendata_item">
-            <h2># Оролтын утга</h2>
-            <table className="doc_table">
-              <thead>
-                <tr>
-                  <th>Нэр</th>
-                  <th>Тайлбар</th>
-                  <th>Төрөл</th>
-                  <th>Нэмэлт тайлбар</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.urlInput.map((r, i) => (
-                  <tr key={i}>
-                    <td>{r.Parameter}</td>
-                    <td>{r.Description}</td>
-                    <td>{r.Type}</td>
-                    <td><b>json</b> эсвэл <b>xml</b> байна.</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+{/* Оролтын утга */}
+{data.input && (
+  <div id="input" className="__opendata_item">
+    <h2># Оролтын жишээ</h2>
+    <table className="doc_table">
+      <thead>
+        <tr>
+          <th>Нэр</th>
+          <th>Утга</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.entries(data.input).map(([key, value], i) => (
+          <tr key={i}>
+            <td>{key}</td>
+            <td>{value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
     {/* Гаралтын утга */}
 <div id="output" className="__opendata_item">
