@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export const dynamicParams = true;
+// export const dynamicParams = true;
 
 export async function GET(req) {
   try {

@@ -5,20 +5,20 @@ export async function GET() {
     try {
         const query = `
             SELECT [id]
-                  ,[first_name]
-                  ,[last_name]
-                  ,[phone_number]
-                  ,[country]
-                  ,[city]
-                  ,[district]
-                  ,[khoroo]
-                  ,[letter]
-                  ,[created_by]
-                  ,[created_date]
+                ,[first_name]
+                ,[last_name]
+                ,[phone_number]
+                ,[country]
+                ,[city]
+                ,[district]
+                ,[khoroo]
+                ,[letter]
+                ,[created_by]
+                ,[created_date]
             FROM [NSOweb].[dbo].[web_1212_contact_us]
             ORDER BY [created_date]
         `;
-        
+
         const results = await db.raw(query);
         return NextResponse.json(Array.isArray(results) ? results : [results]);
     } catch (error) {

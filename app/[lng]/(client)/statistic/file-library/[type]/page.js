@@ -21,7 +21,6 @@ export default function StateCate({ params: { lng }, params }) {
             }
 
             const result = await response.json();
-
             if (Array.isArray(result.data)) {
                 setMenuItems(result.data);
                 setPagination((prev) => ({ ...prev, total: result.data.length }));

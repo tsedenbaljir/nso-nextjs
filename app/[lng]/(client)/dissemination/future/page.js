@@ -93,7 +93,7 @@ export default function AboutUs({ params: { lng } }) {
             <img src="/images/disimg.jpg" width="100%" />
             <Main type="future" lng={lng}>
                 <table className="w-full">
-                    <thead className="p-datatable-thead">
+                    <thead className=".p-datatable-new-thead">
                         <tr className="__mobile_table">
                             <th style={{ width: "15%" }}>{t('dissemination.scope')}</th>
                             <th style={{ width: "60%" }}>{t('dissemination.specifications')}</th>

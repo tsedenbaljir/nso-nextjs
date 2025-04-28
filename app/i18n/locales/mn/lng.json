@@ -420,6 +420,7 @@
     "giveName": "Нэрийн статистик",
     "history": ""
   },
+
   "report": {
     "bulletin": "Сарын танилцуулга",
     "annual": "Жилийн эмхэтгэл",
@@ -427,5 +428,27 @@
     "survey": "Судалгааны тайлан",
     "magazine": "Ном, сэтгүүл",
     "infographic": "Инфографик"
-  }
+  },
+  "open-data": {
+  "title": "Статистикийн нээлттэй мэдээлэл",
+  "description": "Статистикийн мэдээллийн нэгдсэн сангийн үзүүлэлтүүдийг онлайн сервисаар дамжуулан ашиглах боломжийг хэрэглэгчдэд хүргэж байна.",
+  "api": "API линк",
+  "method": "Арга",
+  "inputTitle": "Оролтын утга",
+  "inputName": "Нэр",
+  "inputDesc": "Тайлбар",
+  "inputType": "Төрөл",
+  "inputNote": "Нэмэлт тайлбар",
+  "outputTitle": "Гаралтын утга",
+  "outputName": "Нэр",
+  "outputDesc": "Тайлбар",
+  "outputType": "Төрөл",
+  "exampleTitle": "Гаралтын жишээ",
+  "exampleJson": "application/json, text/json",
+  "exampleXml": "application/xml, text/xml",
+  "or": "эсвэл",
+  "notFound": "Мэдээлэл олдсонгүй."
+}
+
+  
 }

@@ -17,7 +17,7 @@ export default function Main({ children, type, lng }) {
                                     router.push("/dissemination/future")
                                 }}>
                                 <div className="p-menuitem-link p-ripple">
-                                    <div className="ng-star-inserted">{t('news.future')}</div>
+                                    <div className="ng-star-inserted ">{t('news.future')}</div>
                                 </div>
                             </li>
                             <li className={`p-tabmenuitem ${type === "latest" && 'p-highlight'} cursor-pointer`}
