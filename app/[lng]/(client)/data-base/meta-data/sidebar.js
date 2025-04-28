@@ -1,22 +1,23 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from "next/navigation"; // Adjusted to import useRouter correctly
+import { useRouter, usePathname } from "next/navigation"; // Adjusted to import useRouter correctly
 import { PanelMenu } from "primereact/panelmenu";
 import { useTranslation } from '@/app/i18n/client';
 import Result from '@/components/Search/subMain/Result';
+import FilterSidebar from '@/components/Search/FilterSidebar';
 import MainSearch from '@/components/Search/subMain/MainSearch';
 
-export default function SideBar({ lng }) {
+export default function SideBar({ lng, setActiveLetter }) {
     const router = useRouter();
+    const path = usePathname();
     const { t } = useTranslation(lng, "lng", "");
-
+    
     const [menuItems, setMenuItems] = useState([]);
 
     const [showResult, setShowResult] = useState(false);
     const [search, setSearching] = useState({});
     const [data, setData] = useState({});
     const [loadingSearch, setLoadingSearch] = useState(true);
-    // This useEffect will update the menu items whenever the route changes
     useEffect(() => {
         setMenuItems([
             {
@@ -26,7 +27,7 @@ export default function SideBar({ lng }) {
                     {
                         label: 'Мэдээ, тооллого, судалгаа',
                         id: 'questionnaire',
-                        className: window.location.pathname === `/${lng}/data-base/meta-data/questionnaire` ? 'active-link' : '',
+                        className: path.includes('questionnaire') ? 'active-link' : '',
                         command: () => {
                             router.push(`/${lng}/data-base/meta-data/questionnaire`);
                         }
@@ -34,7 +35,7 @@ export default function SideBar({ lng }) {
                     {
                         label: 'Үзүүлэлт',
                         id: 'indicator',
-                        className: window.location.pathname === `/${lng}/data-base/meta-data/indicator` ? 'active-link' : '',
+                        className: path.includes('indicator') ? 'active-link' : '',
                         command: () => {
                             router.push(`/${lng}/data-base/meta-data/indicator`);
                         }
@@ -42,7 +43,7 @@ export default function SideBar({ lng }) {
                     {
                         label: 'Нэр, томьёоны тайлбар',
                         id: 'glossary',
-                        className: window.location.pathname === `/${lng}/data-base/meta-data/glossary` ? 'active-link' : '',
+                        className: path.includes('glossary') ? 'active-link' : '',
                         command: () => {
                             router.push(`/${lng}/data-base/meta-data/glossary`);
                         }
@@ -52,17 +53,20 @@ export default function SideBar({ lng }) {
                 expanded: true
             }
         ]);
-    }, [window.location.pathname]);
+    }, [path]);
 
     return (
         <div>
-            <div class="__cate_search -my-1">
+            <div className="__cate_search -my-1">
                 <div className="__main_search">
                     <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
                     {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
                 </div>
             </div>
             <PanelMenu model={menuItems} className="w-full nso_cate_selection" />
+            <div>
+                <FilterSidebar setActiveLetter={setActiveLetter} /> 
+            </div>
         </div>
     );
 }

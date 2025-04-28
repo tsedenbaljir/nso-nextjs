@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Spin } from 'antd';
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
@@ -27,7 +27,6 @@ export default function Glossary({ params: { lng }, searchParams }) {
         { label: t('metadata.title') }
     ];
 
-    // Fetch filters
     useEffect(() => {
         const fetchFilters = async () => {
             try {

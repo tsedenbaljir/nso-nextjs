@@ -67,7 +67,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
     }, [searchParams?.search, first, rows, lng]);
 
     const onPageChange = (e) => {
-        if (searchParams?.search) return; // Disable pagination during search
+        if (searchParams?.search) return; 
         setFirst(e.first);
         setRows(e.rows);
         window.scrollTo(0, 0);
