@@ -4,8 +4,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function TransparencyDetailPage() {
-        const { t } = useTranslation(lng, "lng", "");
-        const isMn = lng === 'mn';
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);

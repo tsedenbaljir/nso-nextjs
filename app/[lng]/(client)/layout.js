@@ -1,12 +1,12 @@
-import { Inter } from "next/font/google";
 import "../globals.scss";
 import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
+import { Inter } from "next/font/google";
 import Layout from '@/components/baseLayout';
 
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });

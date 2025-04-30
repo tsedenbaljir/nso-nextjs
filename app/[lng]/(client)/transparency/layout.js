@@ -1,16 +1,35 @@
 "use client"
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
 
-export default function Statecate({ children, params: { lng } }) {
+export default function TransparencyLayout({ children, params: { lng } }) {
+
+    const { id, name } = useParams();
     const { t } = useTranslation(lng, "lng", "");
     const isMn = lng === 'mn';
 
-    const breadMap = [
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (id) {
+            fetch(`/api/transparency/${id}`)
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.status) setData(res.data);
+                })
+                .finally(() => setLoading(false));
+        }
+    }, [id]);
+
+    var breadMap = [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-        { label: t('transparency'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] },
+        { label: t('transparency'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] }
     ];
+    if(name) breadMap.push({ label: name ? decodeURIComponent(name) : ""});
+    if(!loading) breadMap.push({ label: data.title });
 
     return (
         <>
