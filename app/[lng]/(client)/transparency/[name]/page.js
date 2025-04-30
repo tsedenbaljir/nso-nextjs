@@ -42,21 +42,24 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                             <div className="loading">Уншиж байна...</div>
                         ) : items.length > 0 ? (
                             items.map((item, index) => (
-                                <div key={index}
-                                    onClick={() => {
-                                        window.open(item.file_path, '_blank');
-                                    }}
-                                    target="_blank"
+                                <Link
+                                    key={index}
+                                    href={`/${lng}/transparency/${name}/${item.id}`}
                                     className="__card"
-                                    style={{ background: 'var(--surface-bk2)' }}>
+                                    style={{ background: 'var(--surface-bk2)' }}
+                                >
                                     <div className="__category_group">
                                         <h3>{item.title}</h3>
                                     </div>
                                     <div className="circle">
                                         <i className="pi pi-arrow-right"></i>
                                     </div>
+<<<<<<< HEAD
                                 </div>
                                 
+=======
+                                </Link>
+>>>>>>> 35736b204ce4f8ad2544e57432ed28b525ed45b2
                             ))
                         ) : (
                             <div className="no_data">

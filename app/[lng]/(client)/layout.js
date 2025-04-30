@@ -1,12 +1,12 @@
-import { Inter } from "next/font/google";
 import "../globals.scss";
 import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
+import { Inter } from "next/font/google";
 import Layout from '@/components/baseLayout';
 
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
@@ -38,7 +38,7 @@ export default function RootLayout({ children, params: { lng } }) {
           {`
             (function(w,d,s,o,f,js,fjs){w[o]=w[o]||function(){(w[o].q=w[o].q||[]).push(arguments);};(js=d.createElement(s)),(fjs=d.getElementsByTagName(s)[0]);js.id=o;js.src=f;js.async=1;js.referrerPolicy = "origin";fjs.parentNode.insertBefore(js,fjs);})(window,document,"script","copilot","https://script.copilot.live/v1/copilot.min.js?tkn=cat-ifkiii5m");
             copilot("init",{});
-            `}
+          `}
         </Script> */}
         <Script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=loadCaptcha" async defer></Script>
       </head>
