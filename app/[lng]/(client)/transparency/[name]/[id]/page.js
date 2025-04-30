@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import PdfViewer from '@/components/PdfViewer/index';
 export default function TransparencyDetailPage() {
   const { id } = useParams();
   const [data, setData] = useState(null);
@@ -49,24 +49,9 @@ export default function TransparencyDetailPage() {
 
         {/* === PDF файл байвал харах === */}
         {data.file_path && (
-          <div className="bg-gray-50 rounded-md shadow-inner p-4 border border-gray-200 overflow-x-auto">
-
-            {/* PDF iframe */}
-            <div className="w-full" style={{ minWidth: "300px" }}>
-              <iframe
-                  src={data.file_path}
-                className="w-full"
-                style={{
-                  minWidth: "300px",
-                  height: "800px",
-                  border: "1px solid #ccc",
-                  borderRadius: "6px"
-                }}
-                frameBorder="0"
-                allowFullScreen
-              />
-            </div>
-          </div>
+           <div className="pdf-container w-full h-[800px] overflow-hidden">
+           <PdfViewer fileUrl={data.file_path} />
+       </div>
         )}
       </div>
     </div>
