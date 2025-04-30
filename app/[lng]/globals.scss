@@ -147,8 +147,8 @@
 // }
 
 h4 {
-  margin-top: 30px; 
-  margin-bottom: 30px; 
+  margin-top: 10px; 
+  margin-bottom: 10px; 
   font-size: 16px;
   font-weight: bold;
 }
@@ -204,8 +204,6 @@ h4 {
   border-color: #3186f5;
 }
 
-
-
 .__filter_sidebar_word_row {
   display: flex;
   flex-wrap: wrap;
@@ -248,6 +246,14 @@ h4 {
 .__filter_word_item:focus-visible {
   outline: none;
   border-color: #313ef5;
+}
+
+.filter-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  display: block;
 }
 
 // .__filter_word_item:hover {

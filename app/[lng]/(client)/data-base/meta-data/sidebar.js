@@ -1,10 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter, usePathname } from "next/navigation"; // Adjusted to import useRouter correctly
+import { useRouter, usePathname } from "next/navigation";
 import { PanelMenu } from "primereact/panelmenu";
 import { useTranslation } from '@/app/i18n/client';
 import Result from '@/components/Search/subMain/Result';
-import FilterSidebar from '@/components/Search/FilterSidebar';
 import MainSearch from '@/components/Search/subMain/MainSearch';
 
 export default function SideBar({ lng, setActiveLetter }) {
@@ -64,9 +63,6 @@ export default function SideBar({ lng, setActiveLetter }) {
                 </div>
             </div>
             <PanelMenu model={menuItems} className="w-full nso_cate_selection" />
-            <div>
-                <FilterSidebar setActiveLetter={setActiveLetter} /> 
-            </div>
         </div>
     );
 }

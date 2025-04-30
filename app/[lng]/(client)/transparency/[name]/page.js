@@ -37,6 +37,7 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                         <div className="font-bold text-2xl">{categoryTitle}</div>
                     </div>
                     <div className="__card_groups">
+                   
                         {loading ? (
                             <div className="loading">Уншиж байна...</div>
                         ) : items.length > 0 ? (
@@ -55,6 +56,7 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                                         <i className="pi pi-arrow-right"></i>
                                     </div>
                                 </div>
+                                
                             ))
                         ) : (
                             <div className="no_data">

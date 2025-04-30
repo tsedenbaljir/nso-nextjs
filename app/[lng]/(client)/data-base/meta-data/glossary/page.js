@@ -5,6 +5,7 @@ import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryList from '@/components/Glossary/GlossaryList';
 import GlossaryFilter from '@/components/Glossary/GlossaryFilter';
+import QuestionnaireFilterLetter from '@/components/Questionnaire/QuestionnaireFilterLetter';
 import SideBar from '../sidebar';
 
 export default function Glossary({ params: { lng }, searchParams }) {
@@ -14,9 +15,9 @@ export default function Glossary({ params: { lng }, searchParams }) {
     const [rows, setRows] = useState(10);
     const [first, setFirst] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [filterList, setFilterList] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [filterLoading, setFilterLoading] = useState(false);
+    const [filterList, setFilterList] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState(null);
 
     const isMn = lng === 'mn';
@@ -52,14 +53,11 @@ export default function Glossary({ params: { lng }, searchParams }) {
         };
         fetchFilters();
     }, [lng]);
-
-    // Fetch data based on search or normal view
     useEffect(() => {
         const fetchData = async () => {
             setFilterLoading(true);
             try {
                 if (searchParams?.search) {
-                    // If search parameter exists, use search API
                     const response = await fetch(`/api/glossary/search?search=${searchParams.search}&lng=${lng}`);
                     const data = await response.json();
 
@@ -68,16 +66,23 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         setTotalRecords(data.data.length);
                     }
                 } else {
-                    // Normal glossary view
                     const params = new URLSearchParams({
                         page: Math.floor(first / rows),
                         pageSize: rows
                     });
 
-                    if (selectedFilter) {
-                        params.append('sectorType', selectedFilter.code);
-                    }
+                    console.log("selectedFilter", selectedFilter);
 
+                    if (selectedFilter) {
+                        if (typeof selectedFilter === 'object') {
+                            if (selectedFilter.code) {
+                                params.append('sectorType', selectedFilter.code);
+                            } 
+                        } else if (typeof selectedFilter === 'string') {
+                            params.append('label', selectedFilter); 
+                        }
+                    }
+                    console.log("params", params.toString(), selectedFilter);
                     const response = await fetch(`/api/glossary?${params}`);
                     const data = await response.json();
 
@@ -100,14 +105,14 @@ export default function Glossary({ params: { lng }, searchParams }) {
     }, [searchParams?.search, first, rows, selectedFilter, lng]);
 
     const handleFilterChange = (filter) => {
-        if (searchParams?.search) return; // Disable filters during search
+        if (searchParams?.search) return;
         setSelectedFilter(filter);
         setFirst(0);
         window.scrollTo(0, 0);
     };
 
     const onPageChange = (e) => {
-        if (searchParams?.search) return; // Disable pagination during search
+        if (searchParams?.search) return;
         setFirst(e.first);
         setRows(e.rows);
         window.scrollTo(0, 0);
@@ -141,6 +146,13 @@ export default function Glossary({ params: { lng }, searchParams }) {
                             handleFilterChange={handleFilterChange}
                             t={t}
                             isMn={isMn}
+                        />
+                        <QuestionnaireFilterLetter
+                           filterList={filterList}
+                           selectedFilter={selectedFilter}
+                           handleFilterChange={handleFilterChange}
+                           t={t}
+                           isMn={isMn}
                         />
                     </div>
                     <div className="sm:col-12 md:col-8 lg:col-9">
