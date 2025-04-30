@@ -42,19 +42,19 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                         ) : items.length > 0 ? (
                             items.map((item, index) => (
                                 <Link
-                                  key={index}
-                                  href={`/${lng}/transparency/${name}/${item.id}`}
-                                  className="__card"
-                                  style={{ background: 'var(--surface-bk2)' }}
+                                    key={index}
+                                    href={`/${lng}/transparency/${name}/${item.id}`}
+                                    className="__card"
+                                    style={{ background: 'var(--surface-bk2)' }}
                                 >
-                                  <div className="__category_group">
-                                    <h3>{item.title}</h3>
-                                  </div>
-                                  <div className="circle">
-                                    <i className="pi pi-arrow-right"></i>
-                                  </div>
+                                    <div className="__category_group">
+                                        <h3>{item.title}</h3>
+                                    </div>
+                                    <div className="circle">
+                                        <i className="pi pi-arrow-right"></i>
+                                    </div>
                                 </Link>
-                              ))
+                            ))
                         ) : (
                             <div className="no_data">
                                 Мэдээлэл олдсонгүй

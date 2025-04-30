@@ -21,14 +21,14 @@ export default function TransparencyDetailPage() {
 
   if (loading)
     return (
-        <div className="loading">Уншиж байна...</div>
+      <div className="loading">Уншиж байна...</div>
     );
 
   if (!data)
     return (
-        <div className="no_data">
+      <div className="no_data">
         Мэдээлэл олдсонгүй
-    </div>
+      </div>
     );
 
   return (
@@ -49,9 +49,9 @@ export default function TransparencyDetailPage() {
 
         {/* === PDF файл байвал харах === */}
         {data.file_path && (
-           <div className="pdf-container w-full h-[800px] overflow-hidden">
-           <PdfViewer fileUrl={data.file_path} />
-       </div>
+          <div className="pdf-container w-full h-[800px] overflow-hidden">
+            <PdfViewer fileUrl={data.file_path} />
+          </div>
         )}
       </div>
     </div>
