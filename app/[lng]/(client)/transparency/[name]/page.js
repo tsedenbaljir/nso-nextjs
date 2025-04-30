@@ -1,10 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from '@/app/i18n/client';
-import Link from 'next/link';
 
 export default function TransparencyCategory({ params: { lng, name } }) {
-    const { t } = useTranslation(lng, "lng", "");
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [categoryTitle, setCategoryTitle] = useState('');
@@ -38,16 +35,16 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                     </div>
                     <div className="__card_groups">
                         {loading ? (
-                            <div className="loading">Уншиж байна...</div>
+                            <div className="w-full text-center h-56 items-center flex justify-center">
+                                <div className="loading">Уншиж байна...</div>
+                            </div>
                         ) : items.length > 0 ? (
                             items.map((item, index) => (
                                 <div key={index}
-                                onClick={() => {
-                                    const url = `/transparency/${name}/${item.id}?title=${encodeURIComponent(item.title)}&description=${encodeURIComponent(item.description)}&file_path=${encodeURIComponent(item.file_path)}`;
-                                    window.open(url, '_blank');
-                                  }}
-                                  
-                                  
+                                    onClick={() => {
+                                        const url = `/transparency/${name}/${item.id}?title=${encodeURIComponent(item.title)}&description=${encodeURIComponent(item.description)}&file_path=${encodeURIComponent(item.file_path)}`;
+                                        window.open(url, '_blank');
+                                    }}
                                     target="_blank"
                                     className="__card"
                                     style={{ background: 'var(--surface-bk2)' }}>

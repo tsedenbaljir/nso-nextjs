@@ -4,8 +4,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function TransparencyDetailPage() {
-        const { t } = useTranslation(lng, "lng", "");
-        const isMn = lng === 'mn';
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,14 +21,20 @@ export default function TransparencyDetailPage() {
 
   if (loading)
     return (
-        <div className="loading">Уншиж байна...</div>
+      <div className="nso_statistic_category" style={{ background: 'white' }}>
+        <div className="nso_container">
+          <div className="w-full text-center h-56 items-center flex justify-center">
+            <div className="loading">Уншиж байна...</div>
+          </div>
+        </div>
+      </div>
     );
 
   if (!data)
     return (
-        <div className="no_data">
+      <div className="no_data">
         Мэдээлэл олдсонгүй
-    </div>
+      </div>
     );
 
   return (
@@ -56,7 +60,7 @@ export default function TransparencyDetailPage() {
             {/* PDF iframe */}
             <div className="w-full" style={{ minWidth: "300px" }}>
               <iframe
-                  src={data.file_path}
+                src={data.file_path}
                 className="w-full"
                 style={{
                   minWidth: "300px",
