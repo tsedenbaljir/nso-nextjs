@@ -42,9 +42,12 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                         ) : items.length > 0 ? (
                             items.map((item, index) => (
                                 <div key={index}
-                                    onClick={() => {
-                                        window.open(item.file_path, '_blank');
-                                    }}
+                                onClick={() => {
+                                    const url = `/transparency/${name}/${item.id}?title=${encodeURIComponent(item.title)}&description=${encodeURIComponent(item.description)}&file_path=${encodeURIComponent(item.file_path)}`;
+                                    window.open(url, '_blank');
+                                  }}
+                                  
+                                  
                                     target="_blank"
                                     className="__card"
                                     style={{ background: 'var(--surface-bk2)' }}>
