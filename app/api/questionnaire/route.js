@@ -5,12 +5,31 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '0', 10);
     const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
+    const label = searchParams.get('label');
+    const interval = searchParams.get('interval');
+    const orgId = searchParams.get('orgId');
+    const offset = page * pageSize;
 
     try {
-        const offset = page * pageSize;
+        let filters = `WHERE active = 1 AND is_secret = 0`;
+        const queryParams = [];
+
+        if (label) {
+            filters += ` AND label LIKE ?`;
+            queryParams.push(`${label}%`);
+        }
         
-        // Define the SQL query with necessary filters and pagination
-        const query = `
+        if (interval) {
+            filters += ` AND observe_interval = ?`;
+            queryParams.push(interval);
+        }
+        
+        if (orgId) {
+            filters += ` AND organization_ids LIKE ?`;
+            queryParams.push(`%${orgId}%`);
+        }
+
+        const dataQuery = `
             SELECT [id]
                 ,[common_code_id]
                 ,[code]
@@ -36,29 +55,28 @@ export async function GET(req) {
                 ,[organization_ids]
                 ,[approved_date]
                 ,[views]
-            FROM [NSOweb].[dbo].[dynamic_object] where active = 1 and is_secret = 0
+            FROM [NSOweb].[dbo].[dynamic_object]
+            ${filters}
             ORDER BY [last_modified_date] DESC
-            OFFSET ? ROWS
-            FETCH NEXT ? ROWS ONLY
+            OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
         `;
 
-        // Execute the query with pagination parameters
-        const results = await db.raw(query, [offset, pageSize]);
+        queryParams.push(offset, pageSize);
+
+        const results = await db.raw(dataQuery, queryParams);
         const data = Array.isArray(results) ? results : [results];
 
-        // Optionally, calculate total count for pagination
         const countQuery = `
             SELECT COUNT(*) as total
             FROM [NSOweb].[dbo].[dynamic_object]
-            where active = 1 and is_secret = 0
+            ${filters}
         `;
-
-        const totalResult = await db.raw(countQuery);
-        const totalCount = totalResult[0]?.total || 0;
+        const totalCountResult = await db.raw(countQuery, queryParams.slice(0, -2)); // skip offset, pageSize
+        const totalCount = totalCountResult[0]?.total || 0;
 
         return NextResponse.json({
             status: true,
-            data: data,
+            data,
             pagination: {
                 page,
                 pageSize,

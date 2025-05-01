@@ -145,3 +145,134 @@
 //   border-radius: 6px;
 //   width: 100%;
 // }
+
+h4 {
+  margin-top: 10px; 
+  margin-bottom: 10px; 
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.__filter_sidebar_words {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px; 
+  margin: 0;
+  padding: 0;
+}
+
+.__filter_sidebar_item {
+  background-color: #ffffff;  
+  padding: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-radius: 5px;
+}
+
+.__filter_sidebar_item h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.__filter_sidebar_item ul {
+  padding-left: 5px;
+  list-style-type: none;
+}
+
+.__filter_sidebar_item ul li a {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.__filter_sidebar_item ul li a.active {
+  background-color: #d3d3d3; 
+  color: #333;
+}
+
+.__filter_sidebar_item ul li a:hover {
+  background-color: #e0e0e0; 
+}
+
+.__filter_sidebar_item ul li a:focus {
+  outline: none;
+  border-color: #3186f5;
+}
+
+.__filter_sidebar_word_row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0px;
+  margin-bottom: 1px;
+}
+
+.__filter_sidebar_word_col {
+  flex: 0 0 16%;
+  text-align: center;
+}
+
+.__filter_word_item {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid #ddd; 
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.__filter_word_item.active {
+  background-color: #3186f5;
+  color: white;
+}
+
+.__filter_word_item:focus {
+  outline: none;
+  border-color: #313ef5;
+}
+
+.__filter_word_item:focus-visible {
+  outline: none;
+  border-color: #313ef5;
+}
+
+.filter-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+// .__filter_word_item:hover {
+//   background-color: #f1f1f1; 
+// }
+
+// .count {
+//   display: none;
+//   position: absolute;
+//   top: -10px;
+//   right: -10px;
+//   background-color: #000;
+//   color: #fff;
+//   padding: 5px;
+//   border-radius: 50%;
+//   font-size: 12px;
+// }
+
+// .__filter_word_item:hover .count {
+//   display: block;
+// }
+

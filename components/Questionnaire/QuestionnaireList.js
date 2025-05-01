@@ -1,9 +1,9 @@
 import React from "react";
 import { Spin } from "antd";
 import { Paginator } from "primereact/paginator";
-import GlossaryItem from "./GlossaryItem";
+import QuestionnaireItem from "./QuestionnaireItem";
 
-export default function GlossaryList({
+export default function QuestionnaireList({
   filterLoading,
   list,
   isMn,
@@ -25,7 +25,7 @@ export default function GlossaryList({
             ) : (
               <div className="_group_list">
                 {list.map((item) => (
-                  <GlossaryItem
+                  <QuestionnaireItem
                     key={item.id}
                     path={path}
                     item={item}

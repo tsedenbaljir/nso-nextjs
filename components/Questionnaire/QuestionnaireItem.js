@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-export default function GlossaryItem({ item, isMn, path }) {
+export default function QuestionnaireItem({ item, isMn, path }) {
   const router = useRouter();
 
   const handleClick = () => {

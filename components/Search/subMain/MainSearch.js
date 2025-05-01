@@ -35,7 +35,6 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
         }
     };
 
-    // Debounce the search to avoid too many API calls
     const debouncedSearch = useCallback(
         debounce((value) => {
             if (value.length > 2) {

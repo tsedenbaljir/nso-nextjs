@@ -4,12 +4,16 @@ import { db } from '@/app/api/config/db_csweb.config.js';
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '0', 10);
+    const label = decodeURIComponent(searchParams.get('label') || '');
     const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
 
     try {
         const offset = page * pageSize;
-        
-        // Define the SQL query with necessary filters and pagination
+        let filters = `WHERE [type] = 'indicator' AND [active] = 1 AND [version] = '1' AND [is_current] = 1 AND [is_secure] = 0 `;
+        // const queryParams = [];
+        if (label) {
+            filters += ` AND [namemn] LIKE N'${label}%'`;
+        }
         const query = `
             SELECT 
                 [id],
@@ -31,12 +35,7 @@ export async function GET(req) {
                 [descriptionmn],
                 [views]
             FROM [NSOweb].[dbo].[question_pool]
-            WHERE 
-                [type] = 'indicator' AND 
-                [active] = 1 AND 
-                [version] = '1' AND 
-                [is_current] = 1 AND 
-                [is_secure] = 0
+            ${filters}
             ORDER BY [last_modified_date] DESC
             OFFSET ? ROWS
             FETCH NEXT ? ROWS ONLY
@@ -50,12 +49,7 @@ export async function GET(req) {
         const countQuery = `
             SELECT COUNT(*) as total
             FROM [NSOweb].[dbo].[question_pool]
-            WHERE 
-                [type] = 'indicator' AND 
-                [active] = 1 AND 
-                [version] = '1' AND 
-                [is_current] = 1 AND 
-                [is_secure] = 0 
+            ${filters}
         `;
 
         const totalResult = await db.raw(countQuery);

@@ -47,9 +47,9 @@ export default function Statcate({ params }) {
                 <div className='__cate_title text-2xl font-medium'>
                     {data.name}
                 </div>
-                <div class="nso_tab">
-                    <div class="nso_tab_content">
-                        <div class="__stat_detail_tableau">
+                <div className="nso_tab">
+                    <div className="nso_tab_content">
+                        <div className="__stat_detail_tableau">
                             <div className='__dtab_main_text'
                                 dangerouslySetInnerHTML={{ __html: data.info }}
                             />

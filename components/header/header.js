@@ -231,8 +231,8 @@ const Header = ({ lng }) => {
                 </div>
                 <div className={`__dropdown __mobile ${isShowMobile && 'show'}`}>
                     {loading && <PanelMenu model={menusMobile} className="w-full nso_cate_selection" />}
-                    {loadingSub && menusSub.map((its) => {
-                        return <div className='pt-4'>
+                    {loadingSub && menusSub.map((its, index) => {
+                        return <div className='pt-4' key={index}>
                             <Link href={'/${lng}/' + its.url} className='font-semibold text-lg'>{its.name_mn}</Link>
                         </div>
                     })}
