@@ -5,9 +5,9 @@ const db = knex({
   connection: {
     host: "183.81.170.9",
     port: 1433,
-    user: "sa",
-    password: "user1212",
-    database: "wZGAKCXpZUEB",
+    user: "user1212",
+    password: "wZGAKCXpZUEB",
+    database: "NSOweb",
   },
   options: {
     connectTimeout: 40000,
