@@ -45,7 +45,7 @@ export async function POST(req) {
             message: 'Image downloaded and saved.',
             filename: imageName,
             path: `/uploads/images/${imageName}`,
-            fullUrl: `http://localhost:4231/uploads/images/${imageName}`,
+            fullUrl: `/uploads/images/${imageName}`,
         });
     } catch (err) {
         console.error('Download error:', err.message);
