@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 const BASE_API_URL = process.env.BASE_API_URL;
 // export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
 
 export async function GET(req) {
   try {

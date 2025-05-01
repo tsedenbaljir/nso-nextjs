@@ -3,13 +3,9 @@ import { NextResponse } from "next/server";
 const BASE_API_URL = process.env.BASE_API_URL; // Ensure environment variable is set
 // export const dynamicParams = true;
 
-export const dynamic = 'force-dynamic';
 export async function GET(req) {
   try {
-    const { searchParams } = new URL(req.url);
-    const lng = searchParams.get("lng");
-    
-    const API_URL = `${BASE_API_URL}/${lng}/NSO`;
+    const API_URL = `${BASE_API_URL}/mn/NSO`;
     
     // Fetch categories from API
     const response = await fetch(API_URL);
