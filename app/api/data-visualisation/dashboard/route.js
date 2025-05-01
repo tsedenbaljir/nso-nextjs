@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 
-export async function GET(request) {
+export async function GET(req) {
     try {
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = new URL(req.url);
         const data_viz_id = searchParams.get('data_viz_id');
 
         if (!data_viz_id) {
