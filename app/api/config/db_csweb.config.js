@@ -3,11 +3,11 @@ const knex = require("knex");
 const db = knex({
   client: "mssql",
   connection: {
-    host: "10.0.0.160",
+    host: "183.81.170.9",
     port: 1433,
     user: "sa",
-    password: "M@ldata0o",
-    database: "NSOweb",
+    password: "user1212",
+    database: "wZGAKCXpZUEB",
   },
   options: {
     connectTimeout: 40000,
@@ -17,21 +17,4 @@ const db = knex({
   debug: true,
 });
 
-const elastic_133 = knex({
-  client: "mssql",
-  connection: {
-    host: "10.0.10.113",
-    port: 1433,
-    user: "nsolocaluser",
-    password: "-+mncPVLe=95",
-    database: "SPSAPPDB",
-  },
-  options: {
-    connectTimeout: 40000,
-    encrypt: false,
-    trustServerCertificate: false,
-  },
-  debug: true,
-});
-
-module.exports = { db, elastic_133 };
+module.exports = { db };
