@@ -17,13 +17,13 @@ export default function Statistic({ children, params }) {
       label: t("funStatistic.name"),
       url: [(lng === "mn" ? "/mn" : "/en") + "/statistic/fun-statistic/home"],
     },
-    { label: "Та Монгол Улсын хэд дэх иргэн бэ?" },
+    { label: "Монгол улсын хүн амын тоо" },
   ];
 
   return (
     <>
       <div className="nso_statistic_section bg-white magazines">
-        <Path name={t("fileLibrary.report")} breadMap={breadMap} />
+        <Path name={t("dataVis.population")} breadMap={breadMap} />
         {children}
       </div>
     </>

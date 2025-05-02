@@ -26,6 +26,7 @@
     "canvas": "^3.0.1",
     "dayjs": "^1.11.13",
     "formidable": "^3.5.2",
+    "highcharts-react-official": "^3.2.2",
     "https": "^1.0.0",
     "i18next": "^23.12.2",
     "i18next-browser-languagedetector": "^8.0.0",
@@ -61,7 +62,7 @@
     "tedious": "^18.3.0"
   },
   "devDependencies": {
-    "@types/node": "22.14.1",
+    "@types/node": "^22.14.1",
     "@types/react": "19.1.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",

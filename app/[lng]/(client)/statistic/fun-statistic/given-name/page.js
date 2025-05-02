@@ -8,7 +8,7 @@ export default function Statistic() {
             style={{ backgroundColor: "white", width: "100%" }}
           >
             <iframe
-              src="https://www2.1212.mn/sonirkholtoi/FamilyName_new/"
+              src="https://www2.1212.mn/sonirkholtoi/GivenName_new/"
               height="1200px"
               frameBorder="0"
               width="100%"
