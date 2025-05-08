@@ -97,7 +97,7 @@ export default function DynamicSidebar({ subsector, lng }) {
 
     return (
         <>
-            <div class="__cate_search">
+            <div className="__cate_search">
                 <div className="__main_search">
                     <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
                     {search.length > 2 && <Result type={1} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}

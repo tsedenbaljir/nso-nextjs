@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
 const VariableSelector = ({ variable, onChange }) => {
+  // console.log('variable', variable);
   const [isOpen, setIsOpen] = useState(true);
   const [selected, setSelected] = useState([]);
   const [childSelected, setChildSelected] = useState([]);
@@ -179,7 +180,10 @@ const VariableSelector = ({ variable, onChange }) => {
               : 'сонгох'}
           </button>
 
-          {variable.code === 'Баг, хороо' &&
+          {(variable.code.includes('Баг') ||
+            variable.code.includes('Аймг') ||
+            variable.code.includes('Аймаг') ||
+            variable.code.includes('Сум')) &&
             selected.includes('0') === false && (
               <>
                 <h3 className='mt-4 font-semibold'>Дэд кодууд:</h3>
@@ -308,6 +312,7 @@ const VariableSelector = ({ variable, onChange }) => {
 };
 
 const ResultTable = ({ data }) => {
+  // console.log('data', data);
   if (!data || !data.id || !data.dimension || !data.value || !data.size)
     return null;
 
@@ -337,6 +342,7 @@ const ResultTable = ({ data }) => {
       key,
     }));
   });
+  // console.log('rowDimensions', validRowKeys);
 
   const combinations = [];
   const generateCombinations = (dims, prefix = []) => {
@@ -368,7 +374,7 @@ const ResultTable = ({ data }) => {
       yearData,
     };
   });
-
+  // console.log('rows', rows);
   return (
     <div className='overflow-x-auto'>
       <table className='min-w-full border border-gray-300'>
@@ -423,7 +429,7 @@ export default function VariablesPanel({ variables, url }) {
         selection: { filter: 'item', values },
       }));
 
-    console.log('query', query);
+    // console.log('query', query);
 
     if (query.length !== variables.length) {
       alert('Та дор хаяж нэг утга сонгоно уу!');
@@ -447,7 +453,8 @@ export default function VariablesPanel({ variables, url }) {
 
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
-      
+      // console.log('data', data);
+
       setResultData(data);
     } catch (err) {
       console.error('Алдаа:', err);
@@ -475,7 +482,7 @@ export default function VariablesPanel({ variables, url }) {
         <ResultTable
           data={resultData}
           regionOrder={
-            variables.find((v) => v.code === 'Баг, хороо' || v.code === 'Аймаг')
+            variables.find((v) => v.code.includes('Баг') || v.code.includes('Аймг') || v.code.includes('Аймаг') || v.code.includes('Сум'))
               ?.values || []
           }
         />

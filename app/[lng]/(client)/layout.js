@@ -34,12 +34,12 @@ export default function RootLayout({ children, params: { lng } }) {
             gtag('config', 'G-9DGLNDV1MB');
           `}
         </Script>
-        <Script type="application/javascript">
+        {/* <Script type="application/javascript">
           {`
             (function(w,d,s,o,f,js,fjs){w[o]=w[o]||function(){(w[o].q=w[o].q||[]).push(arguments);};(js=d.createElement(s)),(fjs=d.getElementsByTagName(s)[0]);js.id=o;js.src=f;js.async=1;js.referrerPolicy = "origin";fjs.parentNode.insertBefore(js,fjs);})(window,document,"script","copilot","https://script.copilot.live/v1/copilot.min.js?tkn=cat-a0hcsptl");
             copilot("init",{});
           `}
-        </Script>
+        </Script> */}
         <Script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=loadCaptcha" async defer></Script>
       </head>
       <body className={inter.className}>

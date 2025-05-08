@@ -165,7 +165,7 @@ export default function Glossary({ params }) {
   return (
     <div className="nso_container">
       <div className="sm:col-12 md:col-4 lg:col-3">
-        <div class="__cate_search">
+        <div className="__cate_search">
           <div className="__main_search">
             <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
             {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
