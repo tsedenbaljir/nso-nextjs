@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 export default function Loader({ text = "Уншиж байна..." }) {
     return (
         <div className="loader-overlay">
-            <div className="loader-content">
+            <div className="loader-content text-center">
                 <Spin size="large" />
                 <div className="mt-4">{text}</div>
             </div>

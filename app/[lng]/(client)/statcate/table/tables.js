@@ -62,7 +62,8 @@ export default function Table({ sector, subsector, lng }) {
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
-                        <Link href={`${process.env.BASE_FRONT_URL}/pxweb/mn/NSO/NSO__${sector}__${subsector}/` + rowData.link}
+                        //<Link href={`${process.env.BASE_FRONT_URL}/pxweb/mn/NSO/NSO__${sector}__${subsector}/` + rowData.link}
+                        <Link href={`/${lng}/statcate/table-view/${sector}/${subsector}/${rowData.link}`}
                             className="hover:text-blue-700 hover:underline text-gray-900 font-medium">
                             {rowData.name}
                         </Link>
