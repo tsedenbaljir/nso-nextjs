@@ -155,19 +155,22 @@ export async function POST(request) {
                     text-align: center;
                     color: #6c757d;
                 }
+                .post-text {
+                    color: #28a745;
+                    font-weight: bold;
+                }
             </style>
         </head>
         <body>
             <div class="email-container">
                 <div class="header">
-                    <div class="greeting">Сайн байна уу ${firstname},</div>
+                    <div class="greeting">Сайн байна уу ${firstname} ${lastname},</div>               
                 </div>
-                
-                <div class="content">
+                <div class="content"></div>
                     <p>Статистикийн мэдээллийн нэгдсэн сангийн нээлттэй сервисийг ашиглах token тэмдэгтиийг хүргүүлж байна.</p>
                     
                     <div class="token-container">
-                        <div class="token-label">Нээлттэй сервисийг ашиглахын тулд POST request-ийн Headers:</div>
+                        <div class="token-label">Нээлттэй сервисийг ашиглахын тулд <span class="post-text">POST</span> request-ийн Headers:</div>
                         <div class="token-value">access-token: ${token_text}</div>
                     </div>
                     
