@@ -3,7 +3,7 @@ import { db } from '@/app/api/config/db_csweb.config';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import { sendMail } from '@/services/MailService';
+import nodemailer from "nodemailer";
 
 export async function POST(request) {
   if (!request.headers.get("X-API-Key")) {
@@ -34,7 +34,7 @@ export async function POST(request) {
         const userCheck = await db.raw(`
           SELECT id FROM md_users WHERE email = ?
         `, [email]);
-
+        console.log("userCheck>>>>>>>>", userCheck);
         if (userCheck[0]?.id) {
           return NextResponse.json({
             status: false,
@@ -81,6 +81,7 @@ export async function POST(request) {
           created_date,
           updated_date
         ]);
+
         const user = result[0];
 
         // Send email with token
@@ -93,7 +94,29 @@ export async function POST(request) {
           Ашиглах заавар: https://1212.mn
         <br/><br/> Баярлалаа`;
 
-        await sendMail({ to, subject, html });
+        try {
+          const transporter = nodemailer.createTransport({
+            host: "smtp.office365.com", // Replace with your SMTP host
+            port: 587, // Usually 587 for TLS
+            secure: false, // Use true for port 465, false for others
+            auth: {
+              user: "developer1212@nso.mn", // Replace with your email
+              pass: "25veDloper$#", // Replace with your password
+            },
+          });
+
+          // Send the email
+          const info = await transporter.sendMail({
+            from: `<developer1212@nso.mn>`, //<${process.env.INFO_EMAIL_1212}>`, // Sender address
+            to, // Recipient address
+            subject, // Subject line
+            html, // HTML body
+          });
+          console.log("info>>>>>>>>",info);
+          
+        } catch (error) {
+          console.error("Error in sendMail:", error);
+        }
 
         return NextResponse.json({
           status: true,

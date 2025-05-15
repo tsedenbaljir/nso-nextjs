@@ -18,7 +18,7 @@ export const getUsers = async () => {
 
 export const createUserService = async (user) => {
   try {
-    const url = `${process.env.BASE_URL}/api/user/create/func`;
+    const url = `/api/user/create/func`;
     const response = await fetch(url, {
       method: "POST",
       headers: {

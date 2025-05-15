@@ -1,14 +1,14 @@
 "use server";
 const sendMail = async (data) => {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/api/send-mail`, {
+    const res = await fetch(`/api/send-mail`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-
+    console.log("res>>>>>>>>",res);
     if (!res.ok) {
       throw new Error("Failed to fetch user data");
     }
