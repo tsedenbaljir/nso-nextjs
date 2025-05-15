@@ -87,12 +87,99 @@ export async function POST(request) {
         // Send email with token
         const to = email;
         const subject = "Нээлттэй сервисийг ашиглах тухай";
-        const html = `Сайн байна уу ${firstname}, <br/><br/> 
-        Статистикийн мэдээллийн нэгдсэн сангийн нээлттэй сервисийг ашиглах token тэмдэгтиийг хүргүүлж байна.
-        Нээлттэй сервисийг ашиглахын тулд POST request-ийн Headers: access-token:  <b>${token_text}</b> 
-        <br/>
-          Ашиглах заавар: https://1212.mn
-        <br/><br/> Баярлалаа`;
+        const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #f5f5f5;
+                }
+                .email-container {
+                    background-color: #ffffff;
+                    border-radius: 8px;
+                    padding: 30px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                .header {
+                    border-bottom: 2px solid #f0f0f0;
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+                }
+                .greeting {
+                    font-size: 24px;
+                    color: #2c3e50;
+                    margin-bottom: 20px;
+                }
+                .content {
+                    margin: 20px 0;
+                }
+                .token-container {
+                    background-color: #f8f9fa;
+                    border: 1px solid #e9ecef;
+                    border-radius: 6px;
+                    padding: 15px;
+                    margin: 20px 0;
+                }
+                .token-label {
+                    color: #495057;
+                    font-weight: bold;
+                    margin-bottom: 8px;
+                }
+                .token-value {
+                    font-family: monospace;
+                    background-color: #ffffff;
+                    padding: 10px;
+                    border-radius: 4px;
+                    border: 1px solid #dee2e6;
+                    word-break: break-all;
+                }
+                .guide-link {
+                    color: #007bff;
+                    text-decoration: none;
+                }
+                .guide-link:hover {
+                    text-decoration: underline;
+                }
+                .footer {
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 2px solid #f0f0f0;
+                    text-align: center;
+                    color: #6c757d;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="header">
+                    <div class="greeting">Сайн байна уу ${firstname},</div>
+                </div>
+                
+                <div class="content">
+                    <p>Статистикийн мэдээллийн нэгдсэн сангийн нээлттэй сервисийг ашиглах token тэмдэгтиийг хүргүүлж байна.</p>
+                    
+                    <div class="token-container">
+                        <div class="token-label">Нээлттэй сервисийг ашиглахын тулд POST request-ийн Headers:</div>
+                        <div class="token-value">access-token: ${token_text}</div>
+                    </div>
+                    
+                    <p>Ашиглах заавар: <a href="https://1212.mn" class="guide-link">https://1212.mn</a></p>
+                </div>
+                
+                <div class="footer">
+                    <p>Баярлалаа</p>
+                </div>
+            </div>
+        </body>
+        </html>`;
 
         try {
           const transporter = nodemailer.createTransport({
