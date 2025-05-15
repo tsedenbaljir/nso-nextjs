@@ -135,33 +135,26 @@ const VariableSelector = ({ variable, onChange }) => {
   };
 
   return (
-    <div className='border rounded-lg p-4 w-full max-w-80 min-w-80'>
-      <h2
-        onClick={() => setIsOpen(!isOpen)}
-        className='cursor-pointer text-blue-600 font-bold mb-2 flex items-center justify-between'
-      >
-        <span>
-          {variable.text}
-          <span className='text-yellow-600'> Заавал сонгох *</span>
-        </span>
-        {isOpen ? <UpOutlined /> : <DownOutlined />}
+    <div className="border border-gray-400 rounded-md w-full max-w-80 min-w-80 bg-white shadow flex flex-col">
+      <h2 className="bg-blue-700 text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
+        <span>{variable.text}</span>
       </h2>
 
       {isOpen && (
-        <>
-          <p className='text-sm text-gray-600'>
+        <div className="flex-1">
+          {/* <p className="text-sm text-gray-600 mb-2">
             Сонгосон: {selected.length} | Нийт: {variable.values.length}
-          </p>
-          <div className='mt-2 max-h-48 overflow-y-auto'>
+          </p> */}
+          <div className="h-[250px] overflow-y-auto p-2">
             {variable.values
               .filter((val) => val.length === 1)
               .map((val) => (
-                <div key={val} className='flex items-center mb-1'>
+                <div key={val} className="flex items-center mb-1">
                   <input
-                    type='checkbox'
+                    type="checkbox"
                     checked={selected.includes(val)}
                     onChange={() => toggleValue(val)}
-                    className='mr-2'
+                    className="mr-2"
                   />
                   <label>
                     {variable.valueTexts[variable.values.indexOf(val)] || val}
@@ -169,16 +162,25 @@ const VariableSelector = ({ variable, onChange }) => {
                 </div>
               ))}
           </div>
-          <button
-            onClick={() => toggleAll('base')}
-            className='cursor-pointer mt-3 bg-white border rounded px-3 py-1 text-green-700 font-semibold'
-          >
-            ✅ Бүгдийг{' '}
-            {selected.length ===
-              variable.values.filter((val) => val.length === 1).length
-              ? 'болих'
-              : 'сонгох'}
-          </button>
+          {/* <div className="pl-4 border-l-2 border-gray-200 mb-2 bg-gray-300"> */}
+          {/* ...nested checkboxes... */}
+          {/* </div> */}
+          <div className="bg-gray-100 flex rounded-b-md flex-col gap-2 p-2 border-y border-gray-200">
+            <button
+              onClick={() => toggleAll('base')}
+              className="flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 font-normal rounded px-3 py-2 hover:bg-gray-50"
+            >
+              <input type="checkbox" checked={true} />
+              Бүгдийг сонгох
+            </button>
+            <button
+              onClick={() => toggleAll('base')}
+              className="flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 rounded px-3 py-2 hover:bg-gray-100"
+            >
+              <input type="checkbox" checked={false} />
+              Болих
+            </button>
+          </div>
 
           {(variable.code.includes('Баг') ||
             variable.code.includes('Аймг') ||
@@ -187,6 +189,20 @@ const VariableSelector = ({ variable, onChange }) => {
             selected.includes('0') === false && (
               <>
                 <h3 className='mt-4 font-semibold'>Дэд кодууд:</h3>
+                <button
+                  onClick={() => toggleAll('child')}
+                  className='cursor-pointer text-sm mb-2 text-blue-600 underline'
+                >
+                  ✅ Бүгдийг{' '}
+                  {childSelected.length ===
+                    variable.values.filter(
+                      (val) =>
+                        (val.length === 2 || val.length === 3) &&
+                        selected.some((s) => val.startsWith(s))
+                    ).length
+                    ? 'болих'
+                    : 'сонгох'}
+                </button>
                 <button
                   onClick={() => toggleAll('child')}
                   className='cursor-pointer text-sm mb-2 text-blue-600 underline'
@@ -305,7 +321,7 @@ const VariableSelector = ({ variable, onChange }) => {
                 </div>
               </>
             )}
-        </>
+        </div>
       )}
     </div>
   );
