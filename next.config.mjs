@@ -25,6 +25,7 @@ const nextConfig = {
         ],
     },
     env: {
+        BASE_URL: process.env.BASE_URL,
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
         FRONTEND: process.env.FRONTEND,
@@ -37,6 +38,8 @@ const nextConfig = {
         API_URL: process.env.API_URL,
         BASE_API_URL: process.env.BASE_API_URL,
         X_API_KEY: process.env.X_API_KEY,
+        INFO_EMAIL_1212: process.env.INFO_EMAIL_1212,
+        INFO_PASSWORD_1212: process.env.INFO_PASSWORD_1212,
     },
     output: "standalone",
     crossOrigin: "anonymous",

@@ -93,7 +93,7 @@ export default function Contact({ params: { lng } }) {
                                 <div dangerouslySetInnerHTML={{ __html: webpageData.body }} />
                             )}
                             
-                             <ContactForm />
+                            <ContactForm />
                         </>
                     )}
                 </div>

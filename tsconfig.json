@@ -36,7 +36,7 @@
     "**/*.tsx",
     "components/Loader.js",
     "app/[lng]/(admin)/layout.js"
-  ],
+, "app/[lng]/(client)/user/page.js", "app/[lng]/(client)/user/layout.js", "components/UserCreateForm.js", "services/UserService.js", "app/api/user/route.js", "app/api/user/[slug]/route.js", "app/api/user/create/func/route.js", "services/MailService.js", "app/api/send-mail/route.js"  ],
   "exclude": [
     "node_modules"
   ]
