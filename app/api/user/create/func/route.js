@@ -34,7 +34,6 @@ export async function POST(request) {
         const userCheck = await db.raw(`
           SELECT id FROM md_users WHERE email = ?
         `, [email]);
-        console.log("userCheck>>>>>>>>", userCheck);
         if (userCheck[0]?.id) {
           return NextResponse.json({
             status: false,
@@ -202,7 +201,6 @@ export async function POST(request) {
             subject, // Subject line
             html, // HTML body
           });
-          console.log("info>>>>>>>>",info);
           
         } catch (error) {
           console.error("Error in sendMail:", error);
