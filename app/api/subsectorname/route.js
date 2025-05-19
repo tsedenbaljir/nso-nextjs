@@ -14,16 +14,28 @@ export async function GET(req) {
       return NextResponse.json({ error: "Missing subsectorName parameter" }, { status: 400 });
     }
 
+    if (!lng) {
+      return NextResponse.json({ error: "Missing lng parameter" }, { status: 400 });
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
     const API_URL = `${BASE_API_URL}/${lng}/NSO/${encodeURIComponent(subsectorName)}`;
 
-    const response = await fetch(API_URL);
+    const response = await fetch(API_URL, requestOptions);
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const textData = await response.text();
-    const validJson = textData.replace(/^{.*?}\[/, "[");
+    const validJson = textData;
     const subcategories = JSON.parse(validJson);
     
     if (!Array.isArray(subcategories)) {

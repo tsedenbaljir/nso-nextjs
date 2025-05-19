@@ -1,15 +1,63 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Path from '@/components/path/Index';
+import { usePathname } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
+import LoadingDiv from '@/components/Loading/OneField/Index';
 
 export default function Statecate({ children, params }) {
     const { lng } = params;
+    const pathname = usePathname();
+    const [name, setName] = useState(null);
+    const [title, setTitle] = useState('');
     const { t } = useTranslation(lng, "lng", "");
 
-    const breadMap = [
+    useEffect(() => {
+        const fetchSubcategories = async (categoryId) => {
+            try {
+                const response = await fetch(`/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
+                const result = await response.json();
+                setName(result.data.filter(e => e.id === decodeURIComponent(pathname.split('/')[5])));
+
+                if (!Array.isArray(result.data)) {
+                    return [];
+                }
+            } catch (error) {
+                return [];
+            }
+        };
+        fetchSubcategories(pathname.split('/')[4]);
+
+    }, [pathname]);
+
+
+    useEffect(() => {
+        async function getData() {
+            const res = await fetch(`/api/table-view?lng=${lng}&sector=${pathname.split('/')[4]}&subsector=${pathname.split('/')[5]}&id=${pathname.split('/')[6]}`);
+            if (!res.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            const json = await res.json();
+            setTitle(json.title);
+        }
+        if (pathname.split('/')[6]) {
+            getData();
+        }
+    }, [pathname]);
+
+
+    const breadMap = pathname.includes('statcate/table/') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-        { label: t('statistic') },
+        { label: t('statistic'), url: ['/statcate'] },
+        { label: t('statCate.statData'), url: ['/statcate'] },
+        { label: name ? name[0]?.text : <LoadingDiv /> }
+    ] : [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('statistic'), url: ['/statcate'] },
+        { label: t('statCate.statData'), url: ['/statcate'] },
+        { label: name ? name[0]?.text : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
+        { label: title }
     ];
 
     return (

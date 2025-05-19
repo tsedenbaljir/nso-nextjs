@@ -5,15 +5,30 @@ const BASE_API_URL = process.env.BASE_API_URL; // Ensure environment variable is
 
 export async function GET(req) {
   try {
-    const API_URL = `${BASE_API_URL}/mn/NSO`;
-    
+    const { searchParams } = new URL(req.url);
+    const lng = searchParams.get("lng");
+
+    if (!lng) {
+      return NextResponse.json({ error: "Missing lng parameter" }, { status: 400 });
+    }
+
+    const API_URL = `${BASE_API_URL}/${lng}/NSO`;
+
+    const myHeaders = new Headers();
+    myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
     // Fetch categories from API
-    const response = await fetch(API_URL);
-    
+    const response = await fetch(API_URL, requestOptions);
+
     const textData = await response.text();
-    
+
     // Ensure JSON is valid by removing unexpected wrapping object
-    const validJson = textData.replace(/^{.*?}\[/, "[");
+    const validJson = textData;
     const categories = JSON.parse(validJson);
 
     if (!Array.isArray(categories)) {

@@ -28,7 +28,7 @@ export default function TableView({ params }) {
     return (
         <div className="nso_container statisctic_body">
             <div className="w-full my-5">
-                <h1 className='text-2xl font-bold mb-6'>{title}</h1>
+                <h1 className='text-2xl font-medium mb-6'>{title}</h1>
                 {variables.length > 0 ? (
                     <VariablesPanel variables={variables} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}`} />
                 ) : <div className='flex items-center h-full'>

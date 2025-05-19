@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
 const VariableSelector = ({ variable, onChange }) => {
   // console.log('variable', variable);
