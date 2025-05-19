@@ -27,7 +27,7 @@
       }
 
       .__name {
-        font-weight: bold;
+        font-weight: 500;
         padding-top: 30px;
         line-height: 30px;
         color: var(--text-main);
@@ -59,7 +59,7 @@
             width: 15px;
             height: 15px;
             margin-right: 6px;
-            // background-image: url('/assets/images/view.png');
+            background-image: url('/images/view.png');
             background-position: center;
             background-size: contain;
             background-repeat: no-repeat;
@@ -127,7 +127,7 @@
           padding-left: 24px;
 
           .__name {
-            font-weight: bold;
+            font-weight: 500;
             color: var(--text-main);
             font-size: var(--font-size14);
           }
@@ -149,7 +149,7 @@
                 width: 15px;
                 height: 15px;
                 margin-right: 6px;
-                // background-image: url('/assets/images/view.png');
+                background-image: url('/images/view.png');
                 background-position: center;
                 background-size: contain;
                 background-repeat: no-repeat;

@@ -71,7 +71,7 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
     };
 
     return (
-        <span className="__search">
+        <span className="">
             <input
                 ref={searchRef}
                 className="p-autocomplete-input p-inputtext p-component border-none"
