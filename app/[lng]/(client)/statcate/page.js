@@ -7,6 +7,7 @@ export default function Statcate({ params: { lng, subsector } }) {
     const [sectorData, setSectorData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
     useEffect(() => {
         const fetchSectorData = async () => {
             try {

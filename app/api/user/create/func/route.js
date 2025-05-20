@@ -161,22 +161,22 @@ export async function POST(request) {
             </style>
         </head>
         <body>
-            <div class="email-container">
-                <div class="header">
-                    <div class="greeting">Сайн байна уу ${firstname} ${lastname},</div>               
+            <div className="email-container">
+                <div className="header">
+                    <div className="greeting">Сайн байна уу ${firstname} ${lastname},</div>               
                 </div>
-                <div class="content"></div>
+                <div className="content"></div>
                     <p>Статистикийн мэдээллийн нэгдсэн сангийн нээлттэй сервисийг ашиглах token тэмдэгтиийг хүргүүлж байна.</p>
                     
-                    <div class="token-container">
-                        <div class="token-label">Нээлттэй сервисийг ашиглахын тулд <span class="post-text">POST</span> request-ийн Headers:</div>
-                        <div class="token-value">access-token: ${token_text}</div>
+                    <div className="token-container">
+                        <div className="token-label">Нээлттэй сервисийг ашиглахын тулд <span className="post-text">POST</span> request-ийн Headers:</div>
+                        <div className="token-value">access-token: ${token_text}</div>
                     </div>
                     
-                    <p>Ашиглах заавар: <a href="https://1212.mn" class="guide-link">https://1212.mn</a></p>
+                    <p>Ашиглах заавар: <a href="https://1212.mn" className="guide-link">https://1212.mn</a></p>
                 </div>
                 
-                <div class="footer">
+                <div className="footer">
                     <p>Баярлалаа</p>
                 </div>
             </div>

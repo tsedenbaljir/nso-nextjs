@@ -4,7 +4,13 @@ import Sidebar from "../../../sidebar";
 
 export default function StateCate({ params: { lng }, params }) {
     const { tabs, sector, subsector } = params;
-    
+
+    if (decodeURIComponent(sector) === "Historical data" && tabs === "report") {
+        return <div className="nso_container">
+            <Tabs tabs={tabs} sector={sector} subsector={subsector} lng={lng} />
+        </div>
+    }
+
     return (
         <div className="nso_container statisctic_body">
             {/* Sidebar */}

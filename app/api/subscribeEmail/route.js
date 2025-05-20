@@ -5,12 +5,12 @@ export async function GET() {
     try {
         const query = `
             SELECT [id]
-                  ,[email]
-                  ,[is_subscribe]
-                  ,[created_by]
-                  ,[created_date]
-                  ,[last_modified_by]
-                  ,[last_modified_date]
+                ,[email]
+                ,[is_subscribe]
+                ,[created_by]
+                ,[created_date]
+                ,[last_modified_by]
+                ,[last_modified_date]
             FROM [NSOweb].[dbo].[web_1212_email_subscribe]
             ORDER BY [id]
         `;

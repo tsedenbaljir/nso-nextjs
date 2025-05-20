@@ -304,7 +304,8 @@
     "economy": "Эдийн засаг, байгаль орчин",
     "environment": "Боловсрол, эрүүл мэнд",
     "republic": "Түүхэн статистик",
-    "republicStatistic": "Статистикийн эмхэтгэлүүд",
+    "republicTitle": "Түүхэн статистик",
+    "republicStatistic": "“БНМАУ-ын статистик” цэсийн  өмнөтгөл",
     "monthIntroduction": "Сарын танилцуулга"
   },
   "dataVis": {

@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-import { useRouter } from "next/navigation";
 import Image from 'next/image';
+import { Column } from "primereact/column";
+import { useRouter } from "next/navigation";
+import { DataTable } from "primereact/datatable";
 
 export default function Main({ sector, subsector, lng }) {
 
@@ -16,7 +16,7 @@ export default function Main({ sector, subsector, lng }) {
         // Fetch subcategories
         const fetchSubcategories = async () => {
             try {
-                const response = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=report`);
+                const response = await fetch(`/api/download?info=${sector}&lng=${lng}&type=report`);
                 const result = await response.json();
 
                 setData(result.data)

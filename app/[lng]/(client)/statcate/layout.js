@@ -46,8 +46,17 @@ export default function Statecate({ children, params }) {
         }
     }, [pathname]);
 
-
-    const breadMap = pathname.includes('statcate/table/') ? [
+    const breadMap = pathname.includes('/report/Historical%20data') ? [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('statistic'), url: ['/statcate'] },
+        { label: 'БНМАУ', url: ['/statcate/table/Historical%20data/Enterprise'] },
+        { label: 'БНМАУ -ын тайлан' }
+    ] : pathname.includes('/table/Historical%20data') ? [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('statistic'), url: ['/statcate'] },
+        { label: 'БНМАУ', url: ['/statcate/table/Historical%20data/Enterprise'] },
+        { label: name ? name[0]?.text : <LoadingDiv /> }
+    ] : pathname.includes('statcate/table/') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },

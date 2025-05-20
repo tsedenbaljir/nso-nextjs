@@ -89,6 +89,7 @@
     "previous": "‹ Previous",
     "next": "Next ›"
   },
+  "bnmau": "<p><span data-contrast='auto'>The records kept and censuses conducted by the states and tribes that existed and established their own states in the territory of Central Asia can be considered the earliest history of our registration and statistics, as evidenced by the following facts. It is fascinating to note that the concept of 'household', used by these states and tribes for population registration over 2000 years ago, the method of 'head counting by making livestock run in line', and the amount of taxes levied and the number of people conscripted into the military have been preserved for many years, and some even to this day.</span><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-contrast='auto'>The historical documents indicate that 'during the period of Laoshang Chanyu ruling in 174-163 BCE, the Khunnu Empire used to count the population of the country that led to a more organised state taxation' and 'to mark up the age of people and livestock, the Khunnu Empire carried out registration on the Dog day of September when they had a meeting (worship) in Daylan', and 'the Hunnu Empire had 22.8-28.5 million livestock, given that it had a population of 1.5-2.0 million and based on the fact that there were 19 animals per person in 72 BCE&rdquo;.</span><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-contrast='auto'>Under the reign of Guyeg Khaan, a population census was conducted in the winter of 1247, as written by the statesman and historian Rashid-al-Din in his work 'Sudarin chuulgan' (Compendium of Chronicles).</span> <span data-contrast='auto'>After being proclaimed the Khaan of the Great Mongol Empire in 1251, Munkh Khaan conducted a population registration and census across the empire, which is recorded in history.</span><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-contrast='auto'>The population, livestock, and property registrations and censuses were consistently conducted during the periods of the ancient nomads, the Great Mongol Empire, its successor Khanate, and the Manchu Qing dynasty, as recorded in historical sources.</span><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-contrast='auto'>One of the most well-founded major statistical programs during the </span><span data-contrast='auto'>Autonomous Monarchy </span><span data-contrast='auto'>of Mongolia</span> <span data-contrast='auto'>was the Population and Livestock 1918 Census. This census was organized by the then Government of the </span><span data-contrast='auto'>Autonomous Monarchy</span><span data-contrast='auto'>, with many provinces and districts conducting their own registrations and counts, which were then reviewed and verified by the Ministry of Internal Affairs.</span><span data-ccp-props='{&quot;201341983&quot;:0,&quot;335551550&quot;:6,&quot;335551620&quot;:6,&quot;335559739&quot;:0,&quot;335559740&quot;:276}'>&nbsp;</span></p> <p><span data-ccp-props='{}'>&nbsp;</span></p> <p><span data-contrast='auto'>This year marks the Centennial anniversary of the establishment of Mongolia&rsquo;s modern statistical institution, founded in 1924. In commemoration of this historic milestone, we have prepared a digital dataset for public access. The data contained in the webpage serves as a useful source for research and other purposes by users, researchers, journalists, and all interested parties.</span><span data-ccp-props='{&quot;335551550&quot;:6,&quot;335551620&quot;:6}'>&nbsp;</span></p> <p><span data-contrast='auto'>This webpage - Historical Data contains long time series reflecting the economic and social development of the Mongolian People&rsquo;s Republic (MPR) prior to the adoption of new Constitution of Mongolia in 1992.&nbsp;</span><span data-ccp-props='{&quot;335551550&quot;:6,&quot;335551620&quot;:6}'>&nbsp;</span></p> <p><span data-contrast='auto'>The compilation has systematically been prepared using official statistical publications and materials previously issued by the National Statistical Office (NSO).&nbsp;</span><span data-ccp-props='{&quot;335551550&quot;:6,&quot;335551620&quot;:6}'>&nbsp;</span></p> <p><span data-contrast='auto'>The National Statistical Office continues to fulfill its historic mission of documenting the nation&rsquo;s socio-economic development through data. By digitizing and preserving MPR-era statistical data, we ensure these valuable historical resources remain accessible for future generations.</span><span data-ccp-props='{&quot;335551550&quot;:6,&quot;335551620&quot;:6}'>&nbsp;</span></p>",
   "buttonBNMAU1": "Statistics of the Republic of Mongolia",
   "buttonBNMAU2": "Statistical yearbook",
   "spinnerLoading": "Loading...",
@@ -294,7 +295,8 @@
     "economy": "Economy, environment",
     "environment": "Education, health",
     "republic": "Historical data",
-    "republicStatistic": "Statistics report",
+    "republicTitle": "Historical data",
+    "republicStatistic": "Introduction to a new menu on the corporate web site - the Historty of the Mongolian People’s Republic ",
     "monthIntroduction": "Month Introduction"
   },
   "dataVis": {
@@ -418,24 +420,23 @@
     "infographic": "Infographic"
   },
   "open-data": {
-  "title": "Open Statistical Data",
-  "description": "Provides users access to statistical indicators via online services.",
-  "api": "API link",
-  "method": "Method",
-  "inputTitle": "Input Parameters",
-  "inputName": "Name",
-  "inputDesc": "Description",
-  "inputType": "Type",
-  "inputNote": "Additional Notes",
-  "outputTitle": "Output Fields",
-  "outputName": "Name",
-  "outputDesc": "Description",
-  "outputType": "Type",
-  "exampleTitle": "Output Example",
-  "exampleJson": "application/json, text/json",
-  "exampleXml": "application/xml, text/xml",
-  "or": "or",
-  "notFound": "No data found."
-}
-
+    "title": "Open Statistical Data",
+    "description": "Provides users access to statistical indicators via online services.",
+    "api": "API link",
+    "method": "Method",
+    "inputTitle": "Input Parameters",
+    "inputName": "Name",
+    "inputDesc": "Description",
+    "inputType": "Type",
+    "inputNote": "Additional Notes",
+    "outputTitle": "Output Fields",
+    "outputName": "Name",
+    "outputDesc": "Description",
+    "outputType": "Type",
+    "exampleTitle": "Output Example",
+    "exampleJson": "application/json, text/json",
+    "exampleXml": "application/xml, text/xml",
+    "or": "or",
+    "notFound": "No data found."
+  }
 }

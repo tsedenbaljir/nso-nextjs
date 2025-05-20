@@ -121,26 +121,28 @@
 
             @media only screen and (min-width: 800px) {
                 .__metadata {
+                    gap: 10px;
                     display: flex;
                     flex-direction: row;
                     flex-wrap: nowrap;
 
                     a {
-                        display: flex;
-                        font-size: 14px;
-                        flex-direction: row;
-                        flex-wrap: nowrap;
-                        justify-content: center;
                         width: 50%;
-                        margin: 5px;
                         padding: 10px;
-                        margin-top: 30px;
-                        text-align: center;
-                        border-radius: 6px;
-                        text-decoration: none;
+                        display: flex;
                         color: black;
-                        background-color: white;
+                        font-size: 14px;
+                        margin-top: 30px;
+                        flex-wrap: nowrap;
+                        text-align: center;
+                        flex-direction: row;
                         margin-bottom: -35px;
+                        text-decoration: none;
+                        justify-content: center;
+                        background-color: white;
+                        &:hover {
+                            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+                        }
                     }
                 }
 

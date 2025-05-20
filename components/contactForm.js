@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { notification, ConfigProvider } from 'antd';
+import { submitContactForm } from '@/app/services/actions';
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({
@@ -35,28 +36,9 @@ const ContactForm = () => {
         return;
       }
       try {
-        const cleanedData = {
-          ...formData,
-          lastName: formData.lastName.trim(),
-          firstName: formData.firstName.trim(),
-          country: formData.country.trim(),
-          phoneNumber: formData.phoneNumber.trim(),
-          city: formData.city.trim(),
-          district: formData.district.trim(),
-          khoroo: formData.khoroo.trim(),
-          apartment: formData.apartment.trim(),
-          letter: formData.letter.trim(),
-        };
+        const result = await submitContactForm(formData);
     
-        const response = await fetch('/api/insert/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(cleanedData),
-        });
-    
-        const result = await response.json();
-    
-        if (response.ok) {
+        if (result.success) {
           notification.success({
             message: 'Амжилттай',
             description: 'Таны хүсэлтийг хүлээн авлаа.',

@@ -4,9 +4,9 @@ import axios from 'axios';
 import { Tabs } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
+import ContactForm from '@/components/contactForm';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
-import ContactForm from '@/components/contactForm';
 
 export default function Contact({ params: { lng } }) {
     const [loading, setLoading] = useState(true);
@@ -15,7 +15,6 @@ export default function Contact({ params: { lng } }) {
     const [contactDataProvince, setContactDataProvince] = useState(null);
 
     const { t } = useTranslation(lng, "lng", "");
-    const isMn = lng === 'mn';
 
     const breadMap = [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },

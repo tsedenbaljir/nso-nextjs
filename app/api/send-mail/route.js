@@ -23,7 +23,6 @@ export async function POST(req) {
       html, // HTML body
     });
 
-    console.log("info>>>>>>>>",info);
     return NextResponse.json({
       status: true,
       message: "Email sent successfully!",

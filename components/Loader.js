@@ -25,10 +25,7 @@ export default function Loader({ text = "Уншиж байна..." }) {
                     backdrop-filter: blur(5px);
                 }
                 .loader-content {
-                    background: white;
                     padding: 2rem;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     text-align: center;
                 }
             `}</style>

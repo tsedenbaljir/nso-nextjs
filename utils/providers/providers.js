@@ -4,11 +4,11 @@ import React from 'react'
 import AuthProvider from './AuthProvider';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { PrimeReactProvider } from 'primereact/api';
-import { LoadingContext } from '@/utils/contexts/LoadingContext';
+// import { LoadingContext } from '@/utils/contexts/LoadingContext';
 
 function Providers({ children }) {
     return (
-        <LoadingContext>
+        // <LoadingContext>
             <AuthProvider>
                 <PrimeReactProvider>
                     <AntdRegistry>
@@ -18,7 +18,7 @@ function Providers({ children }) {
                     </AntdRegistry>
                 </PrimeReactProvider>
             </AuthProvider>
-        </LoadingContext>
+        // </LoadingContext>
     );
 }
 

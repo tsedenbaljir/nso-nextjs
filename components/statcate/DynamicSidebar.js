@@ -75,40 +75,40 @@ export default function DynamicSidebar({ sectorData, subsector, lng }) {
 
     return (
         <>
-                <div className="statcatebody">
-                    <div className="nso_container">
-                        <div className="__card_groups">
-                            {menuItems.map((category) => (
-                                <div key={category.id} className="__card">
-                                    <span className="__title">{category.label}</span>
-                                    {loading ? (
-                                        <div className="text-center py-4">
-                                            <LoadingDiv />
-                                            <br />
-                                            <LoadingDiv />
-                                            <br />
-                                            <LoadingDiv />
-                                        </div>
-                                    ) : error ? (
-                                        <p className="text-red-500">Алдаа гарсан байна. Та түр хүлээнэ үү.</p>
-                                    ) : (
-                                        <div className="__category_group">
-                                            {category.subcategories.map((sub) => (
-                                                <span
-                                                    key={sub.id}
-                                                    className={`cursor-pointer ${sub.isActive ? "active-link" : ""}`}
-                                                    onClick={sub.onClick}
-                                                >
-                                                    {sub.label}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+            <div className="statcatebody">
+                <div className="nso_container">
+                    <div className="__card_groups">
+                        {menuItems.map((category) => (
+                            <div key={category.id} className="__card">
+                                <span className="__title">{category.label}</span>
+                                {loading ? (
+                                    <div className="text-center py-4">
+                                        <LoadingDiv />
+                                        <br />
+                                        <LoadingDiv />
+                                        <br />
+                                        <LoadingDiv />
+                                    </div>
+                                ) : error ? (
+                                    <p className="text-red-500">Алдаа гарсан байна. Та түр хүлээнэ үү.</p>
+                                ) : (
+                                    <div className="__category_group">
+                                        {category.subcategories.map((sub) => (
+                                            <span
+                                                key={sub.id}
+                                                className={`cursor-pointer ${sub.isActive ? "active-link" : ""}`}
+                                                onClick={sub.onClick}
+                                            >
+                                                {sub.label}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
+            </div>
         </>
     );
 }

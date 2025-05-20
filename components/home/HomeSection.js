@@ -28,7 +28,7 @@ const HomeSection = ({ lng }) => {
                         <div className="__metadata">
                             <a href="https://data.nso.mn" className="__dock_item leading-4" target="_blank">
                                 <img src="/images/metaIcon.png" height="30px" width="30px"
-                                    style={{ marginRight: '20px', height: 30 }} />
+                                    style={{ height: 30 }} />
                                 ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН
                             </a>
                             <a href="https://metadata.nso.mn" className="__dock_item leading-4" target="_blank">
@@ -37,7 +37,7 @@ const HomeSection = ({ lng }) => {
                                 ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН
                             </a>
                         </div>
-                        <div class="__metadataBanner">
+                        <div className="__metadataBanner">
                             <a href="http://aanb3.nso.mn/" target="_blank">
                                 <img src="/images/aanb3.jpg" height="auto" width="100%" />
                             </a>
@@ -55,7 +55,7 @@ const HomeSection = ({ lng }) => {
                             <span>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</span>
                         </a>
                     </div>
-                    <div class="__metadataBannerphone">
+                    <div className="__metadataBannerphone">
                         <a href="http://aanb3.nso.mn/" target="_blank">
                             <img src="/images/aanb3.jpg" height="auto" width="328px" />
                         </a>

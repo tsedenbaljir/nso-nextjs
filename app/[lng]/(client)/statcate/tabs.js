@@ -14,33 +14,25 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
 
     // Function to determine the active tab index
     const getTabIndex = (tabs) => {
-        if (sector === "HistoricalData") {
-            return 0;
-        } else {
-            switch (tabs) {
-                case "table": return 0;
-                case "indicator": return 1;
-                case "report": return 2;
-                case "methodology": return 3;
-                case "qualityreport": return 4;
-                default: return 0; // Default to "table"
-            }
+        switch (tabs) {
+            case "table": return 0;
+            case "indicator": return 1;
+            case "report": return 2;
+            case "methodology": return 3;
+            case "qualityreport": return 4;
+            default: return 0; // Default to "table"
         }
     };
 
     // Function to get the tab name from the index
     const getIndexTab = (index) => {
-        if (sector === "HistoricalData") {
-            return "table";
-        } else {
-            switch (index) {
-                case 0: return "table";
-                case 1: return "indicator";
-                case 2: return "report";
-                case 3: return "methodology";
-                case 4: return "qualityreport";
-                default: return "table"; // Default to "table"
-            }
+        switch (index) {
+            case 0: return "table";
+            case 1: return "indicator";
+            case 2: return "report";
+            case 3: return "methodology";
+            case 4: return "qualityreport";
+            default: return "table"; // Default to "table"
         }
     };
 
@@ -63,9 +55,39 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 return [];
             }
         };
-        fetchSubcategories(sector);
+        fetchSubcategories(decodeURIComponent(sector));
 
     }, [sector, subsector]);
+
+    if (decodeURIComponent(sector) === "Historical data" && tabs === "report") {
+        return <div id="stat_cate" className="nso_cate_body">
+            {/* Title */}
+            <span className="__cate_title">БНМАУ -ын тайлан</span>
+            {/* PrimeReact Tabs */}
+            <TabView
+                activeIndex={0}
+            >
+                <TabPanel header="Тайлан">
+                    <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                </TabPanel>
+            </TabView>
+        </div>
+    }
+
+    if (decodeURIComponent(sector) === "Historical data" && tabs === "table") {
+        return <div id="stat_cate" className="nso_cate_body">
+            {/* Title */}
+            <span className="__cate_title">{name ? name[0]?.text : <LoadingDiv />}</span>
+            {/* PrimeReact Tabs */}
+            <TabView
+                activeIndex={0}
+            >
+                <TabPanel header="Хүснэгт">
+                    <TablesData sector={sector} subsector={subsector} lng={lng} />
+                </TabPanel>
+            </TabView>
+        </div>
+    }
 
     return (
         <div id="stat_cate" className="nso_cate_body">
@@ -87,24 +109,24 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 </TabPanel>
 
                 {/* ✅ Танилцуулга */}
-                {sector !== "HistoricalData" && <TabPanel header="Танилцуулга">
-                    <MainIndicator sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>}
+                <TabPanel header="Танилцуулга">
+                    <MainIndicator sector={decodeURIComponent(sector)} subsector={decodeURIComponent(subsector)} lng={lng} />
+                </TabPanel>
 
                 {/* ✅ Тайлан */}
-                {sector !== "HistoricalData" && <TabPanel header="Тайлан">
-                    <Report sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>}
+                <TabPanel header="Тайлан">
+                    <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                </TabPanel>
 
                 {/* ✅ Аргачлал */}
-                {sector !== "HistoricalData" && <TabPanel header="Аргачлал">
-                    <Methodology sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>}
+                <TabPanel header="Аргачлал">
+                    <Methodology sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                </TabPanel>
 
                 {/* ✅ Чанарын тайлан */}
-                {sector !== "HistoricalData" && <TabPanel header="Чанарын тайлан">
-                    <Qualityreport sector={sector} subsector={subsector} lng={lng} />
-                </TabPanel>}
+                <TabPanel header="Чанарын тайлан">
+                    <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                </TabPanel>
 
             </TabView>
         </div>
