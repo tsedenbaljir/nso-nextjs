@@ -2,89 +2,85 @@ import React, { useState } from 'react';
 import { notification, ConfigProvider } from 'antd';
 import { submitContactForm } from '@/app/services/actions';
 
-const ContactForm = () => {
-    const [formData, setFormData] = useState({
-        lastName: '',
-        firstName: '',
-        country: '',
-        phoneNumber: '',
-        city: '',
-        district: '',
-        khoroo: '',
-        apartment: '',
-        letter: ''
-    });
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-    const [loading, setLoading] = useState(false);
-    notification.config({
-      placement: 'topRight',
-      top: 100, 
-    });
-    const handleSubmit = async () => {
-      setLoading(true);
-      if (!formData.letter.trim()) {
-        notification.warning({
-          message: 'Анхааруулга',
-          description: 'Та захидлын хэсгийг заавал бөглөнө үү.',
+const ContactForm = ({ isMn }) => {
+  const [formData, setFormData] = useState({
+    lastName: '',
+    firstName: '',
+    country: '',
+    phoneNumber: '',
+    city: '',
+    district: '',
+    khoroo: '',
+    apartment: '',
+    letter: ''
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  notification.config({
+    placement: 'topRight',
+    top: 100,
+  });
+
+  const handleSubmit = async () => {
+    if (!formData.letter.trim()) {
+      notification.warning({
+        message: 'Анхааруулга',
+        description: 'Та захидлын хэсгийг заавал бөглөнө үү.',
+      });
+      return;
+    }
+    try {
+      const result = await submitContactForm(formData);
+
+      if (result.success) {
+        notification.success({
+          message: 'Амжилттай',
+          description: 'Таны хүсэлтийг хүлээн авлаа.',
+          duration: 2,
         });
-        return;
-      }
-      try {
-        const result = await submitContactForm(formData);
-    
-        if (result.success) {
-          notification.success({
-            message: 'Амжилттай',
-            description: 'Таны хүсэлтийг хүлээн авлаа.',
-            duration: 2,
+
+        setTimeout(() => {
+          setFormData({
+            lastName: '',
+            firstName: '',
+            country: '',
+            phoneNumber: '',
+            city: '',
+            district: '',
+            khoroo: '',
+            apartment: '',
+            letter: '',
           });
-    
-          setTimeout(() => {
-            setFormData({
-              lastName: '',
-              firstName: '',
-              country: '',
-              phoneNumber: '',
-              city: '',
-              district: '',
-              khoroo: '',
-              apartment: '',
-              letter: '',
-            });
-          }, 1000); 
-        } else {
-          notification.error({
-            message: 'Алдаа',
-            description: result.error || 'Алдаа гарлаа',
-            duration: 3,
-          });
-        }
-    
-      } catch (err) {
-        console.error('Сүлжээний алдаа:', err);
+        }, 1000);
+      } else {
         notification.error({
-          message: 'Сүлжээний алдаа',
-          description: 'Хүсэлт илгээхэд асуудал гарлаа. Та дахин оролдоно уу.',
+          message: 'Алдаа',
+          description: result.error || 'Алдаа гарлаа',
           duration: 3,
         });
-      } finally {
-        setLoading(false);
       }
-    };
-    
-  
-return (
+
+    } catch (err) {
+      console.error('Сүлжээний алдаа:', err);
+      notification.error({
+        message: 'Сүлжээний алдаа',
+        description: 'Хүсэлт илгээхэд асуудал гарлаа. Та дахин оролдоно уу.',
+        duration: 3,
+      });
+    }
+  };
+
+  return (
     <ConfigProvider
       theme={{ token: { colorPrimary: '#1677ff' } }}
     >
-      <div className="__form">
-        <h2 className="__form_title">Санал хүсэлт</h2>
+      <div className="w-[80%] mx-auto">
+        <h2 className="__form_title">{isMn ? 'Санал хүсэлт' : 'Send feedback'}</h2>
         <div className="__input_form_group two-column">
           <input
             type="text"
@@ -158,7 +154,7 @@ return (
             onChange={handleChange}
           />
         </div>
-        <div className="__submit">
+        <div className="__submit w-[100%] flex justify-end">
           <input
             type="button"
             className="__submit_button"
@@ -168,7 +164,7 @@ return (
         </div>
       </div>
     </ConfigProvider>
-);
+  );
 };
 
 export default ContactForm;

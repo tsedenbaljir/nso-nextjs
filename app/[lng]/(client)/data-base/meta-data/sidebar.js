@@ -6,7 +6,7 @@ import { useTranslation } from '@/app/i18n/client';
 import Result from '@/components/Search/subMain/Result';
 import MainSearch from '@/components/Search/subMain/MainSearch';
 
-export default function SideBar({ lng, setActiveLetter }) {
+export default function SideBar({ lng }) {
     const router = useRouter();
     const path = usePathname();
     const { t } = useTranslation(lng, "lng", "");

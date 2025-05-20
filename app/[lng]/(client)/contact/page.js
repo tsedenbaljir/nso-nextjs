@@ -91,8 +91,7 @@ export default function Contact({ params: { lng } }) {
                             {webpageData && (
                                 <div dangerouslySetInnerHTML={{ __html: webpageData.body }} />
                             )}
-                            
-                            <ContactForm />
+                            <ContactForm isMn={lng === "mn"} />
                         </>
                     )}
                 </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function QuestionnaireFilterObs({ filterList, selectedFilter, handleFilterChange, t, isMn }) {
-
+    console.log("filterList", filterList);
     return (
         <div className="nso_cate_section">
             <div className="__cate_groups_lib get_space">
@@ -9,7 +9,7 @@ export default function QuestionnaireFilterObs({ filterList, selectedFilter, han
                     <span className="filter-title mx-3">{t('filter.organization')}</span>
                     <ul>
                         <li
-                            className={`cursor-pointer ${!selectedFilter ? 'active' : ''}`}
+                            className={`cursor-pointer ${!selectedFilter?.id ? 'active' : ''}`}
                             onClick={() => handleFilterChange(null)}
                         >
                             {t('filter.all')}
