@@ -1,14 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
+import { useMetadata } from '@/utils/contexts/Metadata';
 import GlossaryList from '@/components/Glossary/GlossaryList';
-import QuestionnaireFilterLetter from '@/components/Questionnaire/QuestionnaireFilterLetter';
-import Sidebar from '../sidebar';
 
 export default function Glossary({ params: { lng }, searchParams }) {
     const { t } = useTranslation(lng, "lng", "");
+    const { metadata } = useMetadata();
 
     const [list, setList] = useState([]);
     const [rows, setRows] = useState(10);
@@ -16,16 +15,9 @@ export default function Glossary({ params: { lng }, searchParams }) {
     const [loading, setLoading] = useState(true);
     const [totalRecords, setTotalRecords] = useState(0);
     const [filterLoading, setFilterLoading] = useState(false);
-    const [filterList, setFilterList] = useState([]);
-    const [selectedFilter, setSelectedFilter] = useState(null);
 
     const isMn = lng === 'mn';
 
-    const breadMap = [
-        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-        { label: t('statistic'), url: [(lng === 'mn' ? '/mn' : '/en') + '/statcate'] },
-        { label: t('metadata.title') }
-    ];
     useEffect(() => {
         const fetchData = async () => {
             setFilterLoading(true);
@@ -44,8 +36,8 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         pageSize: rows
                     });
 
-                    if (selectedFilter) {
-                        params.append('label', selectedFilter);
+                    if (metadata) {
+                        params.append('label', metadata);
                     }
 
                     const response = await fetch(`/api/indicator?${params}`);
@@ -67,14 +59,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
         };
 
         fetchData();
-    }, [searchParams?.search, first, rows, selectedFilter, lng]);
-
-    const handleFilterChange = (filter) => {
-        if (searchParams?.search) return;
-        setSelectedFilter(filter);
-        setFirst(0);
-        window.scrollTo(0, 0);
-    };
+    }, [searchParams?.search, first, rows, metadata, lng]);
 
     const onPageChange = (e) => {
         if (searchParams?.search) return;
@@ -98,36 +83,18 @@ export default function Glossary({ params: { lng }, searchParams }) {
     }
 
     return (
-        <>
-            <div className="nso_statistic_section">
-                <Path name={t('metadata.title')} breadMap={breadMap} />
-                <div className="nso_container">
-                    <div className="sm:col-12 md:col-4 lg:col-3">
-                        <br />
-                        <Sidebar lng={lng} />
-                        <QuestionnaireFilterLetter
-                            filterList={filterList}
-                            selectedFilter={selectedFilter}
-                            handleFilterChange={handleFilterChange}
-                            t={t}
-                            isMn={isMn}
-                        />
-                    </div>
-                    <div className="sm:col-12 md:col-8 lg:col-9">
-                        <GlossaryList
-                            path={"indicator"}
-                            filterLoading={filterLoading}
-                            list={list}
-                            isMn={isMn}
-                            searchParams={searchParams}
-                            totalRecords={totalRecords}
-                            first={first}
-                            rows={rows}
-                            onPageChange={onPageChange}
-                        />
-                    </div>
-                </div>
-            </div>
-        </>
+        <div className="sm:col-12 md:col-8 lg:col-9">
+            <GlossaryList
+                path={"indicator"}
+                filterLoading={filterLoading}
+                list={list}
+                isMn={isMn}
+                searchParams={searchParams}
+                totalRecords={totalRecords}
+                first={first}
+                rows={rows}
+                onPageChange={onPageChange}
+            />
+        </div>
     );
 }

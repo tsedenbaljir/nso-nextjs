@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import Sidebar from '../sidebar';
+import Sidebar from './sidebar';
 import Path from '@/components/path/Index';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import { useMetadata } from '@/utils/contexts/Metadata';
 import QuestionnaireFilterObs from '@/components/Questionnaire/QuestionnaireFilterObs';
@@ -12,10 +12,12 @@ import QuestionnaireFilterLetter from '@/components/Questionnaire/QuestionnaireF
 
 export default function QuestionnaireLayout({ children, params: { lng } }) {
     const searchParams = useSearchParams();
+    const pathname = usePathname();
     const { metadata, setMetadata } = useMetadata();
     const { t } = useTranslation(lng, "lng", "");
 
     const [loading, setLoading] = useState(true);
+    const [filterList, setFilterList] = useState([]);
     const [obsFilterList, setObsFilterList] = useState([]);
     const [orgFilterList, setOrgFilterList] = useState([]);
 
@@ -27,6 +29,32 @@ export default function QuestionnaireLayout({ children, params: { lng } }) {
         { label: t('metadata.title') }
     ];
 
+    useEffect(() => {
+        const fetchFilters = async () => {
+            try {
+                const response = await fetch('/api/glossary/sectors');
+                const data = await response.json();
+
+                if (data && (Array.isArray(data) || typeof data === 'object')) {
+                    const dataArray = Array.isArray(data) ? data : [data];
+                    const formattedFilters = dataArray.map(filter => ({
+                        ...filter,
+                        name: filter.namemn,
+                        name_eng: filter.nameen,
+                        code: filter.code,
+                        count: filter.count || 0
+                    }));
+
+                    setFilterList(formattedFilters.filter(filter => filter.count > 0));
+                }
+            } catch (error) {
+                console.error('Error fetching filters:', error);
+                setFilterList([]);
+            }
+        };
+        fetchFilters();
+    }, [lng]);
+    
     useEffect(() => {
         const fetchObs = async () => {
             try {
@@ -107,20 +135,20 @@ export default function QuestionnaireLayout({ children, params: { lng } }) {
             <div className="nso_container mt-4">
                 <div className="sm:col-12 md:col-4 lg:col-3">
                     <Sidebar lng={lng} />
-                    <QuestionnaireFilterOrgs
-                        filterList={orgFilterList}
+                    {(pathname.includes('questionnaire') || pathname.includes('glossary')) && <QuestionnaireFilterOrgs
+                        filterList={pathname.includes('questionnaire') ? orgFilterList : filterList}
                         selectedFilter={metadata}
                         handleFilterChange={handleFilterChange}
                         t={t}
                         isMn={isMn}
-                    />
-                    <QuestionnaireFilterObs
+                    />}
+                    {pathname.includes('questionnaire') && <QuestionnaireFilterObs
                         filterList={obsFilterList}
                         selectedFilter={metadata}
                         handleFilterChange={handleFilterChange}
                         t={t}
                         isMn={isMn}
-                    />
+                    />}
                     <QuestionnaireFilterLetter
                         filterList={obsFilterList}
                         selectedFilter={metadata}
