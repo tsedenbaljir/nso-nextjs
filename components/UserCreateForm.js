@@ -65,7 +65,6 @@ const CreateUserForm = ({ userData }) => {
             };
 
             const response = await createUserService(data);
-            console.log(response);
             if (response.status) {
               api.success({
                 message: 'Амжилттай',

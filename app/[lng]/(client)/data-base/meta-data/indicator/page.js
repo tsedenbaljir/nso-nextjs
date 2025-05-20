@@ -9,7 +9,7 @@ import Sidebar from '../sidebar';
 
 export default function Glossary({ params: { lng }, searchParams }) {
     const { t } = useTranslation(lng, "lng", "");
-    
+
     const [list, setList] = useState([]);
     const [rows, setRows] = useState(10);
     const [first, setFirst] = useState(0);
@@ -44,17 +44,13 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         pageSize: rows
                     });
 
-                    console.log("selectedFilter", selectedFilter);
-
                     if (selectedFilter) {
-                        params.append('label', selectedFilter); 
+                        params.append('label', selectedFilter);
                     }
-
-                    console.log("params", params.toString(), selectedFilter);
 
                     const response = await fetch(`/api/indicator?${params}`);
                     const data = await response.json();
-                    
+
                     if (data.status) {
                         setList(Array.isArray(data.data) ? data.data : []);
                         setTotalRecords(data.pagination.total);
@@ -81,7 +77,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
     };
 
     const onPageChange = (e) => {
-        if (searchParams?.search) return; 
+        if (searchParams?.search) return;
         setFirst(e.first);
         setRows(e.rows);
         window.scrollTo(0, 0);
@@ -107,15 +103,15 @@ export default function Glossary({ params: { lng }, searchParams }) {
                 <Path name={t('metadata.title')} breadMap={breadMap} />
                 <div className="nso_container">
                     <div className="sm:col-12 md:col-4 lg:col-3">
-                        <br/>
+                        <br />
                         <Sidebar lng={lng} />
-                            <QuestionnaireFilterLetter
-                               filterList={filterList}
-                               selectedFilter={selectedFilter}
-                               handleFilterChange={handleFilterChange}
-                               t={t}
-                               isMn={isMn}
-                            />
+                        <QuestionnaireFilterLetter
+                            filterList={filterList}
+                            selectedFilter={selectedFilter}
+                            handleFilterChange={handleFilterChange}
+                            t={t}
+                            isMn={isMn}
+                        />
                     </div>
                     <div className="sm:col-12 md:col-8 lg:col-9">
                         <GlossaryList

@@ -1,13 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
 import Text from "@/components/Loading/Text/Index";
-import ReactMarkdown from "react-markdown";
-import Layout from "@/components/baseLayout";
 import { useTranslation } from "@/app/i18n/client";
-import Sidebar from "../../sidebar";
-import Path from '@/components/path/Index';
 
 export default function GlossaryDetail({ params: { id, lng } }) {
   const { t } = useTranslation(lng, "lng", "");
@@ -18,11 +12,6 @@ export default function GlossaryDetail({ params: { id, lng } }) {
     fetchData();
   }, [id]);
 
-  const breadMap = [
-    { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-    { label: t('statistic'), url: [(lng === 'mn' ? '/mn' : '/en') + '/statcate'] },
-    { label: t('metadata.title') }
-];
   const fetchData = async () => {
     try {
       // const response = await fetch(`/api/glossary/${id}`);
@@ -91,100 +80,90 @@ export default function GlossaryDetail({ params: { id, lng } }) {
     );
   }
 
-  // console.log("data", data);
-
   return (
-    <div className="nso_page_wrap">
-      <Path name={t("metadata.title")} breadMap={breadMap} />
-      <div className="nso_container mt-4">
-        <div className="sm:col-12 md:col-4 lg:col-3">
-          <Sidebar lng={lng} />
-        </div>
-        <div className="__info_detail_page">
-          {!loading ? (
-            <div className="w-full items-center justify-between text-main">
-              <div className="overflow-x-auto">
-              <div className="mb-4 text-sm text-gray-700">
-                <h2 className="text-xl font-bold text-main mr-4 mt-4">
-                  {data[0]?.label}
-                </h2>
+    <div className="__info_detail_page">
+      {!loading ? (
+        <div className="w-full items-center justify-between text-main">
+          <div className="overflow-x-auto">
+            <div className="mb-4 text-sm text-gray-800 w-[95%]">
+              <h2 className="text-2xl font-bold text-main">
+                {data[0]?.label}
+              </h2>
 
-                <div className="flex items-center gap-4 flex-wrap mt-2">
-                  <div className="flex items-center">
-                    <span className="mr-2 text-gray-500">
-                      <i className="pi pi-calendar-minus"></i>
-                    </span>
-                    <span className="mr-2 font-medium">Сүүлд шинэчилсэн:</span>
-                    <span>
-                      {new Date(data[0]?.last_modified_date).toLocaleDateString("sv-SE")}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center">
-                    <span className="mr-2 font-medium">Идэвхтэй эсэх:</span>
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-300
-                        ${
-                          data[0]?.active == 1
-                            ? "bg-green-100 text-green-800 border border-green-300"
-                            : "bg-red-100 text-red-800 border border-red-300"
-                        }
-                      `}
-                    >
-                      {data[0]?.active ? "Идэвхтэй" : "Идэвхгүй"}
-                    </span>
-                  </div>
-                      
-                  <div className="flex items-center">
-                    <span className="mr-2 font-medium">Нээлттэй эсэх:</span>
-                    <span className="text-blue-700 font-medium">
-                      {data[0]?.is_secret ? "Хаалттай" : "Нээлттэй"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-                {/* Table Header */}
-                <div className="flex bg-gray-100 font-semibold text-gray-700 border-b py-2 text-sm">
-                  <div className="w-1/8 text-left px-4">№</div>
-                  <div className="w-1/3 text-left px-4">Нэр</div>
-                  <div className="w-1/3 text-left px-4">Монгол</div>
-                  <div className="w-1/3 text-left px-4">Англи</div>
+              <div className="flex justify-between items-center gap-4 flex-wrap mt-2">
+                <div className="flex items-center">
+                  <span className="mr-2 text-gray-500">
+                    <i className="pi pi-calendar-minus"></i>
+                  </span>
+                  <span>
+                    {new Date(data[0]?.last_modified_date).toLocaleDateString("sv-SE")}
+                  </span>
                 </div>
 
-                {/* Table Rows */}
-                {sortedData.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`flex gap-x-4 py-2 px-4 text-sm ${
-                      index % 2 === 0 ? "bg-blue-50" : "bg-white"
-                    }`}
+                <div className="flex items-center">
+                  <span className="mr-2 font-medium text-gray-400">Идэвхтэй эсэх:</span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-300
+                    ${data[0]?.active == 1
+                        ? "bg-green-500 text-white border"
+                        : "bg-red-100 text-red-800 border border-red-300"
+                      }
+                  `}
                   >
-                    <div className="w-1/7 text-left text-blue-600">
-                      {index + 1}
-                    </div>
-                    <div className="w-1/3 text-left">{item.namemn}</div>
-                    <div className="w-1/3 text-left whitespace-pre-wrap">
-                    {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
-                      ? new Date(item.valuemn).toISOString().split('T')[0]
-                      : item.valuemn}
-                    </div>
-                    <div className="w-1/3 text-left whitespace-pre-wrap">
-                    {item.namemn === "Маягт батлагдсан огноо" && item.valueen
-                      ? new Date(item.valueen).toISOString().split('T')[0]
-                      : item.valueen}
-                    </div>
-                  </div>
-                ))}
+                    {data[0]?.active ? "Идэвхтэй" : "Идэвхгүй"}
+                  </span>
+                </div>
+
+                <div className="flex items-center">
+                  <span className="mr-2 font-medium text-gray-400">Нээлттэй эсэх:</span>
+                  <span className="text-gray-700 font-medium">
+                    {data[0]?.is_secret ? "Хаалттай" : "Нээлттэй"}
+                  </span>
+                </div>
               </div>
             </div>
-          ) : (
-            <>
-              <Text />
-              <Text />
-            </>
-          )}
+            <hr className="my-4" />
+            {/* Table Header */}
+            <div className="flex bg-blue-50 font-semibold text-gray-700 border-gray-100 border-b py-2 text-sm">
+              <div className="w-1/8 text-right px-5">No.</div>
+              <div className="w-1/3 text-left px-5">Нэр</div>
+              <div className="w-1/3 text-left px-5">Монгол</div>
+              <div className="w-1/3 text-left px-5">Англи</div>
+            </div>
+
+            {/* Table Rows */}
+            {categoryOrder.map((its, idx) => {
+              return sortedData.map((item, index) => (
+                <div
+                  key={idx}
+                  className={`flex gap-6 py-2 px-5 border-b border-gray-200 text-sm ${(sortedData.length > 2 ? index : idx) % 2 === 1 ? "bg-blue-50" : "bg-white"
+                    }`}
+                >
+                  <div className="w-1/8 text-right text-blue-600">
+                    {sortedData.length > 2 ? index + 1 : idx + 1}
+                  </div>
+                  <div className="w-1/3 text-left">{item.namemn ? item.namemn : its}</div>
+                  <div className="w-1/3 text-left whitespace-pre-wrap">
+                    {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
+                      ? new Date(item.valuemn).toISOString().split('T')[0]
+                      : item.valuemn ? item.valuemn : ""}
+                  </div>
+                  <div className="w-1/3 text-left whitespace-pre-wrap">
+                    {item.namemn === "Маягт батлагдсан огноо" && item.valueen
+                      ? new Date(item.valueen).toISOString().split('T')[0]
+                      : item.valueen ? item.valueen : ""}
+                  </div>
+                </div>
+              ))
+            })}
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <Text />
+          <Text />
+        </>
+      )}
     </div>
   );
 }

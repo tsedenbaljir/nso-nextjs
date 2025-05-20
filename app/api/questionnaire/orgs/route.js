@@ -4,9 +4,15 @@ import { db } from '@/app/api/config/db_csweb.config.js';
 export async function GET() {
     try {
         const query = `
-            SELECT [id], [name], [fullname] 
-            FROM [NSOweb].[dbo].[organizations]
-            ORDER BY [fullname]
+            SELECT a.[id], [name], [fullname], b.total
+            FROM [NSOweb].[dbo].[organizations] as a
+                left join (
+                    SELECT organization_ids, count(1) as total
+                    from [NSOweb].[dbo].[dynamic_object]
+                    where active = 1 and is_secret = 0
+                    group by organization_ids
+                ) as b on a.id = b.organization_ids
+			order by a.[fullname] asc
         `;
         
         const results = await db.raw(query);

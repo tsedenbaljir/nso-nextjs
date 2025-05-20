@@ -8,7 +8,6 @@ const sendMail = async (data) => {
       },
       body: JSON.stringify(data),
     });
-    console.log("res>>>>>>>>",res);
     if (!res.ok) {
       throw new Error("Failed to fetch user data");
     }

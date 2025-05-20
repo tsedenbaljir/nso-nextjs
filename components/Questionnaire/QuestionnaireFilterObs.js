@@ -4,8 +4,8 @@ export default function QuestionnaireFilterObs({ filterList, selectedFilter, han
     return (
         <div className="nso_cate_section">
             <div className="__cate_groups_lib get_space">
-                <div className="__filter_sidebar_item">
-                    <span className="filter-title"> Ажиглалтын хугацаа</span>
+                <div className="__filter_sidebar_item p-0">
+                    <span className="filter-title mx-3">{t('filter.interval')}</span>
                     <ul>
                         <li
                             className={`cursor-pointer ${!selectedFilter ? 'active' : ''}`}
@@ -13,7 +13,7 @@ export default function QuestionnaireFilterObs({ filterList, selectedFilter, han
                         >
                             {t('filter.all')}
                             <span className="count font-bold">
-                                ({filterList.reduce((sum, item) => sum + item.count, 0)})
+                                {filterList.reduce((sum, item) => sum + item.count, 0)}
                             </span>
                         </li>
                         {filterList.map((item, index) => (
@@ -23,7 +23,7 @@ export default function QuestionnaireFilterObs({ filterList, selectedFilter, han
                                 onClick={() => handleFilterChange(item)}
                             >
                                 {isMn ? item.name : item.name_eng}
-                                <span className="count font-bold">({item.count})</span>
+                                <span className="count font-bold">{item.count}</span>
                             </li>
                         ))}
                     </ul>

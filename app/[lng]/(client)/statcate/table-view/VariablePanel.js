@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 const VariableSelector = ({ variable, onChange }) => {
-  // console.log('variable', variable);
   const [isOpen, setIsOpen] = useState(true);
   const [selected, setSelected] = useState([]);
   const [childSelected, setChildSelected] = useState([]);

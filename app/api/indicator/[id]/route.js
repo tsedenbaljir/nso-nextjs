@@ -5,7 +5,6 @@ export async function GET(req, { params }) {
     const { id } = params;
     const { searchParams } = new URL(req.url);
     const language = searchParams.get('language') || 'mn';
-    console.log("hii");
 
     try {
         // Get the job posting

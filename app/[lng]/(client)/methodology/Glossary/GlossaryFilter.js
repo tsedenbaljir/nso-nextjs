@@ -4,7 +4,7 @@ export default function GlossaryFilter({ filterList, selectedFilter, handleFilte
     return (
         <div className="nso_cate_section">
             <div className="__cate_groups_lib get_space">
-                <div className="__filter_sidebar_item">
+                <div className="__filter_sidebar_item p-0">
                     <span className="filter-title">{t('metadata.sector')}</span>
                     <ul>
                         <li

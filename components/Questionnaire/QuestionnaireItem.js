@@ -9,7 +9,7 @@ export default function QuestionnaireItem({ item, isMn, path }) {
     router.push(`${langPrefix}/data-base/meta-data/${path || ""}/${item.id}`);
   };
   return (
-    <div className="__list" onClick={path ? handleClick : () => {}}>
+    <div className="__list cursor-pointer" onClick={path ? handleClick : () => {}}>
       <div className="__table_line"></div>
       <a className="__list_header">{isMn ? item.name : item.name_eng}</a>
       {item.info && (

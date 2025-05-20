@@ -18,7 +18,6 @@ export default function Main({ lng, sector, subsector }) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        console.log("subsector", subsector);
         // Fetch subcategories
         const response = await fetch(`/api/catalogue?list_id=${subsector}`, {
           cache: "no-store",
@@ -26,7 +25,6 @@ export default function Main({ lng, sector, subsector }) {
         if (!response.ok) throw new Error("Failed to fetch catalogue data");
 
         const result = await response.json();
-        console.log("result", result);
 
         if (result.data) {
           setData(result.data);
@@ -34,7 +32,6 @@ export default function Main({ lng, sector, subsector }) {
           const params = new URLSearchParams();
 
           params.append("key", "value");
-          console.log("params", params.toString());
           // Fetch Tableau Key
           const tableauResponse = await fetch(
             `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${params.toString()}`,
@@ -45,9 +42,7 @@ export default function Main({ lng, sector, subsector }) {
             throw new Error("Failed to fetch Tableau key");
 
           const tableauResult = await tableauResponse.json();
-          console.log("tableauResult", tableauResult);
           const tkt = tableauResult?.value;
-          console.log("tkt", tkt);
           // Ensure `data.tableau` exists before setting `iframeSrc`
           if (tkt && result.data.tableau) {
             setIframeSrc(

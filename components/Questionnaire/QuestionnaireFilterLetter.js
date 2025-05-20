@@ -21,9 +21,9 @@ export default function QuestionnaireFilterLetter({ handleFilterChange, t }) {
 
     return (
         <div className="__filter_sidebar_words">
-            <span className="filter-title"> Эхний үсгээр</span>
+            <span className="filter-title mx-3">{t('filter.startWith')}</span>
             {chunkedData.map((group, index) => (
-                <div key={index} className="__filter_sidebar_word_row">
+                <div key={index} className="__filter_sidebar_word_row mb-2">
                     {group.map((item) => (
                         <div key={item.letter} className="__filter_sidebar_word_col">
                             <div

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
@@ -10,7 +10,7 @@ import SideBar from '../sidebar';
 
 export default function Glossary({ params: { lng }, searchParams }) {
     const { t } = useTranslation(lng, "lng", "");
-    
+
     const [list, setList] = useState([]);
     const [rows, setRows] = useState(10);
     const [first, setFirst] = useState(0);
@@ -71,18 +71,15 @@ export default function Glossary({ params: { lng }, searchParams }) {
                         pageSize: rows
                     });
 
-                    console.log("selectedFilter", selectedFilter);
-
                     if (selectedFilter) {
                         if (typeof selectedFilter === 'object') {
                             if (selectedFilter.code) {
                                 params.append('sectorType', selectedFilter.code);
-                            } 
+                            }
                         } else if (typeof selectedFilter === 'string') {
-                            params.append('label', selectedFilter); 
+                            params.append('label', selectedFilter);
                         }
                     }
-                    console.log("params", params.toString(), selectedFilter);
                     const response = await fetch(`/api/glossary?${params}`);
                     const data = await response.json();
 
@@ -138,7 +135,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
                 <Path name={t('metadata.title')} breadMap={breadMap} />
                 <div className="nso_container">
                     <div className="sm:col-12 md:col-4 lg:col-3">
-                        <br/>
+                        <br />
                         <SideBar lng={lng} />
                         <GlossaryFilter
                             filterList={filterList}
@@ -148,11 +145,11 @@ export default function Glossary({ params: { lng }, searchParams }) {
                             isMn={isMn}
                         />
                         <QuestionnaireFilterLetter
-                           filterList={filterList}
-                           selectedFilter={selectedFilter}
-                           handleFilterChange={handleFilterChange}
-                           t={t}
-                           isMn={isMn}
+                            filterList={filterList}
+                            selectedFilter={selectedFilter}
+                            handleFilterChange={handleFilterChange}
+                            t={t}
+                            isMn={isMn}
                         />
                     </div>
                     <div className="sm:col-12 md:col-8 lg:col-9">
