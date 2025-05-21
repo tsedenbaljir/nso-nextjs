@@ -22,6 +22,11 @@ const nextConfig = {
                 hostname: 'downloads.1212.mn',
                 pathname: '/**', // Allow all paths under this domain
             },
+            {
+                protocol: 'https',
+                hostname: 'betanso.nso.mn', // Add this
+                pathname: '/images/**', // Restrict to images directory if needed
+            },
         ],
     },
     env: {
