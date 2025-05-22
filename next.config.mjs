@@ -15,6 +15,7 @@ const nextConfig = {
             "os.alipayobjects.com",
             "api.ipify.org",
             "downloads.1212.mn",
+            "betanso.nso.mn",
         ],
         remotePatterns: [
             {

@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import { useTranslation } from '@/app/i18n/client';
 import { useMetadata } from '@/utils/contexts/Metadata';
 import GlossaryList from '@/components/Glossary/GlossaryList';
 

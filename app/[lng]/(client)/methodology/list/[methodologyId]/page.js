@@ -23,7 +23,7 @@ export default function Methodology({ params: lng }) {
                 const data = await response.json();
                 if (data.status) {
                     setMethodology(data.data);
-                    setPdfUrl('https://downloads.1212.mn/' + JSON.parse(data.data?.file_info).pathName || null);
+                    setPdfUrl('/uploads/images/' + JSON.parse(data.data?.file_info).pathName || null);
                 } else {
                     console.error("Failed to fetch methodology:", data.message);
                 }
