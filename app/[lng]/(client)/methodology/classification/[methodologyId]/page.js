@@ -149,7 +149,7 @@ export default function Methodology() {
                     }`}
                     onClick={() => setActiveTab("classification")}
                   >
-                    Ангилал, кодын мэдээлэл
+                    Ангилал, кодын мэдээлэл1231321
                     {activeTab === "classification" && (
                       <span className="absolute top-0 left-0 w-full h-1 bg-blue-600"></span>
                     )}
