@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @import "@/components/styles/about-us-header.scss";
 @import "@/components/styles/element-design.scss";
 @import "@/components/styles/variable.scss";
@@ -102,7 +101,11 @@
   cursor: pointer;
   border-radius: 50px;
   transition: background-color 0.3s;
-  background-image: linear-gradient(91.09deg, rgb(64, 172, 112) 0.36%, rgb(85, 196, 134) 99.48%);
+  background-image: linear-gradient(
+    91.09deg,
+    rgb(64, 172, 112) 0.36%,
+    rgb(85, 196, 134) 99.48%
+  );
 }
 
 .__submit_button:hover {
@@ -218,9 +221,31 @@ h4 {
   margin-bottom: 1rem;
   display: block;
 }
+.clamp-title {
+  font-weight: 600;
+  font-size: var(--font-size20); /* эсвэл text-[20px] */
+  line-height: 26px;
+  letter-spacing: -1px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.clamp-description {
+  font-size: 14px;
+  color: #4b5563; /* Tailwind text-gray-600 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 // .__filter_word_item:hover {
-//   background-color: #f1f1f1; 
+//   background-color: #f1f1f1;
 // }
 
 // .count {
@@ -238,34 +263,3 @@ h4 {
 // .__filter_word_item:hover .count {
 //   display: block;
 // }
-
-.__metadata_tab {
-  display: flex;
-  list-style: none;
-  padding-left: 0;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 1rem;
-}
-
-.__metadata_tab li {
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  margin-right: 1rem;
-  border: 1px solid transparent;
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-  background-color: #f0f0f0;
-  font-weight: 600;
-  transition: background-color 0.2s ease;
-}
-
-.__metadata_tab li.active {
-  background-color: #1890ff; /* Үндсэн идэвхтэй табны өнгө */
-  color: white;
-  border-color: #1890ff #1890ff white;
-  font-weight: 700;
-}
-
-.__metadata_tab li:hover:not(.active) {
-  background-color: #e6f7ff;
-}

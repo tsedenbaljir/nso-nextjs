@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Spin } from "antd";
-import PdfViewer from '@/components/PdfViewer/index';
+import PdfViewer from "@/components/PdfViewer/index";
 import { useParams } from "next/navigation";
 
 export default function Methodology({ params: lng }) {
@@ -14,16 +14,19 @@ export default function Methodology({ params: lng }) {
     useEffect(() => {
         const fetchMethodology = async () => {
             try {
-                const response = await fetch("/api/methodology/listDetail", {
+                const response = await fetch("/api/methodology", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: methodologyId })
+                    body: JSON.stringify({ id: methodologyId }),
                 });
 
                 const data = await response.json();
                 if (data.status) {
                     setMethodology(data.data);
-                    setPdfUrl('https://betanso.nso.mn/uploads/images/' + JSON.parse(data.data?.file_info).pathName || null);
+                    setPdfUrl(
+                        "https://betanso.nso.mn/uploads/images/" +
+                        JSON.parse(data.data?.file_info).pathName || null
+                    );
                 } else {
                     console.error("Failed to fetch methodology:", data.message);
                 }
@@ -54,20 +57,22 @@ export default function Methodology({ params: lng }) {
     return (
         <div className="nso_container mt-3">
             <div id="methodology" className="__intro_page">
-                {methodology && <h2 className='text-2xl font-bold'>{methodology.name}</h2>}
+                {methodology && (
+                    <h2 className="text-2xl font-bold">{methodology.name}</h2>
+                )}
 
                 {methodology && (
                     <ul className="__list_info">
                         <div className="__list_item_date">
                             <div className="__li_f_item">
                                 {/* <span className="__title">{t("sector")}:</span> */}
-                                <span className="__cont">
-                                    {methodology.catalogue?.name}
-                                </span>
+                                <span className="__cont">{methodology.catalogue?.name}</span>
                             </div>
                             <div className="__li_f_item">
                                 <span className="__title pi pi-calendar-times"></span>
-                                <span className="__cont">{methodology.approved_date.substr(0, 10)}</span>
+                                <span className="__cont">
+                                    {methodology.approved_date.substr(0, 10)}
+                                </span>
                             </div>
                             <div className="__li_f_item">
                                 <span className="__title pi pi-eye"></span>

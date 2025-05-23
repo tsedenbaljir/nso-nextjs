@@ -15,7 +15,7 @@
   padding-bottom: 30px;
 
   .__main_search {
-    border: .5px solid;
+    border: 0.5px solid;
     border-color: var(--surface-c);
     color: var(--text-main);
 
@@ -27,7 +27,6 @@
   }
 }
 .__sector_list {
-
   .__sector_header {
     height: 40px;
     margin: 20px 10px;
@@ -41,7 +40,7 @@
     color: var(--text-main);
   }
   ::ng-deep .__select_filter {
-    border:0;
+    border: 0;
     padding-left: 5px;
     padding-right: 0px;
     background: rgba(206, 208, 209, 0.2);
@@ -55,7 +54,6 @@
   .__table {
     padding-top: 20px;
   }
-
 }
 .nso_statistic_category {
   width: 100%;
@@ -125,7 +123,7 @@
         align-items: center;
         text-align: center;
         letter-spacing: -0.04em;
-        color: #298BE0;
+        color: #298be0;
         flex: none;
         order: 0;
         flex-grow: 0;
@@ -151,13 +149,13 @@
       line-height: 22px;
       // display: flex;
       float: left;
-      margin: 0 30px; 
+      margin: 0 30px;
       align-items: center;
       letter-spacing: -0.3px;
       color: var(--text-main);
       opacity: 0.6;
     }
-    ._file_reply{
+    ._file_reply {
       font-style: normal;
       font-weight: 500;
       font-size: var(--font-size14);
@@ -170,7 +168,7 @@
       color: var(--text-main);
       opacity: 0.6;
     }
-    ._file_size{
+    ._file_size {
       font-style: normal;
       font-weight: 500;
       font-size: var(--font-size14);
@@ -198,9 +196,10 @@
     cursor: pointer;
   }
 
-  ._download, ._download_mobile {
+  ._download,
+  ._download_mobile {
     ._file {
-      opacity: .7;
+      opacity: 0.7;
       padding-right: 10px;
     }
   }
@@ -230,7 +229,6 @@
   font-size: var(--font-size14);
 }
 
-
 .__dropdown {
   position: relative;
   display: inline-block;
@@ -240,7 +238,7 @@
     background: #ced0d133;
     // border: 1px solid #ced0d133;
     border-radius: 20px;
-    color: var(--text-accent);
+    color: var(--text-main);
     letter-spacing: 0.5px;
     padding: 10px 20px 10px 40px;
     font-size: var(--font-size14);
@@ -283,7 +281,7 @@
       line-height: 19px;
 
       &:hover {
-        background-color:  var(--text-main);
+        background-color: var(--text-main);
         color: #fff;
       }
 
