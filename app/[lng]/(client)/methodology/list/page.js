@@ -33,7 +33,7 @@ export default function Glossary({ params }) {
           pageSize: rows,
           lng: lng,
         });
-        
+
         if (selectedFilter?.id) {
           params.append("catalogue_id", selectedFilter.id);
         }
@@ -42,13 +42,13 @@ export default function Glossary({ params }) {
           `/api/methodology/list?${params.toString()}`
         );
         const result = await response.json();
-        
+
         console.log("Hi", result.data);
 
         if (result.status) {
           setList(result.data || []);
           setTotalRecords(result.pagination?.total || 0);
-          
+
         } else {
           setList([]);
           setTotalRecords(0);
@@ -78,10 +78,10 @@ export default function Glossary({ params }) {
     window.scrollTo(0, 0);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log("filterList", filterList);
     console.log("list", list);
-  },[list])
+  }, [list])
 
   if (loading) {
     return (
@@ -97,18 +97,15 @@ export default function Glossary({ params }) {
 
   return (
     <div className="nso_container">
-      <div>
-        <h2 className='text-2xl font-bold'>Аргачлал</h2>
-        <GlossaryList
-          filterLoading={filterLoading}
-          list={list}
-          isMn={isMn}
-          totalRecords={totalRecords}
-          first={first}
-          rows={rows}
-          onPageChange={onPageChange}
-        />
-      </div>
+      <GlossaryList
+        filterLoading={filterLoading}
+        list={list}
+        isMn={isMn}
+        totalRecords={totalRecords}
+        first={first}
+        rows={rows}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 }
