@@ -55,7 +55,7 @@ export default function DisseminationHome({ lng }) {
                                 >
                                     <img
                                         className="__image"
-                                        src={`https://downloads.1212.mn/${news[0].header_image}`}
+                                        src={`https://betanso.nso.mn/uploads/images/${news[0].header_image}`}
                                         onError={(e) => handleImageError(e.target)}
                                         alt={news[0].name}
                                     />
@@ -89,7 +89,7 @@ export default function DisseminationHome({ lng }) {
                                                 style={{ marginTop: '20px' }}
                                             >
                                                 <img
-                                                    src={`https://downloads.1212.mn/${newsItem.thumb_image}`}
+                                                    src={`https://betanso.nso.mn/uploads/images/${newsItem.thumb_image}`}
                                                     alt="news"
                                                     onError={(e) => handleImageError(e.target)}
                                                 />

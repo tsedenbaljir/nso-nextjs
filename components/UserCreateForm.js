@@ -10,7 +10,7 @@ import {
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
-import { createUserService } from "@/services/UserService";
+import { createUserService } from "@/app/services/UserService";
 import { notification } from 'antd';
 
 const CreateUserForm = ({ userData }) => {

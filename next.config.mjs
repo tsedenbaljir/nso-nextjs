@@ -15,12 +15,18 @@ const nextConfig = {
             "os.alipayobjects.com",
             "api.ipify.org",
             "downloads.1212.mn",
+            "betanso.nso.mn",
         ],
         remotePatterns: [
             {
                 protocol: 'https',
                 hostname: 'downloads.1212.mn',
                 pathname: '/**', // Allow all paths under this domain
+            },
+            {
+                protocol: 'https',
+                hostname: 'betanso.nso.mn', // Add this
+                pathname: '/images/**', // Restrict to images directory if needed
             },
         ],
     },
@@ -60,7 +66,7 @@ const nextConfig = {
                             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
                     },
                 ],
-            },
+            },  
         ];
     },
 };

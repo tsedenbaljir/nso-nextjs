@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUserInfoModel } from "@/services/model/UserModel";
+import { getUserInfoModel } from "@/app/services/model/UserModel";
 
 export async function GET(request, { params: { slug } }) {
   if (!request.headers.get("X-API-Key")) {

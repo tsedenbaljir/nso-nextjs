@@ -1,59 +1,43 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
+import { writeFile } from 'fs/promises';
 import path from 'path';
 
 export const dynamic = 'force-dynamic';
 
-// Use synchronous file operations instead of promises
 export async function POST(req) {
     try {
-        const data = await req.formData();
-        const file = data.get('file');
+        const formData = await req.formData();
+        const file = formData.get('file');
 
         if (!file) {
-            return NextResponse.json({ 
-                success: false, 
-                message: "No file received." 
-            }, { 
-                status: 400 
-            });
+            return NextResponse.json(
+                { success: false, message: 'No file uploaded' },
+                { status: 400 }
+            );
         }
 
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        // Create unique filename
-        const timestamp = Date.now();
-        const originalName = file.name;
-        const extension = path.extname(originalName);
-        const fileName = `${timestamp}${extension}`;
-
-        // Ensure uploads directory exists
+        // Create uploads directory if it doesn't exist
         const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
+        const filePath = path.join(uploadDir, file.name);
 
-        // Write file synchronously
-        const filePath = path.join(uploadDir, fileName);
-        fs.writeFileSync(filePath, buffer);
+        // Write the file
+        await writeFile(filePath, buffer);
 
-        // Return success response
         return NextResponse.json({
             success: true,
             message: 'File uploaded successfully',
-            fileName: fileName,
-            filePath: `${fileName}`,
-            url: `${fileName}`
+            filename: file.name,
+            path: `/uploads/${file.name}`,
+            fullUrl: `/uploads/${file.name}`
         });
-
     } catch (error) {
         console.error('Upload error:', error);
-        return NextResponse.json({ 
-            success: false, 
-            message: "Error uploading file." 
-        }, { 
-            status: 500 
-        });
+        return NextResponse.json(
+            { success: false, message: 'Failed to upload file', error: error.message },
+            { status: 500 }
+        );
     }
 }

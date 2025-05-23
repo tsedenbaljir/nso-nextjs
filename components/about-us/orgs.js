@@ -148,15 +148,15 @@ export default function Orgs({ lng }) {
                                         {datas[where].id === 24 && (
                                             <>
                                                 <br />
-                                                <a className="underline" href="https://downloads.1212.mn/16p_4dRstR2UyuZ-_tJK9cikjthfYtkQ47JZ64y-.pdf" target="_blank">
+                                                <a className="underline" href="https://betanso.nso.mn/uploads/images/16p_4dRstR2UyuZ-_tJK9cikjthfYtkQ47JZ64y-.pdf" target="_blank">
                                                     ДЗХ-ын ажиллах журам 2021 А72
                                                 </a>
                                                 <br />
-                                                <a className="underline" href="https://downloads.1212.mn/9PwHbeEV1P9Sv_ZIXsiccOiPAHrSRB-UX1_Nwk0e.pdf" target="_blank">
+                                                <a className="underline" href="https://betanso.nso.mn/uploads/images/9PwHbeEV1P9Sv_ZIXsiccOiPAHrSRB-UX1_Nwk0e.pdf" target="_blank">
                                                     ДЗ бүрэлдэхүүн шинэчилсэн баталсан тухай 2023 оны А105
                                                 </a>
                                                 <br />
-                                                <a className="underline" href="https://downloads.1212.mn/P4rQhUz5Qba8trdnzPkj1q3Vx-crSIq8_o_HMwS6.pdf" target="_blank">
+                                                <a className="underline" href="https://betanso.nso.mn/uploads/images/P4rQhUz5Qba8trdnzPkj1q3Vx-crSIq8_o_HMwS6.pdf" target="_blank">
                                                     ДЗХ-ын 2024 оны төлөвлөгөө 5
                                                 </a>
                                             </>

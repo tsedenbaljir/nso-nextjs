@@ -12,7 +12,7 @@ export default function index(product) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `https://downloads.1212.mn/${imagePath}`;
+        return `https://betanso.nso.mn/uploads/images/${imagePath}`;
     };
 
     const handleImageError = () => {

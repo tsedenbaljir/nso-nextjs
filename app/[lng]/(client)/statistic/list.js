@@ -13,7 +13,7 @@ export default function Tabs({ lng, type, menuItems, loading, pagination, setPag
 
     // Function to handle file download
     const onDownloadDirect = async (fileInfo) => {
-        const url = `https://downloads.1212.mn/${JSON.parse(fileInfo).pathName}`;
+        const url = `https://betanso.nso.mn/uploads/images/${JSON.parse(fileInfo).pathName}`;
         window.open(url, "_blank");
     };
 
