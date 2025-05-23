@@ -238,3 +238,34 @@ h4 {
 // .__filter_word_item:hover .count {
 //   display: block;
 // }
+
+.__metadata_tab {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
+
+.__metadata_tab li {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  background-color: #f0f0f0;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.__metadata_tab li.active {
+  background-color: #1890ff; /* Үндсэн идэвхтэй табны өнгө */
+  color: white;
+  border-color: #1890ff #1890ff white;
+  font-weight: 700;
+}
+
+.__metadata_tab li:hover:not(.active) {
+  background-color: #e6f7ff;
+}

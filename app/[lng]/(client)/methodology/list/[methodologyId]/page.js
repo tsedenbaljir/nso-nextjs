@@ -14,7 +14,7 @@ export default function Methodology({ params: lng }) {
     useEffect(() => {
         const fetchMethodology = async () => {
             try {
-                const response = await fetch("/api/methodology", {
+                const response = await fetch("/api/methodology/listDetail", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ id: methodologyId })

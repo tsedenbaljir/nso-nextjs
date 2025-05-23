@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
-import GlossaryList from '../Glossary/GlossaryList';
+import ClassificationList from '../ClassificationCode/ClassificationList';
 import GlossaryFilter from '../Glossary/GlossaryFilter';
 
 import Result from '@/components/Search/subMain/Result';
@@ -33,20 +33,19 @@ export default function Glossary({ params }) {
           pageSize: rows,
           lng: lng
         });
-        
+
         if (selectedFilter?.id) {
           params.append("catalogue_id", selectedFilter.id);
         }
 
-        const response = await fetch(`/api/methodology/list?${params.toString()}`);
+        const response = await fetch(`/api/methodology/classification`);
         const result = await response.json();
         
-        console.log("Hi", result.data);
+        console.log("Hi", result.data)
 
         if (result.status) {
-          setList(result.data || []);
+          setList( result.data || []);
           setTotalRecords(result.pagination?.total || 0);
-          
         } else {
           setList([]);
           setTotalRecords(0);
@@ -62,22 +61,21 @@ export default function Glossary({ params }) {
     };
 
     fetchMethodology();
-  }, [first, rows, selectedFilter, lng]); // ✅ `first` and `rows` are now working properly!
+  }, [first, rows, lng]); // ✅ `first` and `rows` are now working properly!
 
-  const handleFilterChange = (filter) => {
-    setSelectedFilter(filter);
-    setFirst(0);
-    window.scrollTo(0, 0);
-  };
+  // const handleFilterChange = (filter) => {
+  //   setSelectedFilter(filter);
+  //   setFirst(0);
+  //   window.scrollTo(0, 0);
+  // };
 
   const onPageChange = (e) => {
     setFirst(e.first);
     setRows(e.rows);
     window.scrollTo(0, 0);
   };
-
   useEffect(()=>{
-    console.log("filterList", filterList);
+    // console.log("filterList", filterList);
     console.log("list", list);
   },[list])
 
@@ -96,8 +94,8 @@ export default function Glossary({ params }) {
   return (
     <div className="nso_container">
       <div className="sm:col-12 md:col-8 lg:col-9">
-        <h2>Аргачлал</h2>
-        <GlossaryList
+        <h2>Ангилал, код</h2>
+        <ClassificationList
           filterLoading={filterLoading}
           list={list}
           isMn={isMn}
