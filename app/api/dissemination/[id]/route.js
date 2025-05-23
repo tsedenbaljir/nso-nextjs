@@ -15,7 +15,7 @@ export async function GET(req, { params }) {
         status: false, 
         data: null, 
         message: "Article not found" 
-      }, { 
+      }, {
         status: 404 
       });
     }

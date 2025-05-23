@@ -120,7 +120,7 @@ export default function Main({ sector, subsector, lng }) {
                         <div onClick={() => {
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`https://downloads.1212.mn/${filePath}`, "_blank");
+                                window.open(`https://betanso.nso.mn/uploads/images/${filePath}`, "_blank");
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">

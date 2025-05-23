@@ -23,7 +23,7 @@ export default function Methodology({ params: lng }) {
                 const data = await response.json();
                 if (data.status) {
                     setMethodology(data.data);
-                    setPdfUrl('/uploads/images/' + JSON.parse(data.data?.file_info).pathName || null);
+                    setPdfUrl('https://betanso.nso.mn/uploads/images/' + JSON.parse(data.data?.file_info).pathName || null);
                 } else {
                     console.error("Failed to fetch methodology:", data.message);
                 }
