@@ -137,7 +137,7 @@ const AgePyramid = () => {
             onClick={togglePlay}
             className="bg-gray-200 hover:bg-gray-300 text-black py-1 px-3 rounded"
           >
-            {timer ? "Pause" : "Play"}
+            {timer ? "Зогсоох" : "Тоглуулах"}
           </button>
           <input
             type="range"

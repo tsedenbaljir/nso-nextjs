@@ -1,12 +1,12 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { Spin } from 'antd';
-import { useTranslation } from '@/app/i18n/client';
-import GlossaryList from '../Glossary/GlossaryList';
-import GlossaryFilter from '../Glossary/GlossaryFilter';
+"use client";
+import React, { useState, useEffect } from "react";
+import { Spin } from "antd";
+import { useTranslation } from "@/app/i18n/client";
+import GlossaryList from "../Glossary/GlossaryList";
+import GlossaryFilter from "../Glossary/GlossaryFilter";
 
-import Result from '@/components/Search/subMain/Result';
-import MainSearch from '@/components/Search/subMain/MainSearch';
+import Result from "@/components/Search/subMain/Result";
+import MainSearch from "@/components/Search/subMain/MainSearch";
 
 export default function Glossary({ params }) {
   const { lng } = params;
@@ -20,13 +20,12 @@ export default function Glossary({ params }) {
   const [filterList, setFilterList] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
 
-
   const [showResult, setShowResult] = useState(false);
   const [search, setSearching] = useState({});
   const [data, setData] = useState({});
   const [loadingSearch, setLoadingSearch] = useState(true);
 
-  const isMn = lng === 'mn';
+  const isMn = lng === "mn";
 
   // Fetch categories and subcategories
   useEffect(() => {
@@ -41,12 +40,18 @@ export default function Glossary({ params }) {
         }
 
         const selectedIndexes = [5, 4, 1, 3, 6, 0, 2, 7]; // Ordered selection
-        const convert = selectedIndexes.map(index => result.data[index]).filter(Boolean);
+        const convert = selectedIndexes
+          .map((index) => result.data[index])
+          .filter(Boolean);
 
         // Fetch subcategories
         const fetchSubcategories = async (categoryId) => {
           try {
-            const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+            const response = await fetch(
+              `/api/subsectorname?subsectorname=${decodeURIComponent(
+                categoryId
+              )}&lng=${lng}`
+            );
             const result = await response.json();
 
             if (!Array.isArray(result.data)) {
@@ -57,13 +62,15 @@ export default function Glossary({ params }) {
             const subcategoriesWithCounts = await Promise.all(
               result.data.map(async (item) => {
                 try {
-                  const responseCounts = await fetch(`/api/methodology?catalogue_id=${item.id}&lng=${lng}`);
+                  const responseCounts = await fetch(
+                    `/api/methodology?catalogue_id=${item.id}&lng=${lng}`
+                  );
                   const resultCounts = await responseCounts.json();
 
                   return {
                     id: item.id,
                     name: item.text,
-                    count: resultCounts.data ? resultCounts.data.length : 0 // Ensure count is handled properly
+                    count: resultCounts.data ? resultCounts.data.length : 0, // Ensure count is handled properly
                   };
                 } catch (error) {
                   console.error(`Error fetching count for ${item.id}:`, error);
@@ -73,14 +80,15 @@ export default function Glossary({ params }) {
             );
 
             // Filter out subcategories where count is 0
-            return subcategoriesWithCounts.filter(item => item.count > 0);
-
+            return subcategoriesWithCounts.filter((item) => item.count > 0);
           } catch (error) {
-            console.error(`Error fetching subcategories for ${categoryId}:`, error);
+            console.error(
+              `Error fetching subcategories for ${categoryId}:`,
+              error
+            );
             return [];
           }
         };
-
 
         // Fetch subcategories for all categories in parallel
         const menuWithSubcategories = await Promise.all(
@@ -107,16 +115,18 @@ export default function Glossary({ params }) {
       try {
         // Prepare query parameters
         const params = new URLSearchParams({
-          page: Math.floor(first / rows),  // ✅ Proper pagination calculation
+          page: Math.floor(first / rows), // ✅ Proper pagination calculation
           pageSize: rows,
-          lng: lng
+          lng: lng,
         });
 
         if (selectedFilter?.id) {
           params.append("catalogue_id", selectedFilter.id);
         }
 
-        const response = await fetch(`/api/methodology/list?${params.toString()}`);
+        const response = await fetch(
+          `/api/methodology/list?${params.toString()}`
+        );
         const result = await response.json();
 
         if (result.status) {
@@ -167,8 +177,23 @@ export default function Glossary({ params }) {
       <div className="sm:col-12 md:col-4 lg:col-3">
         <div className="__cate_search">
           <div className="__main_search">
-            <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
-            {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
+            <MainSearch
+              setShowResult={setShowResult}
+              t={t}
+              setSearching={setSearching}
+              setData={setData}
+              setLoading={setLoadingSearch}
+            />
+            {search.length > 2 && (
+              <Result
+                type={5}
+                showResult={showResult}
+                t={t}
+                loading={loadingSearch}
+                data={data}
+                lng={lng}
+              />
+            )}
           </div>
         </div>
         <GlossaryFilter
