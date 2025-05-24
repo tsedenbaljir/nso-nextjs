@@ -5,8 +5,8 @@ import { useTranslation } from '@/app/i18n/client';
 import Main from '@/components/dissemination/Main';
 import Text from '@/components/Loading/Text/Index';
 import "@/components/styles/dissemination-list.scss";
-import Pagination from '@/components/dissemination/Pagination';
 import { useRouter, useSearchParams } from "next/navigation";
+import Pagination from '@/components/dissemination/Pagination';
 
 export default function AboutUs({ params: { lng } }) {
     const { t } = useTranslation(lng, "lng", "");

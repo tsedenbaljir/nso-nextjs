@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import Tr from '@/components/dissemination/Tr';
-import Main from '@/components/dissemination/Main';
 import { useTranslation } from '@/app/i18n/client';
+import Main from '@/components/dissemination/Main';
 import Text from '@/components/Loading/Text/Index';
 import "@/components/styles/dissemination-list.scss";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Pagination from '@/components/dissemination/Pagination';
 
 export default function AboutUs({ params: { lng } }) {
@@ -93,7 +93,7 @@ export default function AboutUs({ params: { lng } }) {
             <img src="/images/disimg.jpg" width="100%" />
             <Main type="future" lng={lng}>
                 <table className="w-full">
-                    <thead className=".p-datatable-new-thead">
+                    <thead className="p-datatable-thead">
                         <tr className="__mobile_table">
                             <th style={{ width: "15%" }}>{t('dissemination.scope')}</th>
                             <th style={{ width: "60%" }}>{t('dissemination.specifications')}</th>
