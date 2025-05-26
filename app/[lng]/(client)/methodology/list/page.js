@@ -43,8 +43,6 @@ export default function Glossary({ params }) {
         );
         const result = await response.json();
 
-        console.log("Hi", result.data);
-
         if (result.status) {
           setList(result.data || []);
           setTotalRecords(result.pagination?.total || 0);
@@ -77,11 +75,6 @@ export default function Glossary({ params }) {
     setRows(e.rows);
     window.scrollTo(0, 0);
   };
-
-  useEffect(() => {
-    console.log("filterList", filterList);
-    console.log("list", list);
-  }, [list])
 
   if (loading) {
     return (

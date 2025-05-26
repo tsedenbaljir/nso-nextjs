@@ -85,7 +85,7 @@ export default function GlossaryList({
                 </button>
 
                 {/* Sort Dropdown */}
-                <div class="__dropdown">
+                <div className="__dropdown">
                   <button
                     className="_dropbtn"
                     onClick={() => setDropdownOpen(!dropdownOpen)}

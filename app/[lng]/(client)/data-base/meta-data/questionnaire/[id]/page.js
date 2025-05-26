@@ -161,6 +161,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
       ) : (
         <>
           <Text />
+          <br/>
           <Text />
         </>
       )}

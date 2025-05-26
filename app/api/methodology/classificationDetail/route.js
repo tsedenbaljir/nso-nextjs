@@ -19,7 +19,6 @@ export async function POST(req) {
             WHERE is_current = 1 AND is_secure = 0 AND active = 1 AND deleted IS NULL AND id = ?
         `;
         const subTitleResults = await db.raw(subTitleQuery, [classification_code_id]);
-        console.log("subTitleResults", subTitleResults);
 
         // sub_classification_code_SPS өгөгдлийг авах
         const subClassQuery = `
@@ -30,7 +29,6 @@ export async function POST(req) {
             WHERE classification_code_id = ?
         `;
         const subClassResults = await db.raw(subClassQuery, [classification_code_id]);
-        console.log("subClassResults", subClassResults);
         
         // meta_data_value өгөгдлийг авах
         const metaQuery = `
@@ -58,7 +56,6 @@ export async function POST(req) {
             ORDER BY b.[meta_data_id]
         `;
         const metaResults = await db.raw(metaQuery, [classification_code_id]);
-        console.log("metaResults", metaResults);
         return NextResponse.json({
             status: true,
             data: {

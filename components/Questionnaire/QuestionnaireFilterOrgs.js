@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default function QuestionnaireFilterObs({ filterList, selectedFilter, handleFilterChange, t, isMn }) {
-    console.log("filterList", filterList);
     return (
         <div className="nso_cate_section">
             <div className="__cate_groups_lib get_space">

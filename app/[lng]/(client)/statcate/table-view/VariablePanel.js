@@ -326,7 +326,6 @@ const VariableSelector = ({ variable, onChange }) => {
 };
 
 const ResultTable = ({ data }) => {
-  // console.log('data', data);
   if (!data || !data.id || !data.dimension || !data.value || !data.size)
     return null;
 

@@ -73,93 +73,83 @@ export default function QuestionnaireList({
   };
 
   return (
-    <div className="__table_container -mt-22">
-      <div className="nso_cate_body">
-        <div className="nso_tab">
-          <div className="nso_tab_content">
-            <div className="__table_container pt-3">
-              {/* Header */}
-              <div className="_filter_side ">
-                <button
-                  className="__download_button"
-                  onClick={handleDownloadExcel}
-                >
-                  <i className="pi pi-cloud-download"></i> Excel татах
-                </button>
+    <div className="__table_container">
+      <div className="nso_tab_content">
+        {/* Header */}
+        <div className="_filter_side ">
+          <button
+            className="__download_button"
+            onClick={handleDownloadExcel}
+          >
+            <i className="pi pi-cloud-download"></i> Excel татах
+          </button>
 
-                {/* Sort Dropdown */}
-                <div class="__dropdown">
-                  <button
-                    className="_dropbtn"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
+          {/* Sort Dropdown */}
+          <div className="__dropdown">
+            <button
+              className="_dropbtn"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <img src="/images/filter.png" className="filter " />
+              Эрэмбэлэх
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-60 bg-white border rounded shadow-md z-10">
+                {[
+                  "Эхэнд шинэчлэгдсэн",
+                  "Үсгийн дарааллаар",
+                  "Хандалтын тоогоор",
+                ].map((type) => (
+                  <div
+                    key={type}
+                    className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${sortType === type
+                      ? "bg-gray-200 font-semibold flex justify-between items-center"
+                      : ""
+                      }`}
+                    onClick={() => {
+                      setSortType(type);
+                      setDropdownOpen(false);
+                    }}
                   >
-                    <img src="/images/filter.png" className="filter " />
-                    Эрэмбэлэх
-                  </button>
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-60 bg-white border rounded shadow-md z-10">
-                      {[
-                        "Эхэнд шинэчлэгдсэн",
-                        "Үсгийн дарааллаар",
-                        "Хандалтын тоогоор",
-                      ].map((type) => (
-                        <div
-                          key={type}
-                          className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
-                            sortType === type
-                              ? "bg-gray-800 text-white font-semibold flex justify-between items-center"
-                              : ""
-                          }`}
-                          onClick={() => {
-                            setSortType(type);
-                            setDropdownOpen(false);
-                          }}
-                        >
-                          {type}
-                          {sortType === type && <span className="ml-2">↓</span>}
-                        </div>
-                      ))}
-                    </div>
-                  )}{" "}
-                </div>
-              </div>
-
-              {/* Body */}
-              {filterLoading ? (
-                <div className="flex justify-center items-center min-h-[200px]">
-                  <Spin size="large" />
-                </div>
-              ) : (
-                <div className="pt-6">
-                  <div className="_group_list ">
-                    {getSortedList().map((item) => (
-                      <QuestionnaireItem
-                        key={item.id}
-                        path={path}
-                        item={item}
-                        isMn={isMn}
-                      />
-                    ))}
+                    {type}
+                    {sortType === type && <span className="ml-2">↓</span>}
                   </div>
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            )}{" "}
           </div>
         </div>
-
-        {/* Pagination */}
-        {totalRecords > 0 && (
-          <div className="card mt-6">
-            <Paginator
-              first={first}
-              rows={rows}
-              totalRecords={totalRecords}
-              onPageChange={onPageChange}
-              template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-            />
+        {/* Body */}
+        {filterLoading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <div className="_group_list">
+            {getSortedList().map((item) => (
+              <QuestionnaireItem
+                key={item.id}
+                path={path}
+                item={item}
+                isMn={isMn}
+              />
+            ))}
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalRecords > 0 && (
+        <div className="card mt-6">
+          <Paginator
+            first={first}
+            rows={rows}
+            totalRecords={totalRecords}
+            onPageChange={onPageChange}
+            template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+          />
+        </div>
+      )}
     </div>
   );
 }

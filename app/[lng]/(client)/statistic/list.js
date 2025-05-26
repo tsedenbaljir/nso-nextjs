@@ -89,18 +89,18 @@ export default function Tabs({
                 <div className="__table_desktop">
                     <div className="__sector_list">
                         {/* Header */}
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-lg font-bold">
+                        <div className="flex justify-between items-center">
+                            <span className="__sector_header">
                                 {sectors_list.find((e) => e.type === type)?.mnName ||
                                     "Бүх файл"}
-                            </h2>
+                            </span>
 
                             {/* Dropdown */}
                             <div className="relative inline-block text-left">
                                 {/* Toggle button */}
                                 <button
                                     onClick={toggleDropdown}
-                                    className="inline-flex items-center gap-1 px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-700 text-sm"
+                                    className="inline-flex items-center gap-1 px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-100 text-sm"
                                 >
                                     <svg
                                         className="w-4 h-4 text-gray-700"
@@ -126,8 +126,8 @@ export default function Tabs({
                                                 key={filter}
                                                 onClick={() => handleFilterSelect(filter)}
                                                 className={`px-4 py-2 text-sm cursor-pointer ${activeFilter === filter
-                                                        ? "bg-gray-700 text-white flex justify-between items-center"
-                                                        : "hover:bg-gray-700  text-black"
+                                                    ? "bg-gray-100 flex justify-between items-center"
+                                                    : "hover:bg-gray-100"
                                                     }`}
                                             >
                                                 <span>{filter}</span>
@@ -140,9 +140,18 @@ export default function Tabs({
                                 )}
                             </div>
                         </div>
-
+                        <div className='mb-4' style={{
+                            height: 30,
+                            fontWeight: 500,
+                            fontSize: "var(--font-size14)",
+                            color: "var(--text-main)",
+                            background: "var(--table-header)",
+                            transition: "box-shadow .2s",
+                            whiteSpace: "nowrap",
+                            borderBottom: "1px solid rgba(90,90,90,.1)",
+                        }} />
                         {/* File List */}
-                        <div className="space-y-6">
+                        <div className="__file_table">
                             {pagedItems.map((item, index) => {
                                 const fileInfo = safeParse(item.file_info);
                                 const ext = fileInfo?.extension?.toLowerCase() || "file";
@@ -152,7 +161,7 @@ export default function Tabs({
                                         : `${(item.file_size / 1024).toFixed(1)} kB`;
 
                                 return (
-                                    <div key={index} className="border-b pb-4">
+                                    <div key={index} className="border-dashed border-b pb-4 px-3 mb-4">
                                         {/* Гарчиг */}
                                         <div
                                             className="clamp-title text-gray-800 hover:text-gray-800"
@@ -167,23 +176,22 @@ export default function Tabs({
                                         </div>
 
                                         {/* Metadata */}
-                                        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
-                                            <div>
+                                        <div className="__file_table_foot">
+                                            <div className="_file_publishedDate">
                                                 {item.published_date
                                                     ? new Date(item.published_date)
                                                         .toISOString()
                                                         .split("T")[0]
                                                     : "Огноо байхгүй"}
                                             </div>
-                                            <div>👁 {(item.views ?? 0).toLocaleString()}</div>
-                                            <div>
-                                                📄{" "}
+                                            <div className="_file_view">👁 {(item.views ?? 0).toLocaleString()}</div>
+                                            <div className="_file_type">
                                                 <span className="text-blue-600 font-medium uppercase">
                                                     {ext}
                                                 </span>
                                             </div>
-                                            <div>
-                                                💾 {lng === "mn" ? "Файлын хэмжээ:" : "File Size:"}{" "}
+                                            <div className="_file_size">
+                                                {lng === "mn" ? "Файлын хэмжээ:" : "File Size:"}{" "}
                                                 {size}
                                             </div>
                                         </div>
