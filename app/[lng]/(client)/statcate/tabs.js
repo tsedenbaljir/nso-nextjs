@@ -60,7 +60,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     }, [sector, subsector]);
 
     if (decodeURIComponent(sector) === "Historical data" && tabs === "report") {
-        return <div id="stat_cate" className="nso_cate_body">
+        return <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
             <span className="__cate_title">БНМАУ -ын тайлан</span>
             {/* PrimeReact Tabs */}
@@ -75,7 +75,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     }
 
     if (decodeURIComponent(sector) === "Historical data" && tabs === "table") {
-        return <div id="stat_cate" className="nso_cate_body">
+        return <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
             <span className="__cate_title">{name ? name[0]?.text : <LoadingDiv />}</span>
             {/* PrimeReact Tabs */}
@@ -90,12 +90,13 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     }
 
     return (
-        <div id="stat_cate" className="nso_cate_body">
+        <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
             <span className="__cate_title">{name ? name[0]?.text : <LoadingDiv />}</span>
 
             {/* PrimeReact Tabs */}
             <TabView
+                className='nso_tab'
                 activeIndex={activeIndex}
                 onTabChange={(e) => {
                     const newTab = getIndexTab(e.index);

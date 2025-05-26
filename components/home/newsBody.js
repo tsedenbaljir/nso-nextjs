@@ -11,7 +11,7 @@ export default function index(product) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `https://beta.nso.mn/uploads/images/${imagePath}`;
+        return process.env.FRONTEND + `/uploads/images/${imagePath}`;
     };
 
     const handleImageError = () => {

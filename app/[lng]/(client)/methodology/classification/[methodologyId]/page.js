@@ -29,7 +29,7 @@ export default function Methodology() {
           setMethodology(data.data);
           if (data.data.file_info) {
             const fileInfo = JSON.parse(data.data.file_info);
-            setPdfUrl("https://beta.nso.mn/uploads/images/" + fileInfo.pathName);
+            setPdfUrl(process.env.FRONTEND + "/uploads/images/" + fileInfo.pathName);
           }
         } else {
           console.error("Failed to fetch methodology:", data.message);
@@ -80,8 +80,8 @@ export default function Methodology() {
             <span className="__title text-gray-500">Идэвхтэй эсэх:</span>
             <span
               className={`__cont __is_active font-medium ml-2 text-white ${methodology.sub_Title[0]?.active
-                  ? "bg-green-600"
-                  : "bg-red-600"
+                ? "bg-green-600"
+                : "bg-red-600"
                 }`}
             >
               {methodology.sub_Title[0]?.active ? "Идэвхтэй" : "Идэвхгүй"}
@@ -113,8 +113,8 @@ export default function Methodology() {
         <ul className="flex list-none border-b-0 mb-4 pl-0 font-semibold text-sm">
           <li
             className={`cursor-pointer px-4 py-2 mr-4 border border-transparent border-b-0 text-sm relative ${activeTab === "general"
-                ? "text-blue-600"
-                : "text-gray-600 hover:text-blue-600"
+              ? "text-blue-600"
+              : "text-gray-600 hover:text-blue-600"
               }`}
             onClick={() => setActiveTab("general")}
           >
@@ -125,8 +125,8 @@ export default function Methodology() {
           </li>
           <li
             className={`cursor-pointer px-4 py-2 mr-4 border border-transparent border-b-0 text-sm relative ${activeTab === "indicators"
-                ? "text-blue-600"
-                : "text-gray-600 hover:text-blue-600"
+              ? "text-blue-600"
+              : "text-gray-600 hover:text-blue-600"
               }`}
             onClick={() => setActiveTab("indicators")}
           >
@@ -137,8 +137,8 @@ export default function Methodology() {
           </li>
           <li
             className={`cursor-pointer px-4 py-2 border border-transparent border-b-0 text-sm relative ${activeTab === "classification"
-                ? "text-blue-600"
-                : "text-gray-600 hover:text-blue-600"
+              ? "text-blue-600"
+              : "text-gray-600 hover:text-blue-600"
               }`}
             onClick={() => setActiveTab("classification")}
           >

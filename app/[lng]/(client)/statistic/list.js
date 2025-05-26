@@ -63,7 +63,7 @@ export default function Tabs({
             const parsed =
                 typeof fileInfo === "string" ? JSON.parse(fileInfo) : fileInfo;
             if (!parsed?.pathName) return;
-            const url = `https://beta.nso.mn/uploads/images/${parsed.pathName}`;
+            const url = `${process.env.FRONTEND}/uploads/images/${parsed.pathName}`;
             window.open(url, "_blank");
         } catch (err) {
             console.error("Download error:", err);

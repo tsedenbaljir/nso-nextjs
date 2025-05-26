@@ -26,10 +26,10 @@ export default function Sidebar({ t, lng }) {
     return (
         <div className="__group">
             <div className="__card_area">
-                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[3]?.tableau || ""} target='blank' className="__card">
+                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[3]?.tableau || ""} target='blank' className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(https://beta.nso.mn/uploads/images/'${indicators[3]?.image}')`,
+                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[3]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
@@ -41,10 +41,10 @@ export default function Sidebar({ t, lng }) {
                         </div>
                     </div>
                 </Link>
-                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[2]?.tableau || ""} target='blank' className="__card">
+                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[2]?.tableau || ""} target='blank' className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(https://beta.nso.mn/uploads/images/'${indicators[2]?.image}')`,
+                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[2]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
@@ -56,10 +56,10 @@ export default function Sidebar({ t, lng }) {
                         </div>
                     </div>
                 </Link>
-                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[1]?.tableau || ""} target='blank' className="__card">
+                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[1]?.tableau || ""} target='blank' className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(https://beta.nso.mn/uploads/images/'${indicators[1]?.image}')`,
+                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[1]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[1]?.updated_date.substring(0, 10) || "..."}</span>
@@ -71,10 +71,10 @@ export default function Sidebar({ t, lng }) {
                         </div>
                     </div>
                 </Link>
-                <Link href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/` + indicators[0]?.tableau || ""} target='blank' className="__card">
+                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[0]?.tableau || ""} target='blank' className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(https://beta.nso.mn/uploads/images/'${indicators[0]?.image}')`,
+                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[0]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[0]?.updated_date.substring(0, 10) || "..."}</span>

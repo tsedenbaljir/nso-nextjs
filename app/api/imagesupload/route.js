@@ -19,12 +19,15 @@ async function uploadWithRetry(url, options, retries = MAX_RETRIES) {
             return await response.text();
         } catch (error) {
             if (i === retries - 1) throw error;
+            console.log(`Retry ${i + 1}/${retries} for ${url} after error: ${error.message}`);
             await sleep(RETRY_DELAY * (i + 1)); // Exponential backoff
         }
     }
 }
 
 async function processUploads(items, httpsAgent, myHeaders) {
+    console.log("items=======>", items);
+
     const uploadPromises = items.map(async (item) => {
         const raw = JSON.stringify({
             "url": "https://downloads.1212.mn/" + item.pathName
@@ -38,6 +41,7 @@ async function processUploads(items, httpsAgent, myHeaders) {
                 agent: httpsAgent
             });
 
+            console.log(`Success for ${item.pathName}:`, result);
             return {
                 pathName: item.pathName,
                 size: item.size,
@@ -45,6 +49,7 @@ async function processUploads(items, httpsAgent, myHeaders) {
                 result: JSON.parse(result)
             };
         } catch (error) {
+            console.error(`Failed to upload ${item.pathName}:`, error.message);
             return {
                 pathName: item.pathName,
                 size: item.size,
@@ -155,6 +160,7 @@ export async function GET(req) {
 
         // Retry failed files in batches
         while (failedFiles.length > 0 && batchRetryCount < MAX_BATCH_RETRIES) {
+            console.log(`Retrying batch ${batchRetryCount + 1} with ${failedFiles.length} failed files`);
             await sleep(RETRY_DELAY * 2); // Wait before retrying the batch
 
             const retryResults = await processUploads(

@@ -61,34 +61,34 @@ export default function Index({ lng }) {
                         </div>
                         <div className="__group">
                             <div className="__highlight">
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[4]?.tableau}`} target='blank' >
+                                <Link className="__card" href={`${process.env.FRONTEND}/${lng}/${indicators[4]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://beta.nso.mn/uploads/images/${indicators[4]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[4]?.image})` }}></span>
                                         {lng === "mn" ? indicators[4]?.name : indicators[4]?.nameEng || "..."}
                                     </span>
                                     <span className="__count">{indicators[4]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[4]?.info : indicators[4]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[3]?.tableau}`} target='blank' >
+                                <Link className="__card" href={`${process.env.FRONTEND}/${lng}/${indicators[3]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://beta.nso.mn/uploads/images/${indicators[3]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[3]?.image})` }}></span>
                                         {lng === "mn" ? indicators[3]?.name : indicators[3]?.nameEng || "..."}
                                     </span>
                                     <span className="__count">{indicators[3]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[3]?.info : indicators[3]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[2]?.tableau}`} target='blank' >
+                                <Link className="__card" href={`${process.env.FRONTEND}/${lng}/${indicators[2]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://beta.nso.mn/uploads/images/${indicators[2]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[2]?.image})` }}></span>
                                         {lng === "mn" ? indicators[2]?.name : indicators[2]?.nameEng || "..."}
                                     </span>
                                     <span className="__count">{indicators[2]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[2]?.info : indicators[2]?.infoEng}</span>
                                 </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[1]?.tableau}`} target='blank' >
+                                <Link className="__card" href={`${process.env.FRONTEND}/${lng}/${indicators[1]?.tableau}`} target='blank' >
                                     <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://beta.nso.mn/uploads/images/${indicators[1]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[1]?.image})` }}></span>
                                         {lng === "mn" ? indicators[1]?.name : indicators[1]?.nameEng || "..."}
                                     </span>
                                     <span className="__count">{indicators[1]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng}</span>
