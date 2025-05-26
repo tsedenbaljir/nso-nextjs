@@ -11,7 +11,7 @@ export default function Tabs({
     setPagination,
 }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [activeFilter, setActiveFilter] = useState("Хандалтын тоогоор");
+    const [activeFilter, setActiveFilter] = useState("Эхэнд шинэчлэгдсэн");
 
     const filters = [
         "Эхэнд шинэчлэгдсэн",
