@@ -15,7 +15,7 @@ export default function Articles({ article }) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `https://betanso.nso.mn/uploads/images/${imagePath}`;
+        return `https://beta.nso.mn/uploads/images/${imagePath}`;
     };
 
     const handleImageError = () => {

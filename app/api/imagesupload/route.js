@@ -34,7 +34,7 @@ async function processUploads(items, httpsAgent, myHeaders) {
         });
 
         try {
-            const result = await uploadWithRetry("https://betanso.nso.mn/api/downloads", {
+            const result = await uploadWithRetry("https://beta.nso.mn/api/downloads", {
                 method: "POST",
                 headers: myHeaders,
                 body: raw,

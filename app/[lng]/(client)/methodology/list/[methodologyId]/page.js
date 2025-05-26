@@ -24,7 +24,7 @@ export default function Methodology({ params: lng }) {
                 if (data.status) {
                     setMethodology(data.data);
                     setPdfUrl(
-                        "https://betanso.nso.mn/uploads/images/" +
+                        "https://beta.nso.mn/uploads/images/" +
                         JSON.parse(data.data?.file_info).pathName || null
                     );
                 } else {

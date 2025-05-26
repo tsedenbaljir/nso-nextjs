@@ -10,7 +10,7 @@ export default function Index({ Articles, loading, mainPath }) {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '/images/default.jpg';
-        return `https://betanso.nso.mn/uploads/images/${imagePath}`;
+        return `https://beta.nso.mn/uploads/images/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {
