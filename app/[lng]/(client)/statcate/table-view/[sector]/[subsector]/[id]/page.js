@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import VariablesPanel from '../../../VariablePanel';
+import VariablesPanel from '@/components/table-view/VariablePanel';
 import Loading from '@/components/Loader';
 
 export default function TableView({ params }) {
@@ -21,12 +21,13 @@ export default function TableView({ params }) {
             const json = await res.json();
             setTitle(json.title);
             setVariables(json.variables);
+            console.log(json.variables);
         }
         getData();
     }, [params]);
 
     return (
-        <div className="nso_container statisctic_body">
+        <div className="nso_container">
             <div className="w-full my-5">
                 <h1 className='text-2xl font-medium mb-6'>{title}</h1>
                 {variables.length > 0 ? (
