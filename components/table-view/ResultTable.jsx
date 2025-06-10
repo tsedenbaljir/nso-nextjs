@@ -1,61 +1,12 @@
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
-
-function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_data') {
-  const dimensions = pxData.dimension;
-  const dimensionIds = pxData.id;
-  const labels = dimensionIds.map((id) => dimensions[id].label);
-  const categoryLabels = dimensionIds.map((id) =>
-    Object.values(dimensions[id].category.label)
-  );
-
-  const allCombinations = cartesian(...categoryLabels);
-  const values = pxData.value;
-
-  const table = allCombinations.map((row, idx) => {
-    const record = {};
-    labels.forEach((label, i) => {
-      record[label] = row[i];
-    });
-    record['Утга'] = values[idx] ?? '';
-    return record;
-  });
-
-  const ws = XLSX.utils.json_to_sheet(table);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, filename);
-
-  const now = new Date();
-  const timestamp = now
-    .toISOString()
-    .slice(0, 16)
-    .replace('T', '_')
-    .replace(':', '');
-
-  if (format === 'csv') {
-    const csv = XLSX.utils.sheet_to_csv(ws);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    saveAs(blob, `${filename}_${timestamp}.csv`);
-  } else {
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const blob = new Blob([wbout], { type: 'application/octet-stream' });
-    saveAs(blob, `${filename}_${timestamp}.xlsx`);
-  }
-}
-
-function cartesian(...arrays) {
-  return arrays.reduce((a, b) =>
-    a.flatMap((d) => b.map((e) => [...(Array.isArray(d) ? d : [d]), e]))
-  );
-}
-
-function getTableId(url) {
-  return url.split('/').pop()?.replace('.px', '') || '';
-}
-
 export default function ResultTable({ data, url }) {
   if (!data || !data.id || !data.dimension || !data.value || !data.size)
     return null;
+
+  console.log('Data structure:', {
+    id: data.id,
+    dimension: data.dimension,
+    size: data.size
+  });
 
   const yearKey = data.id.find((key) =>
     ['он', 'жил', 'улирал'].some((kw) => key.toLowerCase().includes(kw))
@@ -72,6 +23,11 @@ export default function ResultTable({ data, url }) {
 
   const rowKeys = data.id.filter((key) => key !== yearKey);
   const validRowKeys = rowKeys.filter((key) => data.dimension[key]);
+
+  console.log('Row keys:', {
+    all: rowKeys,
+    valid: validRowKeys
+  });
 
   const rowDimensions = validRowKeys.map((key) => {
     const index = data.dimension[key].category.index;
@@ -115,56 +71,67 @@ export default function ResultTable({ data, url }) {
     };
   });
 
+  // Group rows by the first dimension
+  const groupedRows = rows.reduce((acc, row) => {
+    const firstDimCode = row.rowCombo[0].code;
+    if (!acc[firstDimCode]) {
+      acc[firstDimCode] = [];
+    }
+    acc[firstDimCode].push(row);
+    return acc;
+  }, {});
+
   return (
-    <>
-      <div className='flex gap-2 my-4'>
-        <button
-          onClick={() => exportPXWebToExcel(data, 'xlsx', getTableId(url))}
-          className='bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700'
-        >
-          Excel (.xlsx)
-        </button>
-        <button
-          onClick={() => exportPXWebToExcel(data, 'csv', getTableId(url))}
-          className='bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700'
-        >
-          CSV (.csv)
-        </button>
-      </div>
-      <div className='overflow-x-auto'>
-        <table className='min-w-full border border-gray-300'>
-          <thead>
-            <tr className='bg-gray-100'>
-              {validRowKeys.map((key) => (
-                <th key={key} className='border p-2 min-w-60'>
-                  {key}
-                </th>
-              ))}
-              {years.map(({ code, label }) => (
-                <th key={code} className='border p-2'>
-                  {label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, i) => (
-              <tr key={i}>
-                {row.rowCombo.map((dim, j) => (
-                  <td key={j} className='border p-2 min-w-60'>
-                    {dim.label}
-                  </td>
+    <div className='overflow-x-auto mt-3'>
+      <table className='result-table min-w-full border border-gray-300'>
+        <thead>
+          <tr className='bg-gray-100'>
+            {validRowKeys.map((key, index) => (
+              <th key={key} className='border p-2 min-w-60 font-medium text-sm'>
+                {key}
+              </th>
+            ))}
+            {years.map(({ code, label }) => (
+              <th key={code} className='border p-2 font-medium text-sm'>
+                {label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(groupedRows).map(([groupCode, groupRows]) => (
+            groupRows.map((row, rowIndex) => (
+              <tr key={`${groupCode}-${rowIndex}`}>
+                {row.rowCombo.map((combo, index) => (
+                  index === 0 && rowIndex === 0 ? (
+                    <td
+                      key={`grouped-dim-${index}-${combo.code}`}
+                      className='border p-2 min-w-60 font-normal text-sm align-top'
+                      rowSpan={groupRows.length}
+                    >
+                      {combo.label}
+                    </td>
+                  ) : index > 0 ? (
+                    <td
+                      key={`dim-${index}-${combo.code}-${rowIndex}`}
+                      className='border p-2 min-w-60 font-normal text-sm align-top'
+                    >
+                      {combo.label}
+                    </td>
+                  ) : null
                 ))}
+
                 {row.yearData.map((val, k) => (
-                  <td key={k} className='border p-2 text-right min-w-[80px]'>
+                  <td key={k} className='border p-2 text-right min-w-[80px] font-normal text-sm align-top'>
                     {val != null ? val.toLocaleString('mn-MN') : '—'}
                   </td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+            ))
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
+

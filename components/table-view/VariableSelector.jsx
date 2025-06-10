@@ -115,12 +115,12 @@ const VariableSelector = ({ variable, onChange }) => {
 
   return (
     <>
-      <div className='flex flex-row flex-wrap gap-2 mb-6 col-span-4 min-w-[24%] max-w-[270px]'>
+      <div className='flex flex-row flex-wrap gap-2 col-span-4 min-w-[24%] max-w-[270px]'>
         <div className="border border-gray-400 rounded-md bg-white shadow flex flex-col w-full col-span-4">
           <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
             <span>{variable.text}</span>
           </h2>
-          <div className='m-2 max-h-60 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
+          <div className='m-2 max-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
             {variable.values
               .filter((val) => val.length === 1)
               .map((val) => (
@@ -226,14 +226,14 @@ const SelectorBox = ({
   // console.log(level, filtered.length);
   return (
     filtered.length > 0 && (
-      <div className='flex flex-row flex-wrap gap-2 mb-6 col-span-4 min-w-[24%] max-w-[270px]'>
+      <div className='flex flex-row flex-wrap gap-2 col-span-4 min-w-[24%] max-w-[270px]'>
         <div className="border border-gray-400 rounded-md bg-white shadow flex flex-col w-full">
           <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
             <span>
               {label}
             </span>
           </h2>
-          <div className='m-2 max-h-60 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
+          <div className='m-2 max-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
             {filtered.map((val) => (
               <div
                 key={val}

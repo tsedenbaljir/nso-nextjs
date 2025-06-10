@@ -31,7 +31,7 @@ export default function TableView({ params }) {
             <div className="w-full my-5">
                 <h1 className='text-2xl font-medium mb-6'>{title}</h1>
                 {variables.length > 0 ? (
-                    <VariablesPanel variables={variables} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}`} />
+                    <VariablesPanel variables={variables} title={title} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}`} />
                 ) : <div className='flex items-center h-full'>
                     <Loading />
                 </div>}
