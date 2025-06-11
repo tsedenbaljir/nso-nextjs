@@ -49,7 +49,7 @@ export default function VariablesPanel({ variables, title, url }) {
 
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
-      // console.loga('data', data);
+      console.log('data', data);
       setResultData(data);
     } catch (err) {
       console.error('Алдаа:', err);
