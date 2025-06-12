@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 
 export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_data') {
     if (format === "csv") {
+
         const dimensions = pxData.dimension;
         const dimensionIds = pxData.id;
         const labels = dimensionIds.map((id) => dimensions[id].label);
@@ -24,7 +25,6 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
 
         const ws = XLSX.utils.json_to_sheet(table);
         const wb = XLSX.utils.book_new();
-
         const sheetName = filename
             .replace(/[:\\/?*[\]]/g, '') // Remove invalid characters
             .slice(0, 31); // Truncate to 31 characters
@@ -37,11 +37,8 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             .replace('T', '_')
             .replace(':', '');
 
-        // For CSV, ensure we use the same table format as XLSX
-        const csv = XLSX.utils.sheet_to_csv(ws, { FS: ',', blankrows: false });
-        // Add UTF-8 BOM for proper character encoding detection
-        const BOM = '\uFEFF';
-        const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([wbout], { type: 'application/octet-stream' });
         saveAs(blob, `${filename}_${timestamp}.csv`);
     } else {
         const dimensions = pxData.dimension;
@@ -125,9 +122,9 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             table = allCombinations.map((row, idx) => {
                 const record = {};
                 labels.forEach((label, i) => {
-                    record[label] = row[i];
+                    record[label] = String(row[i]);
                 });
-                record['Утга'] = values[idx] ?? '';
+                record['Утга'] = String(values[idx] ?? '');
                 return record;
             });
         }
