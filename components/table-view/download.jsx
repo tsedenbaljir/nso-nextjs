@@ -38,8 +38,8 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             .replace(':', '');
 
         const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([wbout], { type: 'application/octet-stream' });
-        saveAs(blob, `${filename}_${timestamp}.csv`);
+        const blob = new Blob([wbout], { type: 'text/csv;charset=utf-8' });
+        saveAs(blob, `${filename}_${timestamp}.xlsx`);
     } else {
         const dimensions = pxData.dimension;
         const dimensionIds = pxData.id;
