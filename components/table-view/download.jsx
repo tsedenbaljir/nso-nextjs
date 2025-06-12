@@ -11,10 +11,31 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
 
     const allCombinations = cartesian(...categoryLabels);
     const values = pxData.value;
+    let yearDimensionIndex = -1;
+    if (format !== "xlsx") {
 
-    // Identify the year dimension based on its label 'Он'
-    const yearDimensionLabel = 'Он';
-    const yearDimensionIndex = labels.findIndex(label => label === yearDimensionLabel);
+        // Identify the year dimension based on its label 'Он'
+        const yearDimensionLabel = 'он';
+        yearDimensionIndex = labels.findIndex(label => label === yearDimensionLabel);
+    } else {
+
+        // Identify the year dimension based on its ID or label (more robustly)
+        // First, try to find a year dimension by its ID (e.g., 'TIME', 'YEAR')
+        const yearDimensionKeyById = pxData.id.find(key =>
+            ['он', 'жил', 'улирал', 'хугацаа'].some(kw => key.toLowerCase().includes(kw))
+        );
+
+        if (yearDimensionKeyById) {
+            yearDimensionIndex = pxData.id.indexOf(yearDimensionKeyById);
+        }
+
+        // If not found by ID, try to find by label (e.g., 'Он', 'Хугацаа')
+        if (yearDimensionIndex === -1) {
+            yearDimensionIndex = labels.findIndex(label =>
+                ['он', 'жил', 'улирал', 'хугацаа'].some(kw => label.toLowerCase().includes(kw))
+            );
+        }
+    }
 
     let table;
 
@@ -40,18 +61,31 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             pivotedData[stubKey][year] = values[idx] ?? '';
         });
 
+        // Group rows by the first dimension
+        const groupedRows = {};
+        Object.values(pivotedData).forEach(rowData => {
+            const firstDimValue = rowData._stubValues[0];
+            if (!groupedRows[firstDimValue]) {
+                groupedRows[firstDimValue] = [];
+            }
+            groupedRows[firstDimValue].push(rowData);
+        });
+
         // Construct the new table for XLSX.utils.aoa_to_sheet
         const newTable = [];
 
         // Add header row (stub labels + sorted years)
         newTable.push([...stubLabels, ...years]);
 
-        // Add data rows
-        Object.values(pivotedData).forEach(rowData => {
-            const row = [...rowData._stubValues]; // Start with stub values
-            years.forEach(year => row.push(rowData[year] || '')); // Add year values, fill missing with empty string
-            newTable.push(row);
+        // Add data rows with grouping
+        Object.entries(groupedRows).forEach(([groupValue, groupRows]) => {
+            groupRows.forEach((rowData, rowIndex) => {
+                const row = [...rowData._stubValues]; // Start with stub values
+                years.forEach(year => row.push(rowData[year] || '')); // Add year values, fill missing with empty string
+                newTable.push(row);
+            });
         });
+
         table = newTable; // Use the new pivoted table
     } else {
         // If no year dimension is found, export in the original flat format
@@ -67,6 +101,48 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
 
     // Use aoa_to_sheet for array of arrays or json_to_sheet for array of objects
     const ws = Array.isArray(table[0]) ? XLSX.utils.aoa_to_sheet(table) : XLSX.utils.json_to_sheet(table);
+
+    // Set column widths and styles for better readability
+    if (Array.isArray(table[0])) {
+        const colWidths = table[0].map((_, index) => ({ wch: 15 })); // Set default width for all columns
+        ws['!cols'] = colWidths;
+
+        // Add header style
+        const headerStyle = {
+            font: { bold: true },
+            alignment: { horizontal: 'center' },
+            fill: { fgColor: { rgb: "F2F2F2" } } // Light gray background
+        };
+
+        // Apply header style to first row
+        const range = XLSX.utils.decode_range(ws['!ref']);
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+            const cellRef = XLSX.utils.encode_cell({ r: 0, c: C });
+            if (!ws[cellRef]) ws[cellRef] = { v: table[0][C] };
+            ws[cellRef].s = headerStyle;
+        }
+
+        // Add border style for all cells
+        const borderStyle = {
+            style: 'thin',
+            color: { rgb: "000000" }
+        };
+
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+                if (!ws[cellRef]) ws[cellRef] = { v: table[R][C] };
+                if (!ws[cellRef].s) ws[cellRef].s = {};
+                ws[cellRef].s.border = {
+                    top: borderStyle,
+                    bottom: borderStyle,
+                    left: borderStyle,
+                    right: borderStyle
+                };
+            }
+        }
+    }
+
     const wb = XLSX.utils.book_new();
     // Sanitize sheet name by removing invalid characters and truncating to 31 chars
     const sheetName = filename
@@ -82,8 +158,11 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         .replace(':', '');
 
     if (format === 'csv') {
-        const csv = XLSX.utils.sheet_to_csv(ws);
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        // For CSV, ensure we use the same table format as XLSX
+        const csv = XLSX.utils.sheet_to_csv(ws, { FS: ',', blankrows: false });
+        // Add UTF-8 BOM for proper character encoding detection
+        const BOM = '\uFEFF';
+        const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
         saveAs(blob, `${filename}_${timestamp}.csv`);
     } else {
         const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });

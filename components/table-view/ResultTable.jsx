@@ -1,17 +1,18 @@
 export default function ResultTable({ data, url }) {
-  if (!data || !data.id || !data.dimension || !data.value || !data.size)
+  if (!data || !data.id || !data.dimension || !data.value || !data.size) {
     return null;
+  }
 
-  console.log('Data structure:', {
-    id: data.id,
-    dimension: data.dimension,
-    size: data.size
-  });
+  // console.log('Data structure:', {
+  //   id: data.id,
+  //   dimension: data.dimension,
+  //   size: data.size
+  // });
 
   const yearKey = data.id.find((key) =>
-    ['он', 'жил', 'улирал'].some((kw) => key.toLowerCase().includes(kw))
+    ['он', 'жил', 'улирал', 'хугацаа'].some((kw) => key.toLowerCase().includes(kw))
   );
-
+  
   if (!yearKey || !data.dimension[yearKey]) return null;
 
   const years = Object.entries(data.dimension[yearKey].category.index).map(
@@ -22,12 +23,13 @@ export default function ResultTable({ data, url }) {
   );
 
   const rowKeys = data.id.filter((key) => key !== yearKey);
+
   const validRowKeys = rowKeys.filter((key) => data.dimension[key]);
 
-  console.log('Row keys:', {
-    all: rowKeys,
-    valid: validRowKeys
-  });
+  // console.log('Row keys:', {
+  //   all: rowKeys,
+  //   valid: validRowKeys
+  // });
 
   const rowDimensions = validRowKeys.map((key) => {
     const index = data.dimension[key].category.index;

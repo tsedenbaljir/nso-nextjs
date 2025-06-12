@@ -25,8 +25,6 @@ export default function VariablesPanel({ variables, title, url }) {
         selection: { filter: 'item', values },
       }));
 
-    // console.log('query', query);
-
     if (query.length !== variables.length) {
       alert('Та дор хаяж нэг утга сонгоно уу!');
       return;
@@ -46,10 +44,9 @@ export default function VariablesPanel({ variables, title, url }) {
         },
         body: JSON.stringify(postBody),
       });
-
+      
       if (!res.ok) throw new Error('Failed to fetch');
       const data = await res.json();
-      console.log('data', data);
       setResultData(data);
     } catch (err) {
       console.error('Алдаа:', err);
