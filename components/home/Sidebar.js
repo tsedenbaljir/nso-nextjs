@@ -13,6 +13,7 @@ export default function Sidebar({ t, lng }) {
         try {
             const response = await fetch(`/api/mainIndicators?type=main`);
             const result = await response.json();
+
             if (result.status && Array.isArray(result.data)) {
                 setIndicatos(result.data)
             }
@@ -33,7 +34,7 @@ export default function Sidebar({ t, lng }) {
                         }}
                     ></span>
                     <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
-                    <span className="__name">{lng === "mn" ? indicators[3]?.name : indicators[3]?.nameEng || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[3]?.name : indicators[3]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[3]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} </span>
                         <div className="ng-star-inserted">
@@ -48,7 +49,7 @@ export default function Sidebar({ t, lng }) {
                         }}
                     ></span>
                     <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
-                    <span className="__name">{lng === "mn" ? indicators[2]?.name : indicators[2]?.nameEng || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[2]?.name : indicators[2]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[2]?.phone} </span>
                         <div className="ng-star-inserted">
@@ -63,7 +64,7 @@ export default function Sidebar({ t, lng }) {
                         }}
                     ></span>
                     <span className="__desc">{indicators[1]?.updated_date.substring(0, 10) || "..."}</span>
-                    <span className="__name">{lng === "mn" ? indicators[1]?.name : indicators[1]?.nameEng || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 14 }}>{indicators[1]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng} </span>
                         <div className="ng-star-inserted">
@@ -78,7 +79,7 @@ export default function Sidebar({ t, lng }) {
                         }}
                     ></span>
                     <span className="__desc">{indicators[0]?.updated_date.substring(0, 10) || "..."}</span>
-                    <span className="__name">{lng === "mn" ? indicators[0]?.name : indicators[0]?.nameEng || "..."}</span>
+                    <span className="__name">{lng === "mn" ? indicators[0]?.name : indicators[0]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[0]?.phone} </span>
                         <div className="ng-star-inserted">
