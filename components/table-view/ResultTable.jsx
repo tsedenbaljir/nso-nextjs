@@ -12,7 +12,7 @@ export default function ResultTable({ data }) {
   const yearKey = data.id.find((key) =>
     ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some((kw) => key.toLowerCase().includes(kw))
   );
-  
+
   if (!yearKey || !data.dimension[yearKey]) return null;
 
   const years = Object.entries(data.dimension[yearKey].category.index).map(

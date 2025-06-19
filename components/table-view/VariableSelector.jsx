@@ -62,7 +62,7 @@ const VariableSelector = ({ variable, onChange }) => {
     switch (level) {
       case 'base':
         values = variable.values
-        .filter((val) => ['сар', 'он', 'жил', 'давтамж'].includes(variable.text.toLowerCase()) ? true : val.length === 1);
+        .filter((val) => ['он', 'жил', 'улирал', 'хугацаа', 'сар'].includes(variable.text.toLowerCase()) ? true : val.length === 1);
         current = selected;
         recomputeAndEmit(
           current.length === values.length ? [] : values,
@@ -124,7 +124,7 @@ const VariableSelector = ({ variable, onChange }) => {
           </h2>
           <div className='m-2 max-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
             {variable.values
-              .filter((val) => ['сар', 'он', 'жил', 'давтамж'].includes(variable.text.toLowerCase()) ? true : val.length === 1)
+              .filter((val) => ['он', 'жил', 'улирал', 'хугацаа', 'сар'].includes(variable.text.toLowerCase()) ? true : val.length === 1)
               .map((val) => (
                 <div
                   key={val}
@@ -148,12 +148,12 @@ const VariableSelector = ({ variable, onChange }) => {
             className='mt-3 bg-gray-2 border rounded px-3 py-2 m-1 text-gray-700 font-normal'
           >
             {selected.length ===
-              variable.values.filter((val) => ['сар', 'он', 'жил', 'давтамж'].includes(variable.text.toLowerCase()) ? true : val.length === 1).length
+              variable.values.filter((val) => ['он', 'жил', 'улирал', 'хугацаа', 'сар'].includes(variable.text.toLowerCase()) ? true : val.length === 1).length
               ? '❌'
               : '✅'}
             Бүгдийг{' '}
             {selected.length ===
-              variable.values.filter((val) => ['сар', 'он', 'жил', 'давтамж'].includes(variable.text.toLowerCase()) ? true : val.length === 1).length
+              variable.values.filter((val) => ['он', 'жил', 'улирал', 'хугацаа', 'сар'].includes(variable.text.toLowerCase()) ? true : val.length === 1).length
               ? 'болих'
               : 'сонгох'}
           </button>
