@@ -67,7 +67,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
             <TabView
                 activeIndex={0}
             >
-                <TabPanel header="Тайлан">
+                <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
                     <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
             </TabView>
@@ -82,7 +82,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
             <TabView
                 activeIndex={0}
             >
-                <TabPanel header="Хүснэгт">
+                <TabPanel header={lng === "mn" ? "Хүснэгт" : "Table"}>
                     <TablesData sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
             </TabView>
@@ -105,27 +105,27 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
             >
 
                 {/* ✅ Хүснэгт Tab */}
-                <TabPanel header="Хүснэгт">
+                <TabPanel header={lng === "mn" ? "Хүснэгт" : "Table"}>
                     <TablesData sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Танилцуулга */}
-                <TabPanel header="Танилцуулга">
+                <TabPanel header={lng === "mn" ? "Танилцуулга" : "Introduction"}>
                     <MainIndicator sector={decodeURIComponent(sector)} subsector={decodeURIComponent(subsector)} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Тайлан */}
-                <TabPanel header="Тайлан">
+                <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
                     <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Аргачлал */}
-                <TabPanel header="Аргачлал">
+                <TabPanel header={lng === "mn" ? "Аргачлал" : "Methodology"}>
                     <Methodology sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Чанарын тайлан */}
-                <TabPanel header="Чанарын тайлан">
+                <TabPanel header={lng === "mn" ? "Чанарын тайлан" : "Quality Report"}>
                     <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 

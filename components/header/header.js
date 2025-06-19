@@ -244,12 +244,12 @@ const Header = ({ lng }) => {
                                 selectedMenu && selectedMenu.sort((a, b) => a.list_order - b.list_order).map((dts, index) => {
                                     return <div className='__group' key={index}>
                                         <div className='__title'>
-                                            <a href={dts.url} className='__stat_cat_title'>{dts.name_mn}</a>
+                                            <a href={dts.url} className='__stat_cat_title'>{lng === 'mn' ? dts.name_mn : dts.name_en}</a>
                                         </div>
 
                                         <div className='__items'>
                                             {dts.subway.map((sw, idx) => {
-                                                return <span key={idx}> <a href={sw.url} className='__stat_cat_title'>{sw.name_mn}</a></span>
+                                                return <span key={idx}> <a href={sw.url} className='__stat_cat_title'>{lng === 'mn' ? sw.name_mn : sw.name_en}</a></span>
                                             })}
                                         </div>
                                     </div>
