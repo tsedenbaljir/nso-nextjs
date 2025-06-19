@@ -1,4 +1,4 @@
-export default function ResultTable({ data, url }) {
+export default function ResultTable({ data }) {
   if (!data || !data.id || !data.dimension || !data.value || !data.size) {
     return null;
   }
@@ -10,7 +10,7 @@ export default function ResultTable({ data, url }) {
   // });
 
   const yearKey = data.id.find((key) =>
-    ['он', 'жил', 'улирал', 'хугацаа'].some((kw) => key.toLowerCase().includes(kw))
+    ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some((kw) => key.toLowerCase().includes(kw))
   );
   
   if (!yearKey || !data.dimension[yearKey]) return null;
