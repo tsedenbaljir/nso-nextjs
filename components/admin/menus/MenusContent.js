@@ -31,7 +31,9 @@ export default function MenusContent() {
 
     const fetchMenus = async () => {
         try {
-            const response = await fetch('/api/menus/admin');
+            const response = await fetch('/api/menus/admin', {
+                cache: 'no-store'
+            });
             if (!response.ok) throw new Error('Failed to fetch');
             const data = await response.json();
             if (data.status) {
@@ -46,7 +48,9 @@ export default function MenusContent() {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch('/api/menus/categories');
+            const response = await fetch('/api/menus/categories', {
+                cache: 'no-store'
+            });
             if (!response.ok) throw new Error('Failed to fetch');
             const data = await response.json();
             if (data.status) {
@@ -74,6 +78,7 @@ export default function MenusContent() {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
+                cache: 'no-store'
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -106,6 +111,7 @@ export default function MenusContent() {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
+                cache: 'no-store'
             });
 
             if (!response.ok) throw new Error('Failed to save');

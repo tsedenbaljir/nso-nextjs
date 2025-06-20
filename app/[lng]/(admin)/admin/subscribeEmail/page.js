@@ -1,12 +1,9 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/i18n/client';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Modal, Form, Input, Select, message } from 'antd';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { confirmDialog } from 'primereact/confirmdialog';
-import { ConfirmDialog } from 'primereact/confirmdialog';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -31,7 +28,9 @@ export default function subscribeEmailAdmin({ params: { lng } }) {
 
     const fetchData = async (page = 1, pageSize = 20) => {
         try {
-            const response = await fetch(`/api/subscribeEmail?page=${page - 1}&pageSize=${pageSize}`);
+            const response = await fetch(`/api/subscribeEmail?page=${page - 1}&pageSize=${pageSize}`, {
+                cache: 'no-store'
+            });
             const result = await response.json();
             const emailList = Array.isArray(result.data) ? result.data : Array.isArray(result) ? result : [];
             setData(emailList.map((item, index) => ({

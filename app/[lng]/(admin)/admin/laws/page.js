@@ -42,7 +42,9 @@ export default function AdminLaws() {
 
   const fetchLawsByType = async (type) => {
     try {
-      const response = await fetch(`/api/laws?type=${type}`);
+      const response = await fetch(`/api/laws?type=${type}`, {
+        cache: 'no-store'
+    });
       const result = await response.json();
       if (result.status && Array.isArray(result.data)) {
         setLaws(prev => ({
@@ -74,6 +76,7 @@ export default function AdminLaws() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(editingLaw),
+        cache: 'no-store'
       });
 
       const result = await response.json();
@@ -157,6 +160,7 @@ export default function AdminLaws() {
       const response = await fetch('/api/laws', {
         method: 'POST',
         body: formData,
+        cache: 'no-store'
       });
 
       const result = await response.json();

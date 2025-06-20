@@ -23,7 +23,9 @@ export default function WebpageAdmin({ params: { lng } }) {
 
     const fetchWebpages = async () => {
         try {
-            const response = await axios.get('/api/webpage/all');
+            const response = await axios.get('/api/webpage/all', {
+                cache: 'no-store'
+            });
             setData(response.data);
         } catch (error) {
             console.error('Error fetching webpages:', error);
@@ -37,7 +39,9 @@ export default function WebpageAdmin({ params: { lng } }) {
         
         const fetchUser = async () => {
             try {
-                const response = await fetch('/api/auth/user');
+                const response = await fetch('/api/auth/user', {
+                    cache: 'no-store'
+                });
                 const data = await response.json();
                 if (data.status) {
                     setUser(data.user);
