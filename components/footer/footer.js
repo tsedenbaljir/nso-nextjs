@@ -172,19 +172,19 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <div className="__sub_labels">
                                 <span>{t('footer.today')}</span>
-                                <span>{!loading && Number(data.rows[3].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && data.length > 0 && Number(data.rows[3].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.week')}</span>
-                                <span>{!loading && Number(data.rows[2].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && data.length > 0 && Number(data.rows[2].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.thisMonth')}</span>
-                                <span>{!loading && Number(data.rows[1].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && data.length > 0 && Number(data.rows[1].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.total')}</span>
-                                <span>{!loading && Number(data.rows[0].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && data.length > 0 && Number(data.rows[0].metricValues[0].value).toLocaleString('en-US')}</span>
                             </div>
                         </div>
                     </div>
