@@ -10,7 +10,6 @@ export default function VariablesPanel({ variables, title, url }) {
   const [showOptions, setShowOptions] = useState(1);
   const [resultData, setResultData] = useState(null);
 
-
   const handleChange = (code, values) => {
     setSelectedValues((prev) => ({ ...prev, [code]: values }));
   };
@@ -32,7 +31,7 @@ export default function VariablesPanel({ variables, title, url }) {
       query,
       response: { format: 'json-stat2' },
     };
-
+    
     try {
       const res = await fetch(url, {
         method: 'POST',
@@ -42,8 +41,11 @@ export default function VariablesPanel({ variables, title, url }) {
         },
         body: JSON.stringify(postBody),
       });
-
-      if (!res.ok) throw new Error('Failed to fetch');
+      
+      if (!res.ok) {
+        alert('Хүснэгтийг буруу оруулсан байна.');
+        return;
+      };
       const data = await res.json();
       setResultData(data);
     } catch (err) {

@@ -127,9 +127,9 @@ const VariableSelector = ({ variable, onChange }) => {
             {variable.values
               .filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1)
-              .map((val) => (
-                <div
-                  key={val}
+              .map((val, index) => (
+                val !== '' && <div
+                  key={`${val}-${index}`}
                   className='flex items-center mb-1'
                   onClick={() => toggleValue(val)}
                 >
@@ -156,7 +156,7 @@ const VariableSelector = ({ variable, onChange }) => {
               : '✅'}
             Бүгдийг{' '}
             {selected.length ===
-              variable.values.filter((val) => variable.text !== 'Баг, хороо' &&
+              variable.values.filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1).length
               ? 'болих'
               : 'сонгох'}
@@ -241,9 +241,9 @@ const SelectorBox = ({
             </span>
           </h2>
           <div className='m-2 max-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
-            {filtered.map((val) => (
+            {filtered.map((val, index) => (
               <div
-                key={val}
+                key={`${val}-${values.indexOf(val)}-${index}`}
                 className='flex items-center'
                 onClick={() => toggle(val)}
               >
