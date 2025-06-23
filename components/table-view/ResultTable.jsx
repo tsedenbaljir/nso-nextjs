@@ -39,7 +39,7 @@ export default function ResultTable({ data }) {
       label: label[code] || code,
       idx,
       key,
-    }));
+    })).sort((a, b) => a.idx - b.idx);
   });
 
   const combinations = [];
@@ -111,14 +111,14 @@ export default function ResultTable({ data }) {
                       className='border p-2 min-w-60 font-normal text-sm align-top'
                       rowSpan={groupRows.length}
                     >
-                      {combo.label}
+                      <span style={{ whiteSpace: 'pre' }}>{combo.label}</span>
                     </td>
                   ) : index > 0 ? (
                     <td
                       key={`dim-${index}-${combo.code}-${rowIndex}`}
                       className='border p-2 min-w-60 font-normal text-sm align-top'
                     >
-                      {combo.label}
+                      <span style={{ whiteSpace: 'pre' }}>{combo.label}</span>
                     </td>
                   ) : null
                 ))}
