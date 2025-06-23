@@ -10,8 +10,8 @@ export default function ResultTable({ data }) {
   // });
 
   const yearKey = data.id.find((key) =>
-    ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some((kw) => key.toLowerCase().includes(kw))
-  );
+    ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some((kw) => key.trim().toLowerCase() === kw)
+);
 
   if (!yearKey || !data.dimension[yearKey]) return null;
 
