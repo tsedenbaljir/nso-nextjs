@@ -268,10 +268,12 @@ h4 {
 .footnotes_container,
 #ctl00_ContentPlaceHolderMain_UcAccordianAboutTable2_InformationBox {
   font-family: Arial, sans-serif;
-  h3{
+
+  h3 {
     font-weight: 600;
     font-size: 24px;
   }
+
   // margin: 20px 0;
   // background: #f9f9f9;
   // border-radius: 8px;
@@ -342,6 +344,13 @@ h4 {
 
 .footnotes_container .row:nth-child(odd) {
   background: #eaf6ff;
+
+  .cell3 {
+    a {
+      color: rgb(88, 178, 247);
+      text-decoration: underline;
+    }
+  }
 }
 
 /* Responsiveness (optional) */
