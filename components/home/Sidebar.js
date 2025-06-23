@@ -1,10 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Sidebar({ t, lng }) {
     const [indicators, setIndicatos] = useState([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
     useEffect(() => {
         fetchLawsByType();
     }, []);
@@ -27,7 +28,11 @@ export default function Sidebar({ t, lng }) {
     return (
         <div className="__group">
             <div className="__card_area">
-                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[3]?.tableau || ""} target='blank' className="__card">
+                <div onClick={() => {
+                    if (indicators[3]?.tableau) {
+                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[3]?.tableau, '_blank');
+                    }
+                }} className="__card">
                     <span className="__icon"
                         style={{
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[3]?.image}')`,
@@ -41,8 +46,12 @@ export default function Sidebar({ t, lng }) {
                             {indicators[3]?.indicator_perc <= 0 ? <span className="text-lg">{indicators[3]?.indicator_perc.toFixed(1) || "..."}%</span> : <span className="success">{indicators[3]?.indicator_perc.toFixed(1) || "..."}%</span>}
                         </div>
                     </div>
-                </Link>
-                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[2]?.tableau || ""} target='blank' className="__card">
+                </div>
+                <div onClick={() => {
+                    if (indicators[2]?.tableau) {
+                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[2]?.tableau, '_blank');
+                    }
+                }} className="__card">
                     <span className="__icon"
                         style={{
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[2]?.image}')`,
@@ -56,8 +65,12 @@ export default function Sidebar({ t, lng }) {
                             <span className="text-lg">{indicators[2]?.indicator.toFixed(1) || "..."}%</span>
                         </div>
                     </div>
-                </Link>
-                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[1]?.tableau || ""} target='blank' className="__card">
+                </div>
+                <div onClick={() => {
+                    if (indicators[1]?.tableau) {
+                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[1]?.tableau, '_blank');
+                    }
+                }} className="__card">
                     <span className="__icon"
                         style={{
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[1]?.image}')`,
@@ -71,8 +84,12 @@ export default function Sidebar({ t, lng }) {
                             {indicators[1]?.indicator_perc <= 0 ? <span className="text-lg">{indicators[1]?.indicator_perc.toFixed(1) || "..."}%</span> : <span className="success">{indicators[1]?.indicator_perc.toFixed(1) || "..."}%</span>}
                         </div>
                     </div>
-                </Link>
-                <Link href={`${process.env.FRONTEND}/${lng}/` + indicators[0]?.tableau || ""} target='blank' className="__card">
+                </div>
+                <div onClick={() => {
+                    if (indicators[0]?.tableau) {
+                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[0]?.tableau, '_blank');
+                    }
+                }} className="__card">
                     <span className="__icon"
                         style={{
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[0]?.image}')`,
@@ -86,7 +103,7 @@ export default function Sidebar({ t, lng }) {
                             <span className="text-lg">{indicators[0]?.indicator.toFixed(1) || "..."}%</span>
                         </div>
                     </div>
-                </Link>
+                </div>
             </div>
         </div>
     );
