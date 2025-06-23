@@ -333,6 +333,13 @@ h4 {
 
 .information_definitionlist .row:nth-child(odd) {
   background: #eaf6ff;
+
+  .cell3 {
+    a {
+      color: rgb(88, 178, 247) !important;
+      text-decoration: underline !important;
+    }
+  }
 }
 
 .information_definitionlist .row:last-child {
@@ -344,13 +351,6 @@ h4 {
 
 .footnotes_container .row:nth-child(odd) {
   background: #eaf6ff;
-
-  .cell3 {
-    a {
-      color: rgb(88, 178, 247);
-      text-decoration: underline;
-    }
-  }
 }
 
 /* Responsiveness (optional) */
