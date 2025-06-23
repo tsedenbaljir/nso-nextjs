@@ -15,7 +15,7 @@ module.exports = {
       path: "/home/nso/nso.mn",
       "post-deploy":
         "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
-      shallow: true // <-- This reduces the amount of Git history fetched
+      // shallow: true // <-- This reduces the amount of Git history fetched
     },
   },
 };
