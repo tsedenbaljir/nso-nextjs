@@ -61,7 +61,13 @@ export default function Statecate({ children, params }) {
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
         { label: name ? name[0]?.text : <LoadingDiv /> }
-    ]  : pathname.includes('statcate') ? [
+    ] : pathname.includes('statcate/table-view/') ? [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('statistic'), url: ['/statcate'] },
+        { label: t('statCate.statData'), url: ['/statcate'] },
+        { label: name ? name[0]?.text : <LoadingDiv /> },
+        { label: title ? title : <LoadingDiv /> }
+    ] : pathname.includes('statcate') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
     ] : [

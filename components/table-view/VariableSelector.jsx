@@ -62,7 +62,7 @@ const VariableSelector = ({ variable, onChange }) => {
     switch (level) {
       case 'base':
         values = variable.values
-          .filter((val) => variable.text !== 'Баг, хороо' &&
+          .filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
             variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1);
         current = selected;
         recomputeAndEmit(
@@ -125,7 +125,7 @@ const VariableSelector = ({ variable, onChange }) => {
           </h2>
           <div className='m-2 max-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
             {variable.values
-              .filter((val) => variable.text !== 'Баг, хороо' &&
+              .filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1)
               .map((val) => (
                 <div
@@ -150,7 +150,7 @@ const VariableSelector = ({ variable, onChange }) => {
             className='mt-3 bg-gray-2 border rounded px-3 py-2 m-1 text-gray-700 font-normal'
           >
             {selected.length ===
-              variable.values.filter((val) => variable.text !== 'Баг, хороо' &&
+              variable.values.filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1).length
               ? '❌'
               : '✅'}
@@ -164,7 +164,8 @@ const VariableSelector = ({ variable, onChange }) => {
         </div>
       </div>
 
-      {(variable.code === 'Баг, хороо' ||
+      {(variable.code === 'Аймгийн код' ||
+        variable.code === 'Баг, хороо' ||
         variable.code === 'Аймаг' ||
         variable.code === 'Засаг захиргааны нэгж') && (
           <>
