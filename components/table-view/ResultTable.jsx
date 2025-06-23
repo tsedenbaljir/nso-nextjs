@@ -20,7 +20,7 @@ export default function ResultTable({ data }) {
       code,
       label: data.dimension[yearKey].category.label[code] || code,
     })
-  );
+  ).reverse();
 
   const rowKeys = data.id.filter((key) => key !== yearKey);
 
