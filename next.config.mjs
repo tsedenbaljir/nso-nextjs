@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    experimental: {
+        serverComponentsExternalPackages: ['oracledb'],
+    },
     webpack: (config, { isServer }) => {
         if (isServer) {
             config.externals.push('oracledb');
@@ -68,6 +71,12 @@ const nextConfig = {
                 ],
             },  
         ];
+    },
+    api: {
+        bodyParser: {
+            sizeLimit: '100mb',
+        },
+        responseLimit: false,
     },
 };
 
