@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
+import TextLoading from '@/components/Loading/OneField/Index';
 
 export default function TransparencyLayout({ children, params: { lng } }) {
 
@@ -13,15 +14,21 @@ export default function TransparencyLayout({ children, params: { lng } }) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const getTransparency = async () => {
+        await fetch(`/api/transparency/${id}`, {
+            cache: "no-store",
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status) setData(res.data);
+            })
+            .finally(() => setLoading(false));
+    }
     useEffect(() => {
         if (id) {
-            fetch(`/api/transparency/${id}`)
-                .then((res) => res.json())
-                .then((res) => {
-                    if (res.status) setData(res.data);
-                })
-                .finally(() => setLoading(false));
+            getTransparency()
         }
+        setLoading(false);
     }, [id]);
 
     var breadMap = [
@@ -29,7 +36,7 @@ export default function TransparencyLayout({ children, params: { lng } }) {
         { label: t('transparency'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] }
     ];
     if(name) breadMap.push({ label: name ? decodeURIComponent(name) : ""});
-    if(!loading) breadMap.push({ label: data.title });
+    // if(!loading) breadMap.push({ label: data.title });
 
     return (
         <>
@@ -40,7 +47,7 @@ export default function TransparencyLayout({ children, params: { lng } }) {
                             <span className="__page_name">
                                 {t("transparency")}
                             </span>
-                            <BreadCrumb model={breadMap} />
+                            {loading ? <TextLoading /> : <BreadCrumb model={breadMap} />}
                         </div>
                         {isMn && (
                             <div className="__header" style={{ marginLeft: '20px' }}>

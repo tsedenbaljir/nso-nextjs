@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import Link from 'next/link';
+import TextLoading from '@/components/Loading/Text/Index';
 
 export default function TransparencyCategory({ params: { lng, name } }) {
     const { t } = useTranslation(lng, "lng", "");
@@ -38,12 +39,14 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                     </div>
                     <div className="__card_groups">
                         {loading ? (
-                            <div className="loading">Уншиж байна...</div>
+                            <TextLoading />
                         ) : items.length > 0 ? (
                             items.map((item, index) => (
                                 <Link
                                     key={index}
-                                    href={`/${lng}/transparency/${name}/${item.id}`}
+                                    href={item.id === 38 ? `/${lng}/contact`
+                                        : item.id === 37 ? `/${lng}/transparency/tran-news`
+                                            : `/${lng}/transparency/${name}/${item.id}`}
                                     className="__card"
                                     style={{ background: 'var(--surface-bk2)' }}
                                 >

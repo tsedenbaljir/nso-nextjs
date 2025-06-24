@@ -3,6 +3,8 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import PdfViewer from '@/components/PdfViewer/index';
+import TextLoading from '@/components/Loading/Text/Index';
+
 export default function TransparencyDetailPage() {
   const { id } = useParams();
   const [data, setData] = useState(null);
@@ -21,7 +23,9 @@ export default function TransparencyDetailPage() {
 
   if (loading)
     return (
-      <div className="loading">Уншиж байна...</div>
+      <div className="nso_container py-10">
+        <TextLoading />
+      </div>
     );
 
   if (!data)
