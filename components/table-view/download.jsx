@@ -3,13 +3,17 @@ import { saveAs } from 'file-saver';
 
 export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_data') {
     if (format === "csv") {
-
         const dimensions = pxData.dimension;
         const dimensionIds = pxData.id;
         const labels = dimensionIds.map((id) => dimensions[id].label);
-        const categoryLabels = dimensionIds.map((id) =>
-            Object.values(dimensions[id].category.label)
-        );
+        const categoryLabels = dimensionIds.map((id) => {
+            const labelObj = dimensions[id].category.label;
+            const indexObj = dimensions[id].category.index;
+            return Object.entries(labelObj)
+                .map(([code, label]) => ({ code, label, idx: indexObj[code] }))
+                .sort((a, b) => a.idx - b.idx)
+                .map(item => item.label);
+        });
 
         const allCombinations = cartesian(...categoryLabels);
         const values = pxData.value;
@@ -44,9 +48,14 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         const dimensions = pxData.dimension;
         const dimensionIds = pxData.id;
         const labels = dimensionIds.map((id) => dimensions[id].label);
-        const categoryLabels = dimensionIds.map((id) =>
-            Object.values(dimensions[id].category.label)
-        );
+        const categoryLabels = dimensionIds.map((id) => {
+            const labelObj = dimensions[id].category.label;
+            const indexObj = dimensions[id].category.index;
+            return Object.entries(labelObj)
+                .map(([code, label]) => ({ code, label, idx: indexObj[code] }))
+                .sort((a, b) => a.idx - b.idx)
+                .map(item => item.label);
+        });
 
         const allCombinations = cartesian(...categoryLabels);
         const values = pxData.value;
@@ -54,7 +63,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         // Identify the year dimension based on its ID or label (more robustly)
         // First, try to find a year dimension by its ID (e.g., 'TIME', 'YEAR')
         const yearDimensionKeyById = pxData.id.find(key =>
-            ['он', 'жил', 'улирал', 'хугацаа'].some(kw => key.toLowerCase().includes(kw))
+            ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some((kw) => key.toLowerCase() === kw)
         );
 
         if (yearDimensionKeyById) {
@@ -64,7 +73,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         // If not found by ID, try to find by label (e.g., 'Он', 'Хугацаа')
         if (yearDimensionIndex === -1) {
             yearDimensionIndex = labels.findIndex(label =>
-                ['он', 'жил', 'улирал', 'хугацаа'].some(kw => label.toLowerCase().includes(kw))
+                ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some(kw => label.toLowerCase() === kw)
             );
         }
         let table;
