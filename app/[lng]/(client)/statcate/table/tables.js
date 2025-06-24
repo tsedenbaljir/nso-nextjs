@@ -12,7 +12,9 @@ export default function Table({ sector, subsector, lng }) {
         // Fetch data for DataTable
         const fetchData = async () => {
             try {
-                const res = await fetch(`/api/sectortablename?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}&lng=${lng}`);
+                const res = await fetch(`/api/sectortablename?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}&lng=${lng}`, {
+                    cache: "no-store",
+                });
                 const response = await res.json();
                 // Format API data for DataTable
                 const formattedData = response.data.map((item, index) => ({
