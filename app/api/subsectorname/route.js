@@ -28,7 +28,10 @@ export async function GET(req) {
 
     const API_URL = `${BASE_API_URL}/${lng}/NSO/${encodeURIComponent(subsectorName)}`;
 
-    const response = await fetch(API_URL, requestOptions);
+    const response = await fetch(API_URL, {
+      ...requestOptions,
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
