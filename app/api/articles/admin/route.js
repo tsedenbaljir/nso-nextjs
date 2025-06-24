@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+export const dynamic = "force-dynamic";
 export async function GET(req) {
     // Check authentication
     const auth = await checkAdminAuth(req);
