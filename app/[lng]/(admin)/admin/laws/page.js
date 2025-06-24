@@ -232,7 +232,7 @@ export default function AdminLaws() {
                     mode="basic"
                     name="file"
                     accept="application/pdf"
-                    maxFileSize={10000000}
+                    maxFileSize={100000000}
                     onSelect={handleFileUpload}
                     auto
                     chooseLabel="Choose PDF"
