@@ -20,23 +20,25 @@ export async function GET(request) {
 
         const response = await fetch(`https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${id}`);
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            // throw new Error(`HTTP error! Status: ${response.status}`);
+            return NextResponse.json({
+                status: false,
+                data: [],
+                message: "Failed to fetch data"
+            });
         }
         const contentType = response.headers.get('Content-Type');
         const metadata = await response.text();
-        
+
         // If the response is not HTML, return appropriate response
         if (!contentType.includes('text/html')) {
-            return NextResponse.json(
-                { error: 'Response is not HTML. Likely a PC-Axis file or other format.' },
-                { status: 400 }
-            );
+            return NextResponse.json([]);
         }
 
         // Parse HTML using node-html-parser
         const root = parse(metadata);
         const wrapElement = root.querySelector('#pxwebcontent');
-        
+
         if (!wrapElement) {
             return NextResponse.json(
                 { error: 'Could not find pxwebcontent element' },
