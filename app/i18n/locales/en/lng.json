@@ -296,7 +296,7 @@
     "environment": "Education, health",
     "republic": "Historical data",
     "republicTitle": "Historical data",
-    "republicStatistic": "Introduction to a new menu on the corporate web site - the Historty of the Mongolian People’s Republic ",
+    "republicStatistic": "Introduction to a new menu on the corporate web site - the Historty of the Mongolian People's Republic ",
     "monthIntroduction": "Month Introduction"
   },
   "dataVis": {
@@ -438,5 +438,12 @@
     "exampleXml": "application/xml, text/xml",
     "or": "or",
     "notFound": "No data found."
+  },
+  "404": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "backHome": "Back to Homepage",
+    "goBack": "Go Back",
+    "errorCode": "404"
   }
 }
