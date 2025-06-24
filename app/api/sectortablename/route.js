@@ -34,7 +34,8 @@ export async function GET(req) {
     const API_URL = `${process.env.BASE_API_URL}/${lng}/NSO/${encodeURIComponent(sector)}/${encodeURIComponent(subsector)}`;
     
     // Fetch data from the external API
-    const response = await fetch(API_URL, requestOptions, {
+    const response = await fetch(API_URL, {
+      ...requestOptions,
       cache: "no-store",
     });
     
