@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 
+export const dynamic = 'force-dynamic';
 export async function POST(req) {
     try {
         const body = await req.json();
@@ -20,12 +21,12 @@ export async function POST(req) {
         `;
         const subTitleResults = await db.raw(subTitleQuery, [classification_code_id]);
 
-        // sub_classification_code_SPS өгөгдлийг авах
+        // sub_classification_code өгөгдлийг авах
         const subClassQuery = `
             SELECT [id], [namemn], [nameen], [code], [active], [status],
                 [created_by], [created_date], [last_modified_by], [last_modified_date],
                 [classification_code_id], [deleted], [app_order]
-            FROM [NSOweb].[dbo].[sub_classification_code_SPS]
+            FROM [NSOweb].[dbo].[sub_classification_code]
             WHERE classification_code_id = ?
         `;
         const subClassResults = await db.raw(subClassQuery, [classification_code_id]);
@@ -50,7 +51,7 @@ export async function POST(req) {
                     [id], [namemn], [nameen], [code], [active], [status], 
                     [created_by], [created_date], [last_modified_by], 
                     [last_modified_date], [classification_code_id], [deleted], [app_order]
-                FROM [NSOweb].[dbo].[sub_classification_code_SPS]
+                FROM [NSOweb].[dbo].[sub_classification_code]
             ) AS c ON 
                 b.[type] = 'SingleSelect' AND TRY_CAST(b.[valuemn] AS INT) = c.[id]
             ORDER BY b.[meta_data_id]

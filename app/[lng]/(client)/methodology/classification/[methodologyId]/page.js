@@ -21,7 +21,8 @@ export default function Methodology() {
         const response = await fetch("/api/methodology/classificationDetail", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: methodologyId })
+          body: JSON.stringify({ id: methodologyId }),
+          cache: "no-store"
         });
 
         const data = await response.json();
