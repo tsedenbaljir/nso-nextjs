@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Spin } from "antd";
-import PdfViewer from "@/components/PdfViewer";
 import { useParams } from "next/navigation";
 
 export default function Methodology() {
@@ -58,7 +57,7 @@ export default function Methodology() {
   }
 
   return (
-    <div className="__info_detail_page text-sm">
+    <div className="__info_detail_page text-sm pb-10">
       <div className="__info_detail_header mb-4">
         <div className="__detail_title">
           <h2 className="text-base font-semibold">{methodology.sub_Title[0].namemn}</h2>
