@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-const VariableSelector = ({ variable, onChange }) => {
+const VariableSelector = ({ variable, onChange, lng }) => {
   const [selected, setSelected] = useState([]);
   const [childSelected, setChildSelected] = useState([]);
   const [grandChildSelected, setGrandChildSelected] = useState([]);
@@ -154,12 +154,12 @@ const VariableSelector = ({ variable, onChange }) => {
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1).length
               ? '❌'
               : '✅'}
-            Бүгдийг{' '}
+            {lng === 'mn' ? 'Бүгдийг' : 'Select'} {' '}
             {selected.length ===
               variable.values.filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1).length
-              ? 'болих'
-              : 'сонгох'}
+              ? lng === 'mn' ? 'болих' : 'Remove'
+              : lng === 'mn' ? 'сонгох' : 'All'}
           </button>
         </div>
       </div>
@@ -171,7 +171,7 @@ const VariableSelector = ({ variable, onChange }) => {
           <>
             {selected.length > 0 && (
               <SelectorBox
-                label='Дэд кодууд:'
+                label={lng === 'mn' ? 'Дэд кодууд:' : 'Sub codes:'}
                 level='child'
                 list={childSelected}
                 dependsOn={selected}
@@ -180,11 +180,12 @@ const VariableSelector = ({ variable, onChange }) => {
                 toggleAll={toggleAll}
                 values={variable.values}
                 valueTexts={variable.valueTexts}
+                lng={lng}
               />
             )}
             {childSelected.length > 0 && (
               <SelectorBox
-                label='Гуравдагч түвшин:'
+                label={lng === 'mn' ? 'Гуравдагч түвшин:' : 'Third level:'}
                 level='grand'
                 list={grandChildSelected}
                 dependsOn={childSelected}
@@ -193,11 +194,12 @@ const VariableSelector = ({ variable, onChange }) => {
                 toggleAll={toggleAll}
                 values={variable.values}
                 valueTexts={variable.valueTexts}
+                lng={lng}
               />
             )}
             {grandChildSelected.length > 0 && (
               <SelectorBox
-                label='Дөрөвдөгч түвшин:'
+                label={lng === 'mn' ? 'Дөрөвдөгч түвшин:' : 'Fourth level:'}
                 level='great'
                 list={greatGrandChildSelected}
                 dependsOn={grandChildSelected}
@@ -206,6 +208,7 @@ const VariableSelector = ({ variable, onChange }) => {
                 toggleAll={toggleAll}
                 values={variable.values}
                 valueTexts={variable.valueTexts}
+                lng={lng}
               />
             )}
           </>
@@ -224,6 +227,7 @@ const SelectorBox = ({
   toggleAll,
   values,
   valueTexts,
+  lng
 }) => {
   const filtered = values.filter(
     (val) =>
@@ -263,8 +267,8 @@ const SelectorBox = ({
             onClick={() => toggleAll(level)}
             className='mt-3 bg-gray-2 border rounded px-3 py-2 m-1 text-gray-700 font-normal'
           >
-            {list.length === filtered.length ? '❌' : '✅'} Бүгдийг{' '}
-            {list.length === filtered.length ? 'болих' : 'сонгох'}
+            {list.length === filtered.length ? '❌' : '✅'} {lng === 'mn' ? 'Бүгдийг' : 'Select'} {' '}
+            {list.length === filtered.length ? lng === 'mn' ? 'болих' : 'Remove' : lng === 'mn' ? 'сонгох' : 'All'}
           </button>
         </div>
       </div>

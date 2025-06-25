@@ -5,7 +5,7 @@ import ResultTable from './ResultTable';
 import ExportButton from './ExportButton';
 import VariableSelector from './VariableSelector';
 
-export default function VariablesPanel({ variables, title, url }) {
+export default function VariablesPanel({ variables, title, url, lng }) {
   const [selectedValues, setSelectedValues] = useState({});
   const [showOptions, setShowOptions] = useState(1);
   const [resultData, setResultData] = useState(null);
@@ -55,19 +55,20 @@ export default function VariablesPanel({ variables, title, url }) {
 
   return (
     <div className='flex flex-col'>
-      <ExportButton data={resultData} title={title} />
+      <ExportButton data={resultData} title={title} lng={lng} />
       <div className='flex flex-row flex-wrap gap-2'>
         {variables.map((variable) => (
           <VariableSelector
             key={variable.code}
             variable={variable}
             onChange={handleChange}
+            lng={lng}
           />
         ))}
         <div className='flex flex-row flex-wrap gap-2 col-span-4 min-w-[24%] max-w-[270px]'>
           <div className="border border-gray-400 rounded-md bg-white shadow flex flex-col w-full col-span-4">
             <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
-              <span>Харагдах төрөл</span>
+              <span>{lng === 'mn' ? 'Харагдах төрөл' : 'View type'}</span>
             </h2>
             <div className='!min-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full px-2 py-1 mb-2 bg-white'
               onClick={() => setShowOptions(1)}>
@@ -78,19 +79,19 @@ export default function VariablesPanel({ variables, title, url }) {
                 checked={showOptions === 1}
                 onChange={() => setShowOptions(1)}
               />
-              <label className='cursor-pointer font-normal'>Хүснэгт</label>
+              <label className='cursor-pointer font-normal'>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
             </div>
             <button
               onClick={handleResult}
               className='mt-3 bg-[#005baa] border rounded px-3 py-2 m-1 text-white font-normal'
             >
-              Үр дүн харах
+              {lng === 'mn' ? 'Үр дүн харах' : 'View result'}
             </button>
           </div>
         </div>
       </div>
       {showOptions === 1 && resultData && (
-        <ResultTable data={resultData} url={url} />
+        <ResultTable data={resultData} url={url} lng={lng} />
       )}
     </div>
   );

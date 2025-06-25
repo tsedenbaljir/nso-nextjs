@@ -59,7 +59,7 @@ export async function POST(request) {
         }
 
         const postBody = await request.json();
-
+        console.log(postBody);
         const response = await fetch(
             `${baseAPI}/${lng}/NSO/${decodeURIComponent(sector)}/${decodeURIComponent(subsector)}/${id}`,
             {

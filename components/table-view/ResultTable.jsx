@@ -1,13 +1,13 @@
-export default function ResultTable({ data }) {
+export default function ResultTable({ data, lng }) {
   if (!data || !data.id || !data.dimension || !data.value || !data.size) {
     return null;
   }
 
-  // console.log('Data structure:', {
-  //   id: data.id,
-  //   dimension: data.dimension,
-  //   size: data.size
-  // });
+  console.log('Data structure:', {
+    id: data.id,
+    dimension: data.dimension,
+    size: data.size
+  });
 
   const yearKey = data.id.find((key) =>
     ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some((kw) => key.toLowerCase() === kw)
