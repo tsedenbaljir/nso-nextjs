@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ResultTable from './ResultTable';
 import ExportButton from './ExportButton';
 import VariableSelector from './VariableSelector';
 
 export default function VariablesPanel({ variables, title, url, lng }) {
   const [selectedValues, setSelectedValues] = useState({});
+  const [selectedValuesCount, setSelectedValuesCount] = useState(0);
   const [showOptions, setShowOptions] = useState(1);
   const [resultData, setResultData] = useState(null);
 
@@ -15,6 +16,10 @@ export default function VariablesPanel({ variables, title, url, lng }) {
   };
 
   const handleResult = async () => {
+    if (selectedValuesCount > 100000) {
+      alert('Сонгох боломжтой хамгийн их тоо 100 000 байна.');
+      return;
+    }
     const query = Object.entries(selectedValues)
       .filter(([_, values]) => values.length > 0) // зөвхөн утгатайг үлдээх
       .map(([code, values]) => ({
@@ -31,7 +36,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
       query,
       response: { format: 'json-stat2' },
     };
-    
+
     try {
       const res = await fetch(url, {
         method: 'POST',
@@ -41,7 +46,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
         },
         body: JSON.stringify(postBody),
       });
-      
+
       if (!res.ok) {
         alert('Хүснэгтийг буруу оруулсан байна.');
         return;
@@ -52,6 +57,15 @@ export default function VariablesPanel({ variables, title, url, lng }) {
       console.error('Алдаа:', err);
     }
   };
+
+  useEffect(() => {
+    var count = 1;
+    if (Object.keys(selectedValues).length > 0)
+      for (const value of Object.values(selectedValues)) {
+        count *= value.length;
+      }
+    setSelectedValuesCount(count);
+  }, [selectedValues]);
 
   return (
     <div className='flex flex-col'>
@@ -89,6 +103,11 @@ export default function VariablesPanel({ variables, title, url, lng }) {
             </button>
           </div>
         </div>
+      </div>
+      <div className='text-base text-gray-500 mt-4 w-full text-center'>
+        Сонгогдсон утгын тоо: {selectedValuesCount > 1 ? selectedValuesCount : ''}
+        <br />
+        (Сонгох боломжтой хамгийн их тоо 100 000)
       </div>
       {showOptions === 1 && resultData && (
         <ResultTable data={resultData} url={url} lng={lng} />

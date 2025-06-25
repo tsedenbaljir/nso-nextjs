@@ -3,11 +3,11 @@ export default function ResultTable({ data, lng }) {
     return null;
   }
 
-  console.log('Data structure:', {
-    id: data.id,
-    dimension: data.dimension,
-    size: data.size
-  });
+  // console.log('Data structure:', {
+  //   id: data.id,
+  //   dimension: data.dimension,
+  //   size: data.size
+  // });
 
   const yearKey = data.id.find((key) =>
     ['он', 'жил', 'улирал', 'хугацаа', 'сар'].some((kw) => key.toLowerCase() === kw)
