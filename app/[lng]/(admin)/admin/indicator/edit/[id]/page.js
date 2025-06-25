@@ -58,7 +58,32 @@ export default function EditIndicator() {
             const response = await fetch(`/api/indicators/get?id=${id}`);
             const result = await response.json();
             if (result.status) {
-                setIndicator(result.data[0]);
+                const indicatorData = result.data[0];
+                // Properly handle the date conversion
+                if (indicatorData.last_modified_date) {
+                    // If it's already a Date object, use it as is
+                    if (indicatorData.last_modified_date instanceof Date) {
+                        indicatorData.last_modified_date = indicatorData.last_modified_date;
+                    } else {
+                        // If it's a string, parse it properly
+                        const dateStr = indicatorData.last_modified_date;
+                        // Handle different date formats
+                        let parsedDate;
+                        if (typeof dateStr === 'string') {
+                            // Try parsing as ISO string first
+                            parsedDate = new Date(dateStr);
+                            // Check if the date is valid
+                            if (isNaN(parsedDate.getTime())) {
+                                // If invalid, try parsing as local date string
+                                parsedDate = new Date(dateStr.replace(/GMT\+\d+.*$/, ''));
+                            }
+                        } else {
+                            parsedDate = new Date(dateStr);
+                        }
+                        indicatorData.last_modified_date = parsedDate;
+                    }
+                }
+                setIndicator(indicatorData);
             } else {
                 toast.current.show({
                     severity: 'error',
@@ -158,7 +183,15 @@ export default function EditIndicator() {
                             ) : component === 'InputNumber' ? (
                                 <InputNumber id={id} value={indicator[id]} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} required className="w-full h-[40px] text-sm" />
                             ) : component === 'Calendar' ? (
-                                <Calendar id={id} value={indicator[id] ? new Date(indicator[id]) : null} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} required showIcon className="w-full h-[40px] text-sm" />
+                                <Calendar 
+                                    id={id} 
+                                    value={indicator[id] ? (indicator[id] instanceof Date ? indicator[id] : new Date(indicator[id])) : null} 
+                                    onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} 
+                                    required 
+                                    showIcon 
+                                    className="w-full h-[40px] text-sm"
+                                    dateFormat="dd/mm/yy"
+                                />
                             ) : component === 'FileUpload' ? (
                                 <FileUpload mode="basic" name="file" accept="image/*" maxFileSize={10000000} onSelect={handleFileUpload} auto chooseLabel="Зураг сонгох" className="h-[40px] w-[120px]" />
                             ) : (
