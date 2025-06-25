@@ -47,7 +47,7 @@ export default function EditIndicator() {
     useEffect(() => {
         if (id) {
             fetchIndicator(id);
-        } 
+        }
         else {
             router.push('/admin/indicator');
         }
@@ -134,52 +134,52 @@ export default function EditIndicator() {
 
     return (
         <div className="w-full px-4 h-full">
-          <Card className="p-4">
-            <h2 className="text-xl font-bold mb-4">Үзүүлэлт засварлах</h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-x-4 gap-y-10">
-              {[
-                { id: 'name', label: 'Нэр *' },
-                { id: 'name_eng', label: 'Нэр /Англи/' },
-                { id: 'indicator_type', label: 'Төрөл *', component: 'Dropdown', options: categories },
-                { id: 'indicator', label: 'Тоон үзүүлэлт', component: 'InputNumber' },
-                { id: 'indicator_perc', label: 'Өөрчлөлт', component: 'InputNumber' },
-                { id: 'info', label: 'Тоон үзүүлэлтийн хэмжих нэгж' },
-                { id: 'info_eng', label: 'Тоон үзүүлэлтийн хэмжих нэгж /Англи/' },
-                { id: 'measure_type', label: 'Өөрчлөлтийн хэмжих нэгж *' },
-                { id: 'last_modified_date', label: 'Шинэчилсэн огноо *', component: 'Calendar' },
-                { id: 'list_order', label: 'Эрэмбэ', component: 'InputNumber' },
-                { id: 'tableau', label: 'Холбоос' },
-                { id: 'image', label: 'Зураг', component: 'FileUpload' },
-              ].map(({ id, label, component, options }) => (
-                <div key={id} className="p-field w-[30%] h-[40px]">
-                  <label htmlFor={id} className="block mb-1">{label}</label>
-                  {component === 'Dropdown' ? (
-                    <Dropdown id={id} value={indicator[id]} options={options} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} placeholder="Сонгоно уу" required className="w-full h-[40px] text-sm" />
-                  ) : component === 'InputNumber' ? (
-                    <InputNumber id={id} value={indicator[id]} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} required className="w-full h-[40px] text-sm" />
-                  ) : component === 'Calendar' ? (
-                    <Calendar id={id} value={indicator[id] ? new Date(indicator[id]) : null} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} required showIcon className="w-full h-[40px] text-sm" />
-                  ) : component === 'FileUpload' ? (
-                    <FileUpload mode="basic" name="file" accept="image/*" maxFileSize={10000000} onSelect={handleFileUpload} auto chooseLabel="Зураг сонгох" className="h-[40px] w-[120px]" />
-                  ) : (
-                    <InputText id={id} value={indicator[id]} onChange={(e) => setIndicator({ ...indicator, [id]: e.target.value })} required className="w-full h-[40px] text-sm" />
-                  )}
-                </div>
-              ))}
+            <Card className="p-4">
+                <h2 className="text-xl font-bold mb-4">Үзүүлэлт засварлах</h2>
+                <form onSubmit={handleSubmit} className="grid grid-cols-3 gap-x-4 gap-y-10">
+                    {[
+                        { id: 'name', label: 'Нэр *' },
+                        { id: 'name_eng', label: 'Нэр /Англи/' },
+                        { id: 'indicator_type', label: 'Төрөл *', component: 'Dropdown', options: categories },
+                        { id: 'indicator', label: 'Тоон үзүүлэлт' },
+                        { id: 'indicator_perc', label: 'Өөрчлөлт' },
+                        { id: 'info', label: 'Тоон үзүүлэлтийн хэмжих нэгж' },
+                        { id: 'info_eng', label: 'Тоон үзүүлэлтийн хэмжих нэгж /Англи/' },
+                        { id: 'measure_type', label: 'Өөрчлөлтийн хэмжих нэгж *' },
+                        { id: 'last_modified_date', label: 'Шинэчилсэн огноо *', component: 'Calendar' },
+                        { id: 'list_order', label: 'Эрэмбэ', component: 'InputNumber' },
+                        { id: 'tableau', label: 'Холбоос' },
+                        { id: 'image', label: 'Зураг', component: 'FileUpload' },
+                    ].map(({ id, label, component, options }) => (
+                        <div key={id} className="p-field w-[30%] h-[40px]">
+                            <label htmlFor={id} className="block mb-1">{label}</label>
+                            {component === 'Dropdown' ? (
+                                <Dropdown id={id} value={indicator[id]} options={options} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} placeholder="Сонгоно уу" required className="w-full h-[40px] text-sm" />
+                            ) : component === 'InputNumber' ? (
+                                <InputNumber id={id} value={indicator[id]} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} required className="w-full h-[40px] text-sm" />
+                            ) : component === 'Calendar' ? (
+                                <Calendar id={id} value={indicator[id] ? new Date(indicator[id]) : null} onChange={(e) => setIndicator({ ...indicator, [id]: e.value })} required showIcon className="w-full h-[40px] text-sm" />
+                            ) : component === 'FileUpload' ? (
+                                <FileUpload mode="basic" name="file" accept="image/*" maxFileSize={10000000} onSelect={handleFileUpload} auto chooseLabel="Зураг сонгох" className="h-[40px] w-[120px]" />
+                            ) : (
+                                <InputText id={id} value={indicator[id]} onChange={(e) => setIndicator({ ...indicator, [id]: e.target.value })} required className="w-full h-[40px] text-sm" />
+                            )}
+                        </div>
+                    ))}
 
-              <div className="p-field flex items-center bg-gray-100 px-4 rounded-md h-[40px] w-[30%] mt-4">
-                <input type="checkbox" id="published" checked={indicator.published} onChange={(e) => setIndicator({ ...indicator, published: e.target.checked })} className="mr-2" />
-                <label htmlFor="published">Идэвхтэй</label>
-              </div>
-          
-              <div className="p-field col-span-3 flex justify-end gap-2 mt-4">
-                <Button label="Хадгалах" type="submit" icon="pi pi-save" className="h-[40px] w-[160px] bg-blue-500 border-blue-500 hover:bg-blue-600 hover:border-blue-600 text-white" />
-                <Button label="Болих" type="button" icon="pi pi-times" onClick={() => router.push('/admin/indicator')} severity="secondary" className="h-[40px] w-[160px] bg-blue-500 border-blue-500 hover:bg-blue-600 hover:border-blue-600 text-white" />
-              </div>
-            </form>
-          </Card>
-          <Toast ref={toast} />
+                    <div className="p-field flex items-center bg-gray-100 px-4 rounded-md h-[40px] w-[30%] mt-4">
+                        <input type="checkbox" id="published" checked={indicator.published} onChange={(e) => setIndicator({ ...indicator, published: e.target.checked })} className="mr-2" />
+                        <label htmlFor="published">Идэвхтэй</label>
+                    </div>
+
+                    <div className="p-field col-span-3 flex justify-end gap-2 mt-4">
+                        <Button label="Хадгалах" type="submit" icon="pi pi-save" className="h-[40px] w-[160px] bg-blue-500 border-blue-500 hover:bg-blue-600 hover:border-blue-600 text-white" />
+                        <Button label="Болих" type="button" icon="pi pi-times" onClick={() => router.push('/admin/indicator')} severity="secondary" className="h-[40px] w-[160px] bg-blue-500 border-blue-500 hover:bg-blue-600 hover:border-blue-600 text-white" />
+                    </div>
+                </form>
+            </Card>
+            <Toast ref={toast} />
         </div>
-      
+
     );
 } 
