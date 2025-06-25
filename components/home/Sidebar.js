@@ -12,7 +12,7 @@ export default function Sidebar({ t, lng }) {
 
     const fetchLawsByType = async () => {
         try {
-            const response = await fetch(`/api/mainIndicators?type=main`);
+            const response = await fetch(`/api/mainIndicators?type=main`, { cache: 'no-store' });
             const result = await response.json();
 
             if (result.status && Array.isArray(result.data)) {
@@ -38,7 +38,7 @@ export default function Sidebar({ t, lng }) {
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[3]?.image}')`,
                         }}
                     ></span>
-                    <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__desc">{indicators[3]?.last_modified_date.substring(0, 10) || "..."}</span>
                     <span className="__name">{lng === "mn" ? indicators[3]?.name : indicators[3]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[3]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} </span>
@@ -57,7 +57,7 @@ export default function Sidebar({ t, lng }) {
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[2]?.image}')`,
                         }}
                     ></span>
-                    <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__desc">{indicators[2]?.last_modified_date.substring(0, 10) || "..."}</span>
                     <span className="__name">{lng === "mn" ? indicators[2]?.name : indicators[2]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[2]?.phone} </span>
@@ -76,7 +76,7 @@ export default function Sidebar({ t, lng }) {
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[1]?.image}')`,
                         }}
                     ></span>
-                    <span className="__desc">{indicators[1]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__desc">{indicators[1]?.last_modified_date.substring(0, 10) || "..."}</span>
                     <span className="__name">{lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 14 }}>{indicators[1]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng} </span>
@@ -95,7 +95,7 @@ export default function Sidebar({ t, lng }) {
                             backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[0]?.image}')`,
                         }}
                     ></span>
-                    <span className="__desc">{indicators[0]?.updated_date.substring(0, 10) || "..."}</span>
+                    <span className="__desc">{indicators[0]?.last_modified_date.substring(0, 10) || "..."}</span>
                     <span className="__name">{lng === "mn" ? indicators[0]?.name : indicators[0]?.name_eng || "..."}</span>
                     <div className="__phone">
                         <span style={{ marginTop: 10, fontSize: 18 }}>{indicators[0]?.phone} </span>

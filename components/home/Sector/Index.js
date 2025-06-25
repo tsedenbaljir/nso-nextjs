@@ -67,7 +67,7 @@ export default function Index({ lng }) {
                                         router.push(`${process.env.FRONTEND}/${lng}/${indicators[4]?.tableau}`, '_blank');
                                     }
                                 }}>
-                                    <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
+                                    <span className="__desc">{indicators[4]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[4]?.image})` }}></span>
                                         {lng === "mn" ? indicators[4]?.name : indicators[4]?.name_eng || "..."}
@@ -79,7 +79,7 @@ export default function Index({ lng }) {
                                         router.push(`${process.env.FRONTEND}/${lng}/${indicators[3]?.tableau}`, '_blank');
                                     }
                                 }}>
-                                    <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
+                                    <span className="__desc">{indicators[3]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[3]?.image})` }}></span>
                                         {lng === "mn" ? indicators[3]?.name : indicators[3]?.name_eng || "..."}
@@ -91,7 +91,7 @@ export default function Index({ lng }) {
                                         router.push(`${process.env.FRONTEND}/${lng}/${indicators[2]?.tableau}`, '_blank');
                                     }
                                 }}>
-                                    <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
+                                    <span className="__desc">{indicators[2]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[2]?.image})` }}></span>
                                         {lng === "mn" ? indicators[2]?.name : indicators[2]?.name_eng || "..."}
@@ -103,7 +103,7 @@ export default function Index({ lng }) {
                                         router.push(`${process.env.FRONTEND}/${lng}/${indicators[1]?.tableau}`, '_blank');
                                     }
                                 }}>
-                                    <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
+                                    <span className="__desc">{indicators[4]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[1]?.image})` }}></span>
                                         {lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}
