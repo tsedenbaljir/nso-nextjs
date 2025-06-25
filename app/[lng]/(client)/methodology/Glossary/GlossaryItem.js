@@ -18,8 +18,8 @@ export default function GlossaryItem({ item, isMn }) {
       <div className="__list_details">
         <span className="__list_date">
           <i className="pi pi-calendar-minus"></i>
-          {item.last_modified_date &&
-            new Date(item.last_modified_date).toISOString().split("T")[0]}
+          {item.approved_date &&
+            new Date(item.approved_date).toISOString().split("T")[0]}
         </span>
       </div>
     </div>

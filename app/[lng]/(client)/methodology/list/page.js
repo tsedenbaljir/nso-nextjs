@@ -3,10 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
 import { useTranslation } from "@/app/i18n/client";
 import GlossaryList from "../Glossary/GlossaryList";
-import GlossaryFilter from "../Glossary/GlossaryFilter";
-
-import Result from "@/components/Search/subMain/Result";
-import MainSearch from "@/components/Search/subMain/MainSearch";
 
 export default function Glossary({ params }) {
   const { lng } = params;
