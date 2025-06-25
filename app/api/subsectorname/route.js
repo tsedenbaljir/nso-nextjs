@@ -27,7 +27,6 @@ export async function GET(req) {
     };
 
     const API_URL = `${BASE_API_URL}/${lng}/NSO/${encodeURIComponent(subsectorName)}`;
-    console.log("API_URL============", API_URL);
 
     const response = await fetch(API_URL, {
       ...requestOptions,

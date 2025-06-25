@@ -5,8 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import LoadingDiv from "@/components/Loading/Text/Index";
-
-export const dynamic = "force-dynamic";
+import { fetchTableauKey } from "@/app/services/actions";
 
 export default function Main({ lng, sector, subsector }) {
   const [data, setData] = useState(null); // Store API data
@@ -28,27 +27,21 @@ export default function Main({ lng, sector, subsector }) {
 
         if (result.data) {
           setData(result.data);
-
-          const params = new URLSearchParams();
-
-          params.append("key", "value");
-          // Fetch Tableau Key
-          const tableauResponse = await fetch(
-            `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${params.toString()}`,
-            { cache: "no-store" }
-          );
-
-          if (!tableauResponse.ok)
-            throw new Error("Failed to fetch Tableau key");
-
-          const tableauResult = await tableauResponse.json();
-          const tkt = tableauResult?.value;
-          // Ensure `data.tableau` exists before setting `iframeSrc`
-          if (tkt && result.data.tableau) {
-            setIframeSrc(
-              `https://tableau.1212.mn/trusted/${tkt}${result.data.tableau}`
-            );
+          // Fetch Tableau Key using action
+          const tableauResult = await fetchTableauKey();
+          console.log("tableauResult============", tableauResult);
+          if (tableauResult.success && tableauResult.data?.value) {
+            const tkt = tableauResult.data.value;
+            // Ensure `data.tableau` exists before setting `iframeSrc`
+            if (tkt && result.data.tableau) {
+              setIframeSrc(
+                `https://tableau.1212.mn/trusted/${tkt}${result.data.tableau}`
+              );
+            }
+          } else {
+            console.error("Failed to fetch Tableau key:", tableauResult.error);
           }
+          
         } else {
           console.error("No data found in catalogue response");
         }

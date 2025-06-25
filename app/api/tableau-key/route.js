@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
     const params = new URLSearchParams();
-    params.append('key', 'value');
+    params.append('key', 'ViewerUser');
 
     try {
         // Fetch data using axios instead of fetch
@@ -31,7 +31,6 @@ export async function GET() {
 
         return apiResponse;
     } catch (error) {
-        console.error("Error fetching Tableau key:", error);
         return NextResponse.json({ error: 'Failed to fetch Tableau key' }, { status: 500 });
     }
 }

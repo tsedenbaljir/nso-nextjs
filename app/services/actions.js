@@ -33,4 +33,26 @@ export async function submitContactForm(formData) {
         console.error('Contact form submission error:', error);
         return { success: false, error: error.message };
     }
+}
+
+export async function fetchTableauKey() {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+    try {
+        // Use absolute URL for server-side requests
+        const response = await fetch(`${process.env.BASE_URL}/api/tableau-key`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch Tableau key');
+        }
+
+        const result = await response.json();
+        return { success: true, data: result };
+    } catch (error) {
+        console.error('Tableau key fetch error:', error);
+        return { success: false, error: error.message };
+    }
 } 
