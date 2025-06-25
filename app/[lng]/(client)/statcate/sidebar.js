@@ -7,7 +7,7 @@ import Result from '@/components/Search/subMain/Result';
 import MainSearch from '@/components/Search/subMain/MainSearch';
 import LoadingDiv from '@/components/Loading/Text/Index';
 
-export default function DynamicSidebar({ subsector, lng }) {
+export default function DynamicSidebar({ sector, subsector, lng }) {
     const { t } = useTranslation(lng, "lng", "");
     const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -77,8 +77,8 @@ export default function DynamicSidebar({ subsector, lng }) {
                             label: category.text,
                             id: category.id,
                             items: subItems,
-                            className: category.id === decodeURIComponent(subsector) ? "active-header-link" : "",
-                            expanded: subItems.some((sub) => sub.id === decodeURIComponent(subsector)) // Auto-expand active submenu
+                            className: category.id === decodeURIComponent(sector) ? "active-header-link" : "",
+                            expanded: category.id === decodeURIComponent(sector) // Auto-expand active submenu
                         };
                     })
                 );

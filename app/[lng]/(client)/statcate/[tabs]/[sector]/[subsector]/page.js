@@ -16,7 +16,7 @@ export default function StateCate({ params: { lng }, params }) {
             {/* Sidebar */}
             <div className="nso_cate_section left-bar">
                 <div className='__cate_groups'>
-                    <Sidebar subsector={subsector} lng={lng} />
+                    <Sidebar sector={sector} subsector={subsector} lng={lng} />
                 </div>
             </div>
             {/* Main Content */}
