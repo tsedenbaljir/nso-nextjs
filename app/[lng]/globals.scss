@@ -374,3 +374,49 @@ h4 {
     margin-bottom: 10px;
   }
 }
+
+.__filter_section {
+  display: flex;
+}
+
+.filter {
+  width: 16px;
+  height: 16px;
+  margin-left: 0.5rem;
+}
+
+.compact-dropdown .p-dropdown {
+  border: none !important;  
+  background-color: #e0f7fa !important; 
+  box-shadow: none !important;     
+}
+
+.compact-dropdown .p-dropdown-trigger {
+  color: #050505 !important; 
+}
+
+.compact-dropdown .p-dropdown-label {
+  color: #050505 !important;
+  padding: 4px 12px !important;
+}
+
+
+._dropbtn {
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.filter_item {
+  text-decoration: none;
+  color: inherit;
+}
+
+.filter_item:hover {
+  background-color: #f0f0f0;
+}
