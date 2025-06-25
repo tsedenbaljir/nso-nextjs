@@ -83,18 +83,16 @@ export default function Glossary({ params: { lng }, searchParams }) {
     }
 
     return (
-        <div className="sm:col-12 md:col-8 lg:col-9">
-            <GlossaryList
-                path={"indicator"}
-                filterLoading={filterLoading}
-                list={list}
-                isMn={isMn}
-                searchParams={searchParams}
-                totalRecords={totalRecords}
-                first={first}
-                rows={rows}
-                onPageChange={onPageChange}
-            />
-        </div>
+        <GlossaryList
+            path={"indicator"}
+            filterLoading={filterLoading}
+            list={list}
+            isMn={isMn}
+            searchParams={searchParams}
+            totalRecords={totalRecords}
+            first={first}
+            rows={rows}
+            onPageChange={onPageChange}
+        />
     );
 }

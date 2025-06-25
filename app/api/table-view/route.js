@@ -29,7 +29,8 @@ export async function GET(request) {
         );
 
         if (!response.ok) {
-            throw new Error('Failed to fetch data');
+            // throw new Error('Failed to fetch data');
+            return NextResponse.json([]);
         }
 
         const data = await response.json();

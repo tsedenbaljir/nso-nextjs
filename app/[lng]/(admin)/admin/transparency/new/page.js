@@ -23,7 +23,7 @@ const CATEGORIES = [
 
 export default function NewTransparency() {
     const router = useRouter();
-    const [body, setBody] = useState('');
+    const [body, setBody] = useState(' ');
     const [formData, setFormData] = useState({
         title: '',
         category: '',

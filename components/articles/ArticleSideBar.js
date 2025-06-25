@@ -10,7 +10,7 @@ export default function ArticleSideBar({ article }) {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '/images/default.jpg';
-        return `https://betanso.nso.mn/uploads/images/${imagePath}`;
+        return process.env.FRONTEND + `/uploads/images/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {

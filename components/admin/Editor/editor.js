@@ -46,7 +46,7 @@ export default function WYSIWYGEditor({ setBody, defaultValue = '' }) {
                 }
 
                 const data = await response.json();
-                const fileUrl = `/uploads/${data.fileName}`;
+                const fileUrl = `/uploads/${data.filename}`;
                 callback(fileUrl, { title: file.name });
 
             } catch (error) {

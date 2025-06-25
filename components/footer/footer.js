@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client'
 import NavbarDialog from '../Dialog/NavbarDialog';
-import { message, notification  } from 'antd';
+import { message, notification } from 'antd';
 
 export default function Footer({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
@@ -15,61 +15,61 @@ export default function Footer({ lng }) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedType, setSelectedType] = useState(null);
     const [email, setEmail] = useState('');
-    const [subscribed, setSubscribed] = useState(false);  
+    const [subscribed, setSubscribed] = useState(false);
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
     notification.config({
         placement: 'topRight',
-        top: 100, 
-      });
+        top: 100,
+    });
     const handleSubscribe = async () => {
         if (!email) {
-          notification.warning({
-            message: 'Анхааруулга',
-            description: 'Цахим шуудангийн хаяг оруулна уу.',
-            duration: 2,
-          });
-          return;
+            notification.warning({
+                message: 'Анхааруулга',
+                description: 'Цахим шуудангийн хаяг оруулна уу.',
+                duration: 2,
+            });
+            return;
         }
-      
+
         try {
-          const response = await fetch('/api/insert/subscribeEmail', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
-          });
-      
-          const result = await response.json();
-      
-          if (response.ok) {
-            notification.success({
-              message: 'Амжилттай',
-              description: 'Таны хүсэлтийг хүлээн авлаа.',
-              duration: 2,
+            const response = await fetch('/api/insert/subscribeEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
             });
-      
-            setTimeout(() => {
-              setEmail('');
-            }, 1000);
-          } else {
-            notification.error({
-              message: 'Алдаа',
-              description: result.error || 'Алдаа гарлаа',
-              duration: 3,
-            });
-          }
+
+            const result = await response.json();
+
+            if (response.ok) {
+                notification.success({
+                    message: 'Амжилттай',
+                    description: 'Таны хүсэлтийг хүлээн авлаа.',
+                    duration: 2,
+                });
+
+                setTimeout(() => {
+                    setEmail('');
+                }, 1000);
+            } else {
+                notification.error({
+                    message: 'Алдаа',
+                    description: result.error || 'Алдаа гарлаа',
+                    duration: 3,
+                });
+            }
         } catch (error) {
-          notification.error({
-            message: 'Алдаа',
-            description: 'Сүлжээний алдаа гарлаа',
-            duration: 3,
-          });
+            notification.error({
+                message: 'Алдаа',
+                description: 'Сүлжээний алдаа гарлаа',
+                duration: 3,
+            });
         }
-      };
+    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -78,11 +78,13 @@ export default function Footer({ lng }) {
                     fetch('/api/menus/admin', { cache: "no-store" }) // No cache
                 ]);
 
-                const analyticsData = await analyticsResponse.json();
-                const navDataS = await navResponse.json();
+                if (analyticsResponse.status === 200 && navResponse.status === 200) {
+                    const analyticsData = await analyticsResponse.json();
+                    const navDataS = await navResponse.json();
 
-                setData(analyticsData);
-                setNavData(navDataS.data);
+                    setData(analyticsData);
+                    setNavData(navDataS.data);
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -170,19 +172,19 @@ export default function Footer({ lng }) {
                         <div className="__content">
                             <div className="__sub_labels">
                                 <span>{t('footer.today')}</span>
-                                <span>{!loading && Number(data.rows[3].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && Number(data?.rows[3]?.metricValues[0]?.value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.week')}</span>
-                                <span>{!loading && Number(data.rows[2].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && Number(data?.rows[2]?.metricValues[0]?.value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.thisMonth')}</span>
-                                <span>{!loading && Number(data.rows[1].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && Number(data?.rows[1]?.metricValues[0]?.value).toLocaleString('en-US')}</span>
                             </div>
                             <div className="__sub_labels">
                                 <span>{t('footer.total')}</span>
-                                <span>{!loading && Number(data.rows[0].metricValues[0].value).toLocaleString('en-US')}</span>
+                                <span>{!loading && Number(data?.rows[0]?.metricValues[0]?.value).toLocaleString('en-US')}</span>
                             </div>
                         </div>
                     </div>

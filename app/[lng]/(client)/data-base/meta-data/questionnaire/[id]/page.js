@@ -55,7 +55,6 @@ export default function GlossaryDetail({ params: { id, lng } }) {
     "Хэл",
     "Боловсруулсан мэргэжилтэн",
   ];
-
   // Assuming `data` contains an array of items with `namemn`, `valuemn`, and `valueen`
   const sortedData = data?.sort((a, b) => {
     const indexA = categoryOrder.indexOf(a.namemn);
@@ -132,35 +131,49 @@ export default function GlossaryDetail({ params: { id, lng } }) {
             </div>
 
             {/* Table Rows */}
-            {categoryOrder.map((its, idx) => {
-              return sortedData.map((item, index) => (
-                <div
-                  key={idx}
-                  className={`flex gap-6 py-2 px-5 border-b border-gray-200 text-sm ${(sortedData.length > 2 ? index : idx) % 2 === 1 ? "bg-blue-50" : "bg-white"
-                    }`}
-                >
-                  <div className="w-1/8 text-right text-blue-600">
-                    {sortedData.length > 2 ? index + 1 : idx + 1}
-                  </div>
-                  <div className="w-1/3 text-left">{item.namemn ? item.namemn : its}</div>
-                  <div className="w-1/3 text-left whitespace-pre-wrap">
-                    {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
-                      ? new Date(item.valuemn).toISOString().split('T')[0]
-                      : item.valuemn ? item.valuemn : ""}
-                  </div>
-                  <div className="w-1/3 text-left whitespace-pre-wrap">
-                    {item.namemn === "Маягт батлагдсан огноо" && item.valueen
-                      ? new Date(item.valueen).toISOString().split('T')[0]
-                      : item.valueen ? item.valueen : ""}
-                  </div>
+            {sortedData.length > 1 ? sortedData.map((item, index) => (
+              <div
+                key={index}
+                className={`flex gap-6 py-2 px-5 border-b border-gray-200 text-sm ${(sortedData.length > 2 ? index : index) % 2 === 1 ? "bg-blue-50" : "bg-white"
+                  }`}
+              >
+                <div className="w-1/8 text-right text-blue-600">
+                  {sortedData.length > 2 ? index + 1 : index + 1}
                 </div>
-              ))
-            })}
+                <div className="w-1/3 text-left">{item.namemn ? item.namemn : item.name}</div>
+                <div className="w-1/3 text-left whitespace-pre-wrap">
+                  {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
+                    ? new Date(item.valuemn).toISOString().split('T')[0]
+                    : item.valuemn ? item.valuemn : ""}
+                </div>
+                <div className="w-1/3 text-left whitespace-pre-wrap">
+                  {item.namemn === "Маягт батлагдсан огноо" && item.valueen
+                    ? new Date(item.valueen).toISOString().split('T')[0]
+                    : item.valueen ? item.valueen : ""}
+                </div>
+              </div>
+            )) : categoryOrder.map((item, index) => (
+              <div
+                key={index}
+                className={`flex gap-6 py-2 px-5 border-b border-gray-200 text-sm ${(sortedData.length > 2 ? index : index) % 2 === 1 ? "bg-blue-50" : "bg-white"
+                  }`}
+              >
+                <div className="w-1/8 text-right text-blue-600">
+                  {sortedData.length > 2 ? index + 1 : index + 1}
+                </div>
+                <div className="w-1/3 text-left">{item}</div>
+                <div className="w-1/3 text-left whitespace-pre-wrap">
+                </div>
+                <div className="w-1/3 text-left whitespace-pre-wrap">
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       ) : (
         <>
           <Text />
+          <br />
           <Text />
         </>
       )}

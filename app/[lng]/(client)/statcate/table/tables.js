@@ -12,7 +12,9 @@ export default function Table({ sector, subsector, lng }) {
         // Fetch data for DataTable
         const fetchData = async () => {
             try {
-                const res = await fetch(`/api/sectortablename?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}&lng=${lng}`);
+                const res = await fetch(`/api/sectortablename?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}&lng=${lng}`, {
+                    cache: "no-store",
+                });
                 const response = await res.json();
                 // Format API data for DataTable
                 const formattedData = response.data.map((item, index) => ({
@@ -42,7 +44,7 @@ export default function Table({ sector, subsector, lng }) {
                 rows={10}
                 // rowsPerPageOptions={[10, 25, 50]} 
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
-                currentPageReportTemplate={`Нийт: {totalRecords}`}
+                currentPageReportTemplate={lng === "mn" ? `Нийт: {totalRecords}` : `Total: {totalRecords}`}
                 className="nso_table"
                 loading={loading}
             >
@@ -58,7 +60,7 @@ export default function Table({ sector, subsector, lng }) {
                 />
                 <Column
                     field="name"
-                    header="Нэр"
+                    header={lng === "mn" ? "Нэр" : "Name"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -71,7 +73,7 @@ export default function Table({ sector, subsector, lng }) {
                 />
                 <Column
                     field="date"
-                    header="Шинэчлэгдсэн огноо"
+                    header={lng === "mn" ? "Шинэчлэгдсэн огноо" : "Updated date"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (

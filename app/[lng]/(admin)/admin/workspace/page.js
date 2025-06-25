@@ -48,7 +48,9 @@ export default function AdminWorkspace({ params: { lng } }) {
 
     const fetchWorkspaces = async () => {
         try {
-            const response = await fetch(`/api/workspace/admin?language=${lng}`);
+            const response = await fetch(`/api/workspace/admin?language=${lng}`, {
+                cache: 'no-store'
+            });
             if (!response.ok) throw new Error('Failed to fetch');
             const result = await response.json();
             if (result.status) {

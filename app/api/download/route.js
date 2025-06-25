@@ -14,7 +14,7 @@ export async function GET(req) {
             SELECT *
                 FROM [NSOweb].[dbo].vw_web_1212_download
                 WHERE new = ? and language = ? and published = 1 and file_type = ?
-                order by [last_modified_date] desc
+                order by published_date desc
         `, [info, lng, type]);
             
         return NextResponse.json({

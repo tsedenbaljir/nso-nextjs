@@ -31,7 +31,9 @@ export default function ContactAdmin({ params: { lng } }) {
 
     const fetchData = async (page = 1, pageSize = 10) => {
         try {
-            const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`);
+            const response = await fetch(`/api/contact?page=${page - 1}&pageSize=${pageSize}`, {
+                cache: 'no-store'
+            });
             const result = await response.json();
             const contactList = Array.isArray(result.data) ? result.data : Array.isArray(result) ? result : [];
             setData(contactList.map((item, index) => ({
@@ -47,7 +49,7 @@ export default function ContactAdmin({ params: { lng } }) {
             }));            
     
         } catch (error) {
-            console.error('Error fetching glossary:', error);
+            console.error('Error fetching contact:', error);
             message.error('Алдаа гарлаа');
         } finally {
             setLoading(false);

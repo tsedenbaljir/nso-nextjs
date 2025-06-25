@@ -32,7 +32,9 @@ export default function AdminLaws() {
 
   const fetchLawsByType = async (type) => {
     try {
-      const response = await fetch(`/api/mainIndicators?type=${type}`);
+      const response = await fetch(`/api/mainIndicators?type=${type}`, {
+        cache: 'no-store'
+    });
       const result = await response.json();
       if (result.status && Array.isArray(result.data)) {
         setLaws(prev => ({
@@ -63,7 +65,8 @@ export default function AdminLaws() {
             },
             body: JSON.stringify({
               id: parseInt(id) // Ensure ID is a number
-            })
+            }),
+            cache: 'no-store'
           });
 
           const result = await response.json();

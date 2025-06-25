@@ -60,14 +60,14 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     }, [sector, subsector]);
 
     if (decodeURIComponent(sector) === "Historical data" && tabs === "report") {
-        return <div id="stat_cate" className="nso_cate_body">
+        return <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
             <span className="__cate_title">БНМАУ -ын тайлан</span>
             {/* PrimeReact Tabs */}
             <TabView
                 activeIndex={0}
             >
-                <TabPanel header="Тайлан">
+                <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
                     <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
             </TabView>
@@ -75,14 +75,14 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     }
 
     if (decodeURIComponent(sector) === "Historical data" && tabs === "table") {
-        return <div id="stat_cate" className="nso_cate_body">
+        return <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
             <span className="__cate_title">{name ? name[0]?.text : <LoadingDiv />}</span>
             {/* PrimeReact Tabs */}
             <TabView
                 activeIndex={0}
             >
-                <TabPanel header="Хүснэгт">
+                <TabPanel header={lng === "mn" ? "Хүснэгт" : "Table"}>
                     <TablesData sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
             </TabView>
@@ -90,12 +90,13 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     }
 
     return (
-        <div id="stat_cate" className="nso_cate_body">
+        <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
             <span className="__cate_title">{name ? name[0]?.text : <LoadingDiv />}</span>
 
             {/* PrimeReact Tabs */}
             <TabView
+                className='nso_tab'
                 activeIndex={activeIndex}
                 onTabChange={(e) => {
                     const newTab = getIndexTab(e.index);
@@ -104,27 +105,27 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
             >
 
                 {/* ✅ Хүснэгт Tab */}
-                <TabPanel header="Хүснэгт">
+                <TabPanel header={lng === "mn" ? "Хүснэгт" : "Table"}>
                     <TablesData sector={sector} subsector={subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Танилцуулга */}
-                <TabPanel header="Танилцуулга">
+                <TabPanel header={lng === "mn" ? "Танилцуулга" : "Introduction"}>
                     <MainIndicator sector={decodeURIComponent(sector)} subsector={decodeURIComponent(subsector)} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Тайлан */}
-                <TabPanel header="Тайлан">
+                <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
                     <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Аргачлал */}
-                <TabPanel header="Аргачлал">
+                <TabPanel header={lng === "mn" ? "Аргачлал" : "Methodology"}>
                     <Methodology sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Чанарын тайлан */}
-                <TabPanel header="Чанарын тайлан">
+                <TabPanel header={lng === "mn" ? "Чанарын тайлан" : "Quality Report"}>
                     <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 

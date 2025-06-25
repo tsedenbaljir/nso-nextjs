@@ -8,6 +8,9 @@ export async function GET(req) {
   const lng = searchParams.get('lng');
   const type = searchParams.get('type');
   const searchTerm = searchParams.get('searchTerm');
+  const year = parseInt(searchParams.get('year'));
+  const month = parseInt(searchParams.get('month'));
+  const orderBy = searchParams.get('orderBy') || 'updated';
 
   const offset = (page - 1) * pageSize;
 
@@ -18,37 +21,75 @@ export async function GET(req) {
       AND news_type = ?
       AND published = 1
   `;
+  const queryParams = [lng, type];
+
+  if (searchTerm && searchTerm !== "") {
+    query += ` AND name LIKE ?`;
+    queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (year) {
+    query += ` AND YEAR(last_modified_date) = ?`;
+    queryParams.push(year);
+  }
+
+  if (month) {
+    query += ` AND MONTH(last_modified_date) = ?`;
+    queryParams.push(month);
+  }
+
+  // ✅ Эрэмбэлэх нөхцөл
+  let orderClause = '';
+  switch (orderBy) {
+    case 'updated':
+      orderClause = 'ORDER BY published_date DESC';
+      break;
+    case 'alphabet':
+      orderClause = 'ORDER BY name ASC';
+      break;
+    case 'views':
+      orderClause = 'ORDER BY view_count DESC'; // Хандалтын тоо хадгалах багана байгаа гэж үзэв
+      break;
+    default:
+      orderClause = 'ORDER BY published_date DESC';
+      break;
+  }
+
+  query += `
+    ${orderClause}
+    OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+  `;
+  queryParams.push(offset, pageSize);
+
   try {
-    // Get paginated results
-    const queryParams = [lng, type];
-    
-    // Add search filter if applicable
-    if (searchTerm && searchTerm !== "") {
-      query += ` AND name LIKE ?`;
-      queryParams.push(`%${searchTerm}%`);
-    }
-
-    // Append ORDER BY and pagination at the end
-    query += `
-      ORDER BY published_date ${type === "latest" ? 'DESC' : 'ASC'}
-      OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
-    `;
-
-    queryParams.push(offset, pageSize);
-
-    // Run the query
     const results = await db.raw(query, queryParams);
-    // Get total count
+
+    // ✅ Нийт хуудасны тоо
     const [totalPage] = await db.raw(`
-      SELECT count(1) as totalPage FROM web_1212_content 
-      where language = ? and content_type = 'NEWS' and news_type = ? and published = 1
+      SELECT COUNT(1) AS totalPage FROM web_1212_content 
+      WHERE content_type = 'NEWS'
+        AND language = ?
+        AND news_type = ?
+        AND published = 1
+        ${searchTerm && searchTerm !== "" ? ` AND name LIKE '%${searchTerm}%'` : ''}
+        ${year ? ` AND YEAR(last_modified_date) = ${year}` : ''}
+        ${month ? ` AND MONTH(last_modified_date) = ${month}` : ''}
     `, [lng, type]);
+
+    // ✅ Он, сар авах
+    const yearsMonths = await db.raw(`
+      SELECT YEAR(last_modified_date) AS Year, MONTH(last_modified_date) AS Month
+      FROM web_1212_content
+      WHERE content_type = 'NEWS'
+      GROUP BY YEAR(last_modified_date), MONTH(last_modified_date)
+      ORDER BY YEAR(last_modified_date) DESC, MONTH(last_modified_date) DESC
+    `);
 
     return NextResponse.json({
       status: true,
       data: results,
       totalPage: totalPage.totalPage,
-      message: ""
+      yearsMonths: yearsMonths
     });
 
   } catch (error) {
@@ -61,8 +102,4 @@ export async function GET(req) {
       status: 500
     });
   }
-}
-
-export async function POST(req) {
-  // Handle POST requests if needed
 }

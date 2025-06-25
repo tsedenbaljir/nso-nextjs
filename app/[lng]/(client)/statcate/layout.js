@@ -36,10 +36,17 @@ export default function Statecate({ children, params }) {
         async function getData() {
             const res = await fetch(`/api/table-view?lng=${lng}&sector=${pathname.split('/')[4]}&subsector=${pathname.split('/')[5]}&id=${pathname.split('/')[6]}`);
             if (!res.ok) {
-                throw new Error('Failed to fetch data');
+                // throw new Error('Failed to fetch data');
+                setTitle('0');
+                return;
+            } else {
+                const json = await res.json();
+                if (json.status) {
+                    setTitle(json.title);
+                } else {
+                    setTitle('0');
+                }
             }
-            const json = await res.json();
-            setTitle(json.title);
         }
         if (pathname.split('/')[6]) {
             getData();
@@ -61,12 +68,20 @@ export default function Statecate({ children, params }) {
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
         { label: name ? name[0]?.text : <LoadingDiv /> }
+    ] : pathname.includes('statcate/table-view/') ? [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('statistic'), url: ['/statcate'] },
+        { label: t('statCate.statData'), url: ['/statcate'] },
+        { label: name ? name[0]?.text : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
+        { label: title ? title === '0' ? '' : title : <LoadingDiv /> }
+    ] : pathname.includes('statcate') ? [
+        { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
+        { label: t('statistic'), url: ['/statcate'] },
     ] : [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
         { label: name ? name[0]?.text : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
-        { label: title }
     ];
 
     return (

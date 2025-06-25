@@ -72,14 +72,14 @@ export default function GlossaryList({
   };
 
   return (
-    <div className="__table_container pt-3">
+    <div className="__table_container">
       <div className="_filter_side ">
         <button className="__download_button" onClick={handleDownloadExcel}>
           <i className="pi pi-cloud-download"></i> Excel татах
         </button>
 
         {/* Sort Dropdown */}
-        <div class="__dropdown">
+        <div className="__dropdown">
           <button
             className="_dropbtn"
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -96,11 +96,10 @@ export default function GlossaryList({
               ].map((type) => (
                 <div
                   key={type}
-                  className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
-                    sortType === type
+                  className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 ${sortType === type
                       ? "bg-gray-800 text-white font-semibold flex justify-between items-center"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => {
                     setSortType(type);
                     setDropdownOpen(false);
@@ -115,21 +114,19 @@ export default function GlossaryList({
         </div>
       </div>
 
-      <div className="nso_cate_body">
-        <div className="nso_tab">
-          <div className="nso_tab_content">
-            {filterLoading ? (
-              <div className="flex justify-center items-center min-h-[200px]">
-                <Spin size="large" />
-              </div>
-            ) : (
-              <div className="_group_list space-y-4">
-                {getSortedList().map((item, index) => (
-                  <GlossaryItem key={index} item={item} isMn={isMn} />
-                ))}
-              </div>
-            )}
-          </div>
+      <div className="nso_tab">
+        <div className="nso_tab_content">
+          {filterLoading ? (
+            <div className="flex justify-center items-center min-h-[200px]">
+              <Spin size="large" />
+            </div>
+          ) : (
+            <div className="_group_list space-y-4">
+              {getSortedList().map((item, index) => (
+                <GlossaryItem key={index} item={item} isMn={isMn} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

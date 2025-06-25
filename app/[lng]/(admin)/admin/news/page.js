@@ -39,7 +39,9 @@ export default function AllNews({ params: { lng } }) {
     const fetchArticles = async () => {
         setLoading(true)
         try {
-            const response = await fetch('/api/articles/admin')
+            const response = await fetch('/api/articles/admin', {
+                cache: 'no-store'
+            })
             if (response.status === 401) {
                 handleUnauthorized()
                 return

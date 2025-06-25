@@ -101,11 +101,9 @@
   cursor: pointer;
   border-radius: 50px;
   transition: background-color 0.3s;
-  background-image: linear-gradient(
-    91.09deg,
-    rgb(64, 172, 112) 0.36%,
-    rgb(85, 196, 134) 99.48%
-  );
+  background-image: linear-gradient(91.09deg,
+      rgb(64, 172, 112) 0.36%,
+      rgb(85, 196, 134) 99.48%);
 }
 
 .__submit_button:hover {
@@ -221,9 +219,11 @@ h4 {
   margin-bottom: 1rem;
   display: block;
 }
+
 .clamp-title {
   font-weight: 600;
-  font-size: var(--font-size20); /* эсвэл text-[20px] */
+  font-size: var(--font-size20);
+  /* эсвэл text-[20px] */
   line-height: 26px;
   letter-spacing: -1px;
   display: -webkit-box;
@@ -236,7 +236,8 @@ h4 {
 
 .clamp-description {
   font-size: 14px;
-  color: #4b5563; /* Tailwind text-gray-600 */
+  color: #4b5563;
+  /* Tailwind text-gray-600 */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -263,3 +264,159 @@ h4 {
 // .__filter_word_item:hover .count {
 //   display: block;
 // }
+/* Ердийн хүснэгт бүтцэд зориулсан */
+.footnotes_container,
+#ctl00_ContentPlaceHolderMain_UcAccordianAboutTable2_InformationBox {
+  font-family: Arial, sans-serif;
+
+  h3 {
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  // margin: 20px 0;
+  // background: #f9f9f9;
+  // border-radius: 8px;
+  // padding: 16px;
+  // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.obs-notes-h3 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #333;
+  // border-bottom: 2px solid #007acc;
+  padding-bottom: 4px;
+}
+
+/* Хүснэгтийн ерөнхий стиль */
+.table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.row {
+  display: table-row;
+  // border-bottom: 1px solid #e0e0e0;
+}
+
+.cell,
+.cell2,
+.cell3 {
+  display: table-cell;
+  vertical-align: top;
+  padding: 10px;
+}
+
+.cell2 {
+  font-weight: bold;
+  width: 30%;
+  color: #222;
+}
+
+.cell3 {
+  width: 70%;
+  color: #555;
+}
+
+/* Урт текстүүдэд зориулсан */
+.the_long_text {
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+/* Хэвлэлийн огноо, эх сурвалж гэх мэт мэдээлэл */
+.information_definitionlist {
+  margin-top: 20px;
+}
+
+.information_definitionlist .row:nth-child(odd) {
+  background: #eaf6ff;
+
+  .cell3 {
+    a {
+      color: rgb(88, 178, 247) !important;
+      text-decoration: underline !important;
+    }
+  }
+}
+
+.information_definitionlist .row:last-child {
+  a {
+    color: rgb(88, 178, 247);
+    text-decoration: underline;
+  }
+}
+
+.footnotes_container .row:nth-child(odd) {
+  background: #eaf6ff;
+}
+
+/* Responsiveness (optional) */
+@media (max-width: 768px) {
+
+  .table,
+  .row,
+  .cell,
+  .cell2,
+  .cell3 {
+    display: block;
+    width: 100%;
+  }
+
+  .cell2 {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .cell3 {
+    margin-bottom: 10px;
+  }
+}
+
+.__filter_section {
+  display: flex;
+}
+
+.filter {
+  width: 16px;
+  height: 16px;
+  margin-left: 0.5rem;
+}
+
+.compact-dropdown .p-dropdown {
+  border: none !important;  
+  background-color: #e0f7fa !important; 
+  box-shadow: none !important;     
+}
+
+.compact-dropdown .p-dropdown-trigger {
+  color: #050505 !important; 
+}
+
+.compact-dropdown .p-dropdown-label {
+  color: #050505 !important;
+  padding: 4px 12px !important;
+}
+
+
+._dropbtn {
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.filter_item {
+  text-decoration: none;
+  color: inherit;
+}
+
+.filter_item:hover {
+  background-color: #f0f0f0;
+}

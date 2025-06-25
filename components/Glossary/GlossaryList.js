@@ -71,7 +71,7 @@ export default function GlossaryList({
     return sorted;
   };
   return (
-    <div className="__table_container -mt-22">
+    <div className="__table_container -mt-20">
       <div className="nso_cate_body">
         <div className="nso_tab">
           <div className="nso_tab_content w-[100%]">
@@ -85,7 +85,7 @@ export default function GlossaryList({
                 </button>
 
                 {/* Sort Dropdown */}
-                <div class="__dropdown">
+                <div className="__dropdown">
                   <button
                     className="_dropbtn"
                     onClick={() => setDropdownOpen(!dropdownOpen)}

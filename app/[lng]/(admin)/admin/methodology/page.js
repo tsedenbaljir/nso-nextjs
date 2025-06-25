@@ -10,7 +10,6 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputText } from 'primereact/inputtext';
 import { FilterMatchMode } from 'primereact/api';
-import { Dropdown } from 'primereact/dropdown';
 
 import "primereact/resources/themes/lara-light-indigo/theme.css"
 import "primereact/resources/primereact.min.css"
@@ -32,7 +31,9 @@ export default function AllNews({ params: { lng } }) {
 
     useEffect(() => {
         async function data() {
-            const response = await fetch('/api/subsectorlist');
+            const response = await fetch('/api/subsectorlist', {
+                cache: 'no-store'
+            });
             const sectors = await response.json();
             const allSubsectors = [];
 
@@ -52,7 +53,9 @@ export default function AllNews({ params: { lng } }) {
     const fetchArticles = async () => {
         setLoading(true)
         try {
-            const response = await fetch('/api/methodology/admin')
+            const response = await fetch('/api/methodology/admin', {
+                cache: 'no-store'
+            })
             if (response.status === 401) {
                 handleUnauthorized()
                 return

@@ -40,11 +40,9 @@ export default function Glossary({ params }) {
 
         const response = await fetch(`/api/methodology/classification`);
         const result = await response.json();
-        
-        console.log("Hi", result.data)
 
         if (result.status) {
-          setList( result.data || []);
+          setList(result.data || []);
           setTotalRecords(result.pagination?.total || 0);
         } else {
           setList([]);
@@ -74,10 +72,6 @@ export default function Glossary({ params }) {
     setRows(e.rows);
     window.scrollTo(0, 0);
   };
-  useEffect(()=>{
-    // console.log("filterList", filterList);
-    console.log("list", list);
-  },[list])
 
   if (loading) {
     return (
@@ -93,18 +87,15 @@ export default function Glossary({ params }) {
 
   return (
     <div className="nso_container">
-      <div className="sm:col-12 md:col-8 lg:col-9">
-        <h2>Ангилал, код</h2>
-        <ClassificationList
-          filterLoading={filterLoading}
-          list={list}
-          isMn={isMn}
-          totalRecords={totalRecords}
-          first={first}
-          rows={rows}
-          onPageChange={onPageChange}
-        />
-      </div>
+      <ClassificationList
+        filterLoading={filterLoading}
+        list={list}
+        isMn={isMn}
+        totalRecords={totalRecords}
+        first={first}
+        rows={rows}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 }

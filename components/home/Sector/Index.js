@@ -1,11 +1,12 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 
 export default function Index({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
-
+    const router = useRouter();
     const [indicators, setIndicatos] = useState([]);
 
     useEffect(() => {
@@ -61,38 +62,54 @@ export default function Index({ lng }) {
                         </div>
                         <div className="__group">
                             <div className="__highlight">
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[4]?.tableau}`} target='blank' >
+                                <div className="__card" onClick={() => {
+                                    if (indicators[4]?.tableau) {
+                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[4]?.tableau}`, '_blank');
+                                    }
+                                }}>
                                     <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://betanso.nso.mn/uploads/images/${indicators[4]?.image})` }}></span>
-                                        {lng === "mn" ? indicators[4]?.name : indicators[4]?.nameEng || "..."}
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[4]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[4]?.name : indicators[4]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[4]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[4]?.info : indicators[4]?.infoEng}</span>
-                                </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[3]?.tableau}`} target='blank' >
+                                </div>
+                                <div className="__card" onClick={() => {
+                                    if (indicators[3]?.tableau) {
+                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[3]?.tableau}`, '_blank');
+                                    }
+                                }}>
                                     <span className="__desc">{indicators[3]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://betanso.nso.mn/uploads/images/${indicators[3]?.image})` }}></span>
-                                        {lng === "mn" ? indicators[3]?.name : indicators[3]?.nameEng || "..."}
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[3]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[3]?.name : indicators[3]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[3]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[3]?.info : indicators[3]?.infoEng}</span>
-                                </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[2]?.tableau}`} target='blank' >
+                                </div>
+                                <div className="__card" onClick={() => {
+                                    if (indicators[2]?.tableau) {
+                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[2]?.tableau}`, '_blank');
+                                    }
+                                }}>
                                     <span className="__desc">{indicators[2]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://betanso.nso.mn/uploads/images/${indicators[2]?.image})` }}></span>
-                                        {lng === "mn" ? indicators[2]?.name : indicators[2]?.nameEng || "..."}
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[2]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[2]?.name : indicators[2]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[2]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[2]?.info : indicators[2]?.infoEng}</span>
-                                </Link>
-                                <Link className="__card" href={`${process.env.BASE_FRONT_URL}/pxweb/${lng}/${indicators[1]?.tableau}`} target='blank' >
+                                </div>
+                                <div className="__card" onClick={() => {
+                                    if (indicators[1]?.tableau) {
+                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[1]?.tableau}`, '_blank');
+                                    }
+                                }}>
                                     <span className="__desc">{indicators[4]?.updated_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(https://betanso.nso.mn/uploads/images/${indicators[1]?.image})` }}></span>
-                                        {lng === "mn" ? indicators[1]?.name : indicators[1]?.nameEng || "..."}
+                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[1]?.image})` }}></span>
+                                        {lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[1]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng}</span>
-                                </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -32,7 +32,9 @@ export default function GlossaryAdmin({ params: { lng } }) {
     // Fetch glossary data
     const fetchData = async (page = 1, pageSize = 10) => {
         try {
-            const response = await fetch(`/api/glossary?page=${page - 1}&pageSize=${pageSize}&role=admin`);
+            const response = await fetch(`/api/glossary?page=${page - 1}&pageSize=${pageSize}&role=admin`, {
+                cache: 'no-store'
+            });
             const result = await response.json();
             if (result.status) {
                 setData(result.data);
@@ -54,7 +56,9 @@ export default function GlossaryAdmin({ params: { lng } }) {
     // Fetch sectors for dropdown
     const fetchSectors = async () => {
         try {
-            const response = await fetch('/api/glossary/sectors');
+            const response = await fetch('/api/glossary/sectors', {
+                cache: 'no-store'
+            });
             const data = await response.json();
             setSectors(data);
         } catch (error) {
@@ -138,7 +142,9 @@ export default function GlossaryAdmin({ params: { lng } }) {
     const handleEdit = async (record) => {
         setEditingId(record.id);
         try {
-            const response = await fetch(`/api/glossary/admin?id=${record.id}`);
+            const response = await fetch(`/api/glossary/admin?id=${record.id}`, {
+                cache: 'no-store'
+            });
             const result = await response.json();
             if (result.status) {
                 // Format the data before setting form values
@@ -179,7 +185,8 @@ export default function GlossaryAdmin({ params: { lng } }) {
             const response = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: JSON.stringify(body),
+                cache: 'no-store'
             });
 
             const result = await response.json();

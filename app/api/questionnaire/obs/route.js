@@ -6,16 +6,16 @@ export async function GET() {
         const query = `
             SELECT [observe_interval], [namemn], [nameen], [count], [app_order]
             FROM (
-            	SELECT [observe_interval], COUNT([id]) as [count]
-            	FROM [NSOweb].[dbo].[dynamic_object] 
-            	WHERE [active] = 1 and [is_secret] = 0
-            	GROUP BY [observe_interval]
-            	) AS a
+                SELECT [observe_interval], COUNT([id]) as [count]
+                FROM [NSOweb].[dbo].[dynamic_object] 
+                WHERE [active] = 1 and [is_secret] = 0
+                GROUP BY [observe_interval]
+                ) AS a
             INNER JOIN (
-            	SELECT [code], [namemn], [nameen], [app_order]
-            	FROM [NSOweb].[dbo].[sub_classification_code_SPS]
-            	WHERE [active] = 1 AND [classification_code_id] = 833001
-            	) AS b ON a.[observe_interval] = b.[code]
+                SELECT [code], [namemn], [nameen], [app_order]
+                FROM [NSOweb].[dbo].[sub_classification_code]
+                WHERE [active] = 1 AND [classification_code_id] = 833001
+                ) AS b ON a.[observe_interval] = b.[code]
             ORDER BY [app_order] 
         `;
         

@@ -12,7 +12,9 @@ const getSubsectors = async (subsectorId) => {
   const API_URL = `${BASE_API_URL}/api/subsectorname?subsectorname=${decodeURIComponent(subsectorId)}&lng=mn`;
 
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch(API_URL, {
+      cache: "no-store",
+    });
     const data = await response.json();
     return data?.data || [];
   } catch (error) {
@@ -23,7 +25,9 @@ const getSubsectors = async (subsectorId) => {
 
 export async function GET(req) {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/api/sectorname`);
+    const response = await fetch(`${process.env.BACKEND_URL}/api/sectorname`, {
+      cache: "no-store",
+    });
     const sectors = await response.json();
 
     // Fetch subsectors for each sector

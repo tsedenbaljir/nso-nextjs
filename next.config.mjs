@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    experimental: {
+        serverComponentsExternalPackages: ['oracledb'],
+    },
     webpack: (config, { isServer }) => {
         if (isServer) {
             config.externals.push('oracledb');
@@ -15,7 +18,7 @@ const nextConfig = {
             "os.alipayobjects.com",
             "api.ipify.org",
             "downloads.1212.mn",
-            "betanso.nso.mn",
+            "beta.nso.mn",
         ],
         remotePatterns: [
             {
@@ -25,7 +28,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'betanso.nso.mn', // Add this
+                hostname: 'beta.nso.mn', // Add this
                 pathname: '/images/**', // Restrict to images directory if needed
             },
         ],
@@ -68,6 +71,12 @@ const nextConfig = {
                 ],
             },  
         ];
+    },
+    api: {
+        bodyParser: {
+            sizeLimit: '100mb',
+        },
+        responseLimit: false,
     },
 };
 

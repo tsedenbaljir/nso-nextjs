@@ -17,10 +17,10 @@ export default function Main({ sector, subsector, lng }) {
         // Fetch subcategories
         const fetchSubcategories = async () => {
             try {
-                const response = await fetch(`/api/methodology?catalogue_id=${subsector}&lng=${lng}`);
+                const response = await fetch(`/api/methodology/list?catalogue_id=${subsector}&lng=${lng}`);
                 const result = await response.json();
 
-                setData(result.data)
+                setData(result.data);
                 if (!Array.isArray(result.data)) {
                     return [];
                 }
@@ -120,7 +120,7 @@ export default function Main({ sector, subsector, lng }) {
                         <div onClick={() => {
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`https://betanso.nso.mn/uploads/images/${filePath}`, "_blank");
+                                window.open(`${process.env.FRONTEND}/uploads/images/${filePath}`, "_blank");
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">

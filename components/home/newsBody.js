@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from "next/navigation";
 
 export default function index(product) {
@@ -12,7 +11,7 @@ export default function index(product) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `https://betanso.nso.mn/uploads/images/${imagePath}`;
+        return process.env.FRONTEND + `/uploads/images/${imagePath}`;
     };
 
     const handleImageError = () => {

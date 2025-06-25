@@ -23,7 +23,10 @@ export async function GET(req) {
     };
 
     // Fetch categories from API
-    const response = await fetch(API_URL, requestOptions);
+    const response = await fetch(API_URL, {
+      ...requestOptions,
+      cache: "no-store",
+    });
 
     const textData = await response.text();
 

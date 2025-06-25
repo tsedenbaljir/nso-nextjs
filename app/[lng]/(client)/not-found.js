@@ -9,11 +9,22 @@ export default function NotFound({ params }) {
     return (
         <main>
             <div className="notFoundContainer">
-                <h1 className="title">{t('404.title', 'Page Not Found')}</h1>
-                <p className="description">{t('404.description', 'Sorry, the page you are looking for does not exist.')}</p>
-                <Link href={`/${params?.lng || 'en'}`} className="homeLink">
-                    {t('404.backHome', 'Back to Homepage')}
-                </Link>
+                <div className="errorCode">
+                    {t('404.errorCode')}
+                </div>
+                <h1 className="title">{t('404.title')}</h1>
+                <p className="description">{t('404.description')}</p>
+                <div className="actions">
+                    <Link href={`/${params?.lng || 'en'}`} className="homeLink">
+                        {t('404.backHome')}
+                    </Link>
+                    <button 
+                        onClick={() => window.history.back()} 
+                        className="backButton"
+                    >
+                        {t('404.goBack')}
+                    </button>
+                </div>
             </div>
         </main>
     )
