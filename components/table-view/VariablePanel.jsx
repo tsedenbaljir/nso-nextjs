@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { notification } from 'antd';
 import ResultTable from './ResultTable';
 import ExportButton from './ExportButton';
 import VariableSelector from './VariableSelector';
@@ -13,14 +14,25 @@ export default function VariablesPanel({ variables, title, url, lng }) {
   const [resultData, setResultData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Configure notification to show in center
+  notification.config({
+    placement: 'top',
+    top: '50%',
+    transform: 'translateY(-50%)',
+  });
+
   const handleChange = (code, values) => {
     setSelectedValues((prev) => ({ ...prev, [code]: values }));
   };
 
   const handleResult = async () => {
-    setLoading(true);
     if (selectedValuesCount > 100000) {
-      alert('Сонгох боломжтой хамгийн их тоо 100 000 байна.');
+      notification.warning({
+        message: 'Анхааруулга',
+        description: 'Сонгох боломжтой хамгийн их тоо 100 000 байна.',
+        duration: 3,
+        placement: 'top',
+      });
       return;
     }
     const query = Object.entries(selectedValues)
@@ -31,35 +43,52 @@ export default function VariablesPanel({ variables, title, url, lng }) {
       }));
 
     if (query.length !== variables.length) {
-      alert('Та дор хаяж нэг утга сонгоно уу!');
-      return;
-    }
-
-    const postBody = {
-      query,
-      response: { format: 'json-stat2' },
-    };
-
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'access-token': 'a79fb6ab-5953-4c46-a240-a20c2af9150a',
-        },
-        body: JSON.stringify(postBody),
+      notification.warning({
+        message: 'Анхааруулга',
+        description: 'Та дор хаяж нэг утга сонгоно уу!',
+        duration: 3,
+        placement: 'top',
       });
-
-      if (!res.ok) {
-        alert('Хүснэгтийг буруу оруулсан байна.');
-        return;
+      return;
+    } else {
+      setLoading(true);
+      const postBody = {
+        query,
+        response: { format: 'json-stat2' },
       };
-      const data = await res.json();
-      setResultData(data);
-    } catch (err) {
-      console.error('Алдаа:', err);
-    } finally {
-      setLoading(false);
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'access-token': 'a79fb6ab-5953-4c46-a240-a20c2af9150a',
+          },
+          body: JSON.stringify(postBody),
+        });
+
+        if (!res.ok) {
+          notification.error({
+            message: 'Алдаа',
+            description: 'Хүснэгтийг буруу оруулсан байна.',
+            duration: 3,
+            placement: 'top',
+          });
+          return;
+        };
+        const data = await res.json();
+        setResultData(data);
+      } catch (err) {
+        console.error('Алдаа:', err);
+        notification.error({
+          message: 'Алдаа',
+          description: 'Алдаа гарлаа. Дахин оролдоно уу.',
+          duration: 3,
+          placement: 'top',
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -84,7 +113,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
             lng={lng}
           />
         ))}
-        <div className='flex flex-row flex-wrap gap-2 col-span-4 min-w-[24%] max-w-[270px]'>
+        <div className='flex flex-row flex-wrap gap-2 col-span-4 w-full md:min-w-[24%] md:max-w-[270px]'>
           <div className="border border-gray-400 rounded-md bg-white shadow flex flex-col w-full col-span-4">
             <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
               <span>{lng === 'mn' ? 'Харагдах төрөл' : 'View type'}</span>
