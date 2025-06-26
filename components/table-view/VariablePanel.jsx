@@ -4,18 +4,21 @@ import { useState, useEffect } from 'react';
 import ResultTable from './ResultTable';
 import ExportButton from './ExportButton';
 import VariableSelector from './VariableSelector';
+import { LoadingOutlined } from '@ant-design/icons';
 
 export default function VariablesPanel({ variables, title, url, lng }) {
   const [selectedValues, setSelectedValues] = useState({});
   const [selectedValuesCount, setSelectedValuesCount] = useState(0);
   const [showOptions, setShowOptions] = useState(1);
   const [resultData, setResultData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (code, values) => {
     setSelectedValues((prev) => ({ ...prev, [code]: values }));
   };
 
   const handleResult = async () => {
+    setLoading(true);
     if (selectedValuesCount > 100000) {
       alert('Сонгох боломжтой хамгийн их тоо 100 000 байна.');
       return;
@@ -55,6 +58,8 @@ export default function VariablesPanel({ variables, title, url, lng }) {
       setResultData(data);
     } catch (err) {
       console.error('Алдаа:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,7 +114,15 @@ export default function VariablesPanel({ variables, title, url, lng }) {
         <br />
         (Сонгох боломжтой хамгийн их тоо 100 000)
       </div>
-      {showOptions === 1 && resultData && (
+      {loading ? (
+        <div className='flex items-center justify-center h-44'>
+          <div className='text-center'>
+            <LoadingOutlined spin style={{ fontSize: '24px', color: '#005baa' }} />
+            <br />
+            <p className='text-gray-500 text-lg'>Уншиж байна...</p>
+          </div>
+        </div>
+      ) : showOptions === 1 && resultData && (
         <ResultTable data={resultData} url={url} lng={lng} />
       )}
     </div>
