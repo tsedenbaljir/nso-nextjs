@@ -67,7 +67,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
               variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
               variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
               variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
-              variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' ? true : val.length === 1);
+              variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1);
         current = selected;
         recomputeAndEmit(
           current.length === values.length ? [] : values,
@@ -134,7 +134,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
                   variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
-                  variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' ? true : val.length === 1)
+                  variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1)
               .map((val, index) => (
                 val !== '' && <div
                   key={`${val}-${index}`}
@@ -163,7 +163,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
                   variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
-                  variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' ? true : val.length === 1).length
+                  variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1).length
               ? '❌'
               : '✅'}
             {lng === 'mn' ? 'Бүгдийг' : 'Select'} {' '}
@@ -173,7 +173,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
                   variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
-                  variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' ? true : val.length === 1).length
+                  variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1).length
               ? lng === 'mn' ? 'болих' : 'Remove'
               : lng === 'mn' ? 'сонгох' : 'All'}
           </button>
