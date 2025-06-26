@@ -139,9 +139,9 @@ export default function VariablesPanel({ variables, title, url, lng }) {
         </div>
       </div>
       <div className='text-base text-gray-500 mt-4 w-full text-center'>
-        Сонгогдсон утгын тоо: {selectedValuesCount > 1 ? selectedValuesCount : ''}
+        {lng === 'mn' ? 'Сонгогдсон утгын тоо:' : 'Selected values:'} {selectedValuesCount > 1 ? selectedValuesCount : ''}
         <br />
-        (Сонгох боломжтой хамгийн их тоо 100 000)
+        {lng === 'mn' ? '(Сонгох боломжтой хамгийн их тоо 100 000)' : '(Maximum number of selectable values: 100 000)'}
       </div>
       {loading ? (
         <div className='flex items-center justify-center h-44'>
