@@ -20,6 +20,9 @@
       cursor: pointer;
       max-width: 770px;
       flex-direction: column;
+      @media (max-width: 768px) {
+        width: 100%;
+      }
 
       img {
         width: 100%;
@@ -96,6 +99,11 @@
       padding-bottom: 20px;
       display: flex;
       flex-direction: column;
+
+      @media (max-width: 768px) {
+        width: 100%;
+        padding-left: 0;
+      }
 
       .__card {
         clear: both;
