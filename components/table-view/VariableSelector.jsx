@@ -63,7 +63,8 @@ const VariableSelector = ({ variable, onChange, lng }) => {
       case 'base':
         values = variable.values
           .filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
-            variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1);
+            variable.text !== 'Аймаг сум' && variable.text !== 'Аймаг, сум' && variable.text !== 'Аймаг' && 
+            variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1);
         current = selected;
         recomputeAndEmit(
           current.length === values.length ? [] : values,
@@ -125,7 +126,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
           </h2>
           <div className='m-2 max-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full'>
             {variable.values
-              .filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
+              .filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' && variable.text !== 'Аймаг сум' && variable.text !== 'Аймаг, сум' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1)
               .map((val, index) => (
                 val !== '' && <div
@@ -150,13 +151,13 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             className='mt-3 bg-gray-2 border rounded px-3 py-2 m-1 text-gray-700 font-normal'
           >
             {selected.length ===
-              variable.values.filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
+              variable.values.filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' && variable.text !== 'Аймаг сум' && variable.text !== 'Аймаг, сум' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1).length
               ? '❌'
               : '✅'}
             {lng === 'mn' ? 'Бүгдийг' : 'Select'} {' '}
             {selected.length ===
-              variable.values.filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' &&
+              variable.values.filter((val) => variable.text !== 'Баг, хороо' && variable.text !== 'Аймгийн код' && variable.text !== 'Аймаг сум' && variable.text !== 'Аймаг, сум' &&
                 variable.text !== 'Аймаг' && variable.text !== 'Засаг захиргааны нэгж' ? true : val.length === 1).length
               ? lng === 'mn' ? 'болих' : 'Remove'
               : lng === 'mn' ? 'сонгох' : 'All'}
@@ -165,6 +166,8 @@ const VariableSelector = ({ variable, onChange, lng }) => {
       </div>
 
       {(variable.code === 'Аймгийн код' ||
+        variable.code === 'Аймаг сум' ||
+        variable.code === 'Аймаг, сум' ||
         variable.code === 'Баг, хороо' ||
         variable.code === 'Аймаг' ||
         variable.code === 'Засаг захиргааны нэгж') && (

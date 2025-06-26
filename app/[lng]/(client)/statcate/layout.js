@@ -35,13 +35,13 @@ export default function Statecate({ children, params }) {
     useEffect(() => {
         async function getData() {
             const res = await fetch(`/api/table-view?lng=${lng}&sector=${pathname.split('/')[4]}&subsector=${pathname.split('/')[5]}&id=${pathname.split('/')[6]}`);
-            if (!res.ok) {
+            if (res.status !== 200) {
                 // throw new Error('Failed to fetch data');
                 setTitle('0');
                 return;
             } else {
                 const json = await res.json();
-                if (json.status) {
+                if (json?.title) {
                     setTitle(json.title);
                 } else {
                     setTitle('0');
