@@ -35,7 +35,14 @@ export default function TransparencyCategory({ params: { lng, name } }) {
             <div className="nso_container">
                 <div className="w-full">
                     <div className="transparency_header">
-                        <div className="font-bold text-2xl">{categoryTitle}</div>
+                        <div className="font-bold text-2xl">
+                            {categoryTitle === 'Үйл ажиллагааны ил тод байдал' ? lng === 'mn' ? categoryTitle : 'Operational transparency' :
+                                categoryTitle === 'Авлигын эсрэг арга хэмжээ' ? lng === 'mn' ? categoryTitle : 'Anti-corruption measures' :
+                                    categoryTitle === 'Үйл ажиллагааны хөтөлбөр, тайлан' ? lng === 'mn' ? categoryTitle : 'Action programs and reports' :
+                                        categoryTitle === 'Төрийн албаны зөвлөлийн Үндэсний статистикийн хорооны дэргэдэх салбар зөвлөл' ?
+                                            lng === 'mn' ? categoryTitle : 'Branch Council under the Statistics Committee of the National Council of Public Service'
+                                            : categoryTitle}
+                        </div>
                     </div>
                     <div className="__card_groups">
                         {loading ? (
@@ -59,8 +66,8 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                                 </Link>
                             ))
                         ) : (
-                            <div className="no_data">
-                                Мэдээлэл олдсонгүй
+                            <div className="no_data p-5">
+                                {lng === 'mn' ? 'Мэдээлэл олдсонгүй' : 'No data found'}
                             </div>
                         )}
                     </div>

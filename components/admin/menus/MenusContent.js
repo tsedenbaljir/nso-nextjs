@@ -273,7 +273,7 @@ export default function MenusContent() {
                 <MenuForm
                     onSubmit={handleMenuSubmit}
                     initialData={editingMenu}
-                    parentMenus={menus.filter(m => m.is_active && m.category_id === 2)}
+                    parentMenus={menus.filter(m => m.is_active && (m.category_id === 2 || m.category_id === 3))}
                     categories={categories}
                     isSubmenu={!!parentId}
                 />

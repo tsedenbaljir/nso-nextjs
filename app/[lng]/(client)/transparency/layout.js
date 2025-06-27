@@ -35,7 +35,12 @@ export default function TransparencyLayout({ children, params: { lng } }) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('transparency'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] }
     ];
-    if(name) breadMap.push({ label: name ? decodeURIComponent(name) : ""});
+    // if(name) breadMap.push({ label: name ? name === 'Үйл ажиллагааны ил тод байдал' ? lng === 'mn' ? decodeURIComponent(name) : 'Operational transparency' :
+    //     name === 'Авлигын эсрэг арга хэмжээ' ? lng === 'mn' ? decodeURIComponent(name) : 'Anti-corruption measures' :
+    //         name === 'Үйл ажиллагааны хөтөлбөр, тайлан' ? lng === 'mn' ? decodeURIComponent(name) : 'Action programs and reports' :
+    //             name === 'Төрийн албаны зөвлөлийн Үндэсний статистикийн хорооны дэргэдэх салбар зөвлөл' ?
+    //                 lng === 'mn' ? decodeURIComponent(name) : 'Branch Council under the Statistics Committee of the National Council of Public Service'
+    //                 : name : ""});
     // if(!loading) breadMap.push({ label: data.title });
 
     return (

@@ -111,7 +111,7 @@ export default function Footer({ lng }) {
                     <div className="col-12 md:col-4 lg:col-4">
                         <span className="__title">{t('footer.links')}</span>
                         <div className="__content">
-                            <div className="nso_add_item" onClick={() => getDialogShow(26)}>
+                            <div className="nso_add_item" onClick={() => getDialogShow(101)}>
                                 <div className="__plus">
                                     <i className="pi pi-plus"></i>
                                 </div>
@@ -119,7 +119,7 @@ export default function Footer({ lng }) {
                                     {t('footer.government')}
                                 </span>
                             </div>
-                            <div className="nso_add_item" onClick={() => getDialogShow(33)}>
+                            <div className="nso_add_item" onClick={() => getDialogShow(100)}>
                                 <div className="__plus">
                                     <i className="pi pi-plus"></i>
                                 </div>
@@ -127,7 +127,7 @@ export default function Footer({ lng }) {
                                     {t('footer.otherSites')}
                                 </span>
                             </div>
-                            <div className="nso_add_item" onClick={() => getDialogShow(41)}>
+                            <div className="nso_add_item" onClick={() => getDialogShow(99)}>
                                 <div className="__plus">
                                     <i className="pi pi-plus"></i>
                                 </div>
