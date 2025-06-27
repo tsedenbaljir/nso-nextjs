@@ -56,7 +56,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="name"
-                    header="Нэр"
+                    header={lng === "mn" ? "Нэр" : "Name"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -68,7 +68,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="file_size"
-                    header="Файлын хэмжээ"
+                    header={lng === "mn" ? "Файлын хэмжээ" : "File size"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -92,7 +92,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="date"
-                    header="Шинэчлэгдсэн огноо"
+                    header={lng === "mn" ? "Шинэчлэгдсэн огноо" : "Updated date"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -103,7 +103,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="views"
-                    header="Татсан тоо"
+                    header={lng === "mn" ? "Татсан тоо" : "Views"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -114,7 +114,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="download"
-                    header="Татах"
+                    header={lng === "mn" ? "Татах" : "Download"}
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {

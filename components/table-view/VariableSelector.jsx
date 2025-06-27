@@ -64,7 +64,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
         values = variable.values
           .filter((val) =>
             variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
-              variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
+              variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
               variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
               variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
               variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1);
@@ -131,7 +131,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             {variable.values
               .filter((val) =>
                 variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
-                  variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
+                  variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
                   variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1)
@@ -160,7 +160,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             {selected.length ===
               variable.values.filter((val) =>
                 variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
-                  variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
+                  variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
                   variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1).length
@@ -170,7 +170,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             {selected.length ===
               variable.values.filter((val) =>
                 variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
-                  variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, sum' &&
+                  variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
                   variable.text !== 'Засаг захиргааны нэгж' && variable.text !== 'Administrator unit' && variable.text !== 'Administrative unit' ? true : val.length === 1).length
@@ -181,7 +181,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
       </div>
 
       {(variable.code === 'Аймаг' || variable.code === 'Aimag' ||
-        variable.code === 'Аймаг, сум' || variable.code === 'Aimag, sum' ||
+        variable.code === 'Аймаг, сум' || variable.code === 'Aimag, soum' ||
         variable.code === 'Баг, хороо' || variable.code === 'Bag, khoroo' ||
         variable.code === 'Аймгийн код' || variable.code === 'Aimag code' ||
         variable.code === 'Засаг захиргааны нэгж' || variable.code === 'Administrator unit') && (

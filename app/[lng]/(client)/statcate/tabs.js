@@ -100,7 +100,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 activeIndex={activeIndex}
                 onTabChange={(e) => {
                     const newTab = getIndexTab(e.index);
-                    router.push(`/statcate/${newTab}/${sector}/${subsector}`);
+                    router.push(`/${lng}/statcate/${newTab}/${sector}/${subsector}`);
                 }}
             >
 

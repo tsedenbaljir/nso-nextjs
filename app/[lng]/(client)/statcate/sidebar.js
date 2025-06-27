@@ -59,7 +59,7 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                             label: item.text,
                             className: item.id === decodeURIComponent(subsector) ? "active-link" : "",
                             command: () => {
-                                router.push(`/mn/statcate/table/${categoryId}/${decodeURIComponent(item.id)}`);
+                                router.push(`/${lng}/statcate/table/${categoryId}/${decodeURIComponent(item.id)}`);
                             }
                         }));
 
