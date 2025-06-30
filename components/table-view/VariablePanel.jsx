@@ -28,8 +28,8 @@ export default function VariablesPanel({ variables, title, url, lng }) {
   const handleResult = async () => {
     if (selectedValuesCount > 100000) {
       notification.warning({
-        message: 'Анхааруулга',
-        description: 'Сонгох боломжтой хамгийн их тоо 100 000 байна.',
+        message: lng === 'mn' ? 'Анхааруулга' : 'Warning',
+        description: lng === 'mn' ? 'Сонгох боломжтой хамгийн их тоо 100 000 байна.' : 'The maximum number of selectable values is 100 000.',
         duration: 3,
         placement: 'top',
       });
@@ -44,8 +44,8 @@ export default function VariablesPanel({ variables, title, url, lng }) {
 
     if (query.length !== variables.length) {
       notification.warning({
-        message: 'Анхааруулга',
-        description: 'Та дор хаяж нэг утга сонгоно уу!',
+        message: lng === 'mn' ? 'Анхааруулга' : 'Warning',
+        description: lng === 'mn' ? 'Та дор хаяж нэг утга сонгоно уу!' : 'You must select at least one value!',
         duration: 3,
         placement: 'top',
       });
@@ -69,8 +69,8 @@ export default function VariablesPanel({ variables, title, url, lng }) {
 
         if (!res.ok) {
           notification.error({
-            message: 'Алдаа',
-            description: 'Хүснэгтийг буруу оруулсан байна.',
+            message: lng === 'mn' ? 'Алдаа' : 'Error',
+            description: lng === 'mn' ? 'Хүснэгтийг буруу оруулсан байна.' : 'The table is incorrect.',
             duration: 3,
             placement: 'top',
           });
@@ -79,10 +79,10 @@ export default function VariablesPanel({ variables, title, url, lng }) {
         const data = await res.json();
         setResultData(data);
       } catch (err) {
-        console.error('Алдаа:', err);
+        console.error(lng === 'mn' ? 'Алдаа:' : 'Error :', err);
         notification.error({
-          message: 'Алдаа',
-          description: 'Алдаа гарлаа. Дахин оролдоно уу.',
+          message: lng === 'mn' ? 'Алдаа' : 'Error',
+          description: lng === 'mn' ? 'Алдаа гарлаа. Дахин оролдоно уу.' : 'An error occurred. Please try again.',
           duration: 3,
           placement: 'top',
         });
