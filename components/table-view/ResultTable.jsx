@@ -24,14 +24,17 @@ export default function ResultTable({ data, lng }) {
 
   const rowKeys = data.id.filter((key) => key !== yearKey);
 
-  const validRowKeys = rowKeys.filter((key) => data.dimension[key]);
+  const validRowKeys = rowKeys.filter((key) => data.dimension[key]).map(key => ({
+    key,
+    label: data.dimension[key].label || key
+  }));
 
-  // console.log('Row keys:', {
-  //   all: rowKeys,
-  //   valid: validRowKeys
-  // });
+  console.log('Row keys:', {
+    all: rowKeys,
+    valid: validRowKeys
+  });
 
-  const rowDimensions = validRowKeys.map((key) => {
+  const rowDimensions = validRowKeys.map(({ key, label: dimensionLabel }) => {
     const index = data.dimension[key].category.index;
     const label = data.dimension[key].category.label;
     return Object.entries(index).map(([code, idx]) => ({
@@ -39,6 +42,7 @@ export default function ResultTable({ data, lng }) {
       label: label[code] || code,
       idx,
       key,
+      dimensionLabel,
     })).sort((a, b) => a.idx - b.idx);
   });
 
@@ -88,9 +92,9 @@ export default function ResultTable({ data, lng }) {
       <table className='result-table min-w-full border border-gray-300'>
         <thead>
           <tr className='bg-gray-100'>
-            {validRowKeys.map((key, index) => (
+            {validRowKeys.map(({ key, label }, index) => (
               <th key={key} className='border p-2 min-w-60 font-medium text-sm'>
-                {key}
+                {label}
               </th>
             ))}
             {years.map(({ code, label }) => (
