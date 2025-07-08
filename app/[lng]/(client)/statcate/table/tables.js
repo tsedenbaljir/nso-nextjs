@@ -9,7 +9,7 @@ import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 export default function Table({ sector, subsector, lng }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [expandedRows, setExpandedRows] = useState({});
+    const [expandedRows, setExpandedRows] = useState(null);
 
     const subFetch = async (rowLink) => {
         const res = await fetch(`/api/sectortablename/subtable?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}&subtables=${decodeURIComponent(rowLink)}&lng=${lng}`, {
@@ -61,7 +61,12 @@ export default function Table({ sector, subsector, lng }) {
         fetchData();
     }, [sector, subsector, lng]);
 
+    useEffect(() => {
+        console.log("expandedRows", expandedRows);
+    }, [expandedRows]);
+
     const handleRowClick = (rowLink) => {
+        console.log(rowLink === expandedRows);
         if(rowLink === expandedRows) {
             setExpandedRows(null);
         } else {
@@ -71,6 +76,7 @@ export default function Table({ sector, subsector, lng }) {
 
     return (
         <div className="bg-white">
+            {expandedRows}
             <DataTable
                 value={data}
                 paginator
