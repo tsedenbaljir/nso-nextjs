@@ -62,12 +62,10 @@ export default function Table({ sector, subsector, lng }) {
     }, [sector, subsector, lng]);
 
     const handleRowClick = (rowLink) => {
-        console.log(rowLink);
         setExpandedRows(prev => ({
             ...prev,
             [rowLink]: !prev[rowLink]
         }));
-        console.log(expandedRows);
     };
 
     return (
@@ -117,18 +115,19 @@ export default function Table({ sector, subsector, lng }) {
                         return (
                             <div>
                                 <span
-                                    className="flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
+                                    className="-ml-4 flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
                                     onClick={() => handleRowClick(rowData.link)}
                                 >
                                     {isExpanded
                                         ? <MinusCircleOutlined className="mr-2" style={{ color: '#1677ff' }} />
                                         : <PlusCircleOutlined className="mr-2" style={{ color: '#1677ff' }} />}
                                     {rowData?.name}
+                                    <span className="text-gray-500 text-sm ml-2">( {rowData?.sub?.length} )</span>
                                 </span>
-                                {/* {isExpanded && ( */}
-                                    <div className="ml-6 mt-1">
+                                {isExpanded && (
+                                    <div className="ml-3 my-2">
                                         {rowData?.sub?.map((item, idx) => (
-                                            <div key={idx} className="py-1 flex justify-between items-start">
+                                            <div key={idx} className="py-2 flex justify-between items-start">
                                                 <Link
                                                     href={`/${lng}/statcate/table-view/${sector}/${subsector}/${item.link}?subtables=${rowData.link}`}
                                                     className="hover:text-blue-700 hover:underline text-gray-900 font-medium"
@@ -138,7 +137,7 @@ export default function Table({ sector, subsector, lng }) {
                                             </div>
                                         ))}
                                     </div>
-                                {/* )} */}
+                                )}
                             </div>
                         );
                     }}
@@ -155,16 +154,15 @@ export default function Table({ sector, subsector, lng }) {
                         const subItems = rowData.sub;
 
                         // Case 1: Show all sub-item dates if expanded
-                        // isExpanded && 
-                        if (Array.isArray(subItems) && subItems.length > 0) {
+                        if (isExpanded && Array.isArray(subItems) && subItems.length > 0) {
                             const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
                             return (
-                                <div className="text-blue-400 font-medium space-y-1">
+                                <div className="text-blue-400 font-medium space-y-1 py-1">
                                     <span className="text-blue-400 font-medium">
                                         {latest?.date?.substr(0, 10)}
                                     </span>
                                     {subItems.map((item, idx) => (
-                                        <div key={idx} className="flex justify-between">
+                                        <div key={idx} className="flex justify-between py-2">
                                             <span>{item?.date?.substr(0, 10)}</span>
                                         </div>
                                     ))}
@@ -173,14 +171,14 @@ export default function Table({ sector, subsector, lng }) {
                         }
 
                         // Case 2: Show latest subItem date if available
-                        // if (Array.isArray(subItems) && subItems.length > 0) {
-                        //     const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-                        //     return (
-                        //         <span className="text-blue-400 font-medium">
-                        //             {latest?.date?.substr(0, 10)}
-                        //         </span>
-                        //     );
-                        // }
+                        if (Array.isArray(subItems) && subItems.length > 0) {
+                            const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+                            return (
+                                <span className="text-blue-400 font-medium">
+                                    {latest?.date?.substr(0, 10)}
+                                </span>
+                            );
+                        }
 
                         // Case 3: Show rowData date as fallback
                         return (
