@@ -96,9 +96,11 @@ export default function Table({ sector, subsector, lng }) {
                     sortable
                     className="nso_table_col"
                     body={(rowData) => {
+                        if (!rowData || !rowData.link) return null;
+                    
                         const isExpanded = expandedRows[rowData.link];
                         const hasSub = Array.isArray(rowData.sub);
-
+                    
                         if (!hasSub) {
                             return (
                                 <Link
@@ -109,11 +111,11 @@ export default function Table({ sector, subsector, lng }) {
                                 </Link>
                             );
                         }
-
+                    
                         return (
                             <div>
                                 <span
-                                    className="flex items-center cursor-pointer text-gray-900 font-medium"
+                                    className="flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
                                     onClick={() => handleRowClick(rowData.link)}
                                 >
                                     {isExpanded
@@ -121,9 +123,9 @@ export default function Table({ sector, subsector, lng }) {
                                         : <PlusCircleOutlined className="mr-2" style={{ color: '#1677ff' }} />}
                                     {rowData?.name}
                                 </span>
-
+                    
                                 {isExpanded && (
-                                    <div className="ml-6 mt-1" key={rowData?.link}>
+                                    <div className="ml-6 mt-1">
                                         {rowData?.sub?.map((item, idx) => (
                                             <div key={idx} className="py-1 flex justify-between items-start">
                                                 <Link
