@@ -62,10 +62,12 @@ export default function Table({ sector, subsector, lng }) {
     }, [sector, subsector, lng]);
 
     const handleRowClick = (rowLink) => {
+        console.log(rowLink);
         setExpandedRows(prev => ({
             ...prev,
             [rowLink]: !prev[rowLink]
         }));
+        console.log(expandedRows);
     };
 
     return (
@@ -123,7 +125,6 @@ export default function Table({ sector, subsector, lng }) {
                                         : <PlusCircleOutlined className="mr-2" style={{ color: '#1677ff' }} />}
                                     {rowData?.name}
                                 </span>
-                    
                                 {isExpanded && (
                                     <div className="ml-6 mt-1">
                                         {rowData?.sub?.map((item, idx) => (
