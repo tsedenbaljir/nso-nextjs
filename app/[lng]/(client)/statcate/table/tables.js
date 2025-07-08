@@ -61,16 +61,6 @@ export default function Table({ sector, subsector, lng }) {
         fetchData();
     }, [sector, subsector, lng]);
 
-    // Handle expand/collapse
-    const handleRowClick = (rowLink, hasSub) => {
-        if (!hasSub) return;
-        if (rowLink === expandedRow) {
-            setExpandedRow(null);
-        } else {
-            setExpandedRow(rowLink);
-        }
-    };
-
     // Name column body
     const nameBodyTemplate = (rowData) => {
         if (!rowData || !rowData.link) return null;
@@ -90,7 +80,14 @@ export default function Table({ sector, subsector, lng }) {
             <div>
                 <span
                     className="-ml-4 flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
-                    onClick={() => handleRowClick(rowData.link, hasSub)}
+                    onClick={() => {
+                        if (!hasSub) return;
+                        if (rowData.link === expandedRow) {
+                            setExpandedRow(null);
+                        } else {
+                            setExpandedRow(rowData.link);
+                        }
+                    }}
                 >
                     {isExpanded
                         ? <MinusCircleOutlined className="mr-2" style={{ color: '#1677ff' }} />
