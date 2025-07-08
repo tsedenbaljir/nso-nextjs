@@ -10,7 +10,7 @@ export async function GET(request) {
         const sector = searchParams.get('sector');
         const subsector = searchParams.get('subsector');
         const id = searchParams.get('id');
-
+        const subtables = searchParams.get('subtables');
         if (!lng || !sector || !subsector || !id) {
             return NextResponse.json(
                 { error: 'Missing required parameters' },
@@ -18,7 +18,7 @@ export async function GET(request) {
             );
         }
 
-        const response = await fetch(`https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${id}`);
+        const response = await fetch(subtables ? `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${id}/${subtables}` : `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${id}`);
         if (!response.ok) {
             // throw new Error(`HTTP error! Status: ${response.status}`);
             return NextResponse.json({

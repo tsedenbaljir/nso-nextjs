@@ -29,10 +29,10 @@ export default function ResultTable({ data, lng }) {
     label: data.dimension[key].label || key
   }));
 
-  console.log('Row keys:', {
-    all: rowKeys,
-    valid: validRowKeys
-  });
+  // console.log('Row keys:', {
+  //   all: rowKeys,
+  //   valid: validRowKeys
+  // });
 
   const rowDimensions = validRowKeys.map(({ key, label: dimensionLabel }) => {
     const index = data.dimension[key].category.index;
@@ -93,12 +93,19 @@ export default function ResultTable({ data, lng }) {
         <thead>
           <tr className='bg-gray-100'>
             {validRowKeys.map(({ key, label }, index) => (
-              <th key={key} className='border p-2 min-w-60 font-medium text-sm'>
+              <th
+                key={key}
+                className="border p-2 min-w-60 font-medium text-sm sticky top-0 z-20 bg-gray-100"
+                style={{ 
+                  left: index < 2 ? `${index * 240}px` : 'auto',
+                  position: index < 2 ? 'sticky' : 'static'
+                }}
+                >
                 {label}
               </th>
             ))}
             {years.map(({ code, label }) => (
-              <th key={code} className='border p-2 font-medium text-sm'>
+              <th key={code} className='border p-2 font-medium text-sm sticky top-0 z-10 bg-gray-100'>
                 {label}
               </th>
             ))}
@@ -114,6 +121,12 @@ export default function ResultTable({ data, lng }) {
                       key={`grouped-dim-${index}-${combo.code}`}
                       className='border p-2 min-w-60 font-normal text-sm align-top'
                       rowSpan={groupRows.length}
+                      style={{ 
+                        left: `${index * 240}px`,
+                        position: 'sticky',
+                        zIndex: 10,
+                        backgroundColor: 'white'
+                      }}
                     >
                       <span style={{ whiteSpace: 'pre' }}>{combo.label}</span>
                     </td>
@@ -121,6 +134,12 @@ export default function ResultTable({ data, lng }) {
                     <td
                       key={`dim-${index}-${combo.code}-${rowIndex}`}
                       className='border p-2 min-w-60 font-normal text-sm align-top'
+                      style={{ 
+                        left: index < 2 ? `${index * 240}px` : 'auto',
+                        position: index < 2 ? 'sticky' : 'static',
+                        zIndex: index < 2 ? 10 : 'auto',
+                        backgroundColor: index < 2 ? 'white' : 'transparent'
+                      }}
                     >
                       <span style={{ whiteSpace: 'pre' }}>{combo.label}</span>
                     </td>

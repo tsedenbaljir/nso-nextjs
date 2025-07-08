@@ -5,10 +5,11 @@ const baseAPI = 'https://data.1212.mn/api/v1';
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
         const lng = searchParams.get('lng');
         const sector = searchParams.get('sector');
         const subsector = searchParams.get('subsector');
-        const id = searchParams.get('id');
+        const subtables = searchParams.get('subtables');
 
         if (!lng || !sector || !subsector || !id) {
             return NextResponse.json(
@@ -18,7 +19,9 @@ export async function GET(request) {
         }
 
         const response = await fetch(
-            `${baseAPI}/${lng}/NSO/${decodeURIComponent(sector)}/${decodeURIComponent(subsector)}/${id}`,
+            subtables ?
+                `${baseAPI}/${lng}/NSO/${decodeURIComponent(sector)}/${decodeURIComponent(subsector)}/${subtables}/${id}`
+                : `${baseAPI}/${lng}/NSO/${decodeURIComponent(sector)}/${decodeURIComponent(subsector)}/${id}`,
             {
                 method: 'GET',
                 headers: {
@@ -50,7 +53,7 @@ export async function POST(request) {
         const sector = searchParams.get('sector');
         const subsector = searchParams.get('subsector');
         const id = searchParams.get('id');
-
+        const subtables = searchParams.get('subtables');
         if (!lng || !sector || !subsector || !id) {
             return NextResponse.json(
                 { error: 'Missing required parameters' },
@@ -59,9 +62,10 @@ export async function POST(request) {
         }
 
         const postBody = await request.json();
-        console.log(postBody);
         const response = await fetch(
-            `${baseAPI}/${lng}/NSO/${decodeURIComponent(sector)}/${decodeURIComponent(subsector)}/${id}`,
+            subtables ?
+                `${baseAPI}/${lng}/NSO/${decodeURIComponent(sector)}/${decodeURIComponent(subsector)}/${subtables}/${id}`
+                : `${baseAPI}/${lng}/NSO/${decodeURIComponent(sector)}/${decodeURIComponent(subsector)}/${id}`,
             {
                 method: 'POST',
                 headers: {

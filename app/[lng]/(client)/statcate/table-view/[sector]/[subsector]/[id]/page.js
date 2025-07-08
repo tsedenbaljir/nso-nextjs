@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import VariablesPanel from '@/components/table-view/VariablePanel';
 import Loading from '@/components/Loader';
 
@@ -8,6 +9,8 @@ export default function TableView({ params }) {
     const sector = params.sector;
     const subsector = params.subsector;
     const id = params.id;
+    const searchParams = useSearchParams();
+    const subtables = searchParams.get('subtables');
 
     const [metadataUrl, setMetadata] = useState('');
     const [title, setTitle] = useState('');
@@ -19,7 +22,7 @@ export default function TableView({ params }) {
             try {
                 setLoading(true);
                 // Fetch the table data
-                const res = await fetch(`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}`);
+                const res = await fetch(`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`);
                 if (!res.ok) {
                     setLoading(false);
                     setTitle('');
@@ -45,7 +48,7 @@ export default function TableView({ params }) {
         async function getMetadata() {
             try {
                 // Fetch the URL
-                const resMetadata = await fetch(`/api/table-view/metadata?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}`);
+                const resMetadata = await fetch(`/api/table-view/metadata?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`);
 
                 if (!resMetadata.ok) {
                     setLoading(false);
@@ -78,7 +81,7 @@ export default function TableView({ params }) {
                         <Loading />
                     </div>
                 ) : variables.length > 0 ? (
-                    <VariablesPanel variables={variables} title={title} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}`} lng={lng} />
+                    <VariablesPanel variables={variables} title={title} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`} lng={lng} />
                 ) : (
                     <div className='flex items-center justify-center h-64'>
                         <p className='text-gray-500 text-lg'>{lng === 'mn' ? 'Хүснэгтийн мэдээлэл олдсонгүй' : 'No data found'}</p>
