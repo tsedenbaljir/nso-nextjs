@@ -81,8 +81,8 @@ export default function Table({ sector, subsector, lng }) {
                 <span
                     className="-ml-4 flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
                     onClick={() => {
-                        if (!hasSub) return;
-                        if (rowData.link === expandedRow) {
+                        console.log("current:", expandedRow, "clicked:", rowData.link);
+                        if (isExpanded) {
                             setExpandedRow(null);
                         } else {
                             setExpandedRow(rowData.link);
@@ -96,7 +96,7 @@ export default function Table({ sector, subsector, lng }) {
                     <span className="text-gray-500 text-sm ml-2">( {rowData?.sub?.length} )</span>
                 </span>
                 {isExpanded && (
-                    <div className="ml-7 my-2">
+                    <div className="ml-4 my-2">
                         {rowData?.sub?.map((item, idx) => (
                             <div key={idx} className="py-2 flex justify-between items-start">
                                 <Link
