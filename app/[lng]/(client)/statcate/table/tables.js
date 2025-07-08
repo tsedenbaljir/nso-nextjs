@@ -62,14 +62,11 @@ export default function Table({ sector, subsector, lng }) {
     }, [sector, subsector, lng]);
 
     const handleRowClick = (rowLink) => {
-        setExpandedRows(prev => {
-            // Accordion-style: only one row can be expanded at a time
-            const newExpandedRows = {};
-            if (!prev[rowLink]) {
-                newExpandedRows[rowLink] = true;
-            }
-            return newExpandedRows;
-        });
+        if(rowLink === expandedRows) {
+            setExpandedRows(null);
+        } else {
+            setExpandedRows(rowLink);
+        }
     };
 
     return (
@@ -102,7 +99,7 @@ export default function Table({ sector, subsector, lng }) {
                     body={(rowData) => {
                         if (!rowData || !rowData.link) return null;
                     
-                        const isExpanded = expandedRows[rowData.link];
+                        const isExpanded = expandedRows === rowData.link;
                         const hasSub = Array.isArray(rowData.sub);
                     
                         if (!hasSub) {
@@ -154,7 +151,7 @@ export default function Table({ sector, subsector, lng }) {
                     sortable
                     className="nso_table_col"
                     body={(rowData) => {
-                        const isExpanded = expandedRows[rowData.link];
+                        const isExpanded = expandedRows === rowData.link;
                         const subItems = rowData.sub;
 
                         // Case 1: Show all sub-item dates if expanded
