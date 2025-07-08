@@ -125,7 +125,7 @@ export default function Table({ sector, subsector, lng }) {
                                         : <PlusCircleOutlined className="mr-2" style={{ color: '#1677ff' }} />}
                                     {rowData?.name}
                                 </span>
-                                {isExpanded && (
+                                {/* {isExpanded && ( */}
                                     <div className="ml-6 mt-1">
                                         {rowData?.sub?.map((item, idx) => (
                                             <div key={idx} className="py-1 flex justify-between items-start">
@@ -138,7 +138,7 @@ export default function Table({ sector, subsector, lng }) {
                                             </div>
                                         ))}
                                     </div>
-                                )}
+                                {/* )} */}
                             </div>
                         );
                     }}
@@ -155,7 +155,8 @@ export default function Table({ sector, subsector, lng }) {
                         const subItems = rowData.sub;
 
                         // Case 1: Show all sub-item dates if expanded
-                        if (isExpanded && Array.isArray(subItems) && subItems.length > 0) {
+                        // isExpanded && 
+                        if (Array.isArray(subItems) && subItems.length > 0) {
                             const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
                             return (
                                 <div className="text-blue-400 font-medium space-y-1">
@@ -172,14 +173,14 @@ export default function Table({ sector, subsector, lng }) {
                         }
 
                         // Case 2: Show latest subItem date if available
-                        if (Array.isArray(subItems) && subItems.length > 0) {
-                            const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-                            return (
-                                <span className="text-blue-400 font-medium">
-                                    {latest?.date?.substr(0, 10)}
-                                </span>
-                            );
-                        }
+                        // if (Array.isArray(subItems) && subItems.length > 0) {
+                        //     const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+                        //     return (
+                        //         <span className="text-blue-400 font-medium">
+                        //             {latest?.date?.substr(0, 10)}
+                        //         </span>
+                        //     );
+                        // }
 
                         // Case 3: Show rowData date as fallback
                         return (
