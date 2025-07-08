@@ -62,10 +62,14 @@ export default function Table({ sector, subsector, lng }) {
     }, [sector, subsector, lng]);
 
     const handleRowClick = (rowLink) => {
-        setExpandedRows(prev => ({
-            ...prev,
-            [rowLink]: !prev[rowLink]
-        }));
+        setExpandedRows(prev => {
+            // Accordion-style: only one row can be expanded at a time
+            const newExpandedRows = {};
+            if (!prev[rowLink]) {
+                newExpandedRows[rowLink] = true;
+            }
+            return newExpandedRows;
+        });
     };
 
     return (
