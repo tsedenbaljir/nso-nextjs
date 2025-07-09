@@ -5,16 +5,12 @@ import { useEffect, useState } from "react";
 
 var expandedRowsDate = null;
 // Name column body
-export function NameBodyTemplate(rowData, lng, sector, subsector, setExpandedRow) {
+export function NameBodyTemplate(rowData, lng, sector, subsector) {
     const [expandedRows, setExpandedRows] = useState(null);
 
     if (!rowData || !rowData.link) return null;
     const isExpanded = expandedRows === rowData.link;
     const hasSub = Array.isArray(rowData.sub) && rowData.sub.length > 0;
-
-    useEffect(() => {
-        setExpandedRow(expandedRows);
-    }, [expandedRows]);
 
     if (!hasSub) {
         return (

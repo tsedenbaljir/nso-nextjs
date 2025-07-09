@@ -8,7 +8,6 @@ import { NameBodyTemplate, DateBodyTemplate } from "./body";
 export default function Table({ sector, subsector, lng }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [expandedRow, setExpandedRow] = useState(null); // Only one row expanded at a time
 
     // Fetch subtables for non-px items
     const subFetch = async (rowLink) => {
@@ -86,7 +85,7 @@ export default function Table({ sector, subsector, lng }) {
                     header={lng === "mn" ? "Нэр" : "Name"}
                     sortable
                     className="nso_table_col"
-                    body={(rowData) => NameBodyTemplate(rowData, lng, sector, subsector, setExpandedRow)}
+                    body={(rowData) => NameBodyTemplate(rowData, lng, sector, subsector)}
                 />
                 {/* Date */}
                 <Column
