@@ -1,8 +1,12 @@
+"use client";
 import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 // Name column body
-export default function nameBodyTemplate(rowData, lng, sector, subsector, expandedRow, setExpandedRow) {
+export default function nameBodyTemplate(rowData, lng, sector, subsector) {
+    const [expandedRow, setExpandedRow] = useState(null);
+    
     if (!rowData || !rowData.link) return null;
     const isExpanded = expandedRow === rowData.link;
     const hasSub = Array.isArray(rowData.sub) && rowData.sub.length > 0;
