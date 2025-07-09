@@ -4,12 +4,17 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 // Name column body
-export default function nameBodyTemplate(rowData, lng, sector, subsector) {
-    const [expandedRow, setExpandedRow] = useState(null);
-    
+export default function nameBodyTemplate(rowData, lng, sector, subsector, setExpandedRow) {
+    const [expandedRows, setExpandedRows] = useState(null);
+
     if (!rowData || !rowData.link) return null;
-    const isExpanded = expandedRow === rowData.link;
+    const isExpanded = expandedRows === rowData.link;
     const hasSub = Array.isArray(rowData.sub) && rowData.sub.length > 0;
+
+    useEffect(() => {
+        setExpandedRow(expandedRows);
+    }, [expandedRows]);
+
     if (!hasSub) {
         return (
             <Link
@@ -26,9 +31,9 @@ export default function nameBodyTemplate(rowData, lng, sector, subsector) {
                 className="-ml-4 flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
                 onClick={() => {
                     if (isExpanded) {
-                        setExpandedRow(null);
+                        setExpandedRows(null);
                     } else {
-                        setExpandedRow(rowData.link);
+                        setExpandedRows(rowData.link);
                     }
                 }}
             >

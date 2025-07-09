@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import nameBodyTemplate from "./body";
+import dateBodyTemplate from "./date";
 
 export default function Table({ sector, subsector, lng }) {
     const [data, setData] = useState([]);
@@ -60,44 +61,6 @@ export default function Table({ sector, subsector, lng }) {
         fetchData();
     }, [sector, subsector, lng]);
 
-
-    // Date column body
-    const dateBodyTemplate = (rowData) => {
-        const isExpanded = expandedRow === rowData.link;
-        const subItems = rowData.sub;
-        // If expanded and has sub-items, show all sub-item dates
-        if (isExpanded && Array.isArray(subItems) && subItems.length > 0) {
-            const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-            return (
-                <div className="text-blue-400 font-medium space-y-1 py-1">
-                    <span className="text-blue-400 font-medium">
-                        {latest?.date?.substr(0, 10)}
-                    </span>
-                    {subItems.map((item, idx) => (
-                        <div key={idx} className="flex justify-between py-2">
-                            <span>{item?.date?.substr(0, 10)}</span>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-        // If has sub-items, show latest sub-item date
-        if (Array.isArray(subItems) && subItems.length > 0) {
-            const latest = [...subItems].sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-            return (
-                <span className="text-blue-400 font-medium">
-                    {latest?.date?.substr(0, 10)}
-                </span>
-            );
-        }
-        // Otherwise, show row's own date
-        return (
-            <span className="text-blue-400 font-medium">
-                {rowData?.date?.substr(0, 10)}
-            </span>
-        );
-    };
-
     return (
         <div className="bg-white">
             <DataTable
@@ -124,7 +87,7 @@ export default function Table({ sector, subsector, lng }) {
                     header={lng === "mn" ? "Нэр" : "Name"}
                     sortable
                     className="nso_table_col"
-                    body={(rowData) => nameBodyTemplate(rowData, lng, sector, subsector, expandedRow, setExpandedRow)}
+                    body={(rowData) => nameBodyTemplate(rowData, lng, sector, subsector, setExpandedRow)}
                 />
                 {/* Date */}
                 <Column
@@ -132,7 +95,7 @@ export default function Table({ sector, subsector, lng }) {
                     header={lng === "mn" ? "Шинэчлэгдсэн огноо" : "Updated date"}
                     sortable
                     className="nso_table_col"
-                    body={dateBodyTemplate}
+                    body={(rowData) => dateBodyTemplate(rowData, expandedRow)}
                 />
             </DataTable>
         </div>
