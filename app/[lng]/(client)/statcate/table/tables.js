@@ -8,7 +8,6 @@ import { NameBodyTemplate, DateBodyTemplate } from "./body";
 export default function Table({ sector, subsector, lng }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [expandedRows, setExpandedRows] = useState(null);
 
     // Fetch subtables for non-px items
     const subFetch = async (rowLink) => {
@@ -86,7 +85,7 @@ export default function Table({ sector, subsector, lng }) {
                     header={lng === "mn" ? "Нэр" : "Name"}
                     sortable
                     className="nso_table_col"
-                    body={(rowData) => NameBodyTemplate(rowData, lng, sector, subsector, expandedRows, setExpandedRows)}
+                    body={(rowData) => NameBodyTemplate(rowData, lng, sector, subsector)}
                 />
                 {/* Date */}
                 <Column
@@ -94,7 +93,7 @@ export default function Table({ sector, subsector, lng }) {
                     header={lng === "mn" ? "Шинэчлэгдсэн огноо" : "Updated date"}
                     sortable
                     className="nso_table_col"
-                    body={(rowData) => DateBodyTemplate(rowData, expandedRows)}
+                    body={(rowData) => DateBodyTemplate(rowData)}
                 />
             </DataTable>
         </div>
