@@ -82,11 +82,8 @@ export default function Table({ sector, subsector, lng }) {
                     className="-ml-4 flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
                     onClick={() => {
                         console.log("current:", expandedRow, "isExpanded:", isExpanded, "clicked:", rowData.link);
-                        if (isExpanded) {
-                            setExpandedRow(null);
-                        } else {
-                            setExpandedRow(rowData.link);
-                        }
+                        
+                        setExpandedRow(rowData.link);
                     }}
                 >
                     {isExpanded
