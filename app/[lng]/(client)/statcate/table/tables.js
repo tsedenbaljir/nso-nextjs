@@ -10,6 +10,7 @@ export default function Table({ sector, subsector, lng }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedRow, setExpandedRow] = useState(null); // Only one row expanded at a time
+    const [expandedRowData, setExpandedRowData] = useState(true);
 
     // Fetch subtables for non-px items
     const subFetch = async (rowLink) => {
@@ -68,12 +69,19 @@ export default function Table({ sector, subsector, lng }) {
         const hasSub = Array.isArray(rowData.sub) && rowData.sub.length > 0;
         if (!hasSub) {
             return (
-                <Link
-                    href={`/${lng}/statcate/table-view/${sector}/${subsector}/${rowData.link}`}
-                    className="hover:text-blue-700 hover:underline text-gray-900 font-medium"
-                >
+                <div>
                     {rowData?.name}
-                </Link>
+                    <span className="text-gray-500 text-sm ml-2"
+                    onClick={() => {
+                        setExpandedRowData(!expandedRowData);
+                    }}
+                    >aaaaaaa</span>
+                    {expandedRowData && (
+                        <div className="ml-4 my-2">
+                            <span className="text-gray-500 text-sm ml-2">bbbbbbbbb</span>
+                        </div>
+                    )}
+                </div>
             );
         }
         return (
