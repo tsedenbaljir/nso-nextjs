@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import nameBodyTemplate from "./body";
-import dateBodyTemplate from "./date";
+import { NameBodyTemplate, DateBodyTemplate } from "./body";
 
 export default function Table({ sector, subsector, lng }) {
     const [data, setData] = useState([]);
@@ -87,7 +86,7 @@ export default function Table({ sector, subsector, lng }) {
                     header={lng === "mn" ? "Нэр" : "Name"}
                     sortable
                     className="nso_table_col"
-                    body={(rowData) => nameBodyTemplate(rowData, lng, sector, subsector, setExpandedRow)}
+                    body={(rowData) => NameBodyTemplate(rowData, lng, sector, subsector, setExpandedRow)}
                 />
                 {/* Date */}
                 <Column
@@ -95,7 +94,7 @@ export default function Table({ sector, subsector, lng }) {
                     header={lng === "mn" ? "Шинэчлэгдсэн огноо" : "Updated date"}
                     sortable
                     className="nso_table_col"
-                    body={(rowData) => dateBodyTemplate(rowData, expandedRow)}
+                    body={(rowData) => DateBodyTemplate(rowData)}
                 />
             </DataTable>
         </div>
