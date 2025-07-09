@@ -78,12 +78,14 @@ export default function Table({ sector, subsector, lng }) {
         }
         return (
             <div>
-                <span
+                <button
                     className="-ml-4 flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
                     onClick={() => {
-                        console.log("current:", expandedRow, "isExpanded:", isExpanded, "clicked:", rowData.link);
-                        
-                        setExpandedRow(rowData.link);
+                        if (isExpanded) {
+                            setExpandedRow(null);
+                        } else {
+                            setExpandedRow(rowData.link);
+                        }
                     }}
                 >
                     {isExpanded
@@ -91,7 +93,7 @@ export default function Table({ sector, subsector, lng }) {
                         : <PlusCircleOutlined className="mr-2" style={{ color: '#1677ff' }} />}
                     {rowData?.name}
                     <span className="text-gray-500 text-sm ml-2">( {rowData?.sub?.length} )</span>
-                </span>
+                </button>
                 {isExpanded && (
                     <div className="ml-4 my-2">
                         {rowData?.sub?.map((item, idx) => (

@@ -26,10 +26,10 @@ export default function VariablesPanel({ variables, title, url, lng }) {
   };
 
   const handleResult = async () => {
-    if (selectedValuesCount > 100000) {
+    if (selectedValuesCount > 1000000) {
       notification.warning({
         message: lng === 'mn' ? 'Анхааруулга' : 'Warning',
-        description: lng === 'mn' ? 'Сонгох боломжтой хамгийн их тоо 100 000 байна.' : 'The maximum number of selectable values is 100 000.',
+        description: lng === 'mn' ? 'Сонгох боломжтой хамгийн их тоо 1 000 000 байна.' : 'The maximum number of selectable values is 1 000 000.',
         duration: 3,
         placement: 'top',
       });
@@ -141,7 +141,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
       <div className='text-base text-gray-500 mt-4 w-full text-center'>
         {lng === 'mn' ? 'Сонгогдсон утгын тоо:' : 'Selected values:'} {selectedValuesCount > 1 ? selectedValuesCount : ''}
         <br />
-        {lng === 'mn' ? '(Сонгох боломжтой хамгийн их тоо 100 000)' : '(Maximum number of selectable values: 100 000)'}
+        {lng === 'mn' ? '(Сонгох боломжтой хамгийн их тоо 1 000 000)' : '(Maximum number of selectable values: 1 000 000)'}
       </div>
       {loading ? (
         <div className='flex items-center justify-center h-44'>
