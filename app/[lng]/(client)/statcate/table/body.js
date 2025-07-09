@@ -3,11 +3,8 @@ import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-var expandedRowsDate = null;
 // Name column body
-export function NameBodyTemplate(rowData, lng, sector, subsector) {
-    const [expandedRows, setExpandedRows] = useState(null);
-
+export function NameBodyTemplate(rowData, lng, sector, subsector, expandedRows, setExpandedRows) {
     if (!rowData || !rowData.link) return null;
     const isExpanded = expandedRows === rowData.link;
     const hasSub = Array.isArray(rowData.sub) && rowData.sub.length > 0;
@@ -29,10 +26,8 @@ export function NameBodyTemplate(rowData, lng, sector, subsector) {
                 className="-ml-4 flex items-center cursor-pointer text-gray-900 font-medium hover:text-blue-700 hover:underline"
                 onClick={() => {
                     if (isExpanded) {
-                        expandedRowsDate = null;
                         setExpandedRows(null);
                     } else {
-                        expandedRowsDate = rowData.link;
                         setExpandedRows(rowData.link);
                     }
                 }}
@@ -61,8 +56,8 @@ export function NameBodyTemplate(rowData, lng, sector, subsector) {
     );
 };
 
-export function DateBodyTemplate(rowData) {
-    const isExpanded = expandedRowsDate === rowData.link;
+export function DateBodyTemplate(rowData, expandedRows) {
+    const isExpanded = expandedRows === rowData.link;
     const subItems = rowData.sub;
     // If expanded and has sub-items, show all sub-item dates
     if (isExpanded && Array.isArray(subItems) && subItems.length > 0) {
