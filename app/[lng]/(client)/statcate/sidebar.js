@@ -56,12 +56,12 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                         // ✅ Add `command` to update URL when clicked
                         return result.data.map((item) => ({
                             id: item.id,
-                            label: item.text,
+                            label: lng === 'en' ? item.text.split('_')[1] : item.text,
                             className: item.id === decodeURIComponent(subsector) ? "active-link" : "",
                             command: () => {
                                 router.push(`/${lng}/statcate/table/${categoryId}/${decodeURIComponent(item.id)}`);
                             }
-                        }));
+                        })).sort((a, b) => a.id.localeCompare(b.id));
 
                     } catch (error) {
                         // console.error(`Error fetching subcategories for ${categoryId}:`, error);

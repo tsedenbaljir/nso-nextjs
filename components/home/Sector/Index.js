@@ -34,7 +34,7 @@ export default function Index({ lng }) {
                     <div className="__statistic_groups">
                         <div className="__group">
                             <div className="__statistics">
-                                <Link className="__card" href={`/${lng}/statcate/table/Population,%20household/Adminstrative%20units,%20territory`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/1_Population,%20household/Adminstrative%20units,%20territory`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.populationHousehold')}</span>
                                 </Link>
