@@ -75,7 +75,7 @@ export default function PieChart({ data, lng }) {
         const chartOptions = {
             chart: {
                 type: 'pie',
-                height: 800
+                height: 400
             },
             title: {
                 text: lng === 'mn' ? 'Дугуй график' : 'Pie Chart'
@@ -97,7 +97,11 @@ export default function PieChart({ data, lng }) {
                     cursor: 'pointer',
                     dataLabels: {
                         enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            fontSize: '11px',
+                            fontWeight: 'bold'
+                        }
                     }
                 }
             },

@@ -106,7 +106,17 @@ export default function ColumnChart({ data, lng }) {
         plotOptions: {
             column: {
                 pointPadding: 0.2,
-                borderWidth: 0
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return this.y?.toLocaleString('mn-MN') || '';
+                    },
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                    }
+                }
             }
         },
         series: series

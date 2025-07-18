@@ -107,6 +107,16 @@ export default function LineChart({ data, lng }) {
             line: {
                 marker: {
                     enabled: true
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return this.y?.toLocaleString('mn-MN') || '';
+                    },
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: 'bold'
+                    }
                 }
             }
         },
