@@ -2,10 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { notification } from 'antd';
-import ResultTable from './ResultTable';
+import ResultTable from './charts/Table';
 import ExportButton from './ExportButton';
 import VariableSelector from './VariableSelector';
 import { LoadingOutlined } from '@ant-design/icons';
+import LineChart from './charts/LineChart';
+import ColumnChart from './charts/ColumnChart';
+import BarChart from './charts/BarChart';
+import AreaChart from './charts/AreaChart';
+import PieChart from './charts/PieChart';
 
 export default function VariablesPanel({ variables, title, url, lng }) {
   const [selectedValues, setSelectedValues] = useState({});
@@ -118,16 +123,73 @@ export default function VariablesPanel({ variables, title, url, lng }) {
             <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
               <span>{lng === 'mn' ? 'Харагдах төрөл' : 'View type'}</span>
             </h2>
-            <div className='!min-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full px-2 py-1 mb-2 bg-white'
-              onClick={() => setShowOptions(1)}>
-              <input
-                type='radio'
-                className='mr-2'
-                value={1}
-                checked={showOptions === 1}
-                onChange={() => setShowOptions(1)}
-              />
-              <label className='cursor-pointer font-normal'>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
+            <div className='!min-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full px-2 py-1 mb-2 bg-white'>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'
+                  onClick={() => setShowOptions(1)}>
+                <input
+                  type='radio'
+                  className='mr-2'
+                  value={1}
+                  checked={showOptions === 1}
+                  onClick={() => setShowOptions(1)}
+                />
+                <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
+              </div>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'
+                  onClick={() => setShowOptions(2)}>
+                <input
+                  type='radio'
+                  className='mr-2'
+                  value={2}
+                  checked={showOptions === 2}
+                  onClick={() => setShowOptions(2)}
+                />
+                <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Шугаман график' : 'Line charts'}</label>
+              </div>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'
+                  onClick={() => setShowOptions(3)}>
+                <input
+                  type='radio'
+                  className='mr-2'
+                  value={3}
+                  checked={showOptions === 3}
+                  onClick={() => setShowOptions(3)}
+                />
+                <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Баганан график' : 'Column charts'}</label>
+              </div>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'
+                  onClick={() => setShowOptions(4)}>
+                <input
+                  type='radio'
+                  className='mr-2'
+                  value={4}
+                  checked={showOptions === 4}
+                  onClick={() => setShowOptions(4)}
+                />
+                <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Туузан график' : 'Bar charts'}</label>
+              </div>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'
+                  onClick={() => setShowOptions(5)}>
+                <input
+                  type='radio'
+                  className='mr-2'
+                  value={5}
+                  checked={showOptions === 5}
+                  onClick={() => setShowOptions(5)}
+                />
+                <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Талбайн график' : 'Area charts'}</label>
+              </div>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'
+                onClick={() => setShowOptions(6)}>
+                <input
+                  type='radio'
+                  className='mr-2'
+                  value={6}
+                  checked={showOptions === 6}
+                  onClick={() => setShowOptions(6)}
+                />
+                <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Дугуй график' : 'Pie charts'}</label>
+              </div>
             </div>
             <button
               onClick={handleResult}
@@ -151,8 +213,15 @@ export default function VariablesPanel({ variables, title, url, lng }) {
             <p className='text-gray-500 text-lg'>Уншиж байна...</p>
           </div>
         </div>
-      ) : showOptions === 1 && resultData && (
-        <ResultTable data={resultData} url={url} lng={lng} />
+      ) : resultData && (
+        <>
+          {showOptions === 1 && <ResultTable data={resultData} url={url} lng={lng} />}
+          {showOptions === 2 && <LineChart data={resultData} lng={lng} />}
+          {showOptions === 3 && <ColumnChart data={resultData} lng={lng} />}
+          {showOptions === 4 && <BarChart data={resultData} lng={lng} />}
+          {showOptions === 5 && <AreaChart data={resultData} lng={lng} />}
+          {showOptions === 6 && <PieChart data={resultData} lng={lng} />}
+        </>
       )}
     </div>
   );
