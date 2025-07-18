@@ -37,11 +37,11 @@ const HomeSection = ({ lng }) => {
                                 ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН
                             </a>
                         </div>
-                        <div className="__metadataBanner">
+                        {/* <div className="__metadataBanner">
                             <a href="http://aanb3.nso.mn/" target="_blank">
                                 <img src="/images/aanb3.jpg" height="auto" width="100%" />
                             </a>
-                        </div>
+                        </div> */}
                     </div >
                     <div className="__metadataphone">
                         <a href="https://data.nso.mn" className="__dock_item" target="_blank">
@@ -55,11 +55,11 @@ const HomeSection = ({ lng }) => {
                             <span>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</span>
                         </a>
                     </div>
-                    <div className="__metadataBannerphone">
+                    {/* <div className="__metadataBannerphone">
                         <a href="http://aanb3.nso.mn/" target="_blank">
                             <img src="/images/aanb3.jpg" height="auto" width="328px" />
                         </a>
-                    </div>
+                    </div> */}
                     <Sidebar t={t} lng={lng} />
                     <img className="mb" src="/images/mbBle.png" />
                 </div >
