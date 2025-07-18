@@ -92,7 +92,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     return (
         <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
-            <span className="__cate_title">{name ? name[0]?.text : <LoadingDiv />}</span>
+            <span className="__cate_title">{name ? name[0]?.text.split('_')[1] ? name[0]?.text.split('_')[1] : name[0]?.text : <LoadingDiv />}</span>
 
             {/* PrimeReact Tabs */}
             <TabView

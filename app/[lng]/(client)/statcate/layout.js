@@ -67,7 +67,7 @@ export default function Statecate({ children, params }) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
-        { label: name ? <div className='text-nowrap'>{name[0]?.text}</div> : <LoadingDiv /> }
+        { label: name ? <div className='text-nowrap'>{name[0]?.text.split('_')[1] ? name[0]?.text.split('_')[1] : name[0]?.text}</div> : <LoadingDiv /> }
     ] : pathname.includes('statcate/table-view/') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
@@ -81,7 +81,7 @@ export default function Statecate({ children, params }) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
-        { label: name ? <div className='text-nowrap'>{name[0]?.text}</div> : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
+        { label: name ? <div className='text-nowrap'>{name[0]?.text.split('_')[1] ? name[0]?.text.split('_')[1] : name[0]?.text}</div> : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
     ];
 
     return (
