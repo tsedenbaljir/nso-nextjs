@@ -77,15 +77,53 @@ export default function ResultTable({ data, lng }) {
     };
   });
 
+  // ------------------- old code start ------------------- 
   // Group rows by the first dimension
-  const groupedRows = rows.reduce((acc, row) => {
-    const firstDimCode = row.rowCombo[0].code;
-    if (!acc[firstDimCode]) {
-      acc[firstDimCode] = [];
-    }
-    acc[firstDimCode].push(row);
-    return acc;
-  }, {});
+  // const groupedRows = rows.reduce((acc, row) => {
+  //   const firstDimCode = row.rowCombo[0].code;
+  //   if (!acc[firstDimCode]) {
+  //     acc[firstDimCode] = [];
+  //   }
+  //   acc[firstDimCode].push(row);
+  //   return acc;
+  // }, {});
+  // ------------------- old code end ------------------- 
+
+  // ------------------- new code start ------------------- 
+
+  // List of labels that should not be grouped
+  const noGroupLabels = [
+    'Аймаг', 'Aimag',
+    'Аймаг, сум', 'Aimag, soum',
+    'Баг, хороо', 'Bag, khoroo',
+    'Аймгийн код', 'Aimag code',
+    'Засаг захиргааны нэгж', 'Administrator unit', 'Administrative unit'
+  ];
+
+  // Determine if the first dimension's label matches any of the no-group labels
+  const shouldNotGroup = rowDimensions.length > 0 &&
+    rowDimensions[0].length > 0 &&
+    noGroupLabels.includes(rowDimensions[0][0].dimensionLabel);
+
+  let groupedRows;
+  if (shouldNotGroup) {
+    // Do not group: each row is its own group
+    groupedRows = rows.reduce((acc, row, idx) => {
+      acc[`row-${idx}`] = [row];
+      return acc;
+    }, {});
+  } else {
+    // Group rows by the first dimension as before
+    groupedRows = rows.reduce((acc, row) => {
+      const firstDimCode = row.rowCombo[0].code;
+      if (!acc[firstDimCode]) {
+        acc[firstDimCode] = [];
+      }
+      acc[firstDimCode].push(row);
+      return acc;
+    }, {});
+  }
+  // ------------------- new code end ------------------- 
 
   return (
     <div className='overflow-x-auto mt-3'>
@@ -96,11 +134,11 @@ export default function ResultTable({ data, lng }) {
               <th
                 key={key}
                 className="border p-2 min-w-60 font-medium text-sm sticky top-0 z-20 bg-gray-100"
-                style={{ 
+                style={{
                   left: index < 2 ? `${index * 240}px` : 'auto',
                   position: index < 2 ? 'sticky' : 'static'
                 }}
-                >
+              >
                 {label}
               </th>
             ))}
@@ -121,7 +159,7 @@ export default function ResultTable({ data, lng }) {
                       key={`grouped-dim-${index}-${combo.code}`}
                       className='border p-2 min-w-60 font-normal text-sm align-top'
                       rowSpan={groupRows.length}
-                      style={{ 
+                      style={{
                         left: `${index * 240}px`,
                         position: 'sticky',
                         zIndex: 10,
@@ -134,7 +172,7 @@ export default function ResultTable({ data, lng }) {
                     <td
                       key={`dim-${index}-${combo.code}-${rowIndex}`}
                       className='border p-2 min-w-60 font-normal text-sm align-top'
-                      style={{ 
+                      style={{
                         left: index < 2 ? `${index * 240}px` : 'auto',
                         position: index < 2 ? 'sticky' : 'static',
                         zIndex: index < 2 ? 10 : 'auto',
