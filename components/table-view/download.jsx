@@ -6,6 +6,22 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         const dimensions = pxData.dimension;
         const dimensionIds = pxData.id;
         const labels = dimensionIds.map((id) => dimensions[id].label);
+        // List of labels that should have a code column after them
+        const showCodeLabels = [
+            'Аймаг', 'Aimag',
+            'Аймаг, сум', 'Aimag, soum',
+            'Баг, хороо', 'Bag, khoroo',
+            'Аймгийн код', 'Aimag code',
+            'Засаг захиргааны нэгж', 'Administrator unit', 'Administrative unit'
+        ];
+        // Build exportLabels: insert 'Код' after matching label
+        const exportLabels = [];
+        labels.forEach((label, i) => {
+            exportLabels.push(label);
+            if (showCodeLabels.includes(label)) {
+                exportLabels.push('Код');
+            }
+        });
         const categoryLabels = dimensionIds.map((id) => {
             const labelObj = dimensions[id].category.label;
             const indexObj = dimensions[id].category.index;
@@ -16,12 +32,26 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         });
 
         const allCombinations = cartesian(...categoryLabels);
+        const allCodes = dimensionIds.map((id) => {
+            const labelObj = dimensions[id].category.label;
+            const indexObj = dimensions[id].category.index;
+            return Object.entries(labelObj)
+                .map(([code, label]) => ({ code, label, idx: indexObj[code] }))
+                .sort((a, b) => a.idx - b.idx)
+                .map(item => item.code);
+        });
+        const allCombinationsCodes = cartesian(...allCodes);
         const values = pxData.value;
 
         const table = allCombinations.map((row, idx) => {
             const record = {};
+            let codeColOffset = 0;
             labels.forEach((label, i) => {
-                record[label] = row[i];
+                record[exportLabels[i + codeColOffset]] = row[i];
+                if (showCodeLabels.includes(label)) {
+                    record[exportLabels[i + codeColOffset + 1]] = allCombinationsCodes[idx][i];
+                    codeColOffset++;
+                }
             });
             record['Утга'] = values[idx] ?? '';
             return record;
@@ -48,6 +78,20 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         const dimensions = pxData.dimension;
         const dimensionIds = pxData.id;
         const labels = dimensionIds.map((id) => dimensions[id].label);
+        const showCodeLabels = [
+            'Аймаг', 'Aimag',
+            'Аймаг, сум', 'Aimag, soum',
+            'Баг, хороо', 'Bag, khoroo',
+            'Аймгийн код', 'Aimag code',
+            'Засаг захиргааны нэгж', 'Administrator unit', 'Administrative unit'
+        ];
+        const exportLabels = [];
+        labels.forEach((label, i) => {
+            exportLabels.push(label);
+            if (showCodeLabels.includes(label)) {
+                exportLabels.push('Код');
+            }
+        });
         const categoryLabels = dimensionIds.map((id) => {
             const labelObj = dimensions[id].category.label;
             const indexObj = dimensions[id].category.index;
@@ -59,6 +103,15 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
 
         const allCombinations = cartesian(...categoryLabels);
         const values = pxData.value;
+        const allCodes = dimensionIds.map((id) => {
+            const labelObj = dimensions[id].category.label;
+            const indexObj = dimensions[id].category.index;
+            return Object.entries(labelObj)
+                .map(([code, label]) => ({ code, label, idx: indexObj[code] }))
+                .sort((a, b) => a.idx - b.idx)
+                .map(item => item.code);
+        });
+        const allCombinationsCodes = cartesian(...allCodes);
         let yearDimensionIndex = -1;
         // Identify the year dimension based on its ID or label (more robustly)
         // First, try to find a year dimension by its ID (e.g., 'TIME', 'YEAR')
@@ -95,6 +148,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
                 if (!pivotedData[stubKey]) {
                     pivotedData[stubKey] = {
                         _stubValues: stubValues, // Store stub values for easy retrieval
+                        _combinationIdx: idx // Store the original index of the combination
                     };
                 }
                 pivotedData[stubKey][year] = values[idx] ?? '';
@@ -114,24 +168,42 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             const newTable = [];
 
             // Add header row (stub labels + sorted years)
-            newTable.push([...stubLabels, ...years]);
+            const stubExportLabels = [];
+            stubLabels.forEach((label, i) => {
+                stubExportLabels.push(label);
+                if (showCodeLabels.includes(label)) {
+                    stubExportLabels.push('Код');
+                }
+            });
+            newTable.push([...stubExportLabels, ...years]);
 
             // Add data rows with grouping
             Object.entries(groupedRows).forEach(([groupValue, groupRows]) => {
                 groupRows.forEach((rowData, rowIndex) => {
-                    const row = [...rowData._stubValues]; // Start with stub values
-                    years.forEach(year => row.push(rowData[year] || '')); // Add year values, fill missing with empty string
+                    const row = [];
+                    stubLabels.forEach((label, i) => {
+                        row.push(rowData._stubValues[i]);
+                        if (showCodeLabels.includes(label)) {
+                            const labelIdx = labels.indexOf(label);
+                            row.push(allCombinationsCodes[rowData._combinationIdx][labelIdx]);
+                        }
+                    });
+                    years.forEach(year => row.push(rowData[year] || ''));
                     newTable.push(row);
                 });
             });
-
             table = newTable; // Use the new pivoted table
         } else {
             // If no year dimension is found, export in the original flat format
             table = allCombinations.map((row, idx) => {
                 const record = {};
+                let codeColOffset = 0;
                 labels.forEach((label, i) => {
-                    record[label] = String(row[i]);
+                    record[exportLabels[i + codeColOffset]] = String(row[i]);
+                    if (showCodeLabels.includes(label)) {
+                        record[exportLabels[i + codeColOffset + 1]] = allCombinationsCodes[idx][i];
+                        codeColOffset++;
+                    }
                 });
                 record['Утга'] = String(values[idx] ?? '');
                 return record;
