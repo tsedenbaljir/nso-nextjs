@@ -103,12 +103,12 @@ export default function Index({ lng }) {
                                         router.push(`${process.env.FRONTEND}/${lng}/${indicators[1]?.tableau}`, '_blank');
                                     }
                                 }}>
-                                    <span className="__desc">{indicators[4]?.last_modified_date.substring(0, 10) || "..."}</span>
+                                    <span className="__desc">{indicators[1]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
                                         <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[1]?.image})` }}></span>
                                         {lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}
                                     </span>
-                                    <span className="__count">{indicators[1]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng}</span>
+                                    <span className="__count">{indicators[1]?.indicator?.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng}</span>
                                 </div>
                             </div>
                         </div>
