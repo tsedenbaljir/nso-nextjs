@@ -69,6 +69,25 @@ export async function GET(req) {
         timeout: 10000 // 10s
     });
 
+//     SELECT TOP (1000) [id]
+//       ,[name]
+//       ,[slug]
+//       ,[language]
+//       ,[body]
+//       ,[published]
+//       ,[list_order]
+//       ,[created_by] 
+//       ,CAST([created_date] AS datetime2(7))
+//       ,[last_modified_by]
+//       ,CAST([last_modified_date] AS datetime2(7))
+//       ,[content_type]
+//       ,[news_type]
+//       , CAST([published_date] AS datetime2(7))
+//       ,[header_image]
+//       ,[views]
+//       ,[thumb_image]
+//   FROM [NSOweb].[dbo].[_123]
+
     // SELECT JSON_VALUE(CAST(file_info AS NVARCHAR(MAX)), '$.pathName') AS pathName,
     // JSON_VALUE(CAST(file_info AS NVARCHAR(MAX)), '$.fileSize') AS size
     // FROM [NSOweb].[dbo].[web_1212_download]
@@ -149,6 +168,22 @@ export async function GET(req) {
     // FROM UrlExtract
     // WHERE url IS NOT NULL
     // ORDER BY [id], url;
+
+    // //////////////////////
+    
+    // update web_1212_content  set header_image= REPLACE(header_image, '.none', '.png'), 
+    // thumb_image= REPLACE(thumb_image, '.none', '.png')
+    //     WHERE id in(
+    // 	92206763,
+    // 92807433,
+    // 92389313,
+    // 92900525,
+    // 92807442,
+    // 92368182,
+    // 92807411,
+    // 92900523
+    // 	)
+
     try {
         const results = await db.raw(`
     `);

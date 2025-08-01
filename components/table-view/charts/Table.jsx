@@ -133,11 +133,7 @@ export default function ResultTable({ data, lng }) {
             {validRowKeys.map(({ key, label }, index) => (
               <th
                 key={key}
-                className="border p-2 min-w-60 font-medium text-sm sticky top-0 z-20 bg-gray-100"
-                style={{
-                  left: index < 2 ? `${index * 240}px` : 'auto',
-                  position: index < 2 ? 'sticky' : 'static'
-                }}
+                className="border p-2 min-w-80 max-w-150 font-medium text-sm sticky top-0 z-20 bg-gray-100"
               >
                 {label}
               </th>
@@ -154,34 +150,12 @@ export default function ResultTable({ data, lng }) {
             groupRows.map((row, rowIndex) => (
               <tr key={`${groupCode}-${rowIndex}`}>
                 {row.rowCombo.map((combo, index) => (
-                  index === 0 && rowIndex === 0 ? (
-                    <td
-                      key={`grouped-dim-${index}-${combo.code}`}
-                      className='border p-2 min-w-60 font-normal text-sm align-top'
-                      rowSpan={groupRows.length}
-                      style={{
-                        left: `${index * 240}px`,
-                        position: 'sticky',
-                        zIndex: 10,
-                        backgroundColor: 'white'
-                      }}
-                    >
-                      <span style={{ whiteSpace: 'pre' }}>{combo.label}</span>
-                    </td>
-                  ) : index > 0 ? (
-                    <td
-                      key={`dim-${index}-${combo.code}-${rowIndex}`}
-                      className='border p-2 min-w-60 font-normal text-sm align-top'
-                      style={{
-                        left: index < 2 ? `${index * 240}px` : 'auto',
-                        position: index < 2 ? 'sticky' : 'static',
-                        zIndex: index < 2 ? 10 : 'auto',
-                        backgroundColor: index < 2 ? 'white' : 'transparent'
-                      }}
-                    >
-                      <span style={{ whiteSpace: 'pre' }}>{combo.label}</span>
-                    </td>
-                  ) : null
+                  <td
+                    key={`dim-${index}-${combo.code}-${rowIndex}`}
+                    className='border p-2 min-w-80 max-w-150 font-normal text-sm align-top'
+                  >
+                    <span>{combo.label}</span>
+                  </td>
                 ))}
 
                 {row.yearData.map((val, k) => (
