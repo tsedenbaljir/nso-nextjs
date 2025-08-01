@@ -42,7 +42,7 @@ export async function GET(req) {
   let orderClause = '';
   switch (orderBy) {
     case 'updated':
-      orderClause = 'ORDER BY published_date DESC';
+      orderClause = `ORDER BY published_date ${type === 'future' ? 'ASC' : 'DESC'}`;
       break;
     case 'alphabet':
       orderClause = 'ORDER BY name ASC';
@@ -77,13 +77,27 @@ export async function GET(req) {
     `, [lng, type]);
 
     // ✅ Он, сар авах
-    const yearsMonths = await db.raw(`
+    let yearsMonthsQuery = `
       SELECT YEAR(last_modified_date) AS Year, MONTH(last_modified_date) AS Month
       FROM web_1212_content
       WHERE content_type = 'NEWS'
+        AND language = ?
+        AND news_type = ?
+        AND published = 1
+    `;
+    const yearsMonthsParams = [lng, type];
+
+    if (searchTerm && searchTerm !== "") {
+      yearsMonthsQuery += ` AND name LIKE ?`;
+      yearsMonthsParams.push(`%${searchTerm}%`);
+    }
+
+    yearsMonthsQuery += `
       GROUP BY YEAR(last_modified_date), MONTH(last_modified_date)
       ORDER BY YEAR(last_modified_date) DESC, MONTH(last_modified_date) DESC
-    `);
+    `;
+
+    const yearsMonths = await db.raw(yearsMonthsQuery, yearsMonthsParams);
 
     return NextResponse.json({
       status: true,
