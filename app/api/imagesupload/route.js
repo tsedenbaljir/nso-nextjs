@@ -81,77 +81,79 @@ export async function GET(req) {
     //   '6_iI5b84oy_-BhWSN_PyAU2_9-wi2Ek4lzMQvW-U.pdf',
     //   'SlarpLuZ_sSErRErZLR-ZWi--1Is9JQ6C_WqXBHA.pptx'
     // )
+    // //////////////////////
+    
+    // WITH UrlExtract AS (
+    //     -- Initial row for each record
+    //     SELECT 
+    //         [id],
+    //         [name],
+    //         [slug],
+    //         [language],
+    //         [body],
+    //         PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) AS start_pos,
+    //         CASE 
+    //             WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) > 0
+    //             THEN SUBSTRING(
+    //                 [body],
+    //                 PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) + 10, -- Start after '<img src="'
+    //                 CHARINDEX('"', [body], PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) + 10) - 
+    //                 PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) - 10
+    //             )
+    //             ELSE NULL
+    //         END AS url,
+    //         CASE 
+    //             WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) > 0
+    //             THEN SUBSTRING(
+    //                 [body],
+    //                 PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) + 10,
+    //                 LEN([body])
+    //             )
+    //             ELSE ''
+    //         END AS remaining_body
+    //     FROM [NSOweb].[dbo].[web_1212_content]
+    //     WHERE [body] LIKE '%<img src="https://gateway.1212.mn/%' and  created_date > '2025-03-28'
+
+    //     UNION ALL
+
+    //     -- Recursive part to find subsequent URLs
+    //     SELECT 
+    //         [id],
+    //         [name],
+    //         [slug],
+    //         [language],
+    //         [body],
+    //         PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) AS start_pos,
+    //         CASE 
+    //             WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) > 0
+    //             THEN SUBSTRING(
+    //                 remaining_body,
+    //                 PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) + 10,
+    //                 CHARINDEX('"', remaining_body, PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) + 10) - 
+    //                 PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) - 10
+    //             )
+    //             ELSE NULL
+    //         END AS url,
+    //         CASE 
+    //             WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) > 0
+    //             THEN SUBSTRING(
+    //                 remaining_body,
+    //                 PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) + 10,
+    //                 LEN(remaining_body)
+    //             )
+    //             ELSE ''
+    //         END AS remaining_body
+    //     FROM UrlExtract
+    //     WHERE PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) > 0
+    // )
+
+    // SELECT REVERSE(SUBSTRING(REVERSE(url), 1, CHARINDEX('/', REVERSE(url)) - 1)) AS pathName,
+    // 1 as size
+    // FROM UrlExtract
+    // WHERE url IS NOT NULL
+    // ORDER BY [id], url;
     try {
         const results = await db.raw(`
-        WITH UrlExtract AS (
-        -- Initial row for each record
-        SELECT 
-            [id],
-            [name],
-            [slug],
-            [language],
-            [body],
-            PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) AS start_pos,
-            CASE 
-                WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) > 0
-                THEN SUBSTRING(
-                    [body],
-                    PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) + 10, -- Start after '<img src="'
-                    CHARINDEX('"', [body], PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) + 10) - 
-                    PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) - 10
-                )
-                ELSE NULL
-            END AS url,
-            CASE 
-                WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) > 0
-                THEN SUBSTRING(
-                    [body],
-                    PATINDEX('%<img src="https://gateway.1212.mn/%', [body]) + 10,
-                    LEN([body])
-                )
-                ELSE ''
-            END AS remaining_body
-        FROM [NSOweb].[dbo].[web_1212_content]
-        WHERE [body] LIKE '%<img src="https://gateway.1212.mn/%' and  created_date > '2025-03-28'
-
-        UNION ALL
-
-        -- Recursive part to find subsequent URLs
-        SELECT 
-            [id],
-            [name],
-            [slug],
-            [language],
-            [body],
-            PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) AS start_pos,
-            CASE 
-                WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) > 0
-                THEN SUBSTRING(
-                    remaining_body,
-                    PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) + 10,
-                    CHARINDEX('"', remaining_body, PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) + 10) - 
-                    PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) - 10
-                )
-                ELSE NULL
-            END AS url,
-            CASE 
-                WHEN PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) > 0
-                THEN SUBSTRING(
-                    remaining_body,
-                    PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) + 10,
-                    LEN(remaining_body)
-                )
-                ELSE ''
-            END AS remaining_body
-        FROM UrlExtract
-        WHERE PATINDEX('%<img src="https://gateway.1212.mn/%', remaining_body) > 0
-    )
-
-    SELECT REVERSE(SUBSTRING(REVERSE(url), 1, CHARINDEX('/', REVERSE(url)) - 1)) AS pathName,
-    1 as size
-    FROM UrlExtract
-    WHERE url IS NOT NULL
-    ORDER BY [id], url;
     `);
 
         let uploadResults = await processUploads(results, httpsAgent, myHeaders);
