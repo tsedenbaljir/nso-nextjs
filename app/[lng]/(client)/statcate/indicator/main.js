@@ -29,7 +29,6 @@ export default function Main({ lng, sector, subsector }) {
           setData(result.data);
           // Fetch Tableau Key using action
           const tableauResult = await fetchTableauKey();
-          console.log("tableauResult============", tableauResult);
           if (tableauResult.success && tableauResult.data?.value) {
             const tkt = tableauResult.data.value;
             // Ensure `data.tableau` exists before setting `iframeSrc`

@@ -11,7 +11,7 @@ export default function Methodology() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("general");
   const handleExcelDownload = () => {
-    console.log("Excel татах товч дарлаа");
+    // console.log("Excel татах товч дарлаа");
   };
 
   useEffect(() => {
