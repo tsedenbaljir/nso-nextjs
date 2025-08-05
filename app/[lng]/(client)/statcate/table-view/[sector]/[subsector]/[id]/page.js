@@ -70,7 +70,7 @@ export default function TableView({ params }) {
             }
         }
         getMetadata()
-    }, [params]);
+    }, [params, subtables]);
 
     return (
         <div className="nso_container">
