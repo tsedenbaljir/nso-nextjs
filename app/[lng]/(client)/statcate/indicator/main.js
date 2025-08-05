@@ -21,24 +21,24 @@ export default function Main({ lng, sector, subsector }) {
         const response = await fetch(`/api/catalogue?list_id=${subsector}`, {
           cache: "no-store",
         });
-        if (!response.ok) throw new Error("Failed to fetch catalogue data");
+        if (!response?.ok) throw new Error("Failed to fetch catalogue data");
 
-        const result = await response.json();
+        const result = await response?.json();
 
         if (result.data) {
           setData(result.data);
           // Fetch Tableau Key using action
           const tableauResult = await fetchTableauKey();
-          if (tableauResult.success && tableauResult.data?.value) {
-            const tkt = tableauResult.data.value;
+          if (tableauResult?.success && tableauResult?.data?.value) {
+            const tkt = tableauResult?.data?.value;
             // Ensure `data.tableau` exists before setting `iframeSrc`
             if (tkt && result.data.tableau) {
               setIframeSrc(
-                `https://tableau.1212.mn/trusted/${tkt}${result.data.tableau}`
+                `https://tableau.1212.mn/trusted/${tkt}${result?.data?.tableau}`
               );
             }
           } else {
-            console.error("Failed to fetch Tableau key:", tableauResult.error);
+            console.error("Failed to fetch Tableau key:", tableauResult?.error);
           }
           
         } else {
@@ -73,7 +73,7 @@ export default function Main({ lng, sector, subsector }) {
             rehypePlugins={[rehypeRaw]}
             className="text-black"
           >
-            {lng === "mn" ? data.info : data.info_eng || "No content available"}
+            {lng === "mn" ? data?.info : data?.info_eng || "No content available"}
           </ReactMarkdown>
 
           <br />
