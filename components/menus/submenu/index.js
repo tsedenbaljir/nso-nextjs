@@ -48,8 +48,12 @@ export default function Index({ lng }) {
         // Construct the new URL
         const newPathname = pathname.replace(`/${currentLang}`, `/${newLang}`);
 
+        // Preserve search parameters (query string)
+        const searchParams = window.location.search;
+        const newUrl = searchParams ? `${newPathname}${searchParams}` : newPathname;
+
         // Change the URL without refreshing the page
-        router.push(newPathname);
+        router.push(newUrl);
     }
 
     if (!mounted) {
