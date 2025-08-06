@@ -52,7 +52,7 @@ export default function TransparencyCategory({ params: { lng, name } }) {
                                 <Link
                                     key={index}
                                     href={item.id === 38 ? `/${lng}/contact`
-                                        : item.id === 37 ? `/${lng}/transparency/tran-news`
+                                        : item.id === 37 ? `/${lng}/about-us/workspace`
                                             : `/${lng}/transparency/${name}/${item.id}`}
                                     className="__card"
                                     style={{ background: 'var(--surface-bk2)' }}
