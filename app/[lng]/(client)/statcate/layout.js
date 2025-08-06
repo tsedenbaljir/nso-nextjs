@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Path from '@/components/path/Index';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/OneField/Index';
 
 export default function Statecate({ children, params }) {
     const { lng } = params;
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const subtables = searchParams.get('subtables');
     const [name, setName] = useState(null);
     const [title, setTitle] = useState('');
     const { t } = useTranslation(lng, "lng", "");
@@ -34,13 +36,14 @@ export default function Statecate({ children, params }) {
 
     useEffect(() => {
         async function getData() {
-            const res = await fetch(`/api/table-view?lng=${lng}&sector=${pathname.split('/')[4]}&subsector=${pathname.split('/')[5]}&id=${pathname.split('/')[6]}`);
+            const res = await fetch(`/api/table-view?lng=${lng}&sector=${pathname.split('/')[4]}&subsector=${pathname.split('/')[5]}&id=${pathname.split('/')[6]}${subtables ? `&subtables=${subtables}` : ''}`);
             if (res.status !== 200) {
                 // throw new Error('Failed to fetch data');
                 setTitle('0');
                 return;
             } else {
                 const json = await res.json();
+                console.log(json);
                 if (json?.title) {
                     setTitle(json.title);
                 } else {
@@ -51,7 +54,7 @@ export default function Statecate({ children, params }) {
         if (pathname.split('/')[6]) {
             getData();
         }
-    }, [pathname]);
+    }, [pathname, subtables]);
 
     const breadMap = pathname.includes('/report/Historical%20data') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
