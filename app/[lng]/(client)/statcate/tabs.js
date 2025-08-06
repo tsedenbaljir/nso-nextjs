@@ -111,22 +111,22 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
 
                 {/* ✅ Танилцуулга */}
                 <TabPanel header={lng === "mn" ? "Танилцуулга" : "Introduction"}>
-                    <MainIndicator sector={decodeURIComponent(sector)} subsector={decodeURIComponent(subsector)} lng={lng} />
+                    <MainIndicator sector={decodeURIComponent(sector)} subsector={decodeURIComponent(subsector.split('_')[1] ? subsector.split('_')[1] : subsector)} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Тайлан */}
                 <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
-                    <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    <Report sector={decodeURIComponent(sector)} subsector={subsector.split('_')[1] ? subsector.split('_')[1] : subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Аргачлал */}
                 <TabPanel header={lng === "mn" ? "Аргачлал" : "Methodology"}>
-                    <Methodology sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    <Methodology sector={decodeURIComponent(sector)} subsector={subsector.split('_')[1] ? subsector.split('_')[1] : subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Чанарын тайлан */}
                 <TabPanel header={lng === "mn" ? "Чанарын тайлан" : "Quality Report"}>
-                    <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector.split('_')[1] ? subsector.split('_')[1] : subsector} lng={lng} />
                 </TabPanel>
 
             </TabView>
