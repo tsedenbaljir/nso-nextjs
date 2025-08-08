@@ -41,6 +41,9 @@ const Header = ({ lng }) => {
         };
     }, []);
 
+    // useEffect(() => {
+    //     setDropDownClose()
+    // }, [lng, window.location.pathname]);
 
     useEffect(() => {
         const fetchMenusSub = async () => {
@@ -110,12 +113,14 @@ const Header = ({ lng }) => {
                                     id: subs.id,
                                     label: lng === 'mn' ? subs.name_mn : subs.name_en,
                                     command: () => {
+                                        onShowMobileMenu();
                                         router.push(`/${lng}/${subs.url}`);
                                     }
                                 })),
                             })),
                             command: () => {
                                 if (category?.url)
+                                    onShowMobileMenu();
                                     router.push(`/${lng}/${category?.url}`);
                             }
                         };
@@ -207,7 +212,6 @@ const Header = ({ lng }) => {
                 </ul>
                 <ul className="__mobile_menu">
                     <li>
-                        {/* (click)="onShowMobileMenu($event)"  */}
                         <a className="__mobile_menu_bar icon" onClick={() => { onShowMobileMenu() }}></a>
                     </li>
                 </ul>
@@ -232,7 +236,7 @@ const Header = ({ lng }) => {
                 <div className={`__dropdown __mobile ${isShowMobile && 'show'}`}>
                     {loading && <PanelMenu model={menusMobile} className="w-full nso_cate_selection" />}
                     {loadingSub && menusSub.map((its, index) => {
-                        return <div className='pt-4' key={index}>
+                        return <div className='pt-4' key={index} onClick={() => { onShowMobileMenu() }}>
                             <Link href={its.url} className='font-semibold text-lg'>{its.name_mn}</Link>
                         </div>
                     })}
