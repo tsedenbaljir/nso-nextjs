@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import "@/components/styles/statistics-news.scss";
+import Image from 'next/image';
 
 export default function DisseminationHome({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
@@ -53,9 +54,9 @@ export default function DisseminationHome({ lng }) {
                                     className="__main_news"
                                     onClick={() => window.location.href = `/${lng}/dissemination/${news[0].id}`}
                                 >
-                                    <img
+                                    <Image
                                         className="__image"
-                                        src={`${process.env.FRONTEND}/uploads/images/${news[0].header_image}`}
+                                        src={`/uploads/images/${news[0].header_image}`}
                                         onError={(e) => handleImageError(e.target)}
                                         alt={news[0].name}
                                     />
@@ -88,8 +89,8 @@ export default function DisseminationHome({ lng }) {
                                                 onClick={() => window.location.href = `/${lng}/dissemination/${newsItem.id}`}
                                                 style={{ marginTop: '20px' }}
                                             >
-                                                <img
-                                                    src={`${process.env.FRONTEND}/uploads/images/${newsItem.thumb_image}`}
+                                                <Image
+                                                    src={`/uploads/images/${newsItem.thumb_image}`}
                                                     alt="news"
                                                     onError={(e) => handleImageError(e.target)}
                                                 />
