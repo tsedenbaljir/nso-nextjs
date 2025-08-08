@@ -64,48 +64,48 @@ export default function Index({ lng }) {
                             <div className="__highlight">
                                 <div className="__card" onClick={() => {
                                     if (indicators[4]?.tableau) {
-                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[4]?.tableau}`, '_blank');
+                                        router.push(`/${lng}/${indicators[4]?.tableau}`, '_blank');
                                     }
                                 }}>
                                     <span className="__desc">{indicators[4]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[4]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(/uploads/images/${indicators[4]?.image})` }}></span>
                                         {lng === "mn" ? indicators[4]?.name : indicators[4]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[4]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[4]?.info : indicators[4]?.infoEng}</span>
                                 </div>
                                 <div className="__card" onClick={() => {
                                     if (indicators[3]?.tableau) {
-                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[3]?.tableau}`, '_blank');
+                                        router.push(`/${lng}/${indicators[3]?.tableau}`, '_blank');
                                     }
                                 }}>
                                     <span className="__desc">{indicators[3]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[3]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(/uploads/images/${indicators[3]?.image})` }}></span>
                                         {lng === "mn" ? indicators[3]?.name : indicators[3]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[3]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[3]?.info : indicators[3]?.infoEng}</span>
                                 </div>
                                 <div className="__card" onClick={() => {
                                     if (indicators[2]?.tableau) {
-                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[2]?.tableau}`, '_blank');
+                                        router.push(`/${lng}/${indicators[2]?.tableau}`, '_blank');
                                     }
                                 }}>
                                     <span className="__desc">{indicators[2]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[2]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(/uploads/images/${indicators[2]?.image})` }}></span>
                                         {lng === "mn" ? indicators[2]?.name : indicators[2]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[2]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[2]?.info : indicators[2]?.infoEng}</span>
                                 </div>
                                 <div className="__card" onClick={() => {
                                     if (indicators[1]?.tableau) {
-                                        router.push(`${process.env.FRONTEND}/${lng}/${indicators[1]?.tableau}`, '_blank');
+                                        router.push(`/${lng}/${indicators[1]?.tableau}`, '_blank');
                                     }
                                 }}>
                                     <span className="__desc">{indicators[1]?.last_modified_date.substring(0, 10) || "..."}</span>
                                     <span className="__title">
-                                        <span className="__icon" style={{ backgroundImage: `url(${process.env.FRONTEND}/uploads/images/${indicators[1]?.image})` }}></span>
+                                        <span className="__icon" style={{ backgroundImage: `url(/uploads/images/${indicators[1]?.image})` }}></span>
                                         {lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}
                                     </span>
                                     <span className="__count">{indicators[1]?.indicator?.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng}</span>

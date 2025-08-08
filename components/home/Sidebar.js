@@ -30,12 +30,12 @@ export default function Sidebar({ t, lng }) {
             <div className="__card_area">
                 <div onClick={() => {
                     if (indicators[3]?.tableau) {
-                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[3]?.tableau, '_blank');
+                        router.push(`/${lng}/` + indicators[3]?.tableau, '_blank');
                     }
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[3]?.image}')`,
+                            backgroundImage: `url(/uploads/images/'${indicators[3]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[3]?.last_modified_date.substring(0, 10) || "..."}</span>
@@ -49,12 +49,12 @@ export default function Sidebar({ t, lng }) {
                 </div>
                 <div onClick={() => {
                     if (indicators[2]?.tableau) {
-                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[2]?.tableau, '_blank');
+                        router.push(`/${lng}/` + indicators[2]?.tableau, '_blank');
                     }
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[2]?.image}')`,
+                            backgroundImage: `url(/uploads/images/'${indicators[2]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[2]?.last_modified_date.substring(0, 10) || "..."}</span>
@@ -68,12 +68,12 @@ export default function Sidebar({ t, lng }) {
                 </div>
                 <div onClick={() => {
                     if (indicators[1]?.tableau) {
-                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[1]?.tableau, '_blank');
+                        router.push(`/${lng}/` + indicators[1]?.tableau, '_blank');
                     }
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[1]?.image}')`,
+                            backgroundImage: `url(/uploads/images/'${indicators[1]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[1]?.last_modified_date.substring(0, 10) || "..."}</span>
@@ -87,12 +87,12 @@ export default function Sidebar({ t, lng }) {
                 </div>
                 <div onClick={() => {
                     if (indicators[0]?.tableau) {
-                        router.push(`${process.env.FRONTEND}/${lng}/` + indicators[0]?.tableau, '_blank');
+                        router.push(`/${lng}/` + indicators[0]?.tableau, '_blank');
                     }
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(${process.env.FRONTEND}/uploads/images/'${indicators[0]?.image}')`,
+                            backgroundImage: `url(/uploads/images/'${indicators[0]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[0]?.last_modified_date.substring(0, 10) || "..."}</span>
