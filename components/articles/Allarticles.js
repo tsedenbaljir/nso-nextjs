@@ -12,13 +12,13 @@ export default function Index({ Articles, loading, mainPath }) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return process.env.FRONTEND + `/uploads/images/${imagePath}`;
+        return `/uploads/images/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {
         setErrorImages(prev => ({
             ...prev,
-            [articleId]: process.env.FRONTEND + `/uploads/images/${imagePath}`
+            [articleId]: `/uploads/images/${imagePath}`
         }));
     };
 
@@ -48,7 +48,7 @@ export default function Index({ Articles, loading, mainPath }) {
                                         }}
                                     >
                                         <div className="relative w-full h-[200px] overflow-hidden">
-                                            <img
+                                            <Image
                                                 src={errorImages[art.id] || getImageUrl(art.header_image)}
                                                 alt={art.name || 'Article image'}
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

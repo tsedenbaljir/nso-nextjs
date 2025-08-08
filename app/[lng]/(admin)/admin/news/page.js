@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useTranslation } from '@/app/i18n/client'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
@@ -158,7 +158,7 @@ export default function AllNews({ params: { lng } }) {
     const onGlobalFilterChange = (e) => {
         const value = e.target.value;
         let _filters = { ...filters };
-        
+
         _filters['global'].value = value;
 
         setFilters(_filters);
@@ -182,8 +182,9 @@ export default function AllNews({ params: { lng } }) {
     };
 
     return (
-            <div className="w-full card">
-                <ConfirmDialog />
+        <div className="w-full card">
+            <ConfirmDialog />
+            <Suspense fallback={<>Уншиж байна...1</>}>
                 <DataTable
                     value={articles}
                     dataKey="id"
@@ -267,6 +268,7 @@ export default function AllNews({ params: { lng } }) {
                         style={{ width: '6rem' }}
                     />
                 </DataTable>
-            </div>
+            </Suspense>
+        </div>
     )
 }

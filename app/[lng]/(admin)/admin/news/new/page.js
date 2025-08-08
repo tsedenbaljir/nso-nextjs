@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
@@ -12,7 +12,7 @@ const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
 
 const Dashboard = () => {
     const [body, setBody] = useState('');
-    const [headerImageFile, setHeaderImageFile] = useState(null);
+    const [headerImageFile, setHeaderImageFile] = useState([]);
     const [title, setTitle] = useState('');
     const [newsType, setNewsType] = useState(1);
     const [language, setLanguage] = useState('mn');
@@ -50,7 +50,7 @@ const Dashboard = () => {
             }
 
             const data = await response.json();
-            return data.url;
+            return data.filename;
         } catch (error) {
             console.error('Error uploading image:', error);
             throw error;
@@ -62,43 +62,47 @@ const Dashboard = () => {
 
         try {
             let imageUrl = '';
+            
             if (headerImageFile) {
                 imageUrl = await uploadImage(headerImageFile);
             }
 
-            const currentDate = new Date().toISOString();
+            if (imageUrl) {
+                const currentDate = new Date().toISOString();
+                const articleData = {
+                    name: title,
+                    language: language.toUpperCase(),
+                    body: body,
+                    published: published,
+                    list_order: 0,
+                    created_by: user?.username || 'anonymousUser',
+                    created_date: currentDate,
+                    last_modified_date: currentDate,
+                    content_type: 'NSONEWS',
+                    news_type: newsType,
+                    published_date: currentDate,
+                    header_image: imageUrl,
+                    views: 0
+                };
 
-            const articleData = {
-                name: title,
-                language: language.toUpperCase(),
-                body: body,
-                published: published,
-                list_order: 0,
-                created_by: user?.username || 'anonymousUser',
-                created_date: currentDate,
-                last_modified_date: currentDate,
-                content_type: 'NSONEWS',
-                news_type: newsType,
-                published_date: currentDate,
-                header_image: imageUrl,
-                views: 0
-            };
+                const response = await fetch('/api/articles', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(articleData),
+                });
 
-            const response = await fetch('/api/articles', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(articleData),
-            });
+                const data = await response.json();
 
-            const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to create article');
+                }
 
-            if (!response.ok) {
-                throw new Error(data.message || 'Failed to create article');
+                alert('Мэдээ амжилттай нэмэгдлээ');
+            } else {
+                alert('Нүүр зураг оруулаагүй байна.');
             }
-
-            alert('Мэдээ амжилттай нэмэгдлээ');
 
         } catch (error) {
             console.error('Error posting data:', error);
