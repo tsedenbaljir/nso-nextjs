@@ -113,14 +113,14 @@ const Header = ({ lng }) => {
                                     id: subs.id,
                                     label: lng === 'mn' ? subs.name_mn : subs.name_en,
                                     command: () => {
-                                        onShowMobileMenu();
+                                        setIsShowMobile(!isShowMobile);
                                         router.push(`/${lng}/${subs.url}`);
                                     }
                                 })),
                             })),
                             command: () => {
                                 if (category?.url)
-                                    onShowMobileMenu();
+                                    setIsShowMobile(!isShowMobile);
                                     router.push(`/${lng}/${category?.url}`);
                             }
                         };
