@@ -18,7 +18,7 @@ export default function Statecate({ children, params }) {
     useEffect(() => {
         const fetchSubcategories = async (categoryId) => {
             try {
-                const response = await fetch(`/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
                 const result = await response.json();
                 setName(result.data.filter(e => e.id === decodeURIComponent(pathname.split('/')[5])));
 

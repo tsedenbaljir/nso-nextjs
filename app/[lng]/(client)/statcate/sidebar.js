@@ -46,7 +46,7 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                 // Fetch subSectors
                 const fetchSubcategories = async (categoryId) => {
                     try {
-                        const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+                        const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
                         const result = await response.json();
 
                         if (!Array.isArray(result.data)) {

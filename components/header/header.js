@@ -233,7 +233,7 @@ const Header = ({ lng }) => {
                     {loading && <PanelMenu model={menusMobile} className="w-full nso_cate_selection" />}
                     {loadingSub && menusSub.map((its, index) => {
                         return <div className='pt-4' key={index}>
-                            <Link href={'/${lng}/' + its.url} className='font-semibold text-lg'>{its.name_mn}</Link>
+                            <Link href={its.url} className='font-semibold text-lg'>{its.name_mn}</Link>
                         </div>
                     })}
                 </div>

@@ -8,12 +8,9 @@ import GlossaryFilter from './Glossary/GlossaryFilter';
 
 export default function Layout({ children, params: { lng } }) {
   const { t } = useTranslation(lng, "lng", "");
-  const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filterLoading, setFilterLoading] = useState(false);
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
-  const [totalRecords, setTotalRecords] = useState(0);
   const [filterList, setFilterList] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const isMn = lng === 'mn';
@@ -36,7 +33,7 @@ export default function Layout({ children, params: { lng } }) {
         // Fetch subcategories
         const fetchSubcategories = async (categoryId) => {
           try {
-            const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+            const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
             const result = await response.json();
 
             if (!Array.isArray(result.data)) {
