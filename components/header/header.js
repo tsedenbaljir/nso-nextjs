@@ -114,14 +114,21 @@ const Header = ({ lng }) => {
                                     label: lng === 'mn' ? subs.name_mn : subs.name_en,
                                     command: () => {
                                         setIsShowMobile(!isShowMobile);
-                                        router.push(`/${lng}/${subs.url}`);
+                                        if (isShowMobile === false) {
+                                            router.push(`/${lng}/${subs.url}`);
+                                        }
                                     }
                                 })),
                             })),
                             command: () => {
-                                if (category?.url)
+                                if (category?.url) {
                                     setIsShowMobile(!isShowMobile);
-                                    router.push(`/${lng}/${category?.url}`);
+                                    if (isShowMobile === false) {
+                                        router.push(`/${lng}/${category?.url}`);
+                                    } else {
+                                        setIsShowMobile(!isShowMobile);
+                                    }
+                                }
                             }
                         };
                     })
