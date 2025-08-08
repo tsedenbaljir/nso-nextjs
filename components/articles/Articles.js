@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import Image from 'next/image';
 
 export default function Articles({ article }) {
     const [imageError, setImageError] = useState(false);
@@ -15,7 +16,7 @@ export default function Articles({ article }) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return process.env.FRONTEND + `/uploads/images/${imagePath}`;
+        return `/uploads/images/${imagePath}`;
     };
 
     const handleImageError = () => {
@@ -34,7 +35,7 @@ export default function Articles({ article }) {
         <article className="__about_post">
             <div className="__info_detail_page">
                 <div className="bg-gray">
-                    <img
+                    <Image
                         src={imageError ? `/uploads/${article.header_image}` : getImageUrl(article.header_image)}
                         alt={article.name || 'Article image'}
                         width={500}

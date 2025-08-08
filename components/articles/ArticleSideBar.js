@@ -10,7 +10,7 @@ export default function ArticleSideBar({ article }) {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '/images/default.jpg';
-        return process.env.FRONTEND + `/uploads/images/${imagePath}`;
+        return `/uploads/images/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {
@@ -35,7 +35,7 @@ export default function ArticleSideBar({ article }) {
                         }}>
                         <a className="__posts">
                             <div className="relative w-full h-[200px] overflow-hidden">
-                                <img
+                                <Image
                                     className="absolute inset-0 w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
                                     src={errorImages[art.id] || getImageUrl(art.header_image)}
                                     alt={art.name || 'News image'}

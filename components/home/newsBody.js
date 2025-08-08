@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 
 export default function index(product) {
     const router = useRouter();
@@ -11,7 +12,7 @@ export default function index(product) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return process.env.FRONTEND + `/uploads/images/${imagePath}`;
+        return `/uploads/images/${imagePath}`;
     };
 
     const handleImageError = () => {
@@ -26,7 +27,7 @@ export default function index(product) {
             }}
         >
             <div className="relative w-full h-[200px] overflow-hidden">
-                <img
+                <Image
                     src={imageError ? `/uploads/${product.header_image}` : getImageUrl(product.header_image)}
                     alt={product.name || 'News image'}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
