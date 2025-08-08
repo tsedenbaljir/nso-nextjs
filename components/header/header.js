@@ -110,13 +110,13 @@ const Header = ({ lng }) => {
                                     id: subs.id,
                                     label: lng === 'mn' ? subs.name_mn : subs.name_en,
                                     command: () => {
-                                        router.push(`${subs.url}`);
+                                        router.push(`/${lng}/${subs.url}`);
                                     }
                                 })),
                             })),
                             command: () => {
                                 if (category?.url)
-                                    router.push(`${category?.url}`);
+                                    router.push(`/${lng}/${category?.url}`);
                             }
                         };
                     })
