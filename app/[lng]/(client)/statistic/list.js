@@ -48,15 +48,15 @@ export default function Tabs({
         return sorted;
     };
 
-    const getExtension = (file_info) => {
-        try {
-            const file =
-                typeof file_info === "string" ? JSON.parse(file_info) : file_info;
-            return file?.extension?.toUpperCase() || "N/A";
-        } catch {
-            return "N/A";
-        }
-    };
+    // const getExtension = (file_info) => {
+    //     try {
+    //         const file =
+    //             typeof file_info === "string" ? JSON.parse(file_info) : file_info;
+    //         return file?.extension?.toUpperCase() || "N/A";
+    //     } catch {
+    //         return "N/A";
+    //     }
+    // };
 
     const onDownloadDirect = async (fileInfo) => {
         try {

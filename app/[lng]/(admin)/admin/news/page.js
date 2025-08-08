@@ -184,7 +184,7 @@ export default function AllNews({ params: { lng } }) {
     return (
         <div className="w-full card">
             <ConfirmDialog />
-            <Suspense fallback={<>Уншиж байна...1</>}>
+            <Suspense fallback={<>Уншиж байна...</>}>
                 <DataTable
                     value={articles}
                     dataKey="id"
