@@ -113,21 +113,13 @@ const Header = ({ lng }) => {
                                     id: subs.id,
                                     label: lng === 'mn' ? subs.name_mn : subs.name_en,
                                     command: () => {
-                                        setIsShowMobile(!isShowMobile);
-                                        if (isShowMobile === false) {
-                                            router.push(`/${lng}/${subs.url}`);
-                                        }
+                                        window.location.href = `/${lng}/${subs.url}`;
                                     }
                                 })),
                             })),
                             command: () => {
                                 if (category?.url) {
-                                    setIsShowMobile(!isShowMobile);
-                                    if (isShowMobile === false) {
-                                        router.push(`/${lng}/${category?.url}`);
-                                    } else {
-                                        setIsShowMobile(!isShowMobile);
-                                    }
+                                    window.location.href = `/${lng}/${category?.url}`;
                                 }
                             }
                         };
