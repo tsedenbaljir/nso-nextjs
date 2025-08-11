@@ -2,27 +2,14 @@ module.exports = {
   apps: [
     {
       name: "nso.mn",
-      cwd: "/home/nso/nso.mn/current",                 // PM2 current release-ээс ажиллуулна
-      script: "./node_modules/next/dist/bin/next",     // Next binary-г шууд ажиллуулна
-      interpreter: "node",                              // ← чухал: bash биш, node-оор
-      args: "start -p 3000",                            // таны backend порт
-      exec_mode: "cluster",
-      instances: 2,                                     // zero-downtime reload
+      script: "npm run start",
       watch: false,
-      autorestart: true,
-      max_memory_restart: "512M",
       env: {
         NODE_ENV: "production",
-        PORT: "3000"
-        // UPLOAD_PATH хэрэггүй бол орхи; хэрэгтэй бол энд нэм
-        // UPLOAD_PATH: "/home/nso/uploads"
-      },
-      error_file: "/home/nso/logs/nso.err.log",
-      out_file: "/home/nso/logs/nso.out.log",
-      merge_logs: true
+        UPLOAD_PATH: "/home/nso/uploads"
+      }
     },
   ],
-
   deploy: {
     production: {
       user: "nso",
@@ -30,11 +17,38 @@ module.exports = {
       ref: "origin/main",
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
-      // Tailwind/PostCSS зэрэг devDeps build-д хэрэгтэй → ci, build,
-      // дараа нь devDeps-ийг цэвэрлээд (prune) zero-downtime reload хийнэ
       "post-deploy":
-        "mkdir -p /home/nso/logs && npm ci && npm run build && npm prune --omit=dev && pm2 startOrReload ecosystem.config.js --only nso.mn --env production",
+        "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
       shallow: true
     },
   },
 };
+// module.exports = {
+//   apps: [
+//     {
+//       name: "nso.mn",
+//       script: "npm",
+//       args: "run start", // start скриптээ зөв ажиллуулах
+//       exec_mode: "cluster", // ZERO-downtime байлгахын тулд cluster mode ашиглана
+//       instances: 2, // 2 instances хэрэгтэй (эсвэл "max")
+//       watch: false, // production-д watch хэрэггүй
+//       autorestart: true, // апп унасан тохиолдолд дахин эхлэнэ
+//       max_memory_restart: "512M", // санах ойг хэтрүүлэхгүй байх
+//       env: {
+//         NODE_ENV: "production",
+//         UPLOAD_PATH: "/home/nso/uploads",
+//       }
+//     },
+//   ],
+//   deploy: {
+//     production: {
+//       user: "nso",
+//       host: "183.81.170.9",
+//       ref: "origin/main",
+//       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
+//       path: "/home/nso/nso.mn",
+//       "post-deploy": "npm ci && npm run build && pm2 reload ecosystem.config.js --env production", // npm install-ийг ci-р сольсон
+//       shallow: true
+//     },
+//   },
+// };
