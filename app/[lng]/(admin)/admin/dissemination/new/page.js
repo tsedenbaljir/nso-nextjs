@@ -77,7 +77,7 @@ export default function NewDissemination() {
                 last_modified_date: currentDate,
                 content_type: 'NEWS',
                 news_type: newsType,
-                published_date: publishedDate.split('T')[0] + 'T' + publishedTime,
+                published_date: publishedDate + 'T' + publishedTime,
                 header_image: imageUrl,
                 views: 0,
                 slug: slug
