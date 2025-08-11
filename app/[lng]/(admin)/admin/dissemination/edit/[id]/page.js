@@ -81,7 +81,7 @@ export default function EditDissemination({ params: { id } }) {
             if (!response.ok) throw new Error('Image upload failed')
 
             const data = await response.json()
-            return data.url
+            return data.filename
         } catch (error) {
             console.error('Error uploading image:', error)
             throw error
