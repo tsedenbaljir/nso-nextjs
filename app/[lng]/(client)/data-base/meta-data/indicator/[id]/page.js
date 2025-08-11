@@ -38,7 +38,8 @@ export default function GlossaryDetail({ params: { id, lng } }) {
     "Эх үүсвэр",
     "Хэл",
     "Боловсруулсан мэргэжилтэн",
-    "Хамгийн сүүлд өөрчлөгдсөн огноо",
+    "Сүүлд өөрчлөгдсөн огноо",
+    "Хариуцагч",
   ];
 
   // Assuming `data` contains an array of items with `namemn`, `valuemn`, and `valueen`
@@ -106,12 +107,10 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                   </span>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-300
-                                        ${
-                                          data[0]?.active == 1
-                                            ? "bg-green-500 text-white border"
-                                            : "bg-red-100 text-red-800 border border-red-300"
-                                        }
-                                        `}
+                        ${data[0]?.active == 1
+                        ? "bg-green-500 text-white border"
+                        : "bg-red-100 text-red-800 border border-red-300"
+                      }`}
                   >
                     {data[0]?.active ? "Идэвхтэй" : "Идэвхгүй"}
                   </span>
@@ -141,23 +140,22 @@ export default function GlossaryDetail({ params: { id, lng } }) {
             {sortedData.map((item, index) => (
               <div
                 key={index}
-                className={`flex gap-6 py-2 px-5 border-b border-gray-200 text-sm ${
-                  index % 2 === 1 ? "bg-blue-50" : "bg-white"
-                }`}
+                className={`flex gap-6 py-2 px-5 border-b border-gray-200 text-sm ${index % 2 === 1 ? "bg-blue-50" : "bg-white"
+                  }`}
               >
                 <div className="w-1/8 text-left text-blue-600">{index + 1}</div>
-                <div className="w-1/3 text-left">{item.namemn}</div>
+                <div className="w-1/3 text-left">{categoryOrder[index]}</div>
                 <div className="w-1/3 text-left whitespace-pre-wrap">
                   {(item.namemn === "Тооцож эхэлсэн хугацаа" ||
                     item.namemn === "Хамгийн сүүлд өөрчлөгдсөн огноо") &&
-                  item.valuemn
+                    item.valuemn
                     ? new Date(item.valuemn).toISOString().split("T")[0]
                     : item.valuemn}
                 </div>
                 <div className="w-1/3 text-left whitespace-pre-wrap">
                   {(item.namemn === "Тооцож эхэлсэн хугацаа" ||
-                    item.namemn === "Хамгийн сүүлд өөрчлөгдсөн огноо") &&
-                  item.valueen
+                    item.namemn === "Сүүлд өөрчлөгдсөн огноо") &&
+                    item.valueen
                     ? new Date(item.valueen).toISOString().split("T")[0]
                     : item.valueen}
                 </div>

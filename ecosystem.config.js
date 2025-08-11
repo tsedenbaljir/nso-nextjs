@@ -4,6 +4,10 @@ module.exports = {
       name: "nso.mn",
       script: "npm run start",
       watch: true,
+      env: {
+        NODE_ENV: "production",
+        UPLOAD_PATH: "/home/nso/uploads"
+      }
     },
   ],
   deploy: {
@@ -15,7 +19,7 @@ module.exports = {
       path: "/home/nso/nso.mn",
       "post-deploy":
         "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
-      shallow: true // <-- This reduces the amount of Git history fetched
+      shallow: true
     },
   },
 };

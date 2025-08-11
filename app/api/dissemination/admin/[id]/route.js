@@ -39,7 +39,6 @@ export async function PUT(req, { params }) {
     try {
         const { id } = params;
         const data = await req.json();
-
         // Validate required fields
         if (!data.name || !data.language || !data.body) {
             return NextResponse.json({
@@ -48,19 +47,43 @@ export async function PUT(req, { params }) {
             }, { status: 400 });
         }
 
-        // Ensure all values are properly defined
+        // Ensure all values are properly defined and convert to appropriate types
         const updateData = {
-            name: data.name || '',
-            language: data.language || '',
-            body: data.body || '',
-            published: data.published || 0,
-            news_type: data.news_type || 'LATEST',
+            name: String(data.name || ''),
+            language: String(data.language || ''),
+            body: String(data.body || ''),
+            published: parseInt(data.published) || 0,
+            news_type: String(data.news_type || 'LATEST'),
             published_date: data.published_date || null,
-            header_image: data.header_image || '',
-            last_modified_by: data.last_modified_by || '',
+            header_image: String(data.header_image || ''),
+            last_modified_by: String(data.last_modified_by || ''),
             last_modified_date: data.last_modified_date || new Date().toISOString(),
-            slug: data.slug || ''
+            slug: String(data.slug || '')
         };
+
+        const sqlParams = [
+            updateData.name,
+            updateData.language,
+            updateData.body,
+            updateData.published,
+            updateData.news_type,
+            updateData.published_date,
+            updateData.header_image,
+            updateData.last_modified_by,
+            updateData.last_modified_date,
+            updateData.slug,
+            parseInt(id)
+        ];
+
+        // Check for any undefined values
+        const undefinedIndexes = sqlParams.map((param, index) => param === undefined ? index : -1).filter(index => index !== -1);
+        if (undefinedIndexes.length > 0) {
+            console.error('Undefined parameters at indexes:', undefinedIndexes);
+            return NextResponse.json({
+                status: false,
+                message: "Өгөгдлийн алдаа: undefined утгууд байна"
+            }, { status: 400 });
+        }
 
         await db.raw(`
             UPDATE web_1212_content 
@@ -75,19 +98,7 @@ export async function PUT(req, { params }) {
                 last_modified_date = ?,
                 slug = ?
             WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE')
-        `, [
-            updateData.name,
-            updateData.language,
-            updateData.body,
-            updateData.published,
-            updateData.news_type,
-            updateData.published_date,
-            updateData.header_image,
-            updateData.last_modified_by,
-            updateData.last_modified_date,
-            updateData.slug,
-            id
-        ]);
+        `, sqlParams);
 
         return NextResponse.json({
             status: true,
@@ -96,6 +107,10 @@ export async function PUT(req, { params }) {
 
     } catch (error) {
         console.error('Error updating dissemination:', error);
+        console.error('Error details:', {
+            message: error.message,
+            stack: error.stack
+        });
         return NextResponse.json({
             status: false,
             message: "Мэдээлэл засварлахад алдаа гарлаа"

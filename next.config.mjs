@@ -3,6 +3,9 @@
 const nextConfig = {
     experimental: {
         serverComponentsExternalPackages: ['oracledb'],
+        serverActions: {
+            bodySizeLimit: '100mb',
+        },
     },
     webpack: (config, { isServer }) => {
         if (isServer) {
@@ -71,12 +74,6 @@ const nextConfig = {
                 ],
             },  
         ];
-    },
-    api: {
-        bodyParser: {
-            sizeLimit: '100mb',
-        },
-        responseLimit: false,
     },
 };
 
