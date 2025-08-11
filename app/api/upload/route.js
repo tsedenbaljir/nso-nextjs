@@ -30,8 +30,8 @@ export async function POST(req) {
             success: true,
             message: 'File uploaded successfully',
             filename: file.name,
-            path: `/uploads/${file.name}`,
-            fullUrl: `/uploads/${file.name}`
+            path: `/uploads/images/${file.name}`,
+            fullUrl: `/uploads/images/${file.name}`
         });
     } catch (error) {
         console.error('Upload error:', error);
