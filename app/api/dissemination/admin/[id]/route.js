@@ -39,6 +39,7 @@ export async function PUT(req, { params }) {
     try {
         const { id } = params;
         const data = await req.json();
+
         // Validate required fields
         if (!data.name || !data.language || !data.body) {
             return NextResponse.json({
@@ -49,18 +50,19 @@ export async function PUT(req, { params }) {
 
         // Ensure all values are properly defined and convert to appropriate types
         const updateData = {
-            name: String(data.name || ''),
-            language: String(data.language || ''),
-            body: String(data.body || ''),
+            name: data.name,
+            language: data.language,
+            body: data.body,
             published: parseInt(data.published) || 0,
-            news_type: String(data.news_type || 'LATEST'),
+            news_type: data.news_type,
             published_date: data.published_date || null,
-            header_image: String(data.header_image || ''),
-            last_modified_by: String(data.last_modified_by || ''),
+            header_image: data.header_image,
+            last_modified_by: data.last_modified_by,
             last_modified_date: data.last_modified_date || new Date().toISOString(),
-            slug: String(data.slug || '')
+            slug: data.slug
         };
 
+        // Create the parameters array
         const sqlParams = [
             updateData.name,
             updateData.language,
