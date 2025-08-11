@@ -90,7 +90,7 @@ export default function DisseminationHome({ lng }) {
                                                 style={{ marginTop: '20px' }}
                                             >
                                                 <img
-                                                    src={`/uploads/images/${newsItem.thumb_image}`}
+                                                    src={`/uploads/images/${newsItem.header_image}`}
                                                     alt="news"
                                                     onError={(e) => handleImageError(e.target)}
                                                 />
