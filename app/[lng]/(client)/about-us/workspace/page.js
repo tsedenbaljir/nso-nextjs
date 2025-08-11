@@ -92,12 +92,12 @@ export default function Home({ params: { lng } }) {
                     <div className="__title text-2xl font-semibold uppercase">
                         {lng === "mn" ? "Нээлттэй ажлын байр" : "OPEN JOB VACANCY"}
                     </div>
-                    <div className="__jf flex items-center">
+                    {/* <div className="__jf flex items-center">
                         <div className="__jobs-count float-right mr-5">
                             {lng === "mn" ? "Нийт" : "A total of"}
                             <>{loading ? "..." : " " + pagination.total}</> {lng === "mn" ? "ажлын байр" : "jobs"}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="nso_container">

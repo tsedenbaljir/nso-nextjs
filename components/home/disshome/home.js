@@ -54,7 +54,7 @@ export default function DisseminationHome({ lng }) {
                                     className="__main_news"
                                     onClick={() => window.location.href = `/${lng}/dissemination/${news[0].id}`}
                                 >
-                                    <Image
+                                    <img
                                         className="__image"
                                         src={`/uploads/images/${news[0].header_image}`}
                                         onError={(e) => handleImageError(e.target)}
@@ -89,7 +89,7 @@ export default function DisseminationHome({ lng }) {
                                                 onClick={() => window.location.href = `/${lng}/dissemination/${newsItem.id}`}
                                                 style={{ marginTop: '20px' }}
                                             >
-                                                <Image
+                                                <img
                                                     src={`/uploads/images/${newsItem.thumb_image}`}
                                                     alt="news"
                                                     onError={(e) => handleImageError(e.target)}

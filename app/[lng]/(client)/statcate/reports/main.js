@@ -129,7 +129,7 @@ export default function Main({ sector, subsector, lng }) {
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">
-                            <Image src="/images/file-download.png" width={15} height={15} className='float-left mt-1' alt='file-download' /> PDF
+                            <img src="/images/file-download.png" width={15} height={15} className='float-left mt-1' alt='file-download' /> PDF
                         </div>
                     )}
                 />

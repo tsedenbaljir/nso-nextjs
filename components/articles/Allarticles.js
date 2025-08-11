@@ -48,7 +48,7 @@ export default function Index({ Articles, loading, mainPath }) {
                                         }}
                                     >
                                         <div className="relative w-full h-[200px] overflow-hidden">
-                                            <Image
+                                            <img
                                                 src={errorImages[art.id] || getImageUrl(art.header_image)}
                                                 alt={art.name || 'Article image'}
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

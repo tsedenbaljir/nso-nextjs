@@ -27,7 +27,7 @@ export default function index(product) {
             }}
         >
             <div className="relative w-full h-[200px] overflow-hidden">
-                <Image
+                <img
                     src={imageError ? `/uploads/${product.header_image}` : getImageUrl(product.header_image)}
                     alt={product.name || 'News image'}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
