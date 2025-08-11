@@ -29,7 +29,10 @@ export default function Statecate({ children, params }) {
                 return [];
             }
         };
-        fetchSubcategories(pathname.split('/')[4]);
+        const categoryId = pathname.split('/')[4];
+        if (categoryId) {
+            fetchSubcategories(categoryId);
+        }
 
     }, [pathname]);
 
@@ -43,7 +46,6 @@ export default function Statecate({ children, params }) {
                 return;
             } else {
                 const json = await res.json();
-                console.log(json);
                 if (json?.title) {
                     setTitle(json.title);
                 } else {

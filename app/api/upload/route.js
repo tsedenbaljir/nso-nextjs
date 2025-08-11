@@ -20,7 +20,7 @@ export async function POST(req) {
         const buffer = Buffer.from(bytes);
 
         // Create uploads directory if it doesn't exist
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'images');
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
         const filePath = path.join(uploadDir, file.name);
 
         // Write the file
@@ -30,8 +30,8 @@ export async function POST(req) {
             success: true,
             message: 'File uploaded successfully',
             filename: file.name,
-            path: `/uploads/images/${file.name}`,
-            fullUrl: `/uploads/images/${file.name}`
+            path: `/uploads/${file.name}`,
+            fullUrl: `/uploads/${file.name}`
         });
     } catch (error) {
         console.error('Upload error:', error);

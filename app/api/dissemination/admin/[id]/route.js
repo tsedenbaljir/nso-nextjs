@@ -40,6 +40,28 @@ export async function PUT(req, { params }) {
         const { id } = params;
         const data = await req.json();
 
+        // Validate required fields
+        if (!data.name || !data.language || !data.body) {
+            return NextResponse.json({
+                status: false,
+                message: "Шаардлагатай талбаруудыг бөглөнө үү"
+            }, { status: 400 });
+        }
+
+        // Ensure all values are properly defined
+        const updateData = {
+            name: data.name || '',
+            language: data.language || '',
+            body: data.body || '',
+            published: data.published || 0,
+            news_type: data.news_type || 'LATEST',
+            published_date: data.published_date || null,
+            header_image: data.header_image || '',
+            last_modified_by: data.last_modified_by || '',
+            last_modified_date: data.last_modified_date || new Date().toISOString(),
+            slug: data.slug || ''
+        };
+
         await db.raw(`
             UPDATE web_1212_content 
             SET name = ?,
@@ -54,16 +76,16 @@ export async function PUT(req, { params }) {
                 slug = ?
             WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE')
         `, [
-            data.name,
-            data.language,
-            data.body,
-            data.published,
-            data.news_type,
-            data.published_date,
-            data.header_image,
-            data.last_modified_by,
-            data.last_modified_date,
-            data.slug,
+            updateData.name,
+            updateData.language,
+            updateData.body,
+            updateData.published,
+            updateData.news_type,
+            updateData.published_date,
+            updateData.header_image,
+            updateData.last_modified_by,
+            updateData.last_modified_date,
+            updateData.slug,
             id
         ]);
 

@@ -18,8 +18,8 @@ export async function GET(request) {
             );
         }
 
-        const link = `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${id}`
-        const response = await fetch(subtables ? `${link}/${subtables}` : `${link}`);
+        const link = `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${subtables ? subtables + '/' : ''}${id}`
+        const response = await fetch(link);
         if (!response.ok) {
             // throw new Error(`HTTP error! Status: ${response.status}`);
             return NextResponse.json({
