@@ -46,7 +46,7 @@ export async function POST(req) {
                 id, name, language, body, published, list_order,
                 created_by, created_date, last_modified_date,
                 content_type, news_type, published_date, header_image, views,
-                slug
+                slug, thumb_image
             ) VALUES (
                 ?, ?, ?, ?, ?, ?,
                 ?, ?, ?,
@@ -66,7 +66,8 @@ export async function POST(req) {
             data.news_type,
             data.published_date,
             data.header_image,
-            data.slug
+            data.slug,
+            data.header_image
         ]);
 
         return NextResponse.json({
@@ -97,6 +98,7 @@ export async function PUT(req) {
                 news_type = ?,
                 published_date = ?,
                 header_image = ?,
+                thumb_image = ?,
                 last_modified_by = ?,
                 last_modified_date = ?
             WHERE id = ?
@@ -107,6 +109,7 @@ export async function PUT(req) {
             data.published,
             data.news_type,
             data.published_date,
+            data.header_image,
             data.header_image,
             data.last_modified_by,
             currentDate,

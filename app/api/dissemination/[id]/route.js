@@ -10,16 +10,23 @@ export async function GET(req, { params }) {
       WHERE id = ?
     `, [id]);
 
+    // Update total views count
+    await db.raw(`
+      UPDATE web_1212_content 
+      SET views = COALESCE(CAST(views AS INT), 0) + 1 
+      WHERE id = ?
+    `, [id]);
+
     if (!result || result.length === 0) {
-      return NextResponse.json({ 
-        status: false, 
-        data: null, 
-        message: "Article not found" 
+      return NextResponse.json({
+        status: false,
+        data: null,
+        message: "Article not found"
       }, {
-        status: 404 
+        status: 404
       });
     }
-    
+
     const article = {
       ...result,
       publishedDate: result.published_date || result.created_date,
@@ -29,19 +36,19 @@ export async function GET(req, { params }) {
     };
 
     return NextResponse.json({
-      status: true, 
-      data: article, 
-      message: "" 
+      status: true,
+      data: article,
+      message: ""
     });
 
   } catch (error) {
     console.error('Error fetching article:', error);
-    return NextResponse.json({ 
-      status: false, 
-      data: null, 
-      message: "Internal server error" 
-    }, { 
-      status: 500 
+    return NextResponse.json({
+      status: false,
+      data: null,
+      message: "Internal server error"
+    }, {
+      status: 500
     });
   }
 }

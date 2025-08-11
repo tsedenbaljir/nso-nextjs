@@ -71,6 +71,7 @@ export async function PUT(req, { params }) {
             updateData.news_type,
             updateData.published_date,
             updateData.header_image,
+            updateData.header_image,
             updateData.last_modified_by,
             updateData.last_modified_date,
             updateData.slug,
@@ -96,6 +97,7 @@ export async function PUT(req, { params }) {
                 news_type = ?,
                 published_date = ?,
                 header_image = ?,
+                thumb_image = ?,
                 last_modified_by = ?,
                 last_modified_date = ?,
                 slug = ?

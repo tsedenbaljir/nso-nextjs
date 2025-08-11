@@ -6,6 +6,10 @@ export async function GET(req, { params }) {
     const article = await db('web_1212_content')
       .where('id', params.id)
       .first();
+      // Update total views count
+      await db('web_1212_content')
+        .where('id', id)
+        .increment('views', 1);
 
     return NextResponse.json({
       status: true,
