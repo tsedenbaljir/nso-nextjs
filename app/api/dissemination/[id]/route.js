@@ -10,12 +10,14 @@ export async function GET(req, { params }) {
       WHERE id = ?
     `, [id]);
 
-    // Update total views count
-    await db.raw(`
-      UPDATE web_1212_content 
-      SET views = COALESCE(CAST(views AS INT), 0) + 1 
-      WHERE id = ?
-    `, [id]);
+    // Update total views count only if article exists
+    if (result && result.length > 0) {
+      await db.raw(`
+        UPDATE web_1212_content 
+        SET views = COALESCE(CAST(views AS INT), 0) + 1 
+        WHERE id = ?
+      `, [id]);
+    }
 
     if (!result || result.length === 0) {
       return NextResponse.json({

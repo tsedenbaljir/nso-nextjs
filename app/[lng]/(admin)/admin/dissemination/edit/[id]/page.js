@@ -52,8 +52,13 @@ export default function EditDissemination({ params: { id } }) {
                 setNewsType(article.news_type || 'LATEST');
                 setLanguage((article.language || 'MN').toLowerCase());
                 setPublished(article.published || false);
-                setPublishedDate(article.published_date || new Date().toISOString().split('T')[0]);
-                setPublishedTime(article.published_date || new Date().toISOString().split('T')[1]);
+                setPublishedDate(article.published_date.split('T')[0] || new Date().toISOString().split('T')[0]);
+                
+                const date = new Date(article.published_date);
+                const hours = date.getUTCHours().toString().padStart(2, '0');
+                const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+                setPublishedTime(`${hours}:${minutes}`);
+
                 setCurrentImage(article.header_image || '');
                 setSlug(article.slug || '');
             } else {
@@ -112,7 +117,7 @@ export default function EditDissemination({ params: { id } }) {
                 language: language.toUpperCase(),
                 published: published,
                 news_type: newsType,
-                published_date: publishedDate + 'T' + publishedTime,
+                published_date: publishedDate.split('T')[0] + 'T' + publishedTime,
                 header_image: imageUrl,
                 last_modified_by: user?.username || 'anonymousUser',
                 last_modified_date: new Date().toISOString(),
@@ -191,7 +196,10 @@ export default function EditDissemination({ params: { id } }) {
                         <input
                             type="time"
                             value={publishedTime}
-                            onChange={(e) => setPublishedTime(e.target.value)}
+                            onChange={(e) => {
+                                console.log(e.target.value)
+                                setPublishedTime(e.target.value)
+                            }}
                             className="border rounded px-2 py-1"
                         />
                     </div>
