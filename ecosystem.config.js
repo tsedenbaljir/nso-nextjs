@@ -6,7 +6,6 @@ module.exports = {
       watch: false,
       env: {
         NODE_ENV: "production",
-        UPLOAD_PATH: "/home/nso/uploads"
       }
     },
   ],
