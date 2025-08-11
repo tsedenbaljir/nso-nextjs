@@ -69,7 +69,8 @@ export default function Index({ lng }) {
                             <li key={index} className={`${pth.includes(menu.path) && 'active-link-top'}`}>
                                 <Link
                                     className="__stat_top_title text-xs font-medium"
-                                    href={`/${lng}/${menu.url}` || "#"}
+                                    target={menu.url.includes('https://') ? '_blank' : '_self'}
+                                    href={menu.url.includes('https://') ? menu.url : `/${lng}/${menu.url}` || "#"}
                                 >
                                     {lng === 'mn' ? menu.name_mn : menu.name_en}
                                 </Link>
