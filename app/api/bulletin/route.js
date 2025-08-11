@@ -5,14 +5,14 @@ import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 export const dynamic = "force-dynamic";
 export async function GET(req) {
     // Check authentication
-    // const auth = await checkAdminAuth(req);
+    const auth = await checkAdminAuth(req);
 
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({
+            status: false,
+            message: auth.error
+        }, { status: 401 });
+    }
 
     try {
         const { searchParams } = new URL(req.url);
@@ -59,14 +59,14 @@ export async function GET(req) {
 
 export async function POST(req) {
     // Check authentication
-    // const auth = await checkAdminAuth(req);
+    const auth = await checkAdminAuth(req);
 
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({
+            status: false,
+            message: auth.error
+        }, { status: 401 });
+    }
 
     try {
         const body = await req.json();
@@ -99,14 +99,14 @@ export async function POST(req) {
 
 export async function PUT(req) {
     // Check authentication
-    // const auth = await checkAdminAuth(req);
+    const auth = await checkAdminAuth(req);
 
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({
+            status: false,
+            message: auth.error
+        }, { status: 401 });
+    }
 
     try {
         const body = await req.json();
@@ -151,14 +151,14 @@ export async function PUT(req) {
 
 export async function DELETE(req) {
     // Check authentication
-    // const auth = await checkAdminAuth(req);
+    const auth = await checkAdminAuth(req);
 
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({
+            status: false,
+            message: auth.error
+        }, { status: 401 });
+    }
 
     try {
         const { searchParams } = new URL(req.url);
