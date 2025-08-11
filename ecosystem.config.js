@@ -2,21 +2,12 @@ module.exports = {
   apps: [
     {
       name: "nso.mn",
-      cwd: "/home/nso/nso.mn/current",
-      script: "./node_modules/next/dist/bin/next",
-      args: "start -p 3000",
-      exec_mode: "cluster",
-      instances: 2,
+      script: "npm run start",
       watch: false,
-      autorestart: true,
-      max_memory_restart: "512M",
       env: {
         NODE_ENV: "production",
-        PORT: "3000",
-      },
-      error_file: "/home/nso/logs/nso.err.log",
-      out_file: "/home/nso/logs/nso.out.log",
-      merge_logs: true,
+        UPLOAD_PATH: "/home/nso/uploads"
+      }
     },
   ],
   deploy: {
@@ -27,7 +18,7 @@ module.exports = {
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
       "post-deploy":
-        "mkdir -p /home/nso/logs && npm ci --omit=dev && npm run build && pm2 startOrReload ecosystem.config.js --only nso.mn --env production",
+        "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
       shallow: true
     },
   },
