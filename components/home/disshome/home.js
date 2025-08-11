@@ -38,6 +38,12 @@ export default function DisseminationHome({ lng }) {
         image.src = '/images/image-not-found.png'; // Replace with your default image path
     };
 
+    const nameFields = (names) => {
+        if (names) {
+            const textMatch = names.match(/<p>(.*?)<\/p>/);
+            return textMatch[0]
+        }
+    };
     return (
         <div style={{ background: 'var(--surface-bk3)' }}>
             <div className="nso_container">
@@ -56,7 +62,7 @@ export default function DisseminationHome({ lng }) {
                                 >
                                     <img
                                         className="__image"
-                                        src={`/uploads/images/${news[0].header_image}`}
+                                        src={`/uploads/${news[0].header_image}`}
                                         onError={(e) => handleImageError(e.target)}
                                         alt={news[0].name}
                                     />
@@ -64,9 +70,7 @@ export default function DisseminationHome({ lng }) {
                                         <div
                                             className="one"
                                             dangerouslySetInnerHTML={{
-                                                __html: news[0].name.length > 300
-                                                    ? news[0].name.substring(0, 300) + '...'
-                                                    : news[0].name
+                                                __html: nameFields(news[0]?.body)
                                             }}
                                         />
                                     </span>
@@ -90,7 +94,7 @@ export default function DisseminationHome({ lng }) {
                                                 style={{ marginTop: '20px' }}
                                             >
                                                 <img
-                                                    src={`/uploads/images/${newsItem.header_image}`}
+                                                    src={`/uploads/${newsItem.header_image}`}
                                                     alt="news"
                                                     onError={(e) => handleImageError(e.target)}
                                                 />
@@ -98,9 +102,7 @@ export default function DisseminationHome({ lng }) {
                                                     <span
                                                         className="__name"
                                                         dangerouslySetInnerHTML={{
-                                                            __html: newsItem.name.length > 200
-                                                                ? newsItem.name.substring(0, 200) + '...'
-                                                                : newsItem.name
+                                                            __html: nameFields(newsItem?.body)
                                                         }}
                                                     />
                                                     <div className="__info">
