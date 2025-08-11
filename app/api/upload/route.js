@@ -20,7 +20,7 @@ export async function POST(req) {
         const buffer = Buffer.from(bytes);
 
         // Create uploads directory if it doesn't exist
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'images');
         const filePath = path.join(uploadDir, file.name);
 
         // Write the file
