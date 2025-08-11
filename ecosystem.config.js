@@ -2,12 +2,21 @@ module.exports = {
   apps: [
     {
       name: "nso.mn",
-      script: "npm run start",
+      cwd: "/home/nso/nso.mn/current",
+      script: "./node_modules/next/dist/bin/next",
+      args: "start -p 3000",
+      exec_mode: "cluster",
+      instances: 2,
       watch: false,
+      autorestart: true,
+      max_memory_restart: "512M",
       env: {
         NODE_ENV: "production",
-        UPLOAD_PATH: "/home/nso/uploads"
-      }
+        PORT: "3000",
+      },
+      error_file: "/home/nso/logs/nso.err.log",
+      out_file: "/home/nso/logs/nso.out.log",
+      merge_logs: true,
     },
   ],
   deploy: {
@@ -18,37 +27,8 @@ module.exports = {
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
       "post-deploy":
-        "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
+        "mkdir -p /home/nso/logs && npm ci --omit=dev && npm run build && pm2 startOrReload ecosystem.config.js --only nso.mn --env production",
       shallow: true
     },
   },
 };
-// module.exports = {
-//   apps: [
-//     {
-//       name: "nso.mn",
-//       script: "npm",
-//       args: "run start", // start скриптээ зөв ажиллуулах
-//       exec_mode: "cluster", // ZERO-downtime байлгахын тулд cluster mode ашиглана
-//       instances: 2, // 2 instances хэрэгтэй (эсвэл "max")
-//       watch: false, // production-д watch хэрэггүй
-//       autorestart: true, // апп унасан тохиолдолд дахин эхлэнэ
-//       max_memory_restart: "512M", // санах ойг хэтрүүлэхгүй байх
-//       env: {
-//         NODE_ENV: "production",
-//         UPLOAD_PATH: "/home/nso/uploads",
-//       }
-//     },
-//   ],
-//   deploy: {
-//     production: {
-//       user: "nso",
-//       host: "183.81.170.9",
-//       ref: "origin/main",
-//       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
-//       path: "/home/nso/nso.mn",
-//       "post-deploy": "npm ci && npm run build && pm2 reload ecosystem.config.js --env production", // npm install-ийг ci-р сольсон
-//       shallow: true
-//     },
-//   },
-// };
