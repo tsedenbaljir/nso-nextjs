@@ -48,6 +48,38 @@ export async function PUT(req, { params }) {
             }, { status: 400 });
         }
 
+        // Validate and format date fields
+        let publishedDate = null;
+        if (data.published_date) {
+            try {
+                const date = new Date(data.published_date);
+                if (isNaN(date.getTime())) {
+                    return NextResponse.json({
+                        status: false,
+                        message: "Огноо буруу форматтай байна"
+                    }, { status: 400 });
+                }
+                publishedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+            } catch (error) {
+                return NextResponse.json({
+                    status: false,
+                    message: "Огноо форматлахад алдаа гарлаа"
+                }, { status: 400 });
+            }
+        }
+
+        let lastModifiedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        if (data.last_modified_date) {
+            try {
+                const date = new Date(data.last_modified_date);
+                if (!isNaN(date.getTime())) {
+                    lastModifiedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+                }
+            } catch (error) {
+                console.warn('Invalid last_modified_date, using current date');
+            }
+        }
+
         // Ensure all values are properly defined and convert to appropriate types
         const updateData = {
             name: data.name,
@@ -55,10 +87,10 @@ export async function PUT(req, { params }) {
             body: data.body,
             published: data.published,
             news_type: data.news_type,
-            published_date: data.published_date || null,
+            published_date: publishedDate,
             header_image: data.header_image,
             last_modified_by: data.last_modified_by,
-            last_modified_date: data.last_modified_date || new Date().toISOString(),
+            last_modified_date: lastModifiedDate,
             slug: data.slug
         };
 

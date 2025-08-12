@@ -48,7 +48,7 @@ export default function TableView({ params }) {
         async function getMetadata() {
             try {
                 // Fetch the URL
-                const resMetadata = await fetch(`http://localhost:3000/api/table-view/metadata?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`);
+                const resMetadata = await fetch(`/api/table-view/metadata?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`);
 
                 if (!resMetadata.ok) {
                     setLoading(false);

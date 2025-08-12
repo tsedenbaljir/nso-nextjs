@@ -239,18 +239,35 @@ export default function Footer({ lng }) {
                                     <span className="__text">© {new Date().getFullYear()}. {t('footer.copyright')}</span>
                                 </div>
                                 <div>
-                                    {/* {socialLinks && socialLinks.navitems && (
-                                        <ul>
-                                            {socialLinks.navitems.map((item, index) => (
-                                                <li key={item.id}>
-                                                    <span 
-                                                        onClick={() => directLink(item.link)}
-                                                        className={`social-icon nth-${index + 1}`}
-                                                    />
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )} */}
+                                    {/* {socialLinks && socialLinks.navitems && ( */}
+                                    <ul>
+                                        {/* {socialLinks.navitems.map((item, index) => ( */}
+                                        <li className='flex items-center gap-2'>
+                                            <a className='social-icon nth-1' href="https://www.facebook.com/StatisticMGL" target="_blank" rel="noopener noreferrer">
+                                                <i className="pi pi-facebook text-white rounded-full text-2xl"></i>
+                                            </a>
+                                            <a className='social-icon nth-1' href="https://www.instagram.com/statisticsmgl/" target="_blank" rel="noopener noreferrer">
+                                                <i className="pi pi-instagram text-white rounded-full text-2xl"></i>
+                                            </a>
+                                            <a className='social-icon nth-1' href="https://x.com/StatisticMGL" target="_blank" rel="noopener noreferrer">
+                                                <i className="pi pi-twitter text-white rounded-full text-2xl"></i>
+                                            </a>
+                                            <a className='social-icon nth-1' href="https://invite.viber.com/?g2=AQAzp9NJAUNbnU%2FNkn9IZOVy0QI1dPj2t2XCc3HiJNJ0oZkkTPTNKgHbahaa2FLz" target="_blank" rel="noopener noreferrer">
+                                                <i className="pi pi-viber text-white rounded-full text-2xl"></i>
+                                            </a>
+                                            <a className='social-icon nth-1' href="https://t.me/StatisticMGL" target="_blank" rel="noopener noreferrer">
+                                                <i className="pi pi-telegram text-white rounded-full text-2xl"></i>
+                                            </a>
+                                            <a className='social-icon nth-1' href="https://www.youtube.com/@statisticmgl6111" target="_blank" rel="noopener noreferrer">
+                                                <i className="pi pi-youtube text-white rounded-full text-3xl"></i>
+                                            </a>
+                                            <a className='social-icon nth-1' href="https://www.linkedin.com/in/national-statistics-office-of-mongolia-b38565377/" target="_blank" rel="noopener noreferrer">
+                                                <i className="pi pi-linkedin text-white rounded-full text-2xl"></i>
+                                            </a>
+                                        </li>
+                                        {/* // ))} */}
+                                    </ul>
+                                    {/* )} */}
                                 </div>
                             </div>
                         </div>
