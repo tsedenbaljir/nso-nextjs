@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "nso.mn",
       script: "npm run start",
-      watch: false,
+      watch: true,
       env: {
         NODE_ENV: "production",
       }
