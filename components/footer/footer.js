@@ -227,7 +227,7 @@ export default function Footer({ lng }) {
                                     </a>
                                 </div>
                                 <div className="__input">
-                                    <img src="/images/refreshQR.png" style={{ marginLeft: '10px' }} width={84} alt="QR Code" />
+                                    <img src="/images/qr-code 1.png" style={{ marginLeft: '10px' }} width={84} alt="QR Code" />
                                 </div>
                             </div>
                         </div>

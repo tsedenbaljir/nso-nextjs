@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { parse } from 'node-html-parser';
 
-const baseAPI = 'https://data.1212.mn/api/v1';
-
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -18,10 +16,10 @@ export async function GET(request) {
             );
         }
 
-        const link = `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${subtables ? subtables + '/' : ''}${id}`
+        const link = subtables ? `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}__${subtables}/${id}` :
+            `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${id}`
         const response = await fetch(link);
         if (!response.ok) {
-            // throw new Error(`HTTP error! Status: ${response.status}`);
             return NextResponse.json({
                 status: false,
                 data: [],
@@ -31,12 +29,10 @@ export async function GET(request) {
         const contentType = response.headers.get('Content-Type');
         const metadata = await response.text();
 
-        // If the response is not HTML, return appropriate response
         if (!contentType.includes('text/html')) {
             return NextResponse.json([]);
         }
 
-        // Parse HTML using node-html-parser
         const root = parse(metadata);
         const wrapElement = root.querySelector('#pxwebcontent');
 
