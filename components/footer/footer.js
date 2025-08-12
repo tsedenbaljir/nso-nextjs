@@ -253,7 +253,7 @@ export default function Footer({ lng }) {
                                                 <i className="pi pi-twitter text-white rounded-full text-2xl"></i>
                                             </a>
                                             <a className='social-icon nth-1' href="https://invite.viber.com/?g2=AQAzp9NJAUNbnU%2FNkn9IZOVy0QI1dPj2t2XCc3HiJNJ0oZkkTPTNKgHbahaa2FLz" target="_blank" rel="noopener noreferrer">
-                                                <i className="pi pi-viber text-white rounded-full text-2xl"></i>
+                                                <i className="pi pi-whatsapp text-white rounded-full text-2xl"></i>
                                             </a>
                                             <a className='social-icon nth-1' href="https://t.me/StatisticMGL" target="_blank" rel="noopener noreferrer">
                                                 <i className="pi pi-telegram text-white rounded-full text-2xl"></i>

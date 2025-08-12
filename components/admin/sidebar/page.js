@@ -55,6 +55,7 @@ export default function Sidebar() {
                 <MenuItems name={"Үйл явдал"} isActive={pth === "news"} link={"news"} />
                 <MenuItems name={"Тархаах хуваарь"} isActive={pth === "dissemination"} link={"dissemination"} />
                 <MenuItems name={"Файл татах"} isActive={pth === "bulletin"} link={"bulletin"} />
+                <MenuItems name={"Тайлан"} isActive={pth === "report"} link={"report"} />
                 <MenuItems name={"Цэсний тохиргоо"} isActive={pth === "menus"} link={"menus"} />
                 <MenuItems name={"Ажлын байр"} isActive={pth === "workspace"} link={"workspace"} />
                 <MenuItems name={"Ил тод байдал"} isActive={pth === "transparency"} link={"transparency"} />
