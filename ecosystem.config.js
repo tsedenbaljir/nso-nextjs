@@ -12,7 +12,7 @@ module.exports = {
   deploy: {
     production: {
       user: "nso",
-      host: "103.85.185.46",
+      host: "183.81.170.9",
       ref: "origin/main",
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
@@ -42,7 +42,7 @@ module.exports = {
 //   deploy: {
 //     production: {
 //       user: "nso",
-//       host: "103.85.185.46",
+//       host: "183.81.170.9",
 //       ref: "origin/main",
 //       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
 //       path: "/home/nso/nso.mn",
