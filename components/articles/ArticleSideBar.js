@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
-// import Image from 'next/image';
+import Image from 'next/image';
 
 export default function ArticleSideBar({ article }) {
     const router = useRouter();
@@ -35,7 +35,7 @@ export default function ArticleSideBar({ article }) {
                         }}>
                         <a className="__posts">
                             <div className="relative w-full h-[200px] overflow-hidden">
-                                <img
+                                <Image
                                     className="absolute inset-0 w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"
                                     src={errorImages[art.id] || getImageUrl(art.header_image)}
                                     alt={art.name || 'News image'}
