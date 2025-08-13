@@ -21,7 +21,7 @@ const nextConfig = {
             "os.alipayobjects.com",
             "api.ipify.org",
             "downloads.1212.mn",
-            "beta.nso.mn",
+            "www.nso.mn",
         ],
         remotePatterns: [
             {
@@ -31,8 +31,13 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'beta.nso.mn', // Add this
+                hostname: 'www.nso.mn', // Add this
                 pathname: '/images/**', // Restrict to images directory if needed
+            },
+            {
+                protocol: 'https',
+                hostname: 'www.nso.mn', // Add this
+                pathname: '/uploads/**', // Restrict to images directory if needed
             },
         ],
     },
