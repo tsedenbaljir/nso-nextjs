@@ -3,23 +3,29 @@ module.exports = {
   apps: [
     {
       name: "nso.mn",
+      // PM2 deploy үүсгэх "current" symlink руу ажиллуулна
       cwd: "/home/nso/nso.mn/current",
 
-      // Next.js production server-г шууд ажиллуулна
-      script: "./node_modules/next/dist/bin/next",
-      args: "start -p 3000",
+      // Next.js production server-г npm-ээр асаана
+      script: "npm",
+      args: "start",
 
+      // Prod тохиргоонууд
       env: {
         NODE_ENV: "production",
         PORT: 3000,
       },
+      env_production: {
+        NODE_ENV: "production",
+        PORT: 3000,
+      },
 
-      // Тогтвортой: ганц процесс, fork mode
-      exec_mode: "fork",
-      instances: 1,
-      watch: false,
+      // Тогтвортой ажиллагаа
+      exec_mode: "cluster",
+      instances: 2,                 // CPU-гийн тоонд тааруулж болно
       autorestart: true,
-      max_memory_restart: "512M",
+      watch: false,
+      max_memory_restart: "512M",   // 512Мб давбал дахин асаана
 
       // Лог
       out_file: "/home/nso/.pm2/logs/nso.mn-out.log",
@@ -34,14 +40,17 @@ module.exports = {
       host: ["183.81.170.9"],
       ref: "origin/main",
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
+      // PM2 энэ замд releases/ болон current/ үүсгэнэ
       path: "/home/nso/nso.mn",
       ssh_options: "StrictHostKeyChecking=no",
       shallow: true,
+
+      // Build toolchain-аа идэвхжүүлээд (nvm/corepack гэх мэт) CI суулгалт → build → dev deps prune → reload
       "post-deploy":
-        'set -e; ' +
-        'npm ci; ' +                 // цэвэр install
-        'npm run build; ' +          // Next build
-        'npm prune --omit=dev; ' +   // prod-д dev deps хасна
+        'npm ci && ' +                         // reproducible install
+        'npm run build && ' +                  // Next.js build
+        'npm prune --omit=dev && ' +           // production-д dev deps цэгцэлнэ
+        'ln -sf $PWD /home/nso/nso.mn/current && ' +
         'pm2 startOrReload ecosystem.config.js --env production',
     },
   },
