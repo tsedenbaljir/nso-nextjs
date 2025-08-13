@@ -62,23 +62,6 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <Providers>
-      <div>
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      asdfasdfadfs
-      </div>
       {children}
     </Providers>
   );
