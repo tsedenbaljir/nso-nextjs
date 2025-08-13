@@ -47,9 +47,6 @@ module.exports = {
 
       // Build toolchain-аа идэвхжүүлээд (nvm/corepack гэх мэт) CI суулгалт → build → dev deps prune → reload
       "post-deploy":
-        'set -e; ' +
-        'export NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" || true; ' +
-        'command -v corepack >/dev/null 2>&1 && corepack enable || true; ' +
         'npm ci; ' +                         // reproducible install
         'npm run build; ' +                  // Next.js build
         'npm prune --omit=dev; ' +           // production-д dev deps цэгцэлнэ
