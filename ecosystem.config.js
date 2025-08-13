@@ -23,12 +23,6 @@ module.exports = {
       autorestart: true,
       watch: false,
       max_memory_restart: "1G",    // 1ГБ давбал дахин асаана
-      kill_timeout: 5000,          // зөөлөн унтраахад 5с хүлээнэ
-
-      // Лог
-      out_file: "/home/nso/.pm2/logs/nso.mn-out.log",
-      error_file: "/home/nso/.pm2/logs/nso.mn-error.log",
-      log_date_format: "YYYY-MM-DD HH:mm Z",
     },
   ],
 
