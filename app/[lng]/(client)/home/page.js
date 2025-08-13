@@ -10,6 +10,10 @@ export default function Home({ params: { lng } }) {
     <Layout lng={lng}>
       <HomeSection indicators={[]} searchData={[]} lng={lng} />
       <Sector lng={lng} />
+      <div>
+      asdfasdfadfs
+      asdfasdfadfs
+      </div>
       <DisseminationHome lng={lng} />
       <CarouselNews lng={lng} />
       <br/>
