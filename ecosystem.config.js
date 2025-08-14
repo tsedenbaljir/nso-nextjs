@@ -4,15 +4,8 @@ module.exports = {
       name: "nso.mn",
       script: "npm",
       args: "start",
-      cwd: "/home/nso/nso.mn/current",
       instances: 1,
-      exec_mode: "fork",
-      watch: false,
-      max_memory_restart: "1G",
-      env: {
-        NODE_ENV: "production",
-        PORT: 3000
-      },
+      watch: true,
       time: true,
       kill_timeout: 5000,
       listen_timeout: 8000,
@@ -29,11 +22,6 @@ module.exports = {
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
       "post-deploy": "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
-      shallow: true,
-      keep_releases: 5,
-      env: {
-        NODE_ENV: "production"
-      }
     },
   },
 };
