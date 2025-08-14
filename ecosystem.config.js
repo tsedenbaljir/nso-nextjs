@@ -13,9 +13,6 @@ module.exports = {
         NODE_ENV: "production",
         PORT: 3000
       },
-      error_file: "/home/nso/nso.mn/logs/err.log",
-      out_file: "/home/nso/nso.mn/logs/out.log",
-      log_file: "/home/nso/nso.mn/logs/combined.log",
       time: true,
       kill_timeout: 5000,
       listen_timeout: 8000,
@@ -32,7 +29,6 @@ module.exports = {
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
       "post-deploy": "cd /home/nso/nso.mn/current && npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
-      "pre-setup": "mkdir -p /home/nso/nso.mn/logs",
       shallow: true,
       keep_releases: 5,
       env: {
