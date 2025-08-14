@@ -41,6 +41,17 @@ export async function POST(req) {
 
         const newId = (parseInt(maxIdResult.maxId) || 0) + 1;
 
+        // Handle published_date properly
+        let publishedDate = currentDate;
+        if (data.published_date) {
+            try {
+                publishedDate = new Date(data.published_date).toISOString();
+            } catch (error) {
+                console.warn('Invalid published_date format, using current date:', data.published_date);
+                publishedDate = currentDate;
+            }
+        }
+
         const [result] = await db.raw(`
             INSERT INTO web_1212_content (
                 id, name, language, body, published, list_order,
@@ -64,7 +75,7 @@ export async function POST(req) {
             currentDate,
             currentDate,
             data.news_type,
-            data.published_date,
+            publishedDate,
             data.header_image,
             data.slug,
             data.header_image
@@ -89,6 +100,17 @@ export async function PUT(req) {
         const data = await req.json();
         const currentDate = new Date().toISOString();
 
+        // Handle published_date properly
+        let publishedDate = currentDate;
+        if (data.published_date) {
+            try {
+                publishedDate = new Date(data.published_date).toISOString();
+            } catch (error) {
+                console.warn('Invalid published_date format, using current date:', data.published_date);
+                publishedDate = currentDate;
+            }
+        }
+
         await db.raw(`
             UPDATE web_1212_content 
             SET name = ?,
@@ -108,7 +130,7 @@ export async function PUT(req) {
             data.body,
             data.published,
             data.news_type,
-            data.published_date,
+            publishedDate,
             data.header_image,
             data.header_image,
             data.last_modified_by,
