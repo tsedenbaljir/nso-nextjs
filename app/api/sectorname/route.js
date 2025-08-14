@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 const BASE_API_URL = process.env.BASE_API_URL; // Ensure environment variable is set
-// export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(req) {
   try {
@@ -25,7 +26,7 @@ export async function GET(req) {
     // Fetch categories from API
     const response = await fetch(API_URL, {
       ...requestOptions,
-      cache: "no-store",
+      cache: 'no-store',
     });
 
     const textData = await response.text();

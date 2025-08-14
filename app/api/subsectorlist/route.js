@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 const BASE_API_URL = process.env.BASE_API_URL; // Use this in production instead of hardcoded localhost
-// export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // Helper function to fetch subsectors by ID
 const getSubsectors = async (subsectorId) => {
@@ -13,7 +14,7 @@ const getSubsectors = async (subsectorId) => {
 
   try {
     const response = await fetch(API_URL, {
-      cache: "no-store",
+      cache: 'no-store',
     });
     const data = await response.json();
     return data?.data || [];
@@ -26,7 +27,7 @@ const getSubsectors = async (subsectorId) => {
 export async function GET(req) {
   try {
     const response = await fetch(`${process.env.BACKEND_URL}/api/sectorname`, {
-      cache: "no-store",
+      cache: 'no-store',
     });
     const sectors = await response.json();
 
