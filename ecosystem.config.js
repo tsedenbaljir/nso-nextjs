@@ -5,6 +5,7 @@ module.exports = {
       script: "npm",
       args: "start",
       exec_mode: "fork",
+      instances: 4,
       watch: true,
       time: true,
       kill_timeout: 5000,
