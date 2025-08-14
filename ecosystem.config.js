@@ -28,7 +28,7 @@ module.exports = {
       ref: "origin/main",
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
-      "post-deploy": "cd /home/nso/nso.mn/current && npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
+      "post-deploy": "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
       shallow: true,
       keep_releases: 5,
       env: {
