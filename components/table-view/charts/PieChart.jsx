@@ -1,9 +1,29 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+import dynamic from 'next/dynamic';
+import Exporting from 'highcharts/modules/exporting';
+import ExportData from 'highcharts/modules/export-data';
+import Offline from 'highcharts/modules/offline-exporting';
 
-export default function PieChart({ data, lng }) {
+// Helper to init a module regardless of export shape
+function initModule(mod) {
+    if (!mod) return;
+    if (typeof mod === 'function') mod(Highcharts);
+    else if (mod.default && typeof mod.default === 'function') mod.default(Highcharts);
+}
+
+// Init modules ONLY on client
+if (typeof window !== 'undefined') {
+    initModule(Exporting);
+    initModule(ExportData);
+    initModule(Offline);
+}
+
+// Import the React wrapper without SSR
+const HighchartsReact = dynamic(() => import('highcharts-react-official'), { ssr: false });
+
+export default function PieChart({ data, lng, title }) {
     if (!data || !data.id || !data.dimension || !data.value || !data.size) {
         return null;
     }
@@ -78,7 +98,7 @@ export default function PieChart({ data, lng }) {
                 height: 400
             },
             title: {
-                text: lng === 'mn' ? 'Дугуй график' : 'Pie Chart'
+                text: ''
             },
             subtitle: {
                 text: lng === 'mn' ? `${year.label} оны мэдээлэл` : `Data for ${year.label}`
@@ -97,13 +117,43 @@ export default function PieChart({ data, lng }) {
                     cursor: 'pointer',
                     dataLabels: {
                         enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        format: '{point.name}: {point.percentage:.1f} %',
                         style: {
                             fontSize: '11px',
-                            fontWeight: 'bold'
+                            fontWeight: 'normal'
                         }
                     }
                 }
+            },
+            exporting: {
+                enabled: true, // enables the export button
+                buttons: {
+                    contextButton: {
+                        menuItems: [
+                            'viewFullscreen',
+                            'printChart',
+                            'separator',
+                            'downloadPNG',
+                            'downloadJPEG'
+                        ]
+                    }
+                },
+                chartOptions: {
+                    title: {
+                        text: title || (lng === 'mn' ? 'График' : 'Chart')
+                    },
+                    subtitle: {
+                        text: lng === 'mn' ? 'Эх сурвалж: www.nso.mn, www.1212.mn' : 'Source: www.nso.mn, www.1212.mn',
+                        align: 'left',
+                        x: 10,
+                        y: 30,
+                        style: {
+                            fontSize: '10px',
+                            color: '#666'
+                        }
+                    }
+                },
+                filename: `piechart_${year.label}_${new Date().toISOString().slice(0, 10)}`
             },
             series: [{
                 name: lng === 'mn' ? 'Утга' : 'Value',

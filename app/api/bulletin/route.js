@@ -17,21 +17,31 @@ export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get('page')) || 0;
-        const pageSize = parseInt(searchParams.get('pageSize')) || 10;
+        const pageSize = parseInt(searchParams.get('pageSize')) || 20;
+        const search = searchParams.get('search') || '';
         const offset = page * pageSize;
 
-        // Get total count
-        const totalCount = await db('web_1212_content')
+        // Build query with search
+        let query = db('web_1212_content')
             .where('content_type', 'NSONEWS')
-            .whereIn('news_type', ['FUTURE'])
-            .count('* as total')
-            .first();
+            .whereIn('news_type', ['FUTURE']);
+
+        let countQuery = db('web_1212_content')
+            .where('content_type', 'NSONEWS')
+            .whereIn('news_type', ['FUTURE']);
+
+        // Add search filter if search term is provided
+        if (search.trim()) {
+            query = query.where('name', 'like', `%${search}%`);
+            countQuery = countQuery.where('name', 'like', `%${search}%`);
+        }
+
+        // Get total count
+        const totalCount = await countQuery.count('* as total').first();
 
         // Get paginated results
-        const results = await db('web_1212_content')
+        const results = await query
             .select('*')
-            .where('content_type', 'NSONEWS')
-            .whereIn('news_type', ['FUTURE'])
             .orderBy('created_date', 'desc')
             .limit(pageSize)
             .offset(offset);

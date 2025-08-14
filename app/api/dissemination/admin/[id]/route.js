@@ -41,7 +41,7 @@ export async function PUT(req, { params }) {
         const data = await req.json();
 
         // Validate required fields
-        if (!data.name || !data.language || !data.body) {
+        if (!data.name || !data.language) {
             return NextResponse.json({
                 status: false,
                 message: "Шаардлагатай талбаруудыг бөглөнө үү"

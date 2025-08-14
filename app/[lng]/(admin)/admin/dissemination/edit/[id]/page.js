@@ -113,7 +113,7 @@ export default function EditDissemination({ params: { id } }) {
             const articleData = {
                 id,
                 name: title,
-                body: body,
+                body: body || "<p></p>",
                 language: language.toUpperCase(),
                 published: published,
                 news_type: newsType,

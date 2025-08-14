@@ -216,11 +216,11 @@ export default function VariablesPanel({ variables, title, url, lng }) {
       ) : resultData && (
         <>
           {showOptions === 1 && <ResultTable data={resultData} url={url} lng={lng} />}
-          {showOptions === 2 && <LineChart data={resultData} lng={lng} />}
-          {showOptions === 3 && <ColumnChart data={resultData} lng={lng} />}
-          {showOptions === 4 && <BarChart data={resultData} lng={lng} />}
-          {showOptions === 5 && <AreaChart data={resultData} lng={lng} />}
-          {showOptions === 6 && <PieChart data={resultData} lng={lng} />}
+          {showOptions === 2 && <LineChart data={resultData} lng={lng} title={title} />}
+          {showOptions === 3 && <ColumnChart data={resultData} lng={lng} title={title} />}
+          {showOptions === 4 && <BarChart data={resultData} lng={lng} title={title} />}
+          {showOptions === 5 && <AreaChart data={resultData} lng={lng} title={title} />}
+          {showOptions === 6 && <PieChart data={resultData} lng={lng} title={title} />}
         </>
       )}
     </div>

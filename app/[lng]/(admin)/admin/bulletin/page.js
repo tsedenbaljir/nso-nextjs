@@ -4,6 +4,8 @@ import { useTranslation } from '@/app/i18n/client';
 import { Form, message, Button, Modal, Input, DatePicker } from 'antd';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { FilterMatchMode } from 'primereact/api';
+import { InputText } from 'primereact/inputtext';
 import { CopyOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export default function ContactAdmin({ params: { lng } }) {
@@ -21,13 +23,14 @@ export default function ContactAdmin({ params: { lng } }) {
     const [editingItem, setEditingItem] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 10,
+        pageSize: 20,
         total: 0
     });
 
-    const fetchData = async (page = 1, pageSize = 10) => {
+    const fetchData = async (page = 1, pageSize = 20, searchTerm = '') => {
         try {
-            const response = await fetch(`/api/bulletin?page=${page - 1}&pageSize=${pageSize}`, {
+            const searchParam = searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : '';
+            const response = await fetch(`/api/bulletin?page=${page - 1}&pageSize=${pageSize}${searchParam}`, {
                 cache: 'no-store'
             });
             const result = await response.json();
@@ -55,10 +58,17 @@ export default function ContactAdmin({ params: { lng } }) {
 
     useEffect(() => {
         fetchData();
+        
+        // Cleanup timeout on unmount
+        return () => {
+            if (window.searchTimeout) {
+                clearTimeout(window.searchTimeout);
+            }
+        };
     }, []);
 
     const onPage = (event) => {
-        fetchData(event.page + 1, event.rows);
+        fetchData(event.page + 1, event.rows, globalFilterValue);
     };
 
     const showModal = () => {
@@ -167,7 +177,7 @@ export default function ContactAdmin({ params: { lng } }) {
                 message.success('Бюллетень амжилттай нэмэгдлээ');
                 setIsModalVisible(false);
                 form.resetFields();
-                fetchData(pagination.current, pagination.pageSize);
+                fetchData(pagination.current, pagination.pageSize, globalFilterValue);
             } else {
                 message.error(result.message || 'Алдаа гарлаа');
             }
@@ -215,7 +225,7 @@ export default function ContactAdmin({ params: { lng } }) {
                 editForm.resetFields();
                 setEditUploadedFile(null);
                 setEditingItem(null);
-                fetchData(pagination.current, pagination.pageSize);
+                fetchData(pagination.current, pagination.pageSize, globalFilterValue);
             } else {
                 message.error(result.message || 'Алдаа гарлаа');
             }
@@ -243,7 +253,7 @@ export default function ContactAdmin({ params: { lng } }) {
 
                     if (result.status) {
                         message.success('Бюллетень амжилттай устгагдлаа');
-                        fetchData(pagination.current, pagination.pageSize);
+                        fetchData(pagination.current, pagination.pageSize, globalFilterValue);
                     } else {
                         message.error(result.message || 'Алдаа гарлаа');
                     }
@@ -255,6 +265,42 @@ export default function ContactAdmin({ params: { lng } }) {
         });
     };
 
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        setGlobalFilterValue(value);
+        
+        // Clear existing timeout
+        if (window.searchTimeout) {
+            clearTimeout(window.searchTimeout);
+        }
+        
+        // Set new timeout for debounced search
+        window.searchTimeout = setTimeout(() => {
+            // Reset to first page when searching
+            setPagination(prev => ({ ...prev, current: 1 }));
+            
+            // Fetch data with search term
+            fetchData(1, pagination.pageSize, value);
+        }, 500); // 500ms delay
+    };
+
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-between items-center">
+                <h5 className="m-0">Хайх</h5>
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText
+                        value={globalFilterValue}
+                        onChange={onGlobalFilterChange}
+                        placeholder="Хайх..."
+                    />
+                </span>
+            </div>
+        );
+    };
     return (
         <div className="">
             <div className="mb-4 flex justify-between items-center pt-3">
@@ -278,6 +324,7 @@ export default function ContactAdmin({ params: { lng } }) {
                 totalRecords={pagination.total}
                 onPage={onPage}
                 loading={loading}
+                header={renderHeader}
                 className="p-datatable-sm"
                 emptyMessage="Мэдээлэл олдсонгүй"
             >

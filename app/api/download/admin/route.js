@@ -9,7 +9,7 @@ export async function GET(req) {
     const info = searchParams.get('info');
     const type = searchParams.get('type');
     const page = parseInt(searchParams.get('page')) || 0;
-    const pageSize = parseInt(searchParams.get('pageSize')) || 10;
+    const pageSize = parseInt(searchParams.get('pageSize')) || 20;
     const fetchAll = searchParams.get('fetchAll') === 'true' || pageSize > 100000;
     const offset = page * pageSize;
 

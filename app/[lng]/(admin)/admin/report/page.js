@@ -35,7 +35,7 @@ export default function ReportAdmin({ params: { lng } }) {
     const [viewingItem, setViewingItem] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 10,
+        pageSize: 20,
         total: 0
     });
     const [filters, setFilters] = useState({
@@ -69,7 +69,7 @@ export default function ReportAdmin({ params: { lng } }) {
             setLoading(true);
 
             // Fetch all data using the admin API - no pagination limit
-            const response = await fetch(`http://localhost:3000/api/download/admin?fetchAll=true&info=all`, {
+            const response = await fetch(`/api/download/admin?fetchAll=true&info=all`, {
                 cache: 'no-store'
             });
             const result = await response.json();
@@ -731,8 +731,8 @@ export default function ReportAdmin({ params: { lng } }) {
                         initialValue={1}
                     >
                         <Select>
-                            <Option value={1}>Нийтлэгдсэн</Option>
-                            <Option value={0}>Нийтлэгдээгүй</Option>
+                            <Option value={1}>Нийтлэх</Option>
+                            <Option value={0}>Нийтлэхгүй</Option>
                         </Select>
                     </Form.Item>
 
@@ -826,8 +826,8 @@ export default function ReportAdmin({ params: { lng } }) {
                         label="Төлөв"
                     >
                         <Select>
-                            <Option value={1}>Нийтлэгдсэн</Option>
-                            <Option value={0}>Нийтлэгдээгүй</Option>
+                            <Option value={1}>Нийтлэх</Option>
+                            <Option value={0}>Нийтлэхгүй</Option>
                         </Select>
                     </Form.Item>
 

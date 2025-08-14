@@ -1,9 +1,29 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+import dynamic from 'next/dynamic';
+import Exporting from 'highcharts/modules/exporting';
+import ExportData from 'highcharts/modules/export-data';
+import Offline from 'highcharts/modules/offline-exporting';
 
-export default function AreaChart({ data, lng }) {
+// Helper to init a module regardless of export shape
+function initModule(mod) {
+    if (!mod) return;
+    if (typeof mod === 'function') mod(Highcharts);
+    else if (mod.default && typeof mod.default === 'function') mod.default(Highcharts);
+}
+
+// Init modules ONLY on client
+if (typeof window !== 'undefined') {
+    initModule(Exporting);
+    initModule(ExportData);
+    initModule(Offline);
+}
+
+// Import the React wrapper without SSR
+const HighchartsReact = dynamic(() => import('highcharts-react-official'), { ssr: false });
+
+export default function AreaChart({ data, lng, title }) {
     if (!data || !data.id || !data.dimension || !data.value || !data.size) {
         return null;
     }
@@ -80,7 +100,7 @@ export default function AreaChart({ data, lng }) {
             height: 800
         },
         title: {
-            text: lng === 'mn' ? 'Туузан график' : 'Area Chart'
+            text: ''
         },
         xAxis: {
             categories: years.map(y => y.label),
@@ -105,12 +125,50 @@ export default function AreaChart({ data, lng }) {
         },
         plotOptions: {
             area: {
-                fillOpacity: 0.6,
-                lineWidth: 1,
                 marker: {
                     enabled: true
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                        return this.y?.toLocaleString('mn-MN') || '';
+                    },
+                    style: {
+                        fontSize: '11px',
+                        fontWeight: 'normal'
+                    }
                 }
             }
+        },
+        exporting: {
+            enabled: true, // enables the export button
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'viewFullscreen',
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG'
+                    ]
+                }
+            },
+            chartOptions: {
+                title: {
+                    text: title || (lng === 'mn' ? 'График' : 'Chart')
+                },
+                subtitle: {
+                    text: lng === 'mn' ? 'Эх сурвалж: www.nso.mn, www.1212.mn' : 'Source: www.nso.mn, www.1212.mn',
+                    align: 'left',
+                    x: 10,
+                    y: 30,
+                    style: {
+                        fontSize: '10px',
+                        color: '#666'
+                    }
+                }
+            },
+            filename: 'areachart_' + new Date().toISOString().slice(0, 10)
         },
         series: series
     };
