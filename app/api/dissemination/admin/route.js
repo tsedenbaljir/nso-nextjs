@@ -62,7 +62,7 @@ export async function POST(req) {
                 ?, ?, ?, ?, ?, ?,
                 ?, ?, ?,
                 'NEWS', ?, ?, ?, 0,
-                ?
+                ?, ?
             )
         `, [
             newId,

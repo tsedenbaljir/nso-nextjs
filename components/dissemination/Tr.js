@@ -13,7 +13,7 @@ export default function Tr({ item, lng, index }) {
     return (<tr key={index}>
         <td>{item.slug}</td>
         <td>
-            {item.body !== "<p></p>" ? (
+            {item.news_type === "LATEST" ? (
                 <span
                     className="cursor-pointer hover:text-blue-400 hover:underline"
                     onClick={() => router.push(`/dissemination/${item.id}`)}
@@ -25,7 +25,7 @@ export default function Tr({ item, lng, index }) {
             )}
             <div className="__table_spec">
                 <span>{item.published_date.substr(0, 10)}</span>
-                {item.body === "<p></p>" && (
+                {item.news_type === "FUTURE" && (
                     <span className="__table_views">
                         {lng === "mn" ? 'Хугацаа болоогүй' : 'Soon'}
                     </span>
