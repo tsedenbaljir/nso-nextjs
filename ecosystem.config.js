@@ -4,7 +4,7 @@ module.exports = {
       name: "nso.mn",
       script: "npm",
       args: "start",
-      instances: 1,
+      exec_mode: "fork",
       watch: true,
       time: true,
       kill_timeout: 5000,
