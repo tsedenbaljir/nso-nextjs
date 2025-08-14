@@ -11,11 +11,6 @@ module.exports = {
       watch: true,                           // prod-д ХААЖ өг
       time: true,
 
-      // Graceful reload/stop
-      wait_ready: false,                      // Next.js ready ивэнт илгээдэггүй тул false байж болно
-      listen_timeout: 8000,
-      kill_timeout: 5000,
-
       // Тогтвортой ажиллагаа
       min_uptime: "10s",
       max_restarts: 10,
@@ -35,8 +30,7 @@ module.exports = {
       // PM2 deploy нь releases/ + current symlink ашиглан "atomic" deploy хийдэг
       // Ингэснээр build хуучин хувилбарыг зогсоохгүй явагдаж, reload үед л солигдоно.
       "post-deploy": [
-        "export NODE_ENV=production",
-        "npm ci --force",                     // npm install биш: тогтвортой, хурдан
+        "npm install --force",                     // npm install биш: тогтвортой, хурдан
         "npm run build",                      // build шинэхэн release дотор хийгдэнэ
         "pm2 reload ecosystem.config.js --env production" // cluster mode тул zero‑downtime
       ].join(" && "),
