@@ -31,7 +31,7 @@ export default function Download({ params: { id, file, lng } }) {
                 // Check if we have news data and headerImage
                 if (sideBarNews && sideBarNews.data[0].header_image) {
                     // Redirect to the download URL
-                    window.location.replace(`https://www.nso.mn/uploads/images/${sideBarNews.data[0].header_image}`, '_blank');
+                    window.location.replace(`https://www.nso.mn/uploads/${sideBarNews.data[0].header_image}`, '_blank');
                     setLoading(false);
                 } else {
                     setError('No download file found');
