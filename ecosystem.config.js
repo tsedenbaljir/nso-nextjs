@@ -2,7 +2,10 @@ module.exports = {
   apps: [
     {
       name: "nso-new.mn",
-      script: "npm run start",
+      cwd: "/home/nso/nso-new.mn/current", // Бүх файлуудын зөв зам
+      script: "npm",  // npm-ийг ашиглах
+      args: "run start",  // командын аргумент
+      interpreter: "none", // Node.js ашиглана
       watch: true
     },
   ],
