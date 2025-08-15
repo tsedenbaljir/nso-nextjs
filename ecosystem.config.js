@@ -23,7 +23,8 @@ module.exports = {
       repo: "git@github.com:tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
       // Build хийсний дараа standalone-д static + public-ийг хуулна
-      "post-deploy": "export NODE_OPTIONS=--max_old_space_size=2048 && npm ci || npm install --force && npm run build && mkdir -p .next/standalone/.next && cp -r .next/static .next/standalone/.next/static && [ -d public ] && cp -r public .next/standalone/public || true && pm2 startOrReload ecosystem.config.js --env production",
+      "post-deploy":
+      "bash -lc 'set -e; export NODE_OPTIONS=--max_old_space_size=2048; npm ci || npm install --force; npm run build; mkdir -p .next/standalone/.next; cp -r .next/static .next/standalone/.next/static; [ -d public ] && cp -r public .next/standalone/public || true; pm2 startOrReload ecosystem.config.js --env production'",
       shallow: true
     },
   },
