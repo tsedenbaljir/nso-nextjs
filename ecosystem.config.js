@@ -2,8 +2,11 @@ module.exports = {
   apps: [
     {
       name: "nso-new.mn",
-      script: "npm run start",
-      watch: true
+      cwd: "/home/nso/nso-new.mn/current",
+      script: "node",
+      args: ".next/standalone/server.js",
+      interpreter: "none",
+      watch: false
     },
   ],
   deploy: {
