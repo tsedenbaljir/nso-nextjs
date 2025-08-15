@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "183.81.170.9",
+      name: "nso.mn",
       script: "npm run start",
       watch: true,
     },
