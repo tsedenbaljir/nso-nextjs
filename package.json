@@ -12,7 +12,7 @@
     "image:push": "docker push gitlab.nso.mn:5050/sps/nso-nextjs",
     "image:all": "docker build -t gitlab.nso.mn:5050/sps/nso-nextjs . && docker push gitlab.nso.mn:5050/sps/nso-nextjs",
     "deploy": "npm run build && npm run image:push",
-    "pm2:deploy": "git stash && pm2 deploy ecosystem.config.js production update",
+    "pm2:deploy": "pm2 deploy production update",
     "pm2:setup": "git stash && pm2 deploy ecosystem.config.js production setup"
   },
   "dependencies": {
