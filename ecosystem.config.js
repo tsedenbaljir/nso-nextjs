@@ -10,8 +10,9 @@ module.exports = {
     production: {
       user: "nso",
       host: "183.81.170.9",
+      ssh_options: "StrictHostKeyChecking=no",
       ref: "origin/main",
-      repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
+      repo: "git@github.com:tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
       "post-deploy":
         "npm install --force && npm run build && pm2 restart ecosystem.config.js --env production",
