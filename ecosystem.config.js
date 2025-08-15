@@ -3,29 +3,7 @@ module.exports = {
     {
       name: "nso.mn",
       script: "npm run start",
-      watch: [
-        "public"
-      ],
-      ignore_watch: [
-        "node_modules",
-        ".git",
-        "app",
-        "components",
-        "utils",
-        "logs"
-      ],
-      autorestart: true,
-      max_memory_restart: "1G",
-      instances: 1,
-      exec_mode: "fork",
-      env: {
-        NODE_ENV: "production",
-        PORT: 3000
-      },
-      env_production: {
-        NODE_ENV: "production",
-        PORT: 3000
-      }
+      watch: false
     },
   ],
   deploy: {
