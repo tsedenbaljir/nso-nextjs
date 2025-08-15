@@ -4,6 +4,7 @@ module.exports = {
       name: "nso.mn",
       script: "npm run start",
       watch: true,
+      autorestart: true,
     },
   ],
   deploy: {
