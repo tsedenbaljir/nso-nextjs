@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    output: "standalone",
+    output: "server",
     experimental: {
         serverComponentsExternalPackages: ['oracledb'],
         serverActions: {
