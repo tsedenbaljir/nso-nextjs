@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    output: "standalone",
     experimental: {
         serverComponentsExternalPackages: ['oracledb'],
         serverActions: {
@@ -58,7 +59,6 @@ const nextConfig = {
         INFO_EMAIL_1212: process.env.INFO_EMAIL_1212,
         INFO_PASSWORD_1212: process.env.INFO_PASSWORD_1212,
     },
-    output: "standalone",
     crossOrigin: "anonymous",
     async headers() {
         return [
