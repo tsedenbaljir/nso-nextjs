@@ -3,9 +3,9 @@ module.exports = {
     {
       name: "nso-new.mn",
       cwd: "/home/nso/nso-new.mn/current",
-      script: "node",
-      args: ".next/standalone/server.js",
-      env: { NODE_ENV: "production", HOSTNAME: "0.0.0.0", PORT: "3000" },
+      script: "node_modules/next/dist/bin/next",
+      args: "start -p 3000",
+      env: { NODE_ENV: "production" },
       watch: false
     }
   ],
@@ -23,8 +23,6 @@ module.exports = {
         "cd /home/nso/nso-new.mn/current",
         "npm ci",
         "npm run build",
-        "mkdir -p /home/nso/nso-new.mn/shared/uploads",
-        "ln -sfn /home/nso/nso-new.mn/shared/uploads public/uploads",
         "pm2 startOrReload ecosystem.config.js --only nso-new.mn"
       ].join(" && "),
       shallow: true
