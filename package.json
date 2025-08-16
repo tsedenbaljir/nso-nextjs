@@ -54,7 +54,6 @@
     "node-fetch": "^2.7.0",
     "node-html-parser": "^7.0.1",
     "nodemailer": "^6.10.1",
-    "nso-nextjs": "file:",
     "oci-common": "^2.91.0",
     "oci-objectstorage": "^2.91.0",
     "oci-secrets": "^2.91.0",
