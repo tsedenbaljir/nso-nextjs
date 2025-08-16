@@ -20,8 +20,7 @@ module.exports = {
       path: "/home/nso/nso-new.mn",
       ssh_options: "StrictHostKeyChecking=no",
       "pre-deploy-local": "",
-      "post-deploy":
-        "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
+      "post-deploy": "cd /home/nso/nso-new.mn/current && npm ci --omit=dev=false && npm run build && pm2 startOrReload ecosystem.config.js --only nso-new.mn",
       shallow: true
     }
   }
