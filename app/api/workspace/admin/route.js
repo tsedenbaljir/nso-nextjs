@@ -59,7 +59,9 @@ export async function POST(req) {
 
         // Add created_date and other metadata
         const now = new Date().toISOString();
+        const [id_new] = await db('job_posting').select('id').orderBy('id', 'desc').limit(1);
         const jobData = {
+            id: id_new.id + 1,
             name: data.name,
             body: data.body,
             location: data.location,

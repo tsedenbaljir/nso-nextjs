@@ -174,7 +174,7 @@ const Dashboard = () => {
                             setHeaderImageFile={setHeaderImageFile}
                         />
                     </div>
-                    <DatePicker className='mt-4' defaultValue={dayjs('2015/01/01', "DD/MM/YYYY")} format={"DD/MM/YYYY"} style={{ height: 50 }} />
+                    <DatePicker className='mt-4' style={{ height: 50 }} />
                     <div className="flex items-center bg-gray-100 px-2 rounded-md mt-4" style={{ height: 50 }}>
                         <input
                             type="checkbox"

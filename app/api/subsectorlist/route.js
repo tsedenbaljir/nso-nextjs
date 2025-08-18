@@ -26,11 +26,8 @@ const getSubsectors = async (subsectorId) => {
 
 export async function GET(req) {
   try {
-    const response = await fetch(`${process.env.BACKEND_URL}/api/sectorname`, {
-      cache: 'no-store',
-    });
+    const response = await fetch(`/api/sectorname?lng=mn`);
     const sectors = await response.json();
-
     // Fetch subsectors for each sector
     const allSubsectors = [];
 

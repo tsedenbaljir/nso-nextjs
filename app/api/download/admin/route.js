@@ -17,7 +17,7 @@ export async function GET(req) {
         let query = `
             SELECT *
             FROM [NSOweb].[dbo].[web_1212_download]
-            WHERE 1=1
+            WHERE file_type in('report','reportSector') and 1=1
         `;
         let params = [];
 

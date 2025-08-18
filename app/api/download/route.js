@@ -12,8 +12,8 @@ export async function GET(req) {
         // order by published_date desc
         const results = await db.raw(`
             SELECT *
-                FROM [NSOweb].[dbo].vw_web_1212_download
-                WHERE new = ? and language = ? and published = 1 and file_type = ?
+                FROM [NSOweb].[dbo].[web_1212_download]
+                WHERE info = ? and language = ? and published = 1 and file_type = ?
                 order by published_date desc
         `, [info, lng, type]);
             

@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from '@/app/i18n/client';
-import { Form, message, Button, Modal, Input, Select, DatePicker, Space, Card, Statistic, Row, Col } from 'antd';
+import { Form, message, Button, Modal, Input, Select, Space, Card, Statistic, Row, Col } from 'antd';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import {
@@ -18,7 +17,6 @@ import {
 const { Option } = Select;
 
 export default function ReportAdmin({ params: { lng } }) {
-    const { t } = useTranslation(lng);
     const [form] = Form.useForm();
     const [editForm] = Form.useForm();
     const [loading, setLoading] = useState(true);
@@ -42,7 +40,7 @@ export default function ReportAdmin({ params: { lng } }) {
         language: '',
         type: '',
         info: '',
-        published: ''
+        published: 1
     });
     const [stats, setStats] = useState({
         total: 0,
@@ -51,12 +49,14 @@ export default function ReportAdmin({ params: { lng } }) {
         types: {}
     });
 
+    const [subsectorOptions, setSubsectorOptions] = useState([]);
+
     const fileTypes = [
-        { value: 'bulletin', label: 'Bulletin' },
-        { value: 'report', label: 'Report' },
-        { value: 'statistics', label: 'Statistics' },
-        { value: 'publication', label: 'Publication' },
-        { value: 'other', label: 'Other' }
+        // { value: 'bulletin', label: 'Bulletin' },
+        { value: 'report', label: 'Салбарын тайлан' },
+        // { value: 'pahc', label: 'Аргачлал' },
+        { value: 'reportSector', label: 'Чанарын тайлан' },
+        // { value: 'other', label: 'Бусад' }
     ];
 
     const languages = [
@@ -76,7 +76,7 @@ export default function ReportAdmin({ params: { lng } }) {
 
             if (result.status && result.data) {
                 const allData = Array.isArray(result.data) ? result.data : [result.data];
-                
+
                 const dataWithIds = allData.map((item, index) => ({
                     ...item,
                     displayId: index + 1
@@ -119,7 +119,34 @@ export default function ReportAdmin({ params: { lng } }) {
 
     useEffect(() => {
         fetchData();
+        fetchSubsectorList();
     }, []);
+
+    const fetchSubsectorList = async () => {
+        try {
+            const response = await fetch('/api/subsectorlist', {
+                cache: 'no-store'
+            });
+            const result = await response.json();
+
+            console.log('Subsector List API Response:', result);
+
+            if (result.data && Array.isArray(result.data)) {
+                console.log('Subsector Data:', result.data);
+                // Transform the data for dropdown options
+                const options = result.data.map(item => ({
+                    label: item.text,
+                    value: item.id,
+                    type: item.type
+                }));
+                setSubsectorOptions(options);
+            } else {
+                console.log('Subsector API Error:', result.message);
+            }
+        } catch (error) {
+            console.error('Error fetching subsector list:', error);
+        }
+    };
 
     const onPage = (event) => {
         setPagination(prev => ({
@@ -260,14 +287,63 @@ export default function ReportAdmin({ params: { lng } }) {
         }
     };
 
+    const createFileInfo = (file, fileUrl) => {
+        const currentDate = new Date().toISOString();
+        const extension = file.name.split('.').pop().toLowerCase();
+
+        // Determine media type based on extension
+        const mediaTypes = {
+            'pdf': 'application/pdf',
+            'doc': 'application/msword',
+            'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls': 'application/vnd.ms-excel',
+            'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ppt': 'application/vnd.ms-powerpoint',
+            'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'txt': 'text/plain',
+            'csv': 'text/csv'
+        };
+
+        return {
+            originalName: file.name,
+            pathName: fileUrl,
+            fileSize: file.size,
+            extension: extension,
+            mediaType: mediaTypes[extension] || 'application/octet-stream',
+            pages: 1,
+            downloads: 0,
+            isPublic: true,
+            createdDate: currentDate
+        };
+    };
+
+    const formatFileSize = (bytes) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    const parseFileInfo = (fileInfoString) => {
+        try {
+            return JSON.parse(fileInfoString);
+        } catch (error) {
+            console.error('Error parsing file_info:', error);
+            return null;
+        }
+    };
+
     const handleSubmit = async (values) => {
         setSubmitLoading(true);
         try {
             let fileUrl = null;
+            let fileInfo = null;
 
             if (uploadedFile) {
                 try {
                     fileUrl = await uploadFile(uploadedFile);
+                    fileInfo = createFileInfo(uploadedFile, fileUrl);
                 } catch (error) {
                     message.error('Файл хуулахад алдаа гарлаа!');
                     setSubmitLoading(false);
@@ -286,6 +362,8 @@ export default function ReportAdmin({ params: { lng } }) {
                     file_type: values.file_type,
                     info: values.info,
                     file_url: fileUrl,
+                    file_info: fileInfo ? JSON.stringify(fileInfo) : null,
+                    file_size: uploadedFile ? uploadedFile.size : 0,
                     published: values.published,
                     created_by: 'admin',
                     last_modified_by: 'admin'
@@ -315,10 +393,12 @@ export default function ReportAdmin({ params: { lng } }) {
         setEditLoading(true);
         try {
             let fileUrl = editingItem.file_url;
+            let fileInfo = null;
 
             if (editUploadedFile) {
                 try {
                     fileUrl = await uploadFile(editUploadedFile);
+                    fileInfo = createFileInfo(editUploadedFile, fileUrl);
                 } catch (error) {
                     message.error('Файл хуулахад алдаа гарлаа!');
                     setEditLoading(false);
@@ -338,6 +418,8 @@ export default function ReportAdmin({ params: { lng } }) {
                     file_type: values.file_type,
                     info: values.info,
                     file_url: fileUrl,
+                    file_info: fileInfo ? JSON.stringify(fileInfo) : null,
+                    file_size: editUploadedFile ? editUploadedFile.size : editingItem.file_size,
                     published: values.published,
                     last_modified_by: 'admin'
                 }),
@@ -394,22 +476,53 @@ export default function ReportAdmin({ params: { lng } }) {
     const downloadFile = (fileInfo, fileName) => {
         try {
             let fileUrl = '';
+            let originalFileName = fileName;
+
             if (typeof fileInfo === 'string') {
-                const parsedInfo = JSON.parse(fileInfo);
-                fileUrl = parsedInfo.pathName || parsedInfo.originalName || fileInfo;
+                const parsedInfo = parseFileInfo(fileInfo);
+                if (parsedInfo) {
+                    fileUrl = parsedInfo.pathName || parsedInfo.originalName;
+                    originalFileName = parsedInfo.originalName || fileName;
+                } else {
+                    fileUrl = fileInfo;
+                }
             } else {
                 fileUrl = fileInfo;
             }
 
+            if (!fileUrl) {
+                message.error('Файлын URL олдсонгүй');
+                return;
+            }
+
             const link = document.createElement('a');
             link.href = fileUrl;
-            link.download = fileName;
+            link.download = originalFileName;
+            link.target = '_blank';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            // Update download count if file_info exists
+            if (typeof fileInfo === 'string') {
+                updateDownloadCount(fileInfo);
+            }
         } catch (error) {
             console.error('Error downloading file:', error);
             message.error('Файл татахад алдаа гарлаа');
+        }
+    };
+
+    const updateDownloadCount = async (fileInfoString) => {
+        try {
+            const fileInfo = parseFileInfo(fileInfoString);
+            if (fileInfo) {
+                fileInfo.downloads = (fileInfo.downloads || 0) + 1;
+                // You can add an API call here to update the download count in the database
+                console.log('Download count updated:', fileInfo.downloads);
+            }
+        } catch (error) {
+            console.error('Error updating download count:', error);
         }
     };
 
@@ -417,8 +530,8 @@ export default function ReportAdmin({ params: { lng } }) {
         <div className="p-6">
             {/* Header */}
             <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">Татаж авах файлын удирдлага</h1>
-                <p className="text-gray-600">Бүх татаж авах файлуудыг харах, засах, устгах</p>
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">Салбарын тайлан, аргачлал, чанарын тайлан</h1>
+                {/* <p className="text-gray-600">Бүх татаж авах файлуудыг харах, засах, устгах</p> */}
             </div>
 
             {/* Statistics Cards */}
@@ -519,7 +632,7 @@ export default function ReportAdmin({ params: { lng } }) {
                                         return itemPublished === filterPublished;
                                     });
                                 }
-                                
+
                                 setFilteredData(filtered);
                                 setPagination(prev => ({
                                     ...prev,
@@ -610,7 +723,16 @@ export default function ReportAdmin({ params: { lng } }) {
                         return index + 1;
                     }}
                 />
-                <Column field="name" header="Нэр" style={{ width: '20%' }} />
+                <Column field="name" header="Нэр" style={{ width: '15%' }} />
+                <Column field="original_name" header="Файлын нэр" style={{ width: '15%' }}
+                    body={(rowData) => {
+                        if (rowData.file_info) {
+                            const fileInfo = parseFileInfo(rowData.file_info);
+                            return fileInfo ? fileInfo.originalName : rowData.name;
+                        }
+                        return rowData.name;
+                    }}
+                />
                 <Column field="file_type" header="Төрөл" style={{ width: '8%' }} />
                 <Column field="language" header="Хэл" style={{ width: '5%' }}
                     body={(rowData) => (
@@ -633,6 +755,15 @@ export default function ReportAdmin({ params: { lng } }) {
                 />
                 <Column field="published_date" header="Огноо" style={{ width: '10%' }}
                     body={(rowData) => rowData.published_date ? new Date(rowData.published_date).toLocaleDateString() : '-'}
+                />
+                <Column field="file_size" header="Хэмжээ" style={{ width: '8%' }}
+                    body={(rowData) => {
+                        if (rowData.file_info) {
+                            const fileInfo = parseFileInfo(rowData.file_info);
+                            return fileInfo ? formatFileSize(fileInfo.fileSize) : '-';
+                        }
+                        return rowData.file_size ? formatFileSize(rowData.file_size) : '-';
+                    }}
                 />
                 <Column
                     header="Үйлдэл"
@@ -720,9 +851,18 @@ export default function ReportAdmin({ params: { lng } }) {
 
                     <Form.Item
                         name="info"
-                        label="Мэдээлэл"
+                        label="Салбар/Дэд салбар"
                     >
-                        <Input.TextArea placeholder="Нэмэлт мэдээлэл" rows={3} />
+                        <Select
+                            placeholder="Салбар эсвэл дэд салбар сонгоно уу"
+                            allowClear
+                        >
+                            {subsectorOptions.map(option => (
+                                <Option key={option.value} value={option.value}>
+                                    {option.label}
+                                </Option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
                     <Form.Item
@@ -816,9 +956,18 @@ export default function ReportAdmin({ params: { lng } }) {
 
                     <Form.Item
                         name="info"
-                        label="Мэдээлэл"
+                        label="Салбар/Дэд салбар"
                     >
-                        <Input.TextArea placeholder="Нэмэлт мэдээлэл" rows={3} />
+                        <Select
+                            placeholder="Салбар эсвэл дэд салбар сонгоно уу"
+                            allowClear
+                        >
+                            {subsectorOptions.map(option => (
+                                <Option key={option.value} value={option.value}>
+                                    {option.label}
+                                </Option>
+                            ))}
+                        </Select>
                     </Form.Item>
 
                     <Form.Item
@@ -919,8 +1068,16 @@ export default function ReportAdmin({ params: { lng } }) {
                             <p>{viewingItem.published_date ? new Date(viewingItem.published_date).toLocaleString() : '-'}</p>
                         </div>
                         <div>
-                            <label className="font-semibold">Мэдээлэл:</label>
-                            <p>{viewingItem.info || '-'}</p>
+                            <label className="font-semibold">Салбар/Дэд салбар:</label>
+                            <p>
+                                {viewingItem.info ?
+                                    (() => {
+                                        const selectedOption = subsectorOptions.find(option => option.value === viewingItem.info);
+                                        return selectedOption ? selectedOption.label : viewingItem.info;
+                                    })()
+                                    : '-'
+                                }
+                            </p>
                         </div>
                         <div>
                             <label className="font-semibold">Файлын мэдээлэл:</label>

@@ -30,6 +30,7 @@ export async function POST(req) {
             success: true,
             message: 'File uploaded successfully',
             filename: file.name,
+            url: `/uploads/${file.name}`,
             path: `/uploads/${file.name}`,
             fullUrl: `/uploads/${file.name}`
         });

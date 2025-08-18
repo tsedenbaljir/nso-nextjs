@@ -25,7 +25,7 @@ export default function Tr({ item, lng, index }) {
             )}
             <div className="__table_spec">
                 <span>{item.published_date.substr(0, 10)}</span>
-                {item.news_type === "FUTURE" && (
+                {(item.published_date > new Date()) && (
                     <span className="__table_views">
                         {lng === "mn" ? 'Хугацаа болоогүй' : 'Soon'}
                     </span>
