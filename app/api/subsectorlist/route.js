@@ -5,17 +5,23 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 // Helper function to fetch subsectors by ID
-const getSubsectors = async (subsectorId) => {
+const getSubsectors = async (subsectorId, baseUrl) => {
   if (!subsectorId) {
     return [];
   }
 
-  const API_URL = `${BASE_API_URL}/api/subsectorname?subsectorname=${decodeURIComponent(subsectorId)}&lng=mn`;
-
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${baseUrl}/api/subsectorname?subsectorname=${encodeURIComponent(subsectorId)}&lng=mn`, {
       cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const data = await response.json();
     return data?.data || [];
   } catch (error) {
@@ -26,14 +32,39 @@ const getSubsectors = async (subsectorId) => {
 
 export async function GET(req) {
   try {
-    const response = await fetch(`https://www.nso.mn/api/sectorname?lng=mn`);
+    // Get the host from the request
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host');
+    const baseUrl = `${protocol}://${host}`;
+    
+    const response = await fetch(`${baseUrl}/api/sectorname?lng=mn`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; NSO-API/1.0)',
+        'Accept': 'application/json'
+      },
+      next: { revalidate: 3600 } // Cache for 1 hour
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const sectors = await response.json();
+    console.log("sectors==================",sectors);
+    
     // Fetch subsectors for each sector
     const allSubsectors = [];
 
-    for (const sector of sectors.data) {
-      const subs = await getSubsectors(sector.id);
-      allSubsectors.push(...subs);
+    if (sectors.data && Array.isArray(sectors.data)) {
+      for (const sector of sectors.data) {
+        try {
+          const subs = await getSubsectors(sector.id, baseUrl);
+          allSubsectors.push(...subs);
+        } catch (subError) {
+          console.error(`Error fetching subsectors for sector ${sector.id}:`, subError);
+          // Continue with other sectors even if one fails
+        }
+      }
     }
 
     return NextResponse.json({
@@ -42,6 +73,9 @@ export async function GET(req) {
 
   } catch (error) {
     console.error("API GET Error:", error);
-    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Internal server error.", 
+      details: error.message 
+    }, { status: 500 });
   }
 }
