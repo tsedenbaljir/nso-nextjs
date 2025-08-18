@@ -9,39 +9,100 @@ const getSubsectors = async (subsectorId) => {
   if (!subsectorId) {
     return [];
   }
-
-  const API_URL = `https://www.nso.mn/api/subsectorname?subsectorname=${decodeURIComponent(subsectorId)}&lng=mn`;
-
+  
   try {
+    const lng = "mn";
+    const subsectorName = subsectorId;
+    
+    if (!subsectorName) {
+      return NextResponse.json({ error: "Missing subsectorName parameter" }, { status: 400 });
+    }
+
+    if (!lng) {
+      return NextResponse.json({ error: "Missing lng parameter" }, { status: 400 });
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    const API_URL = `${BASE_API_URL}/${lng}/NSO/${encodeURIComponent(subsectorName)}`;
+
     const response = await fetch(API_URL, {
-      cache: 'no-store',
+      ...requestOptions,
+      cache: "no-store",
     });
-    const data = await response.json();
-    return data?.data || [];
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const textData = await response.text();
+    const validJson = textData;
+    const subcategories = JSON.parse(validJson);
+    
+    if (!Array.isArray(subcategories)) {
+      return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
+    }
+
+    return subcategories || [];
   } catch (error) {
-    console.error(`Failed to fetch subsectors for ID ${subsectorId}:`, error);
-    return [];
+    console.error("Error fetching subcategories:", error);
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 };
-
 export async function GET(req) {
   try {
-    const response = await fetch(`https://www.nso.mn/api/sectorname?lng=mn`);
-    const sectors = await response.json();
-    // Fetch subsectors for each sector
-    const allSubsectors = [];
+    const lng = "mn";
+    // const lng = searchParams.get("lng");
 
-    for (const sector of sectors.data) {
+    if (!lng) {
+      return NextResponse.json({ error: "Missing lng parameter" }, { status: 400 });
+    }
+
+    const API_URL = `${BASE_API_URL}/${lng}/NSO`;
+
+    const myHeaders = new Headers();
+    myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    // Fetch categories from API
+    const response = await fetch(API_URL, {
+      ...requestOptions,
+      cache: 'no-store',
+    });
+
+    const textData = await response.text();
+
+    // Ensure JSON is valid by removing unexpected wrapping object
+    const validJson = textData;
+    const categories = JSON.parse(validJson);
+
+    if (!Array.isArray(categories)) {
+      return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
+    }
+    const allSubsectors = [];
+    for (const sector of categories) {
       const subs = await getSubsectors(sector.id);
       allSubsectors.push(...subs);
     }
 
+
     return NextResponse.json({
       data: allSubsectors
-    });
-
+    }); // Send categories as response
   } catch (error) {
-    console.error("API GET Error:", error);
+    console.error("API Fetch Error:", error);
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
+
 }
+
