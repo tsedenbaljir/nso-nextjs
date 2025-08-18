@@ -1,31 +1,21 @@
 module.exports = {
   apps: [
     {
-      name: "nso-new.mn",
-      cwd: "/home/nso/nso-new.mn/current",
-      script: "node_modules/next/dist/bin/next",
-      args: "start -p 3000",
-      env: { NODE_ENV: "production" },
-      watch: false
-    }
+      name: "nso.mn",
+      script: "npm run start",
+      watch: true,
+    },
   ],
-
   deploy: {
     production: {
       user: "nso",
-      host: "183.81.170.9",
+      host: "103.85.185.46",
       ref: "origin/main",
-      repo: "git@github.com:tsedenbaljir/nso-nextjs.git",
-      path: "/home/nso/nso-new.mn",
-      ssh_options: "StrictHostKeyChecking=no",
-      "pre-deploy-local": "",
-      "post-deploy": [
-        "cd /home/nso/nso-new.mn/current",
-        "npm ci",
-        "npm run build",
-        "pm2 startOrReload ecosystem.config.js --only nso-new.mn"
-      ].join(" && "),
-      shallow: true
-    }
-  }
+      repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
+      path: "/home/nso/nso.mn",
+      "post-deploy":
+        "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
+      shallow: true // <-- This reduces the amount of Git history fetched
+    },
+  },
 };
