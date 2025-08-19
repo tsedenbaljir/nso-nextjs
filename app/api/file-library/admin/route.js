@@ -11,7 +11,7 @@ export async function GET(req) {
         const lng = searchParams.get("lng");
         const searchTerm = searchParams.get("searchTerm") || "";
         const page = parseInt(searchParams.get("page")) || 1;
-        const limit = parseInt(searchParams.get("limit")) || 50; // Increased default limit
+        const limit = parseInt(searchParams.get("limit")) || 50;
         const offset = (page - 1) * limit;
 
         let query = `
@@ -25,13 +25,11 @@ export async function GET(req) {
                 views as downloads,
                 published as isPublic,
                 published_date as createdDate,
-                list_order,
                 created_by,
                 created_date,
                 last_modified_by,
                 last_modified_date,
-                info as description,
-                data_viz_id
+                info as description
             FROM web_1212_download 
             WHERE file_type IN (
                 'nso-magazine', 'magazine', 'census', 'survey', 'infographic',
@@ -75,26 +73,18 @@ export async function GET(req) {
             countParams.push(searchPattern, searchPattern, searchPattern);
         }
         
-        console.log("Count Query:", countQuery);
-        console.log("Count Params:", countParams);
         const countResult = await db.raw(countQuery, countParams);
-        console.log("Count Result:", JSON.stringify(countResult, null, 2));
         const total = countResult && countResult[0] && countResult[0][0] ? countResult[0][0].total : 0;
 
         // Get paginated results - SQL Server syntax
-        // If limit is very high, don't use pagination to get all results
         if (limit >= 1000) {
             // Get all results without pagination
-            console.log("Getting all results without pagination");
         } else {
             query += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
             params.push(offset, limit);
         }
 
-        console.log("Main Query:", query);
-        console.log("Main Params:", params);
         const result = await db.raw(query, params);
-        console.log("Main Result:", JSON.stringify(result, null, 2));
         
         // Ensure we always return an array
         let files = [];
@@ -133,8 +123,6 @@ export async function POST(req) {
             title,
             description,
             type,
-            category,
-            tags,
             isPublic,
             lng,
             fileInfo,
@@ -148,17 +136,20 @@ export async function POST(req) {
             );
         }
 
+        // First, get the next available ID
+        const [nextId] = await db.raw("SELECT max(id) as nextId FROM web_1212_download");
+        
         const insertResult = await db("web_1212_download").insert({
+            id: parseInt(nextId.nextId) + 1 || 1,
             name: title,
             info: description,
             file_type: type,
             language: lng,
             file_info: fileInfo ? JSON.stringify(fileInfo) : null,
-            file_size: fileInfo?.fileSize || 0,
+            file_size: parseInt(fileInfo?.fileSize || 0),
             views: 0,
-            published: isPublic || false,
+            published: isPublic === true ? 1 : 0,
             published_date: new Date(),
-            list_order: 0,
             created_by: "admin",
             created_date: new Date(),
             last_modified_by: "admin",
@@ -190,8 +181,6 @@ export async function PUT(req) {
             title,
             description,
             type,
-            category,
-            tags,
             isPublic,
         } = body;
 
@@ -206,7 +195,7 @@ export async function PUT(req) {
             name: title,
             info: description,
             file_type: type,
-            published: isPublic,
+            published: isPublic === true ? 1 : 0,
             last_modified_by: "admin",
             last_modified_date: new Date(),
         };

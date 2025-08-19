@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, Input, Table, Space, Modal, Form, Upload, message, Card, Typography, Select, DatePicker } from "antd";
+import { Button, Input, Table, Space, Modal, Form, Upload, message, Card, Typography, Select, DatePicker, Popconfirm } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, UploadOutlined, DownloadOutlined } from "@ant-design/icons";
 import { useTranslation } from "@/app/i18n/client";
 
@@ -16,6 +16,45 @@ export default function FileLibraryAdmin({ params: { lng } }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingFile, setEditingFile] = useState(null);
     const [form] = Form.useForm();
+
+    // Create file info object with detailed metadata
+    const createFileInfo = (file) => {
+        const currentDate = new Date().toISOString();
+        const extension = file.name.split('.').pop().toLowerCase();
+
+        // Determine media type based on extension
+        const mediaTypes = {
+            'pdf': 'application/pdf',
+            'doc': 'application/msword',
+            'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls': 'application/vnd.ms-excel',
+            'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'ppt': 'application/vnd.ms-powerpoint',
+            'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'txt': 'text/plain',
+            'csv': 'text/csv',
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'gif': 'image/gif',
+            'svg': 'image/svg+xml',
+            'zip': 'application/zip',
+            'rar': 'application/x-rar-compressed',
+            '7z': 'application/x-7z-compressed'
+        };
+
+        return {
+            originalName: file.name,
+            fileSize: file.size,
+            type: file.type,
+            extension: extension,
+            mediaType: mediaTypes[extension] || 'application/octet-stream',
+            pages: 1,
+            downloads: 0,
+            isPublic: true,
+            createdDate: currentDate
+        };
+    };
 
     // Fetch files from API
     const fetchFiles = async () => {
@@ -77,14 +116,42 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                 method: "DELETE",
             });
             if (response.ok) {
-                message.success("File deleted successfully");
+                message.success("Файл амжилттай устгагдлаа");
                 fetchFiles();
             } else {
-                message.error("Failed to delete file");
+                message.error("Файл устгахад алдаа гарлаа");
             }
         } catch (error) {
             console.error("Error deleting file:", error);
-            message.error("Failed to delete file");
+            message.error("Файл устгахад алдаа гарлаа");
+        }
+    };
+
+    const handleTogglePublish = async (record) => {
+        try {
+            const response = await fetch("/api/file-library/admin", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: record.id,
+                    title: record.title,
+                    description: record.description,
+                    type: record.type,
+                    isPublic: !record.isPublic,
+                }),
+            });
+
+            if (response.ok) {
+                message.success(record.isPublic ? "File unpublished successfully" : "File published successfully");
+                fetchFiles();
+            } else {
+                message.error("Failed to update file status");
+            }
+        } catch (error) {
+            console.error("Error updating file status:", error);
+            message.error("Failed to update file status");
         }
     };
 
@@ -93,24 +160,47 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             const url = "/api/file-library/admin";
             const method = editingFile ? "PUT" : "POST";
 
+            // Prepare the request body
+            const requestBody = {
+                title: values.title,
+                description: values.description,
+                type: values.type,
+                isPublic: values.isPublic,
+                lng,
+            };
+
+            // Add file info for new files
+            if (!editingFile && values.file && values.file.fileList && values.file.fileList.length > 0) {
+                const file = values.file.fileList[0].originFileObj;
+                requestBody.fileInfo = createFileInfo(file);
+            }
+
+
+
+            // Add ID for editing
+            if (editingFile) {
+                requestBody.id = editingFile.id;
+            }
+
+            console.log("Sending request body:", requestBody);
+
             const response = await fetch(url, {
                 method,
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    ...values,
-                    id: editingFile?.id,
-                    lng,
-                }),
+                body: JSON.stringify(requestBody),
             });
 
-            if (response.ok) {
+            const responseData = await response.json();
+            console.log("Response:", responseData);
+
+            if (response.ok && responseData.success) {
                 message.success(editingFile ? "File updated successfully" : "File added successfully");
                 setIsModalVisible(false);
                 fetchFiles();
             } else {
-                message.error("Failed to save file");
+                message.error(responseData.error || "Failed to save file");
             }
         } catch (error) {
             console.error("Error saving file:", error);
@@ -141,13 +231,13 @@ export default function FileLibraryAdmin({ params: { lng } }) {
     // Table columns
     const columns = [
         {
-            title: "Title",
+            title: "Гарчиг",
             dataIndex: "title",
             key: "title",
             sorter: (a, b) => a.title.localeCompare(b.title),
         },
         {
-            title: "Type",
+            title: "Төрөл",
             dataIndex: "type",
             key: "type",
             filters: [
@@ -170,7 +260,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             onFilter: (value, record) => record.type === value,
         },
         {
-            title: "File Info",
+            title: "Файлын мэдээлэл",
             dataIndex: "file_info",
             key: "file_info",
             render: (fileInfo) => {
@@ -184,7 +274,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             },
         },
         {
-            title: "File Size",
+            title: "Файлын хэмжээ",
             dataIndex: "fileSize",
             key: "fileSize",
             render: (size) => {
@@ -200,13 +290,13 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             },
         },
         {
-            title: "Downloads",
+            title: "Татах",
             dataIndex: "downloads",
             key: "downloads",
             sorter: (a, b) => a.downloads - b.downloads,
         },
         {
-            title: "Public",
+            title: "Төлөв",
             dataIndex: "isPublic",
             key: "isPublic",
             render: (isPublic) => (
@@ -216,14 +306,14 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             ),
         },
         {
-            title: "Created",
+            title: "Үүсгэсэн огноо",
             dataIndex: "createdDate",
             key: "createdDate",
             render: (date) => new Date(date).toLocaleDateString(),
             sorter: (a, b) => new Date(a.createdDate) - new Date(b.createdDate),
         },
         {
-            title: "Actions",
+            title: "Үүсгэсэн огноо",
             key: "actions",
             render: (_, record) => (
                 <Space>
@@ -233,23 +323,38 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                         size="small"
                         onClick={() => handleDownload(record)}
                     >
-                        Download
+                        Татах
                     </Button>
                     <Button
                         icon={<EditOutlined />}
                         size="small"
                         onClick={() => handleEdit(record)}
                     >
-                        Edit
+                        Засварлах
                     </Button>
                     <Button
-                        danger
-                        icon={<DeleteOutlined />}
+                        type={record.isPublic ? "default" : "primary"}
                         size="small"
-                        onClick={() => handleDelete(record.id)}
+                        onClick={() => handleTogglePublish(record)}
                     >
-                        Delete
+                        {record.isPublic ? "Нийтлэхгүй болгох" : "Нийтлэх"}
                     </Button>
+                    <Popconfirm
+                        title="Устгахдаа итгэлтэй байна уу?"
+                        description="Энэ файлыг устгасны дараа сэргээх боломжгүй."
+                        onConfirm={() => handleDelete(record.id)}
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                        placement="left"
+                    >
+                        <Button
+                            danger
+                            icon={<DeleteOutlined />}
+                            size="small"
+                        >
+                            Устгах
+                        </Button>
+                    </Popconfirm>
                 </Space>
             ),
         },
@@ -272,14 +377,6 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                     allowClear
                 />
                 <Space>
-                    <Button
-                        onClick={() => {
-                            const url = `/api/file-library/admin?lng=${lng}&searchTerm=${searchTerm}&limit=1000`;
-                            window.open(url, '_blank');
-                        }}
-                    >
-                        Бүгдийг харах
-                    </Button>
                     <Button
                         type="primary"
                         icon={<PlusOutlined />}
@@ -339,37 +436,23 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                         label="Төрөл"
                         rules={[{ required: true, message: "Төрөл сонгоно уу" }]}
                     >
-                        <Select placeholder="Select file type">
-                            <Option value="nso-magazine">NSO Magazine</Option>
-                            <Option value="magazine">Magazine</Option>
-                            <Option value="census">Census</Option>
-                            <Option value="survey">Survey</Option>
-                            <Option value="infographic">Infographic</Option>
-                            <Option value="weekprice">Week Price</Option>
-                            <Option value="foreigntrade">Foreign Trade</Option>
-                            <Option value="presentation">Presentation</Option>
-                            <Option value="bulletin">Bulletin</Option>
-                            <Option value="annual">Annual</Option>
-                            <Option value="livingstandart">Living Standard</Option>
-                            <Option value="agricultural_census">Agricultural Census</Option>
-                            <Option value="enterprise_census">Enterprise Census</Option>
-                            <Option value="livestock_census">Livestock Census</Option>
-                            <Option value="pahc">PAHC</Option>
+                        <Select placeholder="Төрөл сонгоно уу">
+                            <Option value="nso-magazine">Үндэсний статистик сэтгүүл</Option>
+                            <Option value="magazine">Ном, товхимол</Option>
+                            <Option value="census">Тооллого</Option>
+                            <Option value="survey">Түүвэр судалгаа</Option>
+                            <Option value="infographic">Инфографик</Option>
+                            <Option value="weekprice">7 хоногийн үнийн мэдээ</Option>
+                            <Option value="foreigntrade">15 хоногийн гадаад худалдааны мэдээ</Option>
+                            <Option value="presentation">Сарын мэдээний презентац</Option>
+                            <Option value="bulletin">Сарын танилцуулга</Option>
+                            <Option value="annual">Жилийн эмхэтгэл</Option>
+                            <Option value="livingstandart">Амьжиргааны доод түвшин</Option>
+                            <Option value="agricultural_census">ХААТ</Option>
+                            <Option value="enterprise_census">ААНБТ</Option>
+                            <Option value="livestock_census">Мал тооллого</Option>
+                            <Option value="pahc">ХАОСТ</Option>
                         </Select>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="list_order"
-                        label="Дараалал"
-                    >
-                        <Input type="number" placeholder="Enter list order" />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="data_viz_id"
-                        label="Дата визуал"
-                    >
-                        <Input placeholder="Enter data visualization ID" />
                     </Form.Item>
 
                     <Form.Item
@@ -377,7 +460,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                         label="Төлөв"
                         valuePropName="checked"
                     >
-                        <Select>
+                        <Select placeholder="Төлөв сонгоно уу">
                             <Option value={true}>Нийтлэх</Option>
                             <Option value={false}>Нийтлэхгүй</Option>
                         </Select>
