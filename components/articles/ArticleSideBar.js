@@ -10,7 +10,7 @@ export default function ArticleSideBar({ article }) {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '/images/default.jpg';
-        return `/uploads/images/${imagePath}`;
+        return `/uploads/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {

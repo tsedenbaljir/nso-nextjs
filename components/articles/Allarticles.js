@@ -12,13 +12,13 @@ export default function Index({ Articles, loading, mainPath }) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `/uploads/images/${imagePath}`;
+        return `/uploads/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {
         setErrorImages(prev => ({
             ...prev,
-            [articleId]: `/uploads/images/${imagePath}`
+            [articleId]: `/uploads/${imagePath}`
         }));
     };
 

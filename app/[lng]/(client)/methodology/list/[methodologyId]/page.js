@@ -24,7 +24,7 @@ export default function Methodology({ params: lng }) {
                 if (data.status) {
                     setMethodology(data.data);
                     setPdfUrl(
-                        process.env.FRONTEND + "/uploads/images/" +
+                        process.env.FRONTEND + "/uploads/" +
                         JSON.parse(data.data?.file_info).pathName || null
                     );
                 } else {

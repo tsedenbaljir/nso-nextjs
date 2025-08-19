@@ -3,6 +3,7 @@ import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
 import { Inter } from "next/font/google";
 import Layout from '@/components/baseLayout';
+// import { App } from '@/components/chatBOT/n8nChat';
 
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
@@ -46,6 +47,7 @@ export default function RootLayout({ children, params: { lng } }) {
         <Layout lng={lng}>
           {children}
         </Layout>
+        {/* <App /> */}
       </body>
     </html>
   );

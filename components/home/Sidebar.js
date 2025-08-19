@@ -35,7 +35,7 @@ export default function Sidebar({ t, lng }) {
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(/uploads/images/'${indicators[3]?.image}')`,
+                            backgroundImage: `url(/uploads/'${indicators[3]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[3]?.last_modified_date.substring(0, 10) || "..."}</span>
@@ -54,7 +54,7 @@ export default function Sidebar({ t, lng }) {
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(/uploads/images/'${indicators[2]?.image}')`,
+                            backgroundImage: `url(/uploads/'${indicators[2]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[2]?.last_modified_date.substring(0, 10) || "..."}</span>
@@ -73,7 +73,7 @@ export default function Sidebar({ t, lng }) {
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(/uploads/images/'${indicators[1]?.image}')`,
+                            backgroundImage: `url(/uploads/'${indicators[1]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[1]?.last_modified_date.substring(0, 10) || "..."}</span>
@@ -92,7 +92,7 @@ export default function Sidebar({ t, lng }) {
                 }} className="__card">
                     <span className="__icon"
                         style={{
-                            backgroundImage: `url(/uploads/images/'${indicators[0]?.image}')`,
+                            backgroundImage: `url(/uploads/'${indicators[0]?.image}')`,
                         }}
                     ></span>
                     <span className="__desc">{indicators[0]?.last_modified_date.substring(0, 10) || "..."}</span>

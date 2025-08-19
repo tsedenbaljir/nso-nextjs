@@ -51,7 +51,7 @@ export default function Statcate({ params: { lng } }) {
                         }}>
                             <img
                                 className="cover"
-                                src={`${dt.file_info && "/uploads/images/" + JSON.parse(dt.file_info).pathName || "/images/news1.png"}`}
+                                src={`${dt.file_info && "/uploads/" + JSON.parse(dt.file_info).pathName || "/images/news1.png"}`}
                                 alt={dt.name}
                             />
                             <span className="title">{dt.name}</span>

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Path from '@/components/path/Index';
-import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/OneField/Index';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function Statecate({ children, params }) {
     const { lng } = params;
@@ -77,7 +77,7 @@ export default function Statecate({ children, params }) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
-        { label: name ? <div className='text-nowrap'>{name[0]?.text}</div> : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
+        { label: name ? <div className='text-nowrap'>{name[0]?.text.split('_')[1] ? name[0]?.text.split('_')[1] : name[0]?.text}</div> : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
         { label: title ? title === '0' ? '' : title : <LoadingDiv /> }
     ] : pathname.includes('statcate') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },

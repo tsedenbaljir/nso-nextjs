@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import VariablesPanel from '@/components/table-view/VariablePanel';
 import Loading from '@/components/Loader';
+import DataQueryInterface from '@/components/DataQueryInterface';
+import { Collapse, Space } from 'antd';
+import { ApiOutlined } from '@ant-design/icons';
+
+const { Panel } = Collapse;
 
 export default function TableView({ params }) {
     const lng = params.lng;
@@ -12,6 +17,7 @@ export default function TableView({ params }) {
     const searchParams = useSearchParams();
     const subtables = searchParams.get('subtables');
 
+    const [selectedValues, setSelectedValues] = useState({});
     const [metadataUrl, setMetadata] = useState('');
     const [title, setTitle] = useState('');
     const [variables, setVariables] = useState([]);
@@ -81,13 +87,31 @@ export default function TableView({ params }) {
                         <Loading />
                     </div>
                 ) : variables.length > 0 ? (
-                    <VariablesPanel variables={variables} title={title} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`} lng={lng} />
+                    <VariablesPanel variables={variables} title={title} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`} lng={lng} setSelectedValues={setSelectedValues} selectedValues={selectedValues} />
                 ) : (
                     <div className='flex items-center justify-center h-64'>
                         <p className='text-gray-500 text-lg'>{lng === 'mn' ? 'Хүснэгтийн мэдээлэл олдсонгүй' : 'No data found'}</p>
                     </div>
                 )}
+
                 <div className='mt-5' dangerouslySetInnerHTML={{ __html: metadataUrl }} />
+
+                {/* Data Query Interface */}
+                <div className="mt-8">
+                    <Collapse>
+                        <Panel
+                            header={
+                                <Space>
+                                    <ApiOutlined />
+                                    <span className='text-lg font-normal'>Дараах хаягаас POST хүсэлт илгээх</span>
+                                </Space>
+                            }
+                            key="1"
+                        >
+                            <DataQueryInterface subtables={subtables} sector={sector} subsector={subsector} id={id} lng={lng} selectedValues={selectedValues} />
+                        </Panel>
+                    </Collapse>
+                </div>
             </div>
         </div>
     );

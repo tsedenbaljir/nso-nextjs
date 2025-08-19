@@ -63,7 +63,7 @@ export default function Main({ sector, subsector, lng }) {
                         <div onClick={() => {
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`${process.env.FRONTEND}/uploads/images/${filePath}`, "_blank");
+                                window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-gray-900 font-medium text-nowrap cursor-pointer">
@@ -125,7 +125,7 @@ export default function Main({ sector, subsector, lng }) {
                         <div onClick={() => {
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`${process.env.FRONTEND}/uploads/images/${filePath}`, "_blank");
+                                window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">

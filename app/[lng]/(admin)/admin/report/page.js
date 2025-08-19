@@ -11,7 +11,8 @@ import {
     EyeOutlined,
     SearchOutlined,
     FilterOutlined,
-    ReloadOutlined
+    ReloadOutlined,
+    ArrowRightOutlined
 } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -129,15 +130,13 @@ export default function ReportAdmin({ params: { lng } }) {
             });
             const result = await response.json();
 
-            console.log('Subsector List API Response:', result);
-
             if (result.data && Array.isArray(result.data)) {
-                console.log('Subsector Data:', result.data);
                 // Transform the data for dropdown options
                 const options = result.data.map(item => ({
                     label: item.text,
                     value: item.id,
-                    type: item.type
+                    type: item.type,
+                    sector: item.sector
                 }));
                 setSubsectorOptions(options);
             } else {
@@ -857,9 +856,9 @@ export default function ReportAdmin({ params: { lng } }) {
                             placeholder="Салбар эсвэл дэд салбар сонгоно уу"
                             allowClear
                         >
-                            {subsectorOptions.map(option => (
+                            {subsectorOptions.sort((a, b) => a.sector.localeCompare(b.sector)).map(option => (
                                 <Option key={option.value} value={option.value}>
-                                    {option.label}
+                                    {option.sector} <ArrowRightOutlined /> {option.label}
                                 </Option>
                             ))}
                         </Select>
@@ -962,9 +961,9 @@ export default function ReportAdmin({ params: { lng } }) {
                             placeholder="Салбар эсвэл дэд салбар сонгоно уу"
                             allowClear
                         >
-                            {subsectorOptions.map(option => (
+                            {subsectorOptions.sort((a, b) => a.sector.localeCompare(b.sector)).map(option => (
                                 <Option key={option.value} value={option.value}>
-                                    {option.label}
+                                    {option.sector} <ArrowRightOutlined /> {option.label}
                                 </Option>
                             ))}
                         </Select>

@@ -123,7 +123,7 @@ export default function Home({ params: { lng } }) {
                                         <div
                                             className="ws_desc my-4 text-base"
                                             dangerouslySetInnerHTML={{
-                                                __html: dt.body.length > 250 ? dt.body.substr(0, 250) + '...' : dt.body
+                                                __html: dt.body.length > 250 ? dt.body.substr(0, 500) + '...' : dt.body
                                             }}
                                         ></div>
 

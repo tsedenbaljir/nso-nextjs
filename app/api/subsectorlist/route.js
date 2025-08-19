@@ -9,11 +9,11 @@ const getSubsectors = async (subsectorId) => {
   if (!subsectorId) {
     return [];
   }
-  
+
   try {
     const lng = "mn";
     const subsectorName = subsectorId;
-    
+
     if (!subsectorName) {
       return NextResponse.json({ error: "Missing subsectorName parameter" }, { status: 400 });
     }
@@ -44,7 +44,7 @@ const getSubsectors = async (subsectorId) => {
     const textData = await response.text();
     const validJson = textData;
     const subcategories = JSON.parse(validJson);
-    
+
     if (!Array.isArray(subcategories)) {
       return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
     }
@@ -55,6 +55,7 @@ const getSubsectors = async (subsectorId) => {
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 };
+
 export async function GET(req) {
   try {
     const lng = "mn";
@@ -90,9 +91,10 @@ export async function GET(req) {
       return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
     }
     const allSubsectors = [];
-    for (const sector of categories) {
+    console.log(categories);
+    for (const sector of categories.filter(sector => sector.text !== "Түүхэн Статистик")) {
       const subs = await getSubsectors(sector.id);
-      allSubsectors.push(...subs);
+      allSubsectors.push(...subs.map(sub => ({ ...sub, sector: sector.text })));
     }
 
 

@@ -12,8 +12,7 @@ import BarChart from './charts/BarChart';
 import AreaChart from './charts/AreaChart';
 import PieChart from './charts/PieChart';
 
-export default function VariablesPanel({ variables, title, url, lng }) {
-  const [selectedValues, setSelectedValues] = useState({});
+export default function VariablesPanel({ variables, title, url, lng, setSelectedValues, selectedValues }) {
   const [selectedValuesCount, setSelectedValuesCount] = useState(0);
   const [showOptions, setShowOptions] = useState(1);
   const [resultData, setResultData] = useState(null);
@@ -99,10 +98,11 @@ export default function VariablesPanel({ variables, title, url, lng }) {
 
   useEffect(() => {
     var count = 1;
-    if (Object.keys(selectedValues).length > 0)
+    if (Object.keys(selectedValues).length > 0) {
       for (const value of Object.values(selectedValues)) {
         count *= value.length;
       }
+    }
     setSelectedValuesCount(count);
   }, [selectedValues]);
 
@@ -125,7 +125,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
             </h2>
             <div className='!min-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full px-2 py-1 mb-2 bg-white'>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
-                  onClick={() => setShowOptions(1)}>
+                onClick={() => setShowOptions(1)}>
                 <input
                   type='radio'
                   className='mr-2'
@@ -136,7 +136,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
                 <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
-                  onClick={() => setShowOptions(2)}>
+                onClick={() => setShowOptions(2)}>
                 <input
                   type='radio'
                   className='mr-2'
@@ -147,7 +147,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
                 <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Шугаман график' : 'Line charts'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
-                  onClick={() => setShowOptions(3)}>
+                onClick={() => setShowOptions(3)}>
                 <input
                   type='radio'
                   className='mr-2'
@@ -158,7 +158,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
                 <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Баганан график' : 'Column charts'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
-                  onClick={() => setShowOptions(4)}>
+                onClick={() => setShowOptions(4)}>
                 <input
                   type='radio'
                   className='mr-2'
@@ -169,7 +169,7 @@ export default function VariablesPanel({ variables, title, url, lng }) {
                 <label className='cursor-pointer font-light'>{lng === 'mn' ? 'Туузан график' : 'Bar charts'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
-                  onClick={() => setShowOptions(5)}>
+                onClick={() => setShowOptions(5)}>
                 <input
                   type='radio'
                   className='mr-2'

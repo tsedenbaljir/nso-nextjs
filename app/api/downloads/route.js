@@ -19,7 +19,7 @@ export async function POST(req) {
         }
 
         const imageName = path.basename(new URL(imageUrl).pathname);
-        const dirPath = path.join(process.cwd(), 'public', 'uploads', 'images');
+        const dirPath = path.join(process.cwd(), 'public', 'uploads');
         const localPath = path.join(dirPath, imageName);
 
         if (!fs.existsSync(dirPath)) {
@@ -44,8 +44,8 @@ export async function POST(req) {
             success: true,
             message: 'Image downloaded and saved.',
             filename: imageName,
-            path: `/uploads/images/${imageName}`,
-            fullUrl: `/uploads/images/${imageName}`,
+            path: `/uploads/${imageName}`,
+            fullUrl: `/uploads/${imageName}`,
         });
     } catch (err) {
         console.error('Download error:', err.message);

@@ -186,6 +186,8 @@ export async function GET(req) {
 
     try {
         const results = await db.raw(`
+        SELECT 'hun_am_oron%20suutsnii_2015%20toollogo.pdf' AS pathName,
+        0 size
     `);
 
         let uploadResults = await processUploads(results, httpsAgent, myHeaders);

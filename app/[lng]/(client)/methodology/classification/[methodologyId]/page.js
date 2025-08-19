@@ -29,7 +29,7 @@ export default function Methodology() {
           setMethodology(data.data);
           if (data.data.file_info) {
             const fileInfo = JSON.parse(data.data.file_info);
-            setPdfUrl(process.env.FRONTEND + "/uploads/images/" + fileInfo.pathName);
+            setPdfUrl(process.env.FRONTEND + "/uploads/" + fileInfo.pathName);
           }
         } else {
           console.error("Failed to fetch methodology:", data.message);

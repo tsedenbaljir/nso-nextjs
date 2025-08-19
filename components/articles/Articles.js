@@ -16,7 +16,7 @@ export default function Articles({ article }) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `/uploads/images/${imagePath}`;
+        return `/uploads/${imagePath}`;
     };
 
     const handleImageError = () => {
