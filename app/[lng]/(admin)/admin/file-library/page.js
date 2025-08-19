@@ -155,52 +155,102 @@ export default function FileLibraryAdmin({ params: { lng } }) {
         }
     };
 
+    // Upload file using the existing upload API
+    const uploadFile = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) throw new Error('File upload failed');
+
+            const data = await response.json();
+            return data.filename;
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            throw error;
+        }
+    };
+
     const handleSubmit = async (values) => {
         try {
             const url = "/api/file-library/admin";
-            const method = editingFile ? "PUT" : "POST";
 
-            // Prepare the request body
-            const requestBody = {
-                title: values.title,
-                description: values.description,
-                type: values.type,
-                isPublic: values.isPublic,
-                lng,
-            };
-
-            // Add file info for new files
             if (!editingFile && values.file && values.file.fileList && values.file.fileList.length > 0) {
+                // For new files, upload the actual file first
                 const file = values.file.fileList[0].originFileObj;
-                requestBody.fileInfo = createFileInfo(file);
-            }
+                
+                // Upload file using the existing upload API
+                const uploadedFileName = await uploadFile(file);
+                
+                // Create file info with the uploaded filename
+                const fileInfo = {
+                    ...createFileInfo(file),
+                    fileName: uploadedFileName,
+                    filePath: `/uploads/${uploadedFileName}`,
+                };
 
+                // Create the file record in database
+                const requestBody = {
+                    title: values.title,
+                    description: values.description,
+                    type: values.type,
+                    isPublic: values.isPublic,
+                    lng,
+                    fileInfo: fileInfo,
+                };
 
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
+                });
 
-            // Add ID for editing
-            if (editingFile) {
-                requestBody.id = editingFile.id;
-            }
+                const responseData = await response.json();
+                console.log("Response:", responseData);
 
-            console.log("Sending request body:", requestBody);
-
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestBody),
-            });
-
-            const responseData = await response.json();
-            console.log("Response:", responseData);
-
-            if (response.ok && responseData.success) {
-                message.success(editingFile ? "File updated successfully" : "File added successfully");
-                setIsModalVisible(false);
-                fetchFiles();
+                if (response.ok && responseData.success) {
+                    message.success("File uploaded successfully");
+                    setIsModalVisible(false);
+                    fetchFiles();
+                } else {
+                    message.error(responseData.error || "Failed to upload file");
+                }
             } else {
-                message.error(responseData.error || "Failed to save file");
+                // For editing existing files, just update metadata
+                const requestBody = {
+                    title: values.title,
+                    description: values.description,
+                    type: values.type,
+                    isPublic: values.isPublic,
+                    lng,
+                    id: editingFile.id,
+                };
+
+                const response = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
+                });
+
+                const responseData = await response.json();
+                console.log("Response:", responseData);
+
+                if (response.ok && responseData.success) {
+                    message.success("File updated successfully");
+                    setIsModalVisible(false);
+                    fetchFiles();
+                } else {
+                    message.error(responseData.error || "Failed to update file");
+                }
             }
         } catch (error) {
             console.error("Error saving file:", error);
@@ -210,17 +260,52 @@ export default function FileLibraryAdmin({ params: { lng } }) {
 
     const handleDownload = async (file) => {
         try {
-            const response = await fetch(`/api/file-library/download/${file.id}`);
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = file.originalName || file.title;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
+            // Parse file info to get the file path
+            let filePath = null;
+            let originalName = file.title;
+            
+            if (file.file_info) {
+                try {
+                    const fileInfo = JSON.parse(file.file_info);
+                    filePath = fileInfo.filePath;
+                    originalName = fileInfo.originalName || file.title;
+                } catch (e) {
+                    console.error("Error parsing file info:", e);
+                }
+            }
+
+            if (filePath) {
+                // Download from the uploaded file path
+                const response = await fetch(filePath);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = originalName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    message.error("File not found");
+                }
+            } else {
+                // Fallback to API download
+                const response = await fetch(`/api/file-library/download/${file.id}`);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = originalName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    message.error("Failed to download file");
+                }
             }
         } catch (error) {
             console.error("Error downloading file:", error);
