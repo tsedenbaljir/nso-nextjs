@@ -45,6 +45,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
 
         return {
             originalName: file.name,
+            pathName: file.name,
             fileSize: file.size,
             type: file.type,
             extension: extension,
