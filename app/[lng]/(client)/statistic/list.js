@@ -58,8 +58,12 @@ export default function Tabs({
     //     }
     // };
 
-    const onDownloadDirect = async (fileInfo) => {
+    const onDownloadDirect = async (fileInfo, id) => {
         try {
+            await fetch(`/api/file-library`, {
+                method: "POST",
+                body: JSON.stringify({ id }),
+            });
             const parsed =
                 typeof fileInfo === "string" ? JSON.parse(fileInfo) : fileInfo;
             if (!parsed?.pathName) return;
@@ -165,7 +169,7 @@ export default function Tabs({
                                         {/* Гарчиг */}
                                         <div
                                             className="clamp-title text-gray-800 hover:text-gray-800"
-                                            onClick={() => onDownloadDirect(item.file_info)}
+                                            onClick={() => onDownloadDirect(item.file_info, item.id)}
                                         >
                                             {item.name || "Нэр байхгүй"}
                                         </div>
