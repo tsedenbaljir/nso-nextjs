@@ -60,15 +60,15 @@ export default function Tabs({
 
     const onDownloadDirect = async (fileInfo, id) => {
         try {
-            await fetch(`/api/file-library`, {
-                method: "POST",
-                body: JSON.stringify({ id }),
-            });
             const parsed =
                 typeof fileInfo === "string" ? JSON.parse(fileInfo) : fileInfo;
             if (!parsed?.pathName) return;
             const url = `${process.env.FRONTEND}/uploads/${parsed.pathName}`;
             window.open(url, "_blank");
+            await fetch(`/api/file-library`, {
+                method: "POST",
+                body: JSON.stringify({ id }),
+            });
         } catch (err) {
             console.error("Download error:", err);
         }

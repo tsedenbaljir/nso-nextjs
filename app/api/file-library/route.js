@@ -36,13 +36,6 @@ export async function GET(req) {
 
         const results = await db.raw(baseQuery, queryParams);
 
-        // Update total views count only if article exists
-        await db.raw(`
-            UPDATE web_1212_download 
-            SET views = COALESCE(CAST(views AS INT), 0) + 1 
-            WHERE id = ?
-            `, [results.id]);
-
         return NextResponse.json({
             status: true,
             data: results,
