@@ -182,6 +182,7 @@ export async function PUT(req) {
             description,
             type,
             isPublic,
+            fileInfo,
         } = body;
 
         if (!id) {
@@ -199,6 +200,12 @@ export async function PUT(req) {
             last_modified_by: "admin",
             last_modified_date: new Date(),
         };
+
+        // If new file info is provided, update it
+        if (fileInfo) {
+            updateData.file_info = JSON.stringify(fileInfo);
+            updateData.file_size = parseInt(fileInfo.fileSize || 0);
+        }
 
         // Remove undefined values
         Object.keys(updateData).forEach(key =>

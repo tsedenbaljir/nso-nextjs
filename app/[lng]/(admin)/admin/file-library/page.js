@@ -100,12 +100,10 @@ export default function FileLibraryAdmin({ params: { lng } }) {
     const handleEdit = (record) => {
         setEditingFile(record);
         form.setFieldsValue({
-            title: record.title,
-            description: record.description,
-            type: record.type,
-            category: record.category,
-            tags: record.tags,
-            isPublic: record.isPublic,
+            title: record.title || record.name,
+            description: record.description || record.info,
+            type: record.type || record.file_type,
+            isPublic: record.isPublic === 1 || record.published === 1 || record.isPublic,
         });
         setIsModalVisible(true);
     };
@@ -224,47 +222,50 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                     }
                 }
             } else {
+                // For editing existing files
+                let requestBody = {
+                    id: editingFile.id,
+                    title: values.title,
+                    description: values.description,
+                    type: values.type,
+                    isPublic: values.isPublic,
+                };
+
+                // Check if a new file was uploaded during editing
                 if (values.file && values.file.fileList && values.file.fileList.length > 0) {
                     const file = values.file.fileList[0].originFileObj;
-
-                    // Upload file using the existing upload API
+                    
+                    // Upload the new file
                     const uploadedFileName = await uploadFile(file);
-
+                    
                     // Create file info with the uploaded filename
                     const fileInfo = {
                         ...createFileInfo(file),
                         fileName: uploadedFileName,
                         filePath: `/uploads/${uploadedFileName}`,
                     };
+                    
+                    // Add file info to request body
+                    requestBody.fileInfo = fileInfo;
+                    requestBody.fileSize = file.size;
+                }
 
-                    // For editing existing files, just update metadata
-                    const requestBody = {
-                        title: values.title,
-                        description: values.description,
-                        type: values.type,
-                        isPublic: values.isPublic,
-                        lng,
-                        id: editingFile.id,
-                        fileInfo: fileInfo,
-                    };
+                const response = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
+                });
 
-                    const response = await fetch(url, {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(requestBody),
-                    });
+                const responseData = await response.json();
 
-                    const responseData = await response.json();
-
-                    if (response.ok && responseData.success) {
-                        message.success("File updated successfully");
-                        setIsModalVisible(false);
-                        fetchFiles();
-                    } else {
-                        message.error(responseData.error || "Failed to update file");
-                    }
+                if (response.ok && responseData.success) {
+                    message.success("Файл амжилттай шинэчлэгдлээ");
+                    setIsModalVisible(false);
+                    fetchFiles();
+                } else {
+                    message.error(responseData.error || "Файл шинэчлэхэд алдаа гарлаа");
                 }
             }
         } catch (error) {
@@ -569,16 +570,30 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                     {/* {!editingFile && ( */}
                     <Form.Item
                         name="file"
-                        label="Файл сонгох"
-                        rules={[{ required: true, message: "Файл сонгоно уу" }]}
+                        label={editingFile ? "Файл солих (сонгохгүй бол хуучин файл хэвээр үлдэнэ)" : "Файл сонгох"}
+                        rules={[{ required: !editingFile ? true : false, message: "Файл сонгоно уу" }]}
                     >
                         <Upload
                             beforeUpload={() => false}
                             maxCount={1}
                             accept="*/*"
                         >
-                            <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+                            <Button icon={<UploadOutlined />}>
+                                {editingFile ? "Шинэ файл сонгох" : "Файл сонгох"}
+                            </Button>
                         </Upload>
+                        {editingFile && editingFile.file_info && (
+                            <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
+                                Одоогийн файл: {(() => {
+                                    try {
+                                        const fileInfo = JSON.parse(editingFile.file_info);
+                                        return fileInfo.originalName || 'Unknown file';
+                                    } catch {
+                                        return 'Unknown file';
+                                    }
+                                })()}
+                            </div>
+                        )}
                     </Form.Item>
                     {/* )} */}
 
