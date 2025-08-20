@@ -64,7 +64,6 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             const response = await fetch(`/api/file-library/admin?lng=${lng}&searchTerm=${searchTerm}`);
             if (response.ok) {
                 const data = await response.json();
-                console.log("API Response:", data);
 
                 // Ensure data.data is always an array
                 if (data.success && data.data) {
@@ -181,76 +180,91 @@ export default function FileLibraryAdmin({ params: { lng } }) {
         try {
             const url = "/api/file-library/admin";
 
-            if (!editingFile && values.file && values.file.fileList && values.file.fileList.length > 0) {
-                // For new files, upload the actual file first
-                const file = values.file.fileList[0].originFileObj;
-                
-                // Upload file using the existing upload API
-                const uploadedFileName = await uploadFile(file);
-                
-                // Create file info with the uploaded filename
-                const fileInfo = {
-                    ...createFileInfo(file),
-                    fileName: uploadedFileName,
-                    filePath: `/uploads/${uploadedFileName}`,
-                };
+            if (!editingFile) {
+                if (values.file && values.file.fileList && values.file.fileList.length > 0) {
+                    // For new files, upload the actual file first
+                    const file = values.file.fileList[0].originFileObj;
 
-                // Create the file record in database
-                const requestBody = {
-                    title: values.title,
-                    description: values.description,
-                    type: values.type,
-                    isPublic: values.isPublic,
-                    lng,
-                    fileInfo: fileInfo,
-                };
+                    // Upload file using the existing upload API
+                    const uploadedFileName = await uploadFile(file);
 
-                const response = await fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(requestBody),
-                });
+                    // Create file info with the uploaded filename
+                    const fileInfo = {
+                        ...createFileInfo(file),
+                        fileName: uploadedFileName,
+                        filePath: `/uploads/${uploadedFileName}`,
+                    };
 
-                const responseData = await response.json();
-                console.log("Response:", responseData);
+                    // Create the file record in database
+                    const requestBody = {
+                        title: values.title,
+                        description: values.description,
+                        type: values.type,
+                        isPublic: values.isPublic,
+                        lng,
+                        fileInfo: fileInfo,
+                    };
 
-                if (response.ok && responseData.success) {
-                    message.success("File uploaded successfully");
-                    setIsModalVisible(false);
-                    fetchFiles();
-                } else {
-                    message.error(responseData.error || "Failed to upload file");
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(requestBody),
+                    });
+
+                    const responseData = await response.json();
+
+                    if (response.ok && responseData.success) {
+                        message.success("File uploaded successfully");
+                        setIsModalVisible(false);
+                        fetchFiles();
+                    } else {
+                        message.error(responseData.error || "Failed to upload file");
+                    }
                 }
             } else {
-                // For editing existing files, just update metadata
-                const requestBody = {
-                    title: values.title,
-                    description: values.description,
-                    type: values.type,
-                    isPublic: values.isPublic,
-                    lng,
-                    id: editingFile.id,
-                };
+                if (values.file && values.file.fileList && values.file.fileList.length > 0) {
+                    const file = values.file.fileList[0].originFileObj;
 
-                const response = await fetch(url, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(requestBody),
-                });
+                    // Upload file using the existing upload API
+                    const uploadedFileName = await uploadFile(file);
 
-                const responseData = await response.json();
-                console.log("Response:", responseData);
+                    // Create file info with the uploaded filename
+                    const fileInfo = {
+                        ...createFileInfo(file),
+                        fileName: uploadedFileName,
+                        filePath: `/uploads/${uploadedFileName}`,
+                    };
 
-                if (response.ok && responseData.success) {
-                    message.success("File updated successfully");
-                    setIsModalVisible(false);
-                    fetchFiles();
-                } else {
-                    message.error(responseData.error || "Failed to update file");
+                    // For editing existing files, just update metadata
+                    const requestBody = {
+                        title: values.title,
+                        description: values.description,
+                        type: values.type,
+                        isPublic: values.isPublic,
+                        lng,
+                        id: editingFile.id,
+                        fileInfo: fileInfo,
+                    };
+
+                    const response = await fetch(url, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(requestBody),
+                    });
+
+                    const responseData = await response.json();
+
+                    if (response.ok && responseData.success) {
+                        message.success("File updated successfully");
+                        setIsModalVisible(false);
+                        fetchFiles();
+                    } else {
+                        message.error(responseData.error || "Failed to update file");
+                    }
                 }
             }
         } catch (error) {
@@ -264,7 +278,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             // Parse file info to get the file path
             let filePath = null;
             let originalName = file.title;
-            
+
             if (file.file_info) {
                 try {
                     const fileInfo = JSON.parse(file.file_info);
@@ -552,21 +566,21 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                         </Select>
                     </Form.Item>
 
-                    {!editingFile && (
-                        <Form.Item
-                            name="file"
-                            label="Файл сонгох"
-                            rules={[{ required: true, message: "Файл сонгоно уу" }]}
+                    {/* {!editingFile && ( */}
+                    <Form.Item
+                        name="file"
+                        label="Файл сонгох"
+                        rules={[{ required: true, message: "Файл сонгоно уу" }]}
+                    >
+                        <Upload
+                            beforeUpload={() => false}
+                            maxCount={1}
+                            accept="*/*"
                         >
-                            <Upload
-                                beforeUpload={() => false}
-                                maxCount={1}
-                                accept="*/*"
-                            >
-                                <Button icon={<UploadOutlined />}>Файл сонгох</Button>
-                            </Upload>
-                        </Form.Item>
-                    )}
+                            <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+                        </Upload>
+                    </Form.Item>
+                    {/* )} */}
 
                     <Form.Item>
                         <Space>
