@@ -181,6 +181,7 @@ export async function PUT(req) {
             title,
             description,
             type,
+            lng,
             isPublic,
             fileInfo,
         } = body;
@@ -196,6 +197,7 @@ export async function PUT(req) {
             name: title,
             info: description,
             file_type: type,
+            language: lng,
             published: isPublic === true ? 1 : 0,
             last_modified_by: "admin",
             last_modified_date: new Date(),

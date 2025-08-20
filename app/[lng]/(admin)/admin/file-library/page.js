@@ -103,6 +103,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             title: record.title || record.name,
             description: record.description || record.info,
             type: record.type || record.file_type,
+            lng: record.lng || record.language,
             isPublic: record.isPublic === 1 || record.published === 1 || record.isPublic,
         });
         setIsModalVisible(true);
@@ -134,9 +135,10 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                 },
                 body: JSON.stringify({
                     id: record.id,
-                    title: record.title,
-                    description: record.description,
-                    type: record.type,
+                    title: record.title || record.name,
+                    description: record.description || record.info,
+                    type: record.type || record.file_type,
+                    lng: record.lng || record.language,
                     isPublic: !record.isPublic,
                 }),
             });
@@ -198,8 +200,8 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                         title: values.title,
                         description: values.description,
                         type: values.type,
+                        lng: values.lng,
                         isPublic: values.isPublic,
-                        lng,
                         fileInfo: fileInfo,
                     };
 
@@ -228,6 +230,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                     title: values.title,
                     description: values.description,
                     type: values.type,
+                    lng: values.lng,
                     isPublic: values.isPublic,
                 };
 
@@ -553,6 +556,17 @@ export default function FileLibraryAdmin({ params: { lng } }) {
                             <Option value="enterprise_census">ААНБТ</Option>
                             <Option value="livestock_census">Мал тооллого</Option>
                             <Option value="pahc">ХАОСТ</Option>
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                        name="lng"
+                        label="Хэл"
+                        rules={[{ required: true, message: "Хэл сонгоно уу" }]}
+                    >
+                        <Select placeholder="Хэл сонгоно уу">
+                            <Option value="mn">Монгол</Option>
+                            <Option value="en">English</Option>
                         </Select>
                     </Form.Item>
 
