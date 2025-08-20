@@ -7,7 +7,6 @@ import Path from '@/components/path/Index';
 import { Timeline } from 'primereact/timeline';
 
 import { Dialog } from 'primereact/dialog';
-import "@/components/styles/organizational.scss";
 
 export default function Orgs({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
