@@ -42,7 +42,7 @@ export default function Index({ lng }) {
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.business')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Society%20and%20development/Gender`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Society,%20development/Disability`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.society')}</span>
                                 </Link>
@@ -50,11 +50,11 @@ export default function Index({ lng }) {
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.economy')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Education,%20health/Edu main`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Education,%20health/Births,%20deaths`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.environment')}</span>
                                 </Link>
-                                <Link className="__card" href={`/${lng}/statcate/table/Labour,%20business/Business%20Register`}>
+                                <Link className="__card" href={`/${lng}/statcate/table/Labour,%20business/Civil%20servants`}>
                                     <span className="__icon"></span>
                                     <span className="__name">{t('statCate.labourForce')}</span>
                                 </Link>

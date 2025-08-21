@@ -200,14 +200,14 @@ export default function Orgs({ lng }) {
                                         </ol>
                                     </li>
                                     <li>
-                                        <h5 className="level-2 rectangle text-center" style={{ width: 236 }} onClick={() => { showDialoggazar(20) }}>
+                                        <h5 className="level-2 rectangle text-center" style={{ width: 236, marginTop: 200 }} onClick={() => { showDialoggazar(20) }}>
                                             {t('aboutUsJson.G6')}
                                         </h5>
                                     </li>
                                 </ol>
                             </div>
-                            <div className="lines">
-                            </div>
+                            {/* <div className="lines">
+                            </div> */}
                             <div className="containers mt-7 mb-7">
                                 <ol className="level-22-wrapper">
                                     <ol className="level-32-wrapper">

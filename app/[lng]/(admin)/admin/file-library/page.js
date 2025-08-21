@@ -1,21 +1,60 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Button, Input, Table, Space, Modal, Form, Upload, message, Card, Typography, Select, DatePicker, Popconfirm } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, UploadOutlined, DownloadOutlined } from "@ant-design/icons";
-import { useTranslation } from "@/app/i18n/client";
+import { Button, Input, Table, Space, Modal, Form, Upload, message, Card, Typography, Select, DatePicker, Popconfirm, Row, Col, Statistic } from "antd";
+import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, UploadOutlined, DownloadOutlined, FilterOutlined, ReloadOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
 
-export default function FileLibraryAdmin({ params: { lng } }) {
-    const { t } = useTranslation(lng, "lng", "");
-    const [files, setFiles] = useState([]);
+export default function FileLibraryAdmin() {
+    const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingFile, setEditingFile] = useState(null);
     const [form] = Form.useForm();
+    
+    // Statistics state
+    const [stats, setStats] = useState({
+        total: 0,
+        published: 0,
+        unpublished: 0,
+        types: {}
+    });
+    
+    // Filters state
+    const [filters, setFilters] = useState({
+        lng: '',
+        type: '',
+        info: '',
+        published: ''
+    });
+    
+    // Pagination state
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 20, // Show 20 rows per page
+        total: 0
+    });
+
+    const fileTypes = [
+        { value: 'nso-magazine', label: 'NSO Magazine' },
+        { value: 'magazine', label: 'Magazine' },
+        { value: 'census', label: 'Census' },
+        { value: 'survey', label: 'Survey' },
+        { value: 'infographic', label: 'Infographic' },
+        { value: 'weekprice', label: 'Week Price' },
+        { value: 'foreigntrade', label: 'Foreign Trade' },
+        { value: 'presentation', label: 'Presentation' },
+        { value: 'bulletin', label: 'Bulletin' },
+        { value: 'annual', label: 'Annual' },
+        { value: 'livingstandart', label: 'Living Standard' },
+        { value: 'agricultural_census', label: 'Agricultural Census' },
+        { value: 'enterprise_census', label: 'Enterprise Census' },
+        { value: 'livestock_census', label: 'Livestock Census' },
+        { value: 'pahc', label: 'PAHC' }
+    ];
 
     // Create file info object with detailed metadata
     const createFileInfo = (file) => {
@@ -57,30 +96,65 @@ export default function FileLibraryAdmin({ params: { lng } }) {
         };
     };
 
+    // Calculate statistics from data
+    const calculateStats = (data) => {
+        return {
+            total: data.length,
+            published: data.filter(item => item.isPublic === 1 || item.isPublic === '1' || item.isPublic === true).length,
+            unpublished: data.filter(item => item.isPublic === 0 || item.isPublic === '0' || item.isPublic === false).length,
+            types: data.reduce((acc, item) => {
+                const type = item.type || item.file_type;
+                acc[type] = (acc[type] || 0) + 1;
+                return acc;
+            }, {})
+        };
+    };
+
+    // Get paginated data for display
+    const getPaginatedData = (data) => {
+        const startIndex = (pagination.current - 1) * pagination.pageSize;
+        const endIndex = startIndex + pagination.pageSize;
+        return data.slice(startIndex, endIndex);
+    };
+
     // Fetch files from API
     const fetchFiles = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`/api/file-library/admin?lng=${lng}&searchTerm=${searchTerm}`);
+            // Build query parameters - no pagination parameters needed
+            const params = new URLSearchParams();
+            if (searchTerm) params.append('searchTerm', searchTerm);
+            if (filters.type) params.append('type', filters.type);
+            if (filters.published !== '') params.append('published', filters.published);
+            if (filters.lng) params.append('lng', filters.lng);
+
+            const response = await fetch(`/api/file-library/admin?${params.toString()}`);
             if (response.ok) {
                 const data = await response.json();
 
                 // Ensure data.data is always an array
+                let fileData = [];
                 if (data.success && data.data) {
                     if (Array.isArray(data.data)) {
-                        setFiles(data.data);
+                        fileData = data.data;
                     } else {
                         // If data.data is not an array, wrap it in an array
-                        setFiles([data.data]);
+                        fileData = [data.data];
                     }
-                } else {
-                    setFiles([]);
                 }
+                
+                setFilteredData(fileData);
+                setStats(calculateStats(fileData));
+                setPagination(prev => ({
+                    ...prev,
+                    total: fileData.length,
+                    current: 1
+                }));
             }
         } catch (error) {
             console.error("Error fetching files:", error);
             message.error("Failed to fetch files");
-            setFiles([]);
+            setFilteredData([]);
         } finally {
             setLoading(false);
         }
@@ -88,7 +162,7 @@ export default function FileLibraryAdmin({ params: { lng } }) {
 
     useEffect(() => {
         fetchFiles();
-    }, [lng, searchTerm]);
+    }, [searchTerm, filters.type, filters.published, filters.lng]);
 
     // Handle file operations
     const handleAdd = () => {
@@ -332,6 +406,23 @@ export default function FileLibraryAdmin({ params: { lng } }) {
         }
     };
 
+    // Handle filter changes
+    const handleFilter = () => {
+        fetchFiles();
+    };
+
+    // Clear all filters
+    const clearFilters = () => {
+        setFilters({
+            lng: '',
+            type: '',
+            info: '',
+            published: ''
+        });
+        setSearchTerm('');
+        fetchFiles();
+    };
+
     // Table columns
     const columns = [
         {
@@ -467,19 +558,124 @@ export default function FileLibraryAdmin({ params: { lng } }) {
     return (
         <div className="p-6">
             <div style={{ marginBottom: 24 }}>
-                <Title level={2}>Тайлан эмхэтгэл</Title>
+                <Title level={2}>Файлын сан</Title>
             </div>
 
+            {/* Statistics Cards */}
+            <Row gutter={16} className="mb-6">
+                <Col span={6}>
+                    <Card>
+                        <Statistic
+                            title="Нийт файл"
+                            value={stats.total}
+                            valueStyle={{ color: '#3f8600' }}
+                        />
+                    </Card>
+                </Col>
+                <Col span={6}>
+                    <Card>
+                        <Statistic
+                            title="Нийтлэгдсэн"
+                            value={stats.published}
+                            valueStyle={{ color: '#1890ff' }}
+                        />
+                    </Card>
+                </Col>
+                <Col span={6}>
+                    <Card>
+                        <Statistic
+                            title="Нийтлэгдээгүй"
+                            value={stats.unpublished}
+                            valueStyle={{ color: '#cf1322' }}
+                        />
+                    </Card>
+                </Col>
+                <Col span={6}>
+                    <Card>
+                        <Statistic
+                            title="Файлын төрөл"
+                            value={Object.keys(stats.types).length}
+                            valueStyle={{ color: '#722ed1' }}
+                        />
+                    </Card>
+                </Col>
+            </Row>
+
+            {/* Filters */}
+            <Card className="mb-6">
+                <div className="flex flex-wrap gap-4 items-end">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Хэл</label>
+                        <Select
+                            value={filters.lng}
+                            onChange={(value) => {
+                                setFilters(prev => ({ ...prev, lng: value }));
+                            }}
+                            style={{ width: 120 }}
+                            placeholder="Хэл сонгоно уу"
+                            allowClear
+                        >
+                            <Option value="mn">Монгол</Option>
+                            <Option value="en">English</Option>
+                        </Select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Файлын төрөл</label>
+                        <Select
+                            value={filters.type}
+                            onChange={(value) => setFilters(prev => ({ ...prev, type: value }))}
+                            style={{ width: 120 }}
+                            placeholder="Бүгд"
+                            allowClear
+                        >
+                            {fileTypes.map(type => (
+                                <Option key={type.value} value={type.value}>{type.label}</Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Хайх</label>
+                        <Input
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Нэр эсвэл мэдээлэл"
+                            style={{ width: 200 }}
+                            prefix={<SearchOutlined />}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Төлөв</label>
+                        <Select
+                            value={filters.published}
+                            onChange={(value) => setFilters(prev => ({ ...prev, published: value }))}
+                            style={{ width: 120 }}
+                            placeholder="Бүгд"
+                            allowClear
+                        >
+                            <Option value={1}>Нийтлэгдсэн</Option>
+                            <Option value={0}>Нийтлэгдээгүй</Option>
+                        </Select>
+                    </div>
+                    <Space>
+                        <Button
+                            type="primary"
+                            icon={<FilterOutlined />}
+                            onClick={handleFilter}
+                        >
+                            Шүүх
+                        </Button>
+                        <Button
+                            icon={<ReloadOutlined />}
+                            onClick={clearFilters}
+                        >
+                            Цэвэрлэх
+                        </Button>
+                    </Space>
+                </div>
+            </Card>
+
             {/* Search and Add */}
-            <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Input
-                    placeholder="Файлын нэрээр хайх..."
-                    prefix={<SearchOutlined />}
-                    style={{ width: 300 }}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    allowClear
-                />
+            <div style={{ marginBottom: 16, display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                 <Space>
                     <Button
                         type="primary"
@@ -494,16 +690,25 @@ export default function FileLibraryAdmin({ params: { lng } }) {
             {/* Files Table */}
             <Table
                 columns={columns}
-                dataSource={files}
+                dataSource={getPaginatedData(filteredData)}
                 loading={loading}
                 rowKey="id"
                 pagination={{
-                    pageSize: 50,
+                    current: pagination.current,
+                    pageSize: pagination.pageSize,
+                    total: filteredData.length,
                     showSizeChanger: true,
                     showQuickJumper: true,
-                    pageSizeOptions: ['10', '25', '50', '100'],
+                    pageSizeOptions: ['10', '20', '25', '50', '100'],
                     showTotal: (total, range) =>
                         `${range[0]}-${range[1]} of ${total} файл`,
+                    onChange: (page, pageSize) => {
+                        setPagination(prev => ({
+                            ...prev,
+                            current: page,
+                            pageSize: pageSize
+                        }));
+                    }
                 }}
             />
 

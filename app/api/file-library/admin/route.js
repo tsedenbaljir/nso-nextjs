@@ -10,9 +10,9 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
         const lng = searchParams.get("lng");
         const searchTerm = searchParams.get("searchTerm") || "";
-        const page = parseInt(searchParams.get("page")) || 1;
-        const limit = parseInt(searchParams.get("limit")) || 50;
-        const offset = (page - 1) * limit;
+        const type = searchParams.get("type");
+        const published = searchParams.get("published");
+
 
         let query = `
             SELECT 
@@ -51,39 +51,19 @@ export async function GET(req) {
             params.push(searchPattern, searchPattern, searchPattern);
         }
 
+        if (type) {
+            query += " AND file_type = ?";
+            params.push(type);
+        }
+
+        if (published !== null && published !== undefined && published !== '') {
+            query += " AND published = ?";
+            params.push(parseInt(published));
+        }
+
         query += " ORDER BY published_date DESC";
 
-        // Get total count with same filters
-        let countQuery = `SELECT COUNT(*) as total FROM web_1212_download 
-            WHERE file_type IN (
-                'nso-magazine', 'magazine', 'census', 'survey', 'infographic',
-                'weekprice', 'foreigntrade', 'presentation', 'bulletin', 'annual',
-                'livingstandart', 'agricultural_census', 'enterprise_census',
-                'livestock_census', 'pahc'
-            ) `;
-        
-        const countParams = [];
-        if (lng) {
-            countQuery += " AND language = ?";
-            countParams.push(lng);
-        }
-        if (searchTerm) {
-            countQuery += " AND (name LIKE ? OR info LIKE ? OR file_type LIKE ?)";
-            const searchPattern = `%${searchTerm}%`;
-            countParams.push(searchPattern, searchPattern, searchPattern);
-        }
-        
-        const countResult = await db.raw(countQuery, countParams);
-        const total = countResult && countResult[0] && countResult[0][0] ? countResult[0][0].total : 0;
-
-        // Get paginated results - SQL Server syntax
-        if (limit >= 1000) {
-            // Get all results without pagination
-        } else {
-            query += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-            params.push(offset, limit);
-        }
-
+        // Get all results without pagination
         const result = await db.raw(query, params);
         
         // Ensure we always return an array
@@ -96,15 +76,11 @@ export async function GET(req) {
             files = [result[0]];
         }
 
+        const total = files.length;
+
         return NextResponse.json({
             success: true,
             data: files,
-            pagination: {
-                total,
-                page,
-                limit,
-                totalPages: Math.ceil(total / limit),
-            },
         });
     } catch (error) {
         console.error("Error fetching files:", error);
