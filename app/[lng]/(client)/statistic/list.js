@@ -95,8 +95,7 @@ export default function Tabs({
                         {/* Header */}
                         <div className="flex justify-between items-center">
                             <span className="__sector_header">
-                                {sectors_list.find((e) => e.type === type)?.mnName ||
-                                    "Бүх файл"}
+                                {lng === "mn" ? sectors_list.find((e) => e.type === type)?.mnName : sectors_list.find((e) => e.type === type)?.enName || "All files"}
                             </span>
 
                             {/* Dropdown */}
