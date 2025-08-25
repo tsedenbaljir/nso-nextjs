@@ -49,7 +49,7 @@ export async function PUT(req, { params }) {
             name: body.name,
             body: body.body,
             language: body.language,
-            published: body.published,
+            published: parseInt(body.published),
             news_type: body.news_type,
             published_date: body.published_date,
             header_image: body.header_image,

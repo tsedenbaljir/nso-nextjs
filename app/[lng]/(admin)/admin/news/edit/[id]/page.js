@@ -107,7 +107,7 @@ export default function EditNews({ params: { lng, id } }) {
                 body: body,
                 language: language.toUpperCase(),
                 published: published,
-                news_type: newsType,
+                news_type: newsType === 1 ? 'LATEST' : newsType === 2 ? 'MEDIA' : 'TENDER',
                 published_date: publishedDate || new Date().toISOString(),
                 header_image: imageUrl,
                 last_modified_by: user?.username || 'anonymousUser',
