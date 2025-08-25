@@ -79,7 +79,7 @@ export default function Sidebar({ t, lng }) {
                     <span className="__desc">{indicators[1]?.last_modified_date.substring(0, 10) || "..."}</span>
                     <span className="__name">{lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}</span>
                     <div className="__phone">
-                        <span style={{ marginTop: 10, fontSize: 14 }}>{indicators[1]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng} </span>
+                        <span style={{ marginTop: 10, fontSize: 14 }}>{indicators[1]?.indicator.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.info_eng} </span>
                         <div className="ng-star-inserted">
                             {indicators[1]?.indicator_perc <= 0 ? <span className="text-lg">{indicators[1]?.indicator_perc.toFixed(1) || "..."}%</span> : <span className="success">{indicators[1]?.indicator_perc.toFixed(1) || "..."}%</span>}
                         </div>

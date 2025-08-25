@@ -13,20 +13,27 @@ export async function DELETE(req, { params }) {
     }
 
     try {
-        await db('web_1212_content')
+        const result = await db('web_1212_methodology')
             .where('id', params.id)
-            .delete();
+            .del();
+
+        if (result === 0) {
+            return NextResponse.json({
+                status: false,
+                message: "Methodology not found"
+            }, { status: 404 });
+        }
 
         return NextResponse.json({
             status: true,
-            message: "Article deleted successfully"
+            message: "Methodology deleted successfully"
         });
 
     } catch (error) {
-        console.error('Error deleting article:', error);
+        console.error('Error deleting methodology:', error);
         return NextResponse.json({
             status: false,
-            message: "Failed to delete article: " + error.message
+            message: "Failed to delete methodology: " + error.message
         }, { status: 500 });
     }
 }
@@ -47,42 +54,53 @@ export async function PUT(req, { params }) {
         // Prepare update data with audit fields
         const updateData = {
             name: body.name,
-            body: body.body,
             language: body.language,
             published: body.published,
-            news_type: body.news_type,
-            published_date: body.published_date,
-            header_image: body.header_image,
+            catalogue_id: body.catalogue_id,
+            sector_type: body.sector_type,
+            file_info: body.file_info,
+            approved_date: body.approved_date,
             last_modified_date: new Date().toISOString(),
-            last_modified_by: auth.user.name // Use authenticated user's ID
+            last_modified_by: auth.user.name
         };
 
-        // Update the article
-        await db('web_1212_content')
+        // Remove undefined values
+        Object.keys(updateData).forEach(key =>
+            updateData[key] === undefined && delete updateData[key]
+        );
+
+        // Update the methodology
+        const result = await db('web_1212_methodology')
             .where('id', params.id)
             .update(updateData);
 
-        // Fetch the updated article
-        const updatedArticle = await db('web_1212_content')
+        if (result === 0) {
+            return NextResponse.json({
+                status: false,
+                message: "Methodology not found"
+            }, { status: 404 });
+        }
+
+        // Fetch the updated methodology
+        const updatedMethodology = await db('web_1212_methodology')
             .where('id', params.id)
             .first();
 
         return NextResponse.json({
             status: true,
-            data: updatedArticle,
-            message: "Article updated successfully"
+            data: updatedMethodology,
+            message: "Methodology updated successfully"
         });
 
     } catch (error) {
-        console.error('Error updating article:', error);
+        console.error('Error updating methodology:', error);
         return NextResponse.json({
             status: false,
-            message: "Failed to update article: " + error.message
+            message: "Failed to update methodology: " + error.message
         }, { status: 500 });
     }
 }
 
-// Add GET endpoint for fetching single article
 export async function GET(req, { params }) {
     // Check authentication
     const auth = await checkAdminAuth(req);
@@ -94,28 +112,28 @@ export async function GET(req, { params }) {
     }
 
     try {
-        const article = await db('web_1212_content')
+        const methodology = await db('web_1212_methodology')
             .where('id', params.id)
             .first();
 
-        if (!article) {
+        if (!methodology) {
             return NextResponse.json({
                 status: false,
-                message: "Article not found"
+                message: "Methodology not found"
             }, { status: 404 });
         }
 
         return NextResponse.json({
             status: true,
-            data: article,
+            data: methodology,
             message: ""
         });
 
     } catch (error) {
-        console.error('Error fetching article:', error);
+        console.error('Error fetching methodology:', error);
         return NextResponse.json({
             status: false,
-            message: "Failed to fetch article: " + error.message
+            message: "Failed to fetch methodology: " + error.message
         }, { status: 500 });
     }
 } 

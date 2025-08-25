@@ -200,7 +200,7 @@ export default function Orgs({ lng }) {
                                         </ol>
                                     </li>
                                     <li>
-                                        <h5 className="level-2 rectangle text-center" style={{ width: 236, marginTop: 200 }} onClick={() => { showDialoggazar(20) }}>
+                                        <h5 className="level-2 rectangle text-center" style={{ width: 277, marginTop: 144 }} onClick={() => { showDialoggazar(20) }}>
                                             {t('aboutUsJson.G6')}
                                         </h5>
                                     </li>

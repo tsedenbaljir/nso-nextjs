@@ -14,7 +14,7 @@ export default function FileLibraryAdmin() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingFile, setEditingFile] = useState(null);
     const [form] = Form.useForm();
-    
+
     // Statistics state
     const [stats, setStats] = useState({
         total: 0,
@@ -22,7 +22,7 @@ export default function FileLibraryAdmin() {
         unpublished: 0,
         types: {}
     });
-    
+
     // Filters state
     const [filters, setFilters] = useState({
         lng: '',
@@ -30,7 +30,7 @@ export default function FileLibraryAdmin() {
         info: '',
         published: ''
     });
-    
+
     // Pagination state
     const [pagination, setPagination] = useState({
         current: 1,
@@ -142,7 +142,7 @@ export default function FileLibraryAdmin() {
                         fileData = [data.data];
                     }
                 }
-                
+
                 setFilteredData(fileData);
                 setStats(calculateStats(fileData));
                 setPagination(prev => ({
@@ -311,17 +311,17 @@ export default function FileLibraryAdmin() {
                 // Check if a new file was uploaded during editing
                 if (values.file && values.file.fileList && values.file.fileList.length > 0) {
                     const file = values.file.fileList[0].originFileObj;
-                    
+
                     // Upload the new file
                     const uploadedFileName = await uploadFile(file);
-                    
+
                     // Create file info with the uploaded filename
                     const fileInfo = {
                         ...createFileInfo(file),
                         fileName: uploadedFileName,
                         filePath: `/uploads/${uploadedFileName}`,
                     };
-                    
+
                     // Add file info to request body
                     requestBody.fileInfo = fileInfo;
                     requestBody.fileSize = file.size;

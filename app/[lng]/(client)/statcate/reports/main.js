@@ -66,7 +66,7 @@ export default function Main({ sector, subsector, lng }) {
                                 window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
                             }
                         }}
-                            className="hover:text-blue-700 hover:underline text-gray-900 font-medium text-nowrap cursor-pointer">
+                            className="md:w-[200px] lg:w-[300px] xl:w-[400px] break-words hover:text-blue-700 hover:underline text-gray-900 font-medium cursor-pointer">
                             {rowData.name}
                         </div>
                     )}

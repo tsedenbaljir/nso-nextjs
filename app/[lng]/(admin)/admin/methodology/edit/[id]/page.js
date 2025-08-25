@@ -1,31 +1,29 @@
 "use client"
 import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation'
 import LoaderText from '@/components/Loading/Text/Index'
 import InputItems from "@/components/admin/Edits/AddNew/InputItems"
 import SelectInput from "@/components/admin/Edits/Select/SelectInput"
 import Upload from "@/components/admin/Edits/UploadImages/Upload"
+import { Select, DatePicker } from 'antd';
 
-const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
-    ssr: false,
-    loading: () => <p>Уншиж байна...</p>
-});
-export default function EditNews({ params: { lng, id } }) {
+export default function EditMethodology({ params: { lng, id } }) {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
+    const [sector_types, setTypes] = useState([])
+    const [catalogue, setCatalogue] = useState([])
     const [title, setTitle] = useState('')
-    const [body, setBody] = useState("<p></p>")
     const [newsType, setNewsType] = useState(1)
     const [language, setLanguage] = useState('mn')
     const [published, setPublished] = useState(true)
-    const [headerImageFile, setHeaderImageFile] = useState(null)
-    const [publishedDate, setPublishedDate] = useState('')
-    const [currentImage, setCurrentImage] = useState('');
-    const [user, setUser] = useState(null);
+    const [uploadedFile, setUploadedFile] = useState(null)
+    const [currentFileInfo, setCurrentFileInfo] = useState('')
+    const [catalogue_val, setCatalogue_val] = useState([])
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
-        fetchArticle()
+        fetchMethodology()
+        fetchData()
     }, [id])
 
     useEffect(() => {
@@ -44,28 +42,56 @@ export default function EditNews({ params: { lng, id } }) {
         fetchUser();
     }, []);
 
-    const fetchArticle = async () => {
+    const fetchData = async () => {
+        // Fetch sector types
         try {
-            const response = await fetch(`/api/articles/admin/${id}`)
+            const response = await fetch('/api/subsectorlist');
+            const sectors = await response.json();
+            const allSubsectors = [];
+
+            sectors.data.map((dt, index) => {
+                allSubsectors.push({ id: index + 1, name: dt.text, value: dt.id })
+            })
+            setTypes(allSubsectors)
+        } catch (error) {
+            console.error('Error fetching sector types:', error);
+        }
+
+        // Fetch catalogue
+        try {
+            const response = await fetch('/api/data_catalogue');
+            const sectors = await response.json();
+            setCatalogue(sectors.data)
+        } catch (error) {
+            console.error('Error fetching catalogue:', error);
+        }
+    }
+
+    const fetchMethodology = async () => {
+        try {
+            const response = await fetch(`/api/methodology/admin/${id}`)
             const data = await response.json()
             if (data.status) {
-                const article = data.data
-                setTitle(article.name)
-                setBody(article.body || "<p></p>")
-                setNewsType(article.news_type === 'LATEST' ? 1 : 2)
-                setLanguage(article.language.toLowerCase())
-                setPublished(article.published)
-                setPublishedDate(article.published_date)
-                setCurrentImage(article.header_image)
+                const methodology = data.data
+                setTitle(methodology.name || '')
+                setNewsType(methodology.sector_type || 1)
+                setLanguage(methodology.language?.toLowerCase() || 'mn')
+                setPublished(methodology.published === 1)
+                setCurrentFileInfo(methodology.file_info || '')
+                
+                // Set catalogue value if exists
+                if (methodology.catalogue_id) {
+                    setCatalogue_val([methodology.catalogue_id])
+                }
             }
             setLoading(false)
         } catch (error) {
-            console.error('Error fetching article:', error)
+            console.error('Error fetching methodology:', error)
             setLoading(false)
         }
     }
 
-    const uploadImage = async (file) => {
+    const uploadFile = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
 
@@ -76,13 +102,27 @@ export default function EditNews({ params: { lng, id } }) {
             });
 
             if (!response.ok) {
-                throw new Error('Image upload failed');
+                throw new Error('File upload failed');
             }
 
             const data = await response.json();
-            return data.url;
+            
+            // Create file_info object with metadata
+            const fileInfo = {
+                originalName: file.name,
+                pathName: data.url || file.name,
+                fileSize: file.size,
+                extension: file.name.split('.').pop().toLowerCase(),
+                mediaType: file.type,
+                pages: 1,
+                downloads: 0,
+                isPublic: true,
+                createdDate: new Date().toISOString()
+            };
+            
+            return JSON.stringify(fileInfo);
         } catch (error) {
-            console.error('Error uploading image:', error);
+            console.error('Error uploading file:', error);
             throw error;
         }
     };
@@ -90,126 +130,133 @@ export default function EditNews({ params: { lng, id } }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            let imageUrl = currentImage;
+            let fileInfo = currentFileInfo;
 
-            if (headerImageFile) {
+            if (uploadedFile) {
                 try {
-                    imageUrl = await uploadImage(headerImageFile);
+                    fileInfo = await uploadFile(uploadedFile);
                 } catch (error) {
-                    console.error('Error uploading image:', error);
-                    alert('Зураг хуулахад алдаа гарлаа!');
+                    console.error('Error uploading file:', error);
+                    alert('Файл хуулахад алдаа гарлаа!');
                     return;
                 }
             }
 
-            const articleData = {
+            const methodologyData = {
                 name: title,
-                body: body,
                 language: language.toUpperCase(),
-                published: published,
-                news_type: newsType === 1 ? 'LATEST' : 'MEDIA',
-                published_date: publishedDate || new Date().toISOString(),
-                header_image: imageUrl,
-                last_modified_by: user?.username || 'anonymousUser',
-                last_modified_date: new Date().toISOString()
+                published: published ? 1 : 0,
+                catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
+                sector_type: newsType,
+                file_info: fileInfo,
+                approved_date: published ? new Date().toISOString() : null
             };
 
-            const response = await fetch(`/api/articles/admin/${id}`, {
+            const response = await fetch(`/api/methodology/admin/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(articleData),
+                body: JSON.stringify(methodologyData),
             });
 
             const data = await response.json();
             if (data.status) {
-                alert('Мэдээ амжилттай засварлагдлаа');
-                router.push('/admin/news');
+                alert('Аргачлал амжилттай засварлагдлаа');
+                router.push('/admin/methodology');
             } else {
                 throw new Error(data.message || 'Update failed');
             }
         } catch (error) {
-            console.error('Error updating article:', error);
-            alert('Мэдээ засварлахад алдаа гарлаа!');
+            console.error('Error updating methodology:', error);
+            alert('Аргачлал засварлахад алдаа гарлаа!');
         }
     };
 
     return (
-            <div className="relative overflow-x-auto shadow-md pb-10">
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                    <main className='dark:bg-black h-full'>
-                        <div className="flex flex-grow items-center justify-between px-4 py-5 shadow-2 md:px-5 2xl:px-10">
-                            <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
-                                <div className="nso_btn nso_btn_default font-extrabold text-xl">
-                                    Мэдээ засах
-                                </div>
+        <div className="relative overflow-x-auto shadow-md pb-10">
+            <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                <main className='dark:bg-black h-full'>
+                    <div className="flex flex-grow items-center justify-between px-4 py-5 shadow-2 md:px-5 2xl:px-10">
+                        <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
+                            <div className="nso_btn nso_btn_default font-extrabold text-xl">
+                                Аргачлал засах
                             </div>
                         </div>
-                    </main>
+                    </div>
+                </main>
+            </div>
+            {!loading ? <div className="items-center justify-between px-4 md:px-5 2xl:px-10">
+                <div className='flex flex-wrap gap-3 mb-4'>
+                    <InputItems name={"Гарчиг"} data={title} setData={setTitle} />
                 </div>
-                {!loading ? <div className="items-center justify-between px-4 md:px-5 2xl:px-10">
-                    <div className='flex flex-wrap gap-3 mb-4'>
-                        <SelectInput
-                            setFields={setNewsType}
-                            value={newsType}
-                            data={[
-                                { id: 1, name: "Шинэ мэдээ" },
-                                { id: 2, name: "Медиа мэдээ" },
-                                { id: 3, name: "Тендер" }
-                            ]}
-                        />
-                        <SelectInput
-                            setFields={(value) => setLanguage(value === 1 ? 'mn' : 'en')}
-                            value={language === 'mn' ? 1 : 2}
-                            data={[
-                                { id: 1, name: "MN" },
-                                { id: 2, name: "EN" }
-                            ]}
-                        />
-                        <div className="flex items-center bg-gray-100 px-2 rounded-md">
-                            <input
-                                type="checkbox"
-                                id="publishedCheckbox"
-                                checked={published}
-                                onChange={(e) => setPublished(e.target.checked)}
-                                className="mr-2"
-                            />
-                            <label htmlFor="publishedCheckbox">Нийтлэх</label>
-                        </div>
-                    </div>
-                    <div className='flex flex-wrap gap-3 mb-4'>
-                        <InputItems name={"Гарчиг"} data={title} setData={setTitle} />
-                    </div>
+                <div className='flex flex-wrap gap-3 mb-4'>
+                    <Select
+                        style={{ width: '50%', height: 37 }}
+                        placeholder="Дата каталоги"
+                        value={catalogue_val.length > 0 ? catalogue_val[0] : undefined}
+                        onChange={(value) => {
+                            setCatalogue_val([value]);
+                        }}
+                        options={catalogue.map(item => ({
+                            label: item.namemn,
+                            value: item.id
+                        }))}
+                    />
+                    <SelectInput
+                        label="Статистикийн ангилал"
+                        setFields={setNewsType}
+                        value={newsType}
+                        data={sector_types}
+                    />
+                    <SelectInput
+                        label="Хэл"
+                        setFields={(value) => setLanguage(value === 1 ? 'mn' : 'en')}
+                        value={language === 'mn' ? 1 : 2}
+                        data={[
+                            { id: 1, name: "MN" },
+                            { id: 2, name: "EN" }
+                        ]}
+                    />
+                </div>
+                <div className='flex flex-wrap gap-3 mb-4' >
                     <div className='flex flex-wrap gap-3 mb-6'>
                         <Upload
-                            setHeaderImageFile={setHeaderImageFile}
+                            setHeaderImageFile={setUploadedFile}
                         />
                     </div>
-                    <Editor
-                        setBody={setBody}
-                        defaultValue={body}
-                    />
-                    <div className='float-right pt-4'>
-                        <button
-                            type="button"
-                            onClick={() => router.push('/admin/news/all')}
-                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-black bg-gray hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Буцах
-                        </button>
-                        <button
-                            onClick={handleSubmit}
-                            type="submit"
-                            className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                        >
-                            Хадгалах
-                        </button>
+                    <DatePicker className='mt-4' style={{ height: 50 }} />
+                    <div className="flex items-center bg-gray-100 px-2 rounded-md mt-4" style={{ height: 50 }}>
+                        <input
+                            type="checkbox"
+                            id="publishedCheckbox"
+                            checked={published}
+                            onChange={(e) => setPublished(e.target.checked)}
+                            className="mr-2"
+                        />
+                        <label htmlFor="publishedCheckbox">Нийтлэх</label>
                     </div>
-                </div> : <div className="items-center justify-between px-4 md:px-5 2xl:px-10 h-full">
-                    <LoaderText />
                 </div>
-                }
+                <div className='float-right pt-4'>
+                    <button
+                        type="button"
+                        onClick={() => router.push('/admin/methodology')}
+                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-black bg-gray hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Буцах
+                    </button>
+                    <button
+                        onClick={handleSubmit}
+                        type="submit"
+                        className="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    >
+                        Хадгалах
+                    </button>
+                </div>
+            </div> : <div className="items-center justify-between px-4 md:px-5 2xl:px-10 h-full">
+                <LoaderText />
             </div>
+            }
+        </div>
     )
 }

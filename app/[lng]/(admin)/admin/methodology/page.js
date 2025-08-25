@@ -121,8 +121,9 @@ export default function AllNews({ params: { lng } }) {
             rejectLabel: 'Үгүй',
             accept: async () => {
                 try {
-                    const response = await fetch(`/api/methodology/admin/${id}`, {
+                    const response = await fetch(`/api/methodology/admin`, {
                         method: 'DELETE',
+                        body: JSON.stringify({ id: id })
                     });
                     if (response.status === 401) {
                         handleUnauthorized()

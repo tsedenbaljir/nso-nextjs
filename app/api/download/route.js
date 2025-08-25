@@ -14,7 +14,7 @@ export async function GET(req) {
             SELECT *
                 FROM [NSOweb].[dbo].[web_1212_download]
                 WHERE info = ? and language = ? and published = 1 and file_type = ?
-                order by published_date desc
+                order by created_date desc
         `, [info, lng, type]);
             
         return NextResponse.json({

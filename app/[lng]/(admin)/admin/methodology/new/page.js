@@ -4,39 +4,25 @@ import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
 import Upload from "@/components/admin/Edits/UploadImages/Upload";
 import { Select, DatePicker } from 'antd';
-import dayjs from 'dayjs';
 
 const Dashboard = () => {
     const [sector_types, setTypes] = useState([]);
     const [catalogue, setCatalogue] = useState([]);
     const [catalogue_val, setCatalogue_val] = useState([]);
-    const [headerImageFile, setHeaderImageFile] = useState(null);
+    const [uploadedFile, setUploadedFile] = useState(null);
     const [title, setTitle] = useState('');
     const [newsType, setNewsType] = useState(1);
     const [language, setLanguage] = useState('mn');
     const [published, setPublished] = useState(true);
-    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await fetch('/api/auth/user');
-                const data = await response.json();
-                if (data.status) {
-                    setUser(data.user);
-                }
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
 
         async function data() {
             const response = await fetch('/api/subsectorlist');
             const sectors = await response.json();
             const allSubsectors = [];
-
             sectors.data.map((dt, index) => {
-                allSubsectors.push({ id: index + 1, name: dt.text, value: dt.id })
+                allSubsectors.push({ id: index + 1, name: dt.sector + " - " + dt.text, value: dt.id })
             })
             setTypes(allSubsectors)
         }
@@ -45,14 +31,18 @@ const Dashboard = () => {
         async function data_catalogue() {
             const response = await fetch('/api/data_catalogue');
             const sectors = await response.json();
-            setCatalogue(sectors.data)
+            // Transform data to match SelectInput format
+            const catalogueData = sectors.data.map((item, index) => ({
+                id: index + 1,
+                name: item.namemn,
+                value: item.id
+            }));
+            setCatalogue(catalogueData)
         }
         data_catalogue();
-
-        fetchUser();
     }, []);
 
-    const uploadImage = async (file) => {
+    const uploadFile = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
 
@@ -63,13 +53,27 @@ const Dashboard = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Image upload failed');
+                throw new Error('File upload failed');
             }
 
             const data = await response.json();
-            return data.url;
+
+            // Create file_info object with metadata
+            const fileInfo = {
+                originalName: file.name,
+                pathName: data.url || file.name,
+                fileSize: file.size,
+                extension: file.name.split('.').pop().toLowerCase(),
+                mediaType: file.type,
+                pages: 1, // Default value, can be updated if needed
+                downloads: 0,
+                isPublic: true,
+                createdDate: new Date().toISOString()
+            };
+
+            return JSON.stringify(fileInfo);
         } catch (error) {
-            console.error('Error uploading image:', error);
+            console.error('Error uploading file:', error);
             throw error;
         }
     };
@@ -78,43 +82,42 @@ const Dashboard = () => {
         e.preventDefault();
 
         try {
-            let imageUrl = '';
-            if (headerImageFile) {
-                imageUrl = await uploadImage(headerImageFile);
+            let fileInfo = '';
+            if (uploadedFile) {
+                fileInfo = await uploadFile(uploadedFile);
             }
 
             const currentDate = new Date().toISOString();
-
-            const articleData = {
+            const methodologyData = {
                 name: title,
                 language: language.toUpperCase(),
-                published: published,
-                list_order: 0,
-                created_by: user?.username || 'anonymousUser',
+                published: published ? 1 : 0,
+                // sector_type: catalogue[catalogue_val - 1].value || null,
+                catalogue_id: sector_types[newsType - 1].value || null,
+                sector_type: sector_types[newsType - 1].value || null,
+                file_info: fileInfo,
                 created_date: currentDate,
                 last_modified_date: currentDate,
-                content_type: 'NSONEWS',
-                news_type: newsType,
-                published_date: currentDate,
-                header_image: imageUrl,
-                views: 0
+                approved_date: published ? currentDate : null,
+                views: 0,
+                list_order: 0
             };
 
-            const response = await fetch('/api/articles', {
+            const response = await fetch('/api/methodology/admin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(articleData),
+                body: JSON.stringify(methodologyData),
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Failed to create article');
+                throw new Error(data.message || 'Failed to create methodology');
             }
 
-            alert('Мэдээ амжилттай нэмэгдлээ');
+            alert('Аргачлал амжилттай нэмэгдлээ');
 
         } catch (error) {
             console.error('Error posting data:', error);
@@ -140,17 +143,10 @@ const Dashboard = () => {
                     <InputItems name={"Гарчиг"} data={title} setData={setTitle} />
                 </div>
                 <div className='flex flex-wrap gap-3 mb-4'>
-                    <Select
-                        mode="multiple"
-                        style={{ width: '100%', height: 37 }}
-                        placeholder="Дата каталоги"
-                        onChange={(values) => {
-                            setCatalogue_val(values);
-                        }}
-                        options={catalogue.map(item => ({
-                            label: item.namemn,
-                            value: item.id
-                        }))}
+                    <SelectInput
+                        label="Дата каталоги"
+                        setFields={setCatalogue_val}
+                        data={catalogue}
                     />
                 </div>
                 <div className='flex flex-wrap gap-3 mb-4'>
@@ -171,7 +167,7 @@ const Dashboard = () => {
                 <div className='flex flex-wrap gap-3 mb-4' >
                     <div className='flex flex-wrap gap-3 mb-6'>
                         <Upload
-                            setHeaderImageFile={setHeaderImageFile}
+                            setHeaderImageFile={setUploadedFile}
                         />
                     </div>
                     <DatePicker className='mt-4' style={{ height: 50 }} />
