@@ -8,6 +8,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         const labels = dimensionIds.map((id) => dimensions[id].label);
         // List of labels that should have a code column after them
         const showCodeLabels = [
+            'Бүс', 'Region',
             'Аймаг', 'Aimag',
             'Аймаг, сум', 'Aimag, soum',
             'Баг, хороо', 'Bag, khoroo',
@@ -90,6 +91,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             const dimensionIds = pxData.id;
             const labels = dimensionIds.map((id) => dimensions[id].label);
             const showCodeLabels = [
+                'Бүс', 'Region',
                 'Аймаг', 'Aimag',
                 'Аймаг, сум', 'Aimag, soum',
                 'Баг, хороо', 'Bag, khoroo',
@@ -217,6 +219,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
 
         // List of labels that should not be grouped (same as table component)
         const noGroupLabels = [
+            'Бүс', 'Region',
             'Аймаг', 'Aimag',
             'Аймаг, сум', 'Aimag, soum',
             'Баг, хороо', 'Bag, khoroo',
@@ -250,6 +253,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
 
         // List of labels that should have a code column after them
         const showCodeLabels = [
+            'Бүс', 'Region',
             'Аймаг', 'Aimag',
             'Аймаг, сум', 'Aimag, soum',
             'Баг, хороо', 'Bag, khoroo',
@@ -300,7 +304,7 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
         Object.entries(groupedRows).forEach(([groupCode, groupRows]) => {
             groupRows.forEach((row, rowIndex) => {
                 const dataRow = [];
-                
+
                 // Add dimension values and codes - ensure we add exactly one value per dimension
                 validRowKeys.forEach(({ label }, index) => {
                     if (index < row.rowCombo.length) {

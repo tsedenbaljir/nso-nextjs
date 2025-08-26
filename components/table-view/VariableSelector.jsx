@@ -63,7 +63,8 @@ const VariableSelector = ({ variable, onChange, lng }) => {
       case 'base':
         values = variable.values
           .filter((val) =>
-            variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
+            variable.text !== 'Бүс' && variable.text !== 'Region' &&
+              variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
               variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
               variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
               variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
@@ -130,7 +131,8 @@ const VariableSelector = ({ variable, onChange, lng }) => {
           <div className='m-2 max-h-64 w-full md:min-w-[24%] md:max-w-[270px] overflow-y-auto h-full'>
             {variable.values
               .filter((val) =>
-                variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
+                variable.text !== 'Бүс' && variable.text !== 'Region' &&
+                  variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
                   variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
@@ -159,7 +161,8 @@ const VariableSelector = ({ variable, onChange, lng }) => {
           >
             {selected.length ===
               variable.values.filter((val) =>
-                variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
+                variable.text !== 'Бүс' && variable.text !== 'Region' &&
+                  variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
                   variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
@@ -169,7 +172,8 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             {lng === 'mn' ? 'Бүгдийг' : 'Select'} {' '}
             {selected.length ===
               variable.values.filter((val) =>
-                variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
+                variable.text !== 'Бүс' && variable.text !== 'Region' &&
+                  variable.text !== 'Аймаг' && variable.text !== 'Aimag' &&
                   variable.text !== 'Аймаг, сум' && variable.text !== 'Aimag, soum' &&
                   variable.text !== 'Баг, хороо' && variable.text !== 'Bag, khoroo' &&
                   variable.text !== 'Аймгийн код' && variable.text !== 'Aimag code' &&
@@ -181,6 +185,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
       </div>
 
       {(variable.code === 'Аймаг' || variable.code === 'Aimag' ||
+        variable.code === 'Бүс' || variable.code === 'Region' ||
         variable.code === 'Аймаг, сум' || variable.code === 'Aimag, soum' ||
         variable.code === 'Баг, хороо' || variable.code === 'Bag, khoroo' ||
         variable.code === 'Аймгийн код' || variable.code === 'Aimag code' ||

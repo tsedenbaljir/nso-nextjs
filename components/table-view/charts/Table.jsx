@@ -93,6 +93,7 @@ export default function ResultTable({ data, lng }) {
 
   // List of labels that should not be grouped
   const noGroupLabels = [
+    'Бүс', 'Region',
     'Аймаг', 'Aimag',
     'Аймаг, сум', 'Aimag, soum',
     'Баг, хороо', 'Bag, khoroo',
@@ -155,20 +156,20 @@ export default function ResultTable({ data, lng }) {
                     className='border p-2 min-w-80 max-w-150 font-normal text-sm align-top'
                   >
                     <span
-                      // style={{
-                      //   marginLeft: combo.code.length === 1 ? '0.5rem' :
-                      //     combo.code.length === 2 ? '1.5rem' :
-                      //       combo.code.length === 3 ? '2.5rem' :
-                      //         combo.code.length === 4 ? '3rem' :
-                      //           combo.code.length === 5 ? '3.5rem' :
-                      //             combo.code.length === 6 ? '4rem' :
-                      //               combo.code.length === 7 ? '4.5rem' :
-                      //                 combo.code.length === 8 ? '5.5rem' :
-                      //                   combo.code.length === 9 ? '6.5rem' :
-                      //                     combo.code.length === 10 ? '7.5rem' :
-                      //                       combo.code.length === 11 ? '8.5rem' :
-                      //                         combo.code.length === 12 ? '9rem' : ''
-                      // }}
+                    // style={{
+                    //   marginLeft: combo.code.length === 1 ? '0.5rem' :
+                    //     combo.code.length === 2 ? '1.5rem' :
+                    //       combo.code.length === 3 ? '2.5rem' :
+                    //         combo.code.length === 4 ? '3rem' :
+                    //           combo.code.length === 5 ? '3.5rem' :
+                    //             combo.code.length === 6 ? '4rem' :
+                    //               combo.code.length === 7 ? '4.5rem' :
+                    //                 combo.code.length === 8 ? '5.5rem' :
+                    //                   combo.code.length === 9 ? '6.5rem' :
+                    //                     combo.code.length === 10 ? '7.5rem' :
+                    //                       combo.code.length === 11 ? '8.5rem' :
+                    //                         combo.code.length === 12 ? '9rem' : ''
+                    // }}
                     >{combo.label}</span>
                   </td>
                 ))}
