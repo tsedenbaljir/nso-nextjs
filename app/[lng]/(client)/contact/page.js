@@ -10,9 +10,8 @@ import '@/components/styles/contact-us.scss';
 
 export default function Contact({ params: { lng } }) {
     const [loading, setLoading] = useState(true);
-    const [contactData, setContactData] = useState(null);
     const [webpageData, setWebpageData] = useState(null);
-    const [contactDataProvince, setContactDataProvince] = useState(null);
+    const [contactUsData, setContactUsData] = useState({});
 
     const { t } = useTranslation(lng, "lng", "");
 
@@ -21,106 +20,101 @@ export default function Contact({ params: { lng } }) {
         { label: t('footer.contact') },
     ];
     const options = {
-      q1: {
-        "Өдөр бүр": 1,
-        "7 хоног бүр": 2,
-        "Сар бүр": 3,
-        "Хааяа, шаардлагатай үед": 4
-      },
-      q2: {
-        "www.1212.mn": 1,
-        "Сошиал сувгууд": 2,
-        "Телевизийн сувгууд": 3,
-        "Сонин, хэвлэл": 4,
-        "Мэдээллийн сайтууд": 5,
-        "Лавлах утас 19001212, 70141212": 6
-      },
-      q3: {
-        "Бодлого боловсруулах, хяналт тавих": 1,
-        "Хууль эрх зүйн бэлтгэл": 2,
-        "Бизнесийн шийдвэр гаргах": 3,
-        "Ерөнхий мэдээлэлтэй болох": 4,
-        "Зах зээлийн анализ хийх": 5,
-        "Хэвлэл, медиад ашиглах": 6,
-        "Судалгаа, шинжилгээ хийх": 7,
-        "Гэрээ, хэлэлцээр хийх": 8,
-        "Мэдээлэл дахин түгээх": 9,
-        "Эдийн засгийн загвар, таамаглал": 10
-      },
-      q5: {
-        "Хүндрэлгүй": 1,
-        "Хэт ерөнхий, задаргаа муу": 2,
-        "Ойлгомжгүй, зааваргүй": 3,
-        "Хугацааны хоцрогдолтой": 4,
-        "Нарийвчилсан мэдээлэл авахад хүндрэлтэй": 5
-      }
+        q1: {
+            "Өдөр бүр": 1,
+            "7 хоног бүр": 2,
+            "Сар бүр": 3,
+            "Хааяа, шаардлагатай үед": 4
+        },
+        q2: {
+            "www.1212.mn": 1,
+            "Сошиал сувгууд": 2,
+            "Телевизийн сувгууд": 3,
+            "Сонин, хэвлэл": 4,
+            "Мэдээллийн сайтууд": 5,
+            "Лавлах утас 19001212, 70141212": 6
+        },
+        q3: {
+            "Бодлого боловсруулах, хяналт тавих": 1,
+            "Хууль эрх зүйн бэлтгэл": 2,
+            "Бизнесийн шийдвэр гаргах": 3,
+            "Ерөнхий мэдээлэлтэй болох": 4,
+            "Зах зээлийн анализ хийх": 5,
+            "Хэвлэл, медиад ашиглах": 6,
+            "Судалгаа, шинжилгээ хийх": 7,
+            "Гэрээ, хэлэлцээр хийх": 8,
+            "Мэдээлэл дахин түгээх": 9,
+            "Эдийн засгийн загвар, таамаглал": 10
+        },
+        q5: {
+            "Хүндрэлгүй": 1,
+            "Хэт ерөнхий, задаргаа муу": 2,
+            "Ойлгомжгүй, зааваргүй": 3,
+            "Хугацааны хоцрогдолтой": 4,
+            "Нарийвчилсан мэдээлэл авахад хүндрэлтэй": 5
+        }
     };
 
     const [formData, setFormData] = useState({
-      q1: '',
-      q2: '',
-      q3: [],
-      q4: {}, // { 0: 3, 1: 2, ... }
-      q5: ''
+        q1: '',
+        q2: '',
+        q3: [],
+        q4: {}, // { 0: 3, 1: 2, ... }
+        q5: ''
     });
 
     const handleChange = (question, value) => {
-      setFormData(prev => ({ ...prev, [question]: value }));
+        setFormData(prev => ({ ...prev, [question]: value }));
     };
 
     const handleCheckboxChange = (value) => {
-      setFormData(prev => {
-        const current = new Set(prev.q3);
-        if (current.has(value)) {
-          current.delete(value);
-        } else {
-          current.add(value);
-        }
-        return { ...prev, q3: [...current] };
-      });
+        setFormData(prev => {
+            const current = new Set(prev.q3);
+            if (current.has(value)) {
+                current.delete(value);
+            } else {
+                current.add(value);
+            }
+            return { ...prev, q3: [...current] };
+        });
     };
 
     const handleQ4Change = (index, score) => {
-      setFormData(prev => ({
-        ...prev,
-        q4: { ...prev.q4, [index]: score }
-      }));
-    };
-    const openNotification = (msg) => {
-      notification.open({
-        message: msg,
-      });
+        setFormData(prev => ({
+            ...prev,
+            q4: { ...prev.q4, [index]: score }
+        }));
     };
 
     const handleSubmit = async (e) => {
-      const encodeFormData = (data) => {
-        return {
-          q1: options.q1[data.q1] || 0,
-          q2: options.q2[data.q2] || 0,
-          q3: data.q3.map((item) => options.q3[item] || 0),
-          q4: data.q4, // аль хэдийн кодлогдсон (1-5, 0)
-          q5: options.q5[data.q5] || 0
+        const encodeFormData = (data) => {
+            return {
+                q1: options.q1[data.q1] || 0,
+                q2: options.q2[data.q2] || 0,
+                q3: data.q3.map((item) => options.q3[item] || 0),
+                q4: data.q4, // аль хэдийн кодлогдсон (1-5, 0)
+                q5: options.q5[data.q5] || 0
+            };
         };
-      };
 
-      e.preventDefault();
-      try {
-        const encoded = encodeFormData(formData);
-        await axios.post('/api/survey', encoded);
-          
-        notification.success({
-          message: 'Амжилттай илгээгдлээ!',
-          placement: 'topRight',  // хүсвэл байрлалаа өөрчлөх боломжтой
-          duration: 3,           // хэдэн секундын дараа алга болох хугацаа
-        });
-      } catch (err) {
-        notification.error({
-          message: 'Алдаа гарлаа. Та дахин оролдоно уу.',
-          description: err.message || '',
-          placement: 'topRight',
-          duration: 5,
-        });
-      }
+        e.preventDefault();
+        try {
+            const encoded = encodeFormData(formData);
+            await axios.post('/api/survey', encoded);
+
+            notification.success({
+                message: 'Амжилттай илгээгдлээ!',
+                placement: 'topRight',  // хүсвэл байрлалаа өөрчлөх боломжтой
+                duration: 3,           // хэдэн секундын дараа алга болох хугацаа
+            });
+        } catch (err) {
+            notification.error({
+                message: 'Алдаа гарлаа. Та дахин оролдоно уу.',
+                description: err.message || '',
+                placement: 'topRight',
+                duration: 5,
+            });
+        }
     };
 
 
@@ -139,26 +133,18 @@ export default function Contact({ params: { lng } }) {
                     setWebpageData(webpageResponse.data);
                 }
 
-                // Existing contact phones fetch
-                const contactResponse = await axios.get('https://gateway.1212.mn/services/1212/api/public/contents', {
-                    params: {
-                        'slug.equals': 'contact-phones',
-                        'language.equals': lng.toUpperCase()
-                    }
-                });
-                if (contactResponse.data && contactResponse.data.length > 0) {
-                    setContactData(contactResponse.data[0]);
-                }
+                // Fetch contact-us data for specific IDs
+                const contactUsResponse = await axios.get('/api/contactus?page=0&pageSize=50');
+                if (contactUsResponse.data && contactUsResponse.data.data) {
+                    const contactUsItems = contactUsResponse.data.data;
+                    const contactUsMap = {};
 
-                // Existing province data fetch
-                const provinceResponse = await axios.get('https://gateway.1212.mn/services/1212/api/public/contents', {
-                    params: {
-                        'slug.equals': 'Contact-province',
-                        'language.equals': lng.toUpperCase()
-                    }
-                });
-                if (provinceResponse.data && provinceResponse.data.length > 0) {
-                    setContactDataProvince(provinceResponse.data[0]);
+                    // Map data by ID
+                    contactUsItems.forEach(item => {
+                        contactUsMap[item.id] = item;
+                    });
+
+                    setContactUsData(contactUsMap);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -209,8 +195,10 @@ export default function Contact({ params: { lng } }) {
                     {loading ? (
                         <div className="text-center py-4"><LoadingDiv /></div>
                     ) : (
-                        contactData && (
-                            <div dangerouslySetInnerHTML={{ __html: contactData.body }} />
+                        contactUsData[6] && (
+                            <div dangerouslySetInnerHTML={{
+                                __html: lng === "mn" ? contactUsData[6].bodyMn : contactUsData[6].bodyEn
+                            }} />
                         )
                     )}
                 </div>
@@ -225,8 +213,10 @@ export default function Contact({ params: { lng } }) {
                     {loading ? (
                         <div className="text-center py-4"><LoadingDiv /></div>
                     ) : (
-                        contactDataProvince && (
-                            <div dangerouslySetInnerHTML={{ __html: contactDataProvince.body }} />
+                        contactUsData[5] && (
+                            <div dangerouslySetInnerHTML={{
+                                __html: lng === "mn" ? contactUsData[5].bodyMn : contactUsData[5].bodyEn
+                            }} />
                         )
                     )}
                 </div>
@@ -237,149 +227,149 @@ export default function Contact({ params: { lng } }) {
             label: <span className="font-bold">{lng === "mn" ? 'Сэтгэл ханамжийн судалгаа' : 'Survey'}</span>,
             className: 'contact_tab_item',
             children: (
-              <div className="contact_tab_item space-y-6 py-4">
-                {loading ? (
-                  <div className="text-center py-4"><LoadingDiv /></div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto text-sm">
-                  {/* Асуулт 1 */}
-                  <div>
-                    <p className="font-semibold">1. Та статистикийн мэдээллийг ямар давтамжтай ашигладаг вэ?</p>
-                    {["Өдөр бүр", "7 хоног бүр", "Сар бүр", "Хааяа, шаардлагатай үед"].map((option, idx) => (
-                      <label key={idx} className="block pl-4">
-                        <input
-                          type="radio"
-                          name="q1"
-                          value={option}
-                          checked={formData.q1 === option}
-                          onChange={(e) => handleChange("q1", e.target.value)}
-                          className="mr-2"
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                
-                  {/* Асуулт 2 */}
-                  <div>
-                    <p className="font-semibold">2. Та мэдээллийг ямар эх сурвалжаас авдаг вэ?</p>
-                    {["www.1212.mn", "Сошиал сувгууд", "Телевизийн сувгууд", "Сонин, хэвлэл", "Мэдээллийн сайтууд", "Лавлах утас 19001212, 70141212"].map((option, idx) => (
-                      <label key={idx} className="block pl-4">
-                        <input
-                          type="radio"
-                          name="q2"
-                          value={option}
-                          checked={formData.q2 === option}
-                          onChange={(e) => handleChange("q2", e.target.value)}
-                          className="mr-2"
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                
-                  {/* Асуулт 3 */}
-                  <div>
-                    <p className="font-semibold">3. Та ҮСХ-ны мэдээллийг ямар зорилгоор ашигладаг вэ?</p>
-                    {[
-                      "Бодлого боловсруулах, хяналт тавих",
-                      "Хууль эрх зүйн бэлтгэл",
-                      "Бизнесийн шийдвэр гаргах",
-                      "Ерөнхий мэдээлэлтэй болох",
-                      "Зах зээлийн анализ хийх",
-                      "Хэвлэл, медиад ашиглах",
-                      "Судалгаа, шинжилгээ хийх",
-                      "Гэрээ, хэлэлцээр хийх",
-                      "Мэдээлэл дахин түгээх",
-                      "Эдийн засгийн загвар, таамаглал"
-                    ].map((option, idx) => (
-                      <label key={idx} className="block pl-4">
-                        <input
-                          type="checkbox"
-                          name="q3"
-                          value={option}
-                          checked={formData.q3.includes(option)}
-                          onChange={() => handleCheckboxChange(option)}
-                          className="mr-2"
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                
-                  {/* Асуулт 4 */}
-                  <div>
-                    <p className="font-semibold">4. Та статистикийн мэдээллийн чанарт үнэлгээ өгнө үү.</p>
-                    <table className="w-full border mt-2 text-xs">
-                      <thead>
-                        <tr className="bg-gray-100">
-                          <th className="border px-2 py-1">Үзүүлэлт</th>
-                          {["Маш сайн", "Сайн", "Дунд", "Муу", "Маш муу", "Мэдэхгүй"].map((label, idx) => (
-                            <th className="border px-2 py-1" key={idx}>{label}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[
-                          "Мэдээллийн шуурхай байдал",
-                          "Бүрэн гүйцэт байдал",
-                          "Харьцуулах боломж",
-                          "Ил тод байдал",
-                          "Ойлгомжтой байдал",
-                          "Бодитой байдал"
-                        ].map((label, i) => (
-                          <tr key={i}>
-                            <td className="border px-2 py-1">{label}</td>
-                            {["1", "2", "3", "4", "5", "0"].map((val, j) => (
-                              <td className="border px-2 py-1 text-center" key={j}>
-                                <input
-                                  type="radio"
-                                  name={`q4-${i}`}
-                                  value={val}
-                                  checked={formData.q4[i] === val}
-                                  onChange={() => handleQ4Change(i, val)}
-                                />
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                    
-                  {/* Асуулт 5 */}
-                  <div>
-                    <p className="font-semibold">5. Статистикийн мэдээлэл авахад ямар хүндрэл байдаг вэ?</p>
-                    {[
-                      "Хүндрэлгүй",
-                      "Хэт ерөнхий, задаргаа муу",
-                      "Ойлгомжгүй, зааваргүй",
-                      "Хугацааны хоцрогдолтой",
-                      "Нарийвчилсан мэдээлэл авахад хүндрэлтэй"
-                    ].map((option, idx) => (
-                      <label key={idx} className="block pl-4">
-                        <input
-                          type="radio"
-                          name="q5"
-                          value={option}
-                          checked={formData.q5 === option}
-                          onChange={(e) => handleChange("q5", e.target.value)}
-                          className="mr-2"
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                
-                  {/* Илгээх товч */}
-                  <div className="text-center pt-6">
-                    <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
-                      Илгээх
-                    </button>
-                  </div>
-                </form>
-                )}
-              </div>
+                <div className="contact_tab_item space-y-6 py-4">
+                    {loading ? (
+                        <div className="text-center py-4"><LoadingDiv /></div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl mx-auto text-sm">
+                            {/* Асуулт 1 */}
+                            <div>
+                                <p className="font-semibold">1. Та статистикийн мэдээллийг ямар давтамжтай ашигладаг вэ?</p>
+                                {["Өдөр бүр", "7 хоног бүр", "Сар бүр", "Хааяа, шаардлагатай үед"].map((option, idx) => (
+                                    <label key={idx} className="block pl-4">
+                                        <input
+                                            type="radio"
+                                            name="q1"
+                                            value={option}
+                                            checked={formData.q1 === option}
+                                            onChange={(e) => handleChange("q1", e.target.value)}
+                                            className="mr-2"
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
+
+                            {/* Асуулт 2 */}
+                            <div>
+                                <p className="font-semibold">2. Та мэдээллийг ямар эх сурвалжаас авдаг вэ?</p>
+                                {["www.1212.mn", "Сошиал сувгууд", "Телевизийн сувгууд", "Сонин, хэвлэл", "Мэдээллийн сайтууд", "Лавлах утас 19001212, 70141212"].map((option, idx) => (
+                                    <label key={idx} className="block pl-4">
+                                        <input
+                                            type="radio"
+                                            name="q2"
+                                            value={option}
+                                            checked={formData.q2 === option}
+                                            onChange={(e) => handleChange("q2", e.target.value)}
+                                            className="mr-2"
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
+
+                            {/* Асуулт 3 */}
+                            <div>
+                                <p className="font-semibold">3. Та ҮСХ-ны мэдээллийг ямар зорилгоор ашигладаг вэ?</p>
+                                {[
+                                    "Бодлого боловсруулах, хяналт тавих",
+                                    "Хууль эрх зүйн бэлтгэл",
+                                    "Бизнесийн шийдвэр гаргах",
+                                    "Ерөнхий мэдээлэлтэй болох",
+                                    "Зах зээлийн анализ хийх",
+                                    "Хэвлэл, медиад ашиглах",
+                                    "Судалгаа, шинжилгээ хийх",
+                                    "Гэрээ, хэлэлцээр хийх",
+                                    "Мэдээлэл дахин түгээх",
+                                    "Эдийн засгийн загвар, таамаглал"
+                                ].map((option, idx) => (
+                                    <label key={idx} className="block pl-4">
+                                        <input
+                                            type="checkbox"
+                                            name="q3"
+                                            value={option}
+                                            checked={formData.q3.includes(option)}
+                                            onChange={() => handleCheckboxChange(option)}
+                                            className="mr-2"
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
+
+                            {/* Асуулт 4 */}
+                            <div>
+                                <p className="font-semibold">4. Та статистикийн мэдээллийн чанарт үнэлгээ өгнө үү.</p>
+                                <table className="w-full border mt-2 text-xs">
+                                    <thead>
+                                        <tr className="bg-gray-100">
+                                            <th className="border px-2 py-1">Үзүүлэлт</th>
+                                            {["Маш сайн", "Сайн", "Дунд", "Муу", "Маш муу", "Мэдэхгүй"].map((label, idx) => (
+                                                <th className="border px-2 py-1" key={idx}>{label}</th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {[
+                                            "Мэдээллийн шуурхай байдал",
+                                            "Бүрэн гүйцэт байдал",
+                                            "Харьцуулах боломж",
+                                            "Ил тод байдал",
+                                            "Ойлгомжтой байдал",
+                                            "Бодитой байдал"
+                                        ].map((label, i) => (
+                                            <tr key={i}>
+                                                <td className="border px-2 py-1">{label}</td>
+                                                {["1", "2", "3", "4", "5", "0"].map((val, j) => (
+                                                    <td className="border px-2 py-1 text-center" key={j}>
+                                                        <input
+                                                            type="radio"
+                                                            name={`q4-${i}`}
+                                                            value={val}
+                                                            checked={formData.q4[i] === val}
+                                                            onChange={() => handleQ4Change(i, val)}
+                                                        />
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Асуулт 5 */}
+                            <div>
+                                <p className="font-semibold">5. Статистикийн мэдээлэл авахад ямар хүндрэл байдаг вэ?</p>
+                                {[
+                                    "Хүндрэлгүй",
+                                    "Хэт ерөнхий, задаргаа муу",
+                                    "Ойлгомжгүй, зааваргүй",
+                                    "Хугацааны хоцрогдолтой",
+                                    "Нарийвчилсан мэдээлэл авахад хүндрэлтэй"
+                                ].map((option, idx) => (
+                                    <label key={idx} className="block pl-4">
+                                        <input
+                                            type="radio"
+                                            name="q5"
+                                            value={option}
+                                            checked={formData.q5 === option}
+                                            onChange={(e) => handleChange("q5", e.target.value)}
+                                            className="mr-2"
+                                        />
+                                        {option}
+                                    </label>
+                                ))}
+                            </div>
+
+                            {/* Илгээх товч */}
+                            <div className="text-center pt-6">
+                                <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+                                    Илгээх
+                                </button>
+                            </div>
+                        </form>
+                    )}
+                </div>
             )
         },
     ];

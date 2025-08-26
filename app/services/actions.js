@@ -1,6 +1,4 @@
 'use server'
-import { NextResponse } from 'next/server';
-import { db } from '@/app/api/config/db_csweb.config';
 
 export async function submitContactForm(formData) {
     try {
@@ -16,7 +14,7 @@ export async function submitContactForm(formData) {
             letter: formData.letter.trim(),
         };
 
-        const response = await fetch(`/api/insert/contact`, {
+        const response = await fetch(`${process.env.BASE_URL}/api/insert/contact`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(cleanedData),

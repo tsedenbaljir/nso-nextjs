@@ -63,6 +63,7 @@ export default function Sidebar() {
                 <MenuItems name={"Тайлан"} isActive={pth === "report"} link={"report"} />
                 <MenuItems name={"Тайлан эмхэтгэл"} isActive={pth === "file-library"} link={"file-library"} />
                 <MenuItems name={"Арга зүй"} isActive={pth === "methodology"} link={"methodology"} />
+                <MenuItems name={"Холбоо барих"} isActive={pth === "contact-us"} link={"contact-us"} />
               </ul>
             </div>
             <div >

@@ -5,19 +5,24 @@ export async function POST(req) {
   const body = await req.json();
 
   try {
-    await db('web_1212_contact_us').insert({
-      first_name: body.firstName,
-      last_name: body.lastName,
-      phone_number: body.phoneNumber,
-      country: body.country,
-      city: body.city,
-      district: body.district,
-      khoroo: body.khoroo,
-      apartment_number: body.apartment,
-      letter: body.letter,
-      created_by: 'web_user',
-      created_date: new Date()
-    });
+    const query = `
+      INSERT INTO [NSOweb].[dbo].[web_1212_contact_us] 
+      ( [first_name], [last_name], [phone_number], [country], [city], [district], [khoroo], [apartment_number], [letter], [created_by], [created_date])
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())
+    `;
+
+    await db.raw(query, [
+      body.firstName,
+      body.lastName,
+      body.phoneNumber,
+      body.country,
+      body.city,
+      body.district,
+      body.khoroo,
+      body.apartment,
+      body.letter,
+      'web_user'
+    ]);
 
     return NextResponse.json({ message: 'Таны хүсэлтийг хүлээн авлаа.' }, { status: 200 });
   } catch (error) {
