@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './sidebar';
 import Path from '@/components/path/Index';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryFilter from './Glossary/GlossaryFilter';
 
@@ -15,6 +15,8 @@ export default function Layout({ children, params: { lng } }) {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const isMn = lng === 'mn';
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -92,6 +94,18 @@ export default function Layout({ children, params: { lng } }) {
     setSelectedFilter(filter);
     setFirst(0);
     window.scrollTo(0, 0);
+    try {
+      const params = new URLSearchParams(searchParams?.toString());
+      if (filter && filter.id) {
+        params.set('catalogue_id', String(filter.id));
+      } else {
+        params.delete('catalogue_id');
+      }
+      const query = params.toString();
+      router.push(query ? `${pathname}?${query}` : `${pathname}`);
+    } catch (e) {
+      // no-op
+    }
   };
 
   const onPageChange = (e) => {
@@ -111,7 +125,7 @@ export default function Layout({ children, params: { lng } }) {
       <div className="nso_container mt-4">
         <div className="sm:col-12 md:col-4 lg:col-3">
           <Sidebar lng={lng} />
-          <div className="sm:col-0 md:col-0 lg:col-0">
+          <div className="sm:col-12 md:col-12 lg:col-12">
             {!pathname.includes('classification') && <GlossaryFilter
               filterList={filterList}
               selectedFilter={selectedFilter}

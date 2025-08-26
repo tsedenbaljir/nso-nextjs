@@ -2,11 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
 import { useTranslation } from "@/app/i18n/client";
+import { useSearchParams } from 'next/navigation';
 import GlossaryList from "../Glossary/GlossaryList";
 
 export default function Glossary({ params }) {
   const { lng } = params;
   const { t } = useTranslation(lng, "lng", "");
+  const searchParams = useSearchParams();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(false);
@@ -30,9 +32,9 @@ export default function Glossary({ params }) {
           lng: lng,
         });
 
-        if (selectedFilter?.id) {
-          params.append("catalogue_id", selectedFilter.id);
-        }
+        const selectedFromUrl = searchParams?.get('catalogue_id');
+        const effectiveCatalogueId = selectedFilter?.id || selectedFromUrl;
+        if (effectiveCatalogueId) params.append("catalogue_id", effectiveCatalogueId);
 
         const response = await fetch(
           `/api/methodology/list?${params.toString()}`
@@ -58,7 +60,7 @@ export default function Glossary({ params }) {
     };
 
     fetchMethodology();
-  }, [first, rows, selectedFilter, lng]); // ✅ `first` and `rows` are now working properly!
+  }, [first, rows, selectedFilter, lng, searchParams]); // ✅ sync with URL
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
