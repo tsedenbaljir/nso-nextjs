@@ -116,7 +116,8 @@ export default function Layout({ children, params: { lng } }) {
 
   const breadMap = [
     { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-    { label: t('statCate.methodologyText'), url: [lng === 'mn' ? '/mn/methodology/list' : '/en/methodology/list'] }
+    { label: t('statCate.methodologyText'), url: [lng === 'mn' ? '/mn/methodology/list' : '/en/methodology/list'] },
+    { label: t('metadata.classificationcode'), url: [lng === 'mn' ? '/mn/methodology/classification' : '/en/methodology/classification'] }
   ];
 
   return (
