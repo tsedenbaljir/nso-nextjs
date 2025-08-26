@@ -28,7 +28,7 @@ export default function Index({ lng }) {
         <>
             <div className="nso_home_statistic">
                 <div className="nso_container">
-                    <span className="__group_title">Статистик</span>
+                    <span className="__group_title">{t('statistic')}</span>
                 </div>
                 <div className="nso_container">
                     <div className="__statistic_groups">
@@ -72,7 +72,7 @@ export default function Index({ lng }) {
                                         <span className="__icon" style={{ backgroundImage: `url(/uploads/${indicators[4]?.image})` }}></span>
                                         {lng === "mn" ? indicators[4]?.name : indicators[4]?.name_eng || "..."}
                                     </span>
-                                    <span className="__count">{indicators[4]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[4]?.info : indicators[4]?.infoEng}</span>
+                                    <span className="__count">{indicators[4]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[4]?.info : indicators[4]?.info_eng}</span>
                                 </div>
                                 <div className="__card" onClick={() => {
                                     if (indicators[3]?.tableau) {
@@ -84,7 +84,7 @@ export default function Index({ lng }) {
                                         <span className="__icon" style={{ backgroundImage: `url(/uploads/${indicators[3]?.image})` }}></span>
                                         {lng === "mn" ? indicators[3]?.name : indicators[3]?.name_eng || "..."}
                                     </span>
-                                    <span className="__count">{indicators[3]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[3]?.info : indicators[3]?.infoEng}</span>
+                                    <span className="__count">{indicators[3]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[3]?.info : indicators[3]?.info_eng}</span>
                                 </div>
                                 <div className="__card" onClick={() => {
                                     if (indicators[2]?.tableau) {
@@ -96,7 +96,7 @@ export default function Index({ lng }) {
                                         <span className="__icon" style={{ backgroundImage: `url(/uploads/${indicators[2]?.image})` }}></span>
                                         {lng === "mn" ? indicators[2]?.name : indicators[2]?.name_eng || "..."}
                                     </span>
-                                    <span className="__count">{indicators[2]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[2]?.info : indicators[2]?.infoEng}</span>
+                                    <span className="__count">{indicators[2]?.indicator.toFixed(1) || "..."} {lng === "mn" ? indicators[2]?.info : indicators[2]?.info_eng}</span>
                                 </div>
                                 <div className="__card" onClick={() => {
                                     if (indicators[1]?.tableau) {
@@ -108,7 +108,7 @@ export default function Index({ lng }) {
                                         <span className="__icon" style={{ backgroundImage: `url(/uploads/${indicators[1]?.image})` }}></span>
                                         {lng === "mn" ? indicators[1]?.name : indicators[1]?.name_eng || "..."}
                                     </span>
-                                    <span className="__count">{indicators[1]?.indicator?.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.infoEng}</span>
+                                    <span className="__count">{indicators[1]?.indicator?.toFixed(1) || "..."} {lng === "mn" ? indicators[1]?.info : indicators[1]?.info_eng}</span>
                                 </div>
                             </div>
                         </div>
