@@ -21,11 +21,11 @@ export default function SideBar({ lng }) {
     useEffect(() => {
         setMenuItems([
             {
-                label: 'Бүлэг',
+                label: t('statCate.methodologyText'),
                 id: 'group',
                 items: [
                     {
-                        label: 'Аргачлал',
+                        label: t('statCate.methodologyText'),
                         id: 'list',
                         className: path.includes('list') ? 'active-link' : '',
                         command: () => {
@@ -33,7 +33,7 @@ export default function SideBar({ lng }) {
                         }
                     },
                     {
-                        label: 'Ангилал код',
+                        label: t('metadata.classificationcode'),
                         id: 'classification',
                         className: path.includes('classification') ? 'active-link' : '',
                         command: () => {

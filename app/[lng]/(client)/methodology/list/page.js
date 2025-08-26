@@ -1,13 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
-import { useTranslation } from "@/app/i18n/client";
 import { useSearchParams } from 'next/navigation';
 import GlossaryList from "../Glossary/GlossaryList";
 
 export default function Glossary({ params }) {
   const { lng } = params;
-  const { t } = useTranslation(lng, "lng", "");
   const searchParams = useSearchParams();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +13,6 @@ export default function Glossary({ params }) {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [filterList, setFilterList] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
 
   const isMn = lng === 'mn';
