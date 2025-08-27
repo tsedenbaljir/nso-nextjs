@@ -218,7 +218,7 @@ const FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS = [
         "name": "Vietnam",
         "nameMn": "Вьетнам",
         "parent": 35364212,
-        "link": "https://www.gso.gov.vn/en/homepage/",
+        "link": "https://www.nso.gov.vn",
         "published": true,
         "listOrder": 7,
         "content": null
@@ -238,7 +238,7 @@ const FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS = [
         "name": "Malaysia",
         "nameMn": "Малайз",
         "parent": 35364212,
-        "link": "https://www.dosm.gov.my/v1/index.php",
+        "link": "https://www.dosm.gov.my",
         "published": true,
         "listOrder": 9,
         "content": null
@@ -278,7 +278,7 @@ const FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS = [
         "name": "Thailand",
         "nameMn": "Тайланд",
         "parent": 35364212,
-        "link": "https://www.nso.go.th/sites/2014en",
+        "link": "https://www.nso.go.th",
         "published": true,
         "listOrder": 13,
         "content": null
@@ -328,7 +328,7 @@ const FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS = [
         "name": "India",
         "nameMn": "Энэтхэг",
         "parent": 35364212,
-        "link": "https://www.mospi.gov.in/indian-statistical-service-division-iss-",
+        "link": "https://www.mospi.gov.in",
         "published": true,
         "listOrder": 18,
         "content": null
