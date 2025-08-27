@@ -24,7 +24,7 @@ export default function Methodology({ params: lng }) {
                 if (data.status) {
                     setMethodology(data.data);
                     setPdfUrl(
-                        process.env.FRONTEND + JSON.parse(data.data?.file_info).pathName || null
+                        process.env.FRONTEND + "/uploads/" + JSON.parse(data.data?.file_info).pathName || null
                     );
                 } else {
                     console.error("Failed to fetch methodology:", data.message);
