@@ -5,7 +5,7 @@ import { Spin } from "antd";
 import PdfViewer from "@/components/PdfViewer/index";
 import { useParams } from "next/navigation";
 
-export default function Methodology({ params: lng }) {
+export default function Methodology() {
     const { methodologyId } = useParams();
     const [methodology, setMethodology] = useState(null);
     const [pdfUrl, setPdfUrl] = useState(null);
@@ -24,7 +24,7 @@ export default function Methodology({ params: lng }) {
                 if (data.status) {
                     setMethodology(data.data);
                     setPdfUrl(
-                        process.env.FRONTEND + "/uploads/" + JSON.parse(data.data?.file_info).pathName || null
+                        process.env.FRONTEND + "/uploads/" + JSON.parse(data.data?.file_info).originalName || null
                     );
                 } else {
                     console.error("Failed to fetch methodology:", data.message);
