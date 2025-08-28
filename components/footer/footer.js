@@ -987,7 +987,7 @@ export default function Footer({ lng }) {
                             </div>
                         </div>
                     </div>
-                    <div className="__sub_footer col-12 md:col-12 lg:col-12">
+                    <div className="__sub_footer">
                         <div>
                             <div className="__wrap_between">
                                 <div>
