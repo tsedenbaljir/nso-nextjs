@@ -27,7 +27,7 @@ export default function Statcate({ params }) {
       // Ensure `data.tableau` exists before setting `iframeSrc`
       if (tkt) {
         setDashboard(
-          `https://tableau.1212.mn/trusted/${tkt}/views/PopulationMongolia2022/Dashboard1?:iid=1`
+          `https://tableau.1212.mn/trusted/${tkt}/views/-2023/Dashboard1/Administrator/25c9fa0b-a829-4161-851a-da51c0dfedb6`
         );
         setLoadingDash(false);
       }

@@ -127,17 +127,17 @@ const GOVERNMENTAL_ORGANIZATIONS_NAVITEMS = [
     },
     {
         "name": "Cabinet Secretariat of Government of Mongolia",
-        "nameMn": "Монгол Улсын Засгийн Газрын Хэрэг Эрхлэх Хороо",
+        "nameMn": "Монгол Улсын Засгийн газрын хэрэг эрхлэх газар",
         "link": "https://cabinet.gov.mn/",
     },
     {
         "name": "Anti Corruption Agency",
-        "nameMn": "Хэлэлцээр Хэлэлцэх Агентлаг",
+        "nameMn": "Авлигын эсрэг хамтдаа",
         "link": "https://iaac.mn",
     },
     {
         "name": "Declaration of Personal Interest",
-        "nameMn": "Хувийн сонирхлын мэдүүлэг",
+        "nameMn": "Хувийн ашиг сонирхол, хөрөнгө орлогын мэдүүлэг",
         "link": "https://meduuleg.iaac.mn/AOS/Login",
     }
 ];
@@ -846,7 +846,7 @@ export default function Footer({ lng }) {
             setNavData(localizedData);
         }
         if(dialogType === 99){
-            const localizedData = FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS.map(item => ({
+            const localizedData = FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS.sort((a, b) => a.nameMn - b.nameMn).map(item => ({
                 ...item,
                 displayName: lng === "mn" ? item.nameMn : item.name
             }));
@@ -890,7 +890,7 @@ export default function Footer({ lng }) {
                                     {t('footer.foreignGovernment')}
                                 </span>
                             </div>
-                            <div className="nso_add_item">
+                            {/* <div className="nso_add_item">
                                 <div className="__plus">
                                     <i className="pi pi-link"></i>
                                 </div>
@@ -899,13 +899,13 @@ export default function Footer({ lng }) {
                                         {t('footer.oldVersion2')}
                                     </a>
                                 </span>
-                            </div>
+                            </div> */}
                             <div className="nso_add_item">
                                 <div className="__plus">
                                     <i className="pi pi-link"></i>
                                 </div>
                                 <span className="__text">
-                                    <a href="http://www1.1212.mn/" target="_blank" rel="noopener noreferrer">
+                                    <a href="http://www2.1212.mn" target="_blank" rel="noopener noreferrer">
                                         {t('footer.oldVersion1')}
                                     </a>
                                 </span>
