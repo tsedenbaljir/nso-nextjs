@@ -37,54 +37,6 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
         }, null, 2));
     }, [selectedValues]);
 
-    const handleFetchData = async () => {
-        if (!url.trim()) {
-            message.error('URL is required');
-            return;
-        }
-
-        if (!query.trim()) {
-            message.error('JSON query is required');
-            return;
-        }
-
-        let queryObj;
-        try {
-            queryObj = JSON.parse(query);
-        } catch (error) {
-            message.error('Invalid JSON format');
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await fetch('/api/data-query', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    url: url.trim(),
-                    query: queryObj
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                setResult(data.data);
-                message.success('Data fetched successfully');
-            } else {
-                message.error(data.error || 'Failed to fetch data');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            message.error('Failed to fetch data');
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const handleDownloadQuery = () => {
         const blob = new Blob([query], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -167,19 +119,20 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
             >
                 <Space direction="vertical" style={{ width: '100%' }} size="large">
                     {/* API Token Button */}
-                    <Button
+                    {/* <Button
                         type="primary"
                         icon={<DownloadOutlined />}
                         size="large"
                     >
                         API TOKEN
-                    </Button>
+                    </Button> */}
 
                     {/* URL Section */}
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                             <Text strong>URL:</Text>
                             <Button
+                                type="primary"
                                 icon={<CopyOutlined />}
                                 onClick={handleCopyUrl}
                                 size="small"
@@ -191,7 +144,7 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             placeholder="Enter API URL"
-                            style={{ 
+                            style={{
                                 marginTop: '8px',
                                 color: '#000000',
                                 backgroundColor: '#f5f5f5'
@@ -206,6 +159,7 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                             <Text strong>JSON query:</Text>
                             <Button
+                                type="primary"
                                 icon={<CopyOutlined />}
                                 onClick={handleCopyQuery}
                                 size="small"
@@ -219,8 +173,8 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
                             placeholder="Enter JSON query"
                             rows={8}
                             className='text-black text-md'
-                            style={{ 
-                                marginTop: '8px', 
+                            style={{
+                                marginTop: '8px',
                                 letterSpacing: '0.1em',
                                 color: '#000000',
                                 backgroundColor: '#f5f5f5'
@@ -233,30 +187,12 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
                     <Space>
                         <Button
                             type="primary"
-                            onClick={handleFetchData}
-                            loading={loading}
-                            size="large"
-                        >
-                            {loading ? 'Татаж авч байна...' : 'Мэдээлэл татах'}
-                        </Button>
-
-                        <Button
                             icon={<DownloadOutlined />}
                             onClick={handleDownloadQuery}
                             size="large"
                         >
                             JSON query татах
                         </Button>
-
-                        {result && (
-                            <Button
-                                icon={<DownloadOutlined />}
-                                onClick={handleDownloadResult}
-                                size="large"
-                            >
-                                Үр дүнг татах
-                            </Button>
-                        )}
                     </Space>
 
                     {/* Result Display */}
