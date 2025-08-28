@@ -13,10 +13,10 @@ export default function Articles({ article }) {
     }
 
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return '/images/default.jpg';
+        if (!imagePath) return 'https://www.nso.mn/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
-        if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `/uploads/${imagePath}`;
+        if (imagePath.startsWith('/uploads/')) return `https://www.nso.mn/${imagePath}`;
+        return `https://www.nso.mn/uploads/${imagePath}`;
     };
 
     const handleImageError = () => {
@@ -36,7 +36,7 @@ export default function Articles({ article }) {
             <div className="__info_detail_page">
                 <div className="bg-gray">
                     <Image
-                        src={imageError ? `/uploads/${article.header_image}` : getImageUrl(article.header_image)}
+                        src={imageError ? `https://www.nso.mn/uploads/${article.header_image}` : getImageUrl(article.header_image)}
                         alt={article.name || 'Article image'}
                         width={500}
                         height={500}

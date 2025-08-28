@@ -7,16 +7,17 @@ export default function ArticleSideBar({ article }) {
     const router = useRouter();
     const [errorImages, setErrorImages] = useState({});
 
-
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return '/images/default.jpg';
-        return `/uploads/${imagePath}`;
+        if (!imagePath) return 'https://www.nso.mn/images/default.jpg';
+        if (imagePath.startsWith('http')) return imagePath;
+        if (imagePath.startsWith('/uploads/')) return `https://www.nso.mn/${imagePath}`;
+        return `https://www.nso.mn/uploads/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {
         setErrorImages(prev => ({
             ...prev,
-            [articleId]: `/uploads/${imagePath}`
+            [articleId]: `https://www.nso.mn/uploads/${imagePath}`
         }));
     };
 
