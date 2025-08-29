@@ -113,13 +113,21 @@ const Header = ({ lng }) => {
                                     id: subs.id,
                                     label: lng === 'mn' ? subs.name_mn : subs.name_en,
                                     command: () => {
-                                        window.location.href = `/${lng}/${subs.url}`;
+                                        if (subs.url.includes('http')) {
+                                            window.location.href = subs.url;
+                                        } else {
+                                            window.location.href = `/${lng}/${subs.url}`;
+                                        }
                                     }
                                 })),
                             })),
                             command: () => {
                                 if (category?.url) {
-                                    window.location.href = `/${lng}/${category?.url}`;
+                                    if (category.url.includes('http')) {
+                                        window.location.href = category.url;
+                                    } else {
+                                        window.location.href = `/${lng}/${category?.url}`;
+                                    }
                                 }
                             }
                         };
@@ -236,7 +244,9 @@ const Header = ({ lng }) => {
                     {loading && <PanelMenu model={menusMobile} className="w-full nso_cate_selection" />}
                     {loadingSub && menusSub.map((its, index) => {
                         return <div className='pt-4' key={index} onClick={() => { onShowMobileMenu() }}>
-                            <Link href={its.url} className='font-semibold text-lg'>{its.name_mn}</Link>
+                            <Link href={its.url.includes('http') ? its.url : `/${lng}/${its.url}`}
+                                target={its.url.includes('http') ? '_blank' : '_self'}
+                                className='font-semibold text-lg'>{its.name_mn}</Link>
                         </div>
                     })}
                 </div>
