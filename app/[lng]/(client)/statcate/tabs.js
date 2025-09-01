@@ -116,7 +116,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
 
                 {/* ✅ Тайлан */}
                 <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
-                    <Report sector={decodeURIComponent(sector)} subsector={subsector.split('_')[1] ? subsector.split('_')[1] : subsector} lng={lng} />
+                    <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 
                 {/* ✅ Аргачлал */}
