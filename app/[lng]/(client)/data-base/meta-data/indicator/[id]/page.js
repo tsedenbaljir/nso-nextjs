@@ -14,6 +14,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
         if (!response.ok) throw new Error("Failed to fetch");
 
         const result = await response.json();
+        
         if (result.status) {
           setData(result.data);
         }
@@ -36,7 +37,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
     "Үзүүлэлтийг тооцох давтамж",
     "Хэмжих нэгж",
     "Эх үүсвэр",
-    "Хэл",
+    " Хэл",
     "Боловсруулсан мэргэжилтэн",
     "Сүүлд өөрчлөгдсөн огноо",
     "Хариуцагч",
@@ -147,7 +148,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                 <div className="w-1/3 text-left">{categoryOrder[index]}</div>
                 <div className="w-1/3 text-left whitespace-pre-wrap">
                   {(item.namemn === "Тооцож эхэлсэн хугацаа" ||
-                    item.namemn === "Хамгийн сүүлд өөрчлөгдсөн огноо") &&
+                    item.namemn === "Сүүлд өөрчлөгдсөн огноо") &&
                     item.valuemn
                     ? new Date(item.valuemn).toISOString().split("T")[0]
                     : item.valuemn}
