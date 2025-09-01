@@ -915,8 +915,8 @@ export default function Footer({ lng }) {
                                     <i className="pi pi-check"></i>
                                 </div>
                                 <span className="__text">
-                                    <a href={lng + '/terms_of_use'} target="_blank" rel="noopener noreferrer">
-                                        {lng === "mn" ? "Ашиглах нөхцөл" : "terms of use"}
+                                    <a href={`${lng === "mn" ? "www.nso.mn/mn/terms_of_use" : 'www.nso.mn/en/terms_of_use'}`} target="_blank" rel="noopener noreferrer">
+                                        {lng === "mn" ? "Ашиглах нөхцөл" : "Terms of use"}
                                     </a>
                                 </span>
                             </div>

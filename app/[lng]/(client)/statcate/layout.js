@@ -61,12 +61,12 @@ export default function Statecate({ children, params }) {
     const breadMap = pathname.includes('/report/Historical%20data') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
-        { label: 'БНМАУ', url: ['/statcate/table/Historical%20data/Enterprise'] },
-        { label: 'БНМАУ -ын тайлан' }
+        { label: lng === 'mn' ? 'БНМАУ' : 'Republic of Mongolia', url: ['/statcate/table/Historical%20data/Enterprise'] },
+        { label: lng === 'mn' ? 'БНМАУ -ын тайлан' : 'Republic of Mongolia report' }
     ] : pathname.includes('/table/Historical%20data') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
-        { label: 'БНМАУ', url: ['/statcate/table/Historical%20data/Enterprise'] },
+        { label: lng === 'mn' ? 'БНМАУ' : 'Republic of Mongolia', url: ['/statcate/table/Historical%20data/Enterprise'] },
         { label: name ? <div className='text-nowrap'>{name[0]?.text}</div> : <LoadingDiv /> }
     ] : pathname.includes('statcate/table/') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
