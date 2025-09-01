@@ -8,6 +8,7 @@ export async function GET(req) {
     const label = searchParams.get('label');
     const interval = searchParams.get('interval');
     const orgId = searchParams.get('orgId');
+    const lng = searchParams.get('lng');
     const offset = page * pageSize;
 
     try {

@@ -11,11 +11,11 @@ export default function QuestionnaireItem({ item, isMn, path }) {
   return (
     <div className="__list cursor-pointer" onClick={path ? handleClick : () => {}}>
       <div className="__table_line"></div>
-      <a className="__list_header">{isMn ? item.name : item.name_eng}</a>
+      <a className="__list_header">{isMn ? item.name : item.name_eng || item.name}</a>
       {item.info && (
         <div className="description">
           <span className="__list_content">
-            {isMn ? item.info : item.info_eng}
+            {isMn ? item.info : item.info_eng || item.info}
           </span>
         </div>
       )}

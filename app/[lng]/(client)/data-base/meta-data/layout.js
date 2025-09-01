@@ -149,13 +149,13 @@ export default function QuestionnaireLayout({ children, params: { lng } }) {
                         t={t}
                         isMn={isMn}
                     />}
-                    <QuestionnaireFilterLetter
+                    {isMn && <QuestionnaireFilterLetter
                         filterList={obsFilterList}
                         selectedFilter={metadata}
                         handleFilterChange={handleFilterChange}
                         t={t}
                         isMn={isMn}
-                    />
+                    />}
                 </div>
                 <div className="sm:col-12 md:col-8 lg:col-9">
                     {children}
