@@ -1,13 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import Image from 'next/image';
 import { Column } from "primereact/column";
-import { useRouter } from "next/navigation";
 import { DataTable } from "primereact/datatable";
 
 export default function Main({ sector, subsector, lng }) {
 
-    const router = useRouter();
     // Set initial active tab
     const [data, setData] = useState([]); // Store API data
     const [loading, setLoading] = useState(true);
@@ -31,7 +28,7 @@ export default function Main({ sector, subsector, lng }) {
             }
         };
         fetchSubcategories();
-    }, [sector, subsector]);
+    }, [sector, subsector, lng]);
 
     return (
         <div className="bg-white">
