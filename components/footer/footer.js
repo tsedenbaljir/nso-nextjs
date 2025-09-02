@@ -1,9 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client'
 import NavbarDialog from '../Dialog/NavbarDialog';
-import { message, notification } from 'antd';
+import { notification } from 'antd';
 
 const BRANCH_SITES_NAVITEMS = [
     {
@@ -122,7 +121,7 @@ const BRANCH_SITES_NAVITEMS = [
 const GOVERNMENTAL_ORGANIZATIONS_NAVITEMS = [
     {
         "name": "Parliament of Mongolia",
-        "nameMn": "Монгол Улсын Их Хурлын",
+        "nameMn": "Монгол Улсын Их Хурал",
         "link": "https://parliament.mn",
     },
     {
@@ -143,619 +142,85 @@ const GOVERNMENTAL_ORGANIZATIONS_NAVITEMS = [
 ];
 
 const FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS = [
-    {
-        "id": 35364212,
-        "name": "Asia",
-        "nameMn": "Ази",
-        "parent": 0,
-        "link": null,
-        "published": true,
-        "listOrder": 0,
-        "content": null
-    },
-    {
-        "id": 35364213,
-        "name": "Azerbaijan",
-        "nameMn": "Азербайжан",
-        "parent": 35364212,
-        "link": "https://www.stat.gov.az/?lang=en",
-        "published": true,
-        "listOrder": 1,
-        "content": null
-    },
-    {
-        "id": 35364214,
-        "name": "United Arab Emirates",
-        "nameMn": "Арабын нэгдсэн Эмират",
-        "parent": 35364212,
-        "link": "https://ghdx.healthdata.org/organizations/national-bureau-statistics-united-arab-emirates",
-        "published": true,
-        "listOrder": 2,
-        "content": null
-    },
-    {
-        "id": 35364215,
-        "name": "Armenia",
-        "nameMn": "Армени",
-        "parent": 35364212,
-        "link": "https://armstat.am/en/?nid=301",
-        "published": true,
-        "listOrder": 3,
-        "content": null
-    },
-    {
-        "id": 35364216,
-        "name": "Bhutan",
-        "nameMn": "Балба",
-        "parent": 35364212,
-        "link": "https://www.nsb.gov.bt/",
-        "published": true,
-        "listOrder": 4,
-        "content": null
-    },
-    {
-        "id": 48160502,
-        "name": "Bangladesh",
-        "nameMn": "Бангладеш",
-        "parent": 35364212,
-        "link": "http://www.bbs.gov.bd/",
-        "published": true,
-        "listOrder": 5,
-        "content": null
-    },
-    {
-        "id": 48160503,
-        "name": "Brunei",
-        "nameMn": "Бруней",
-        "parent": 35364212,
-        "link": "https://deps.mofe.gov.bn/Theme/Home.aspx",
-        "published": true,
-        "listOrder": 6,
-        "content": null
-    },
-    {
-        "id": 47923101,
-        "name": "Vietnam",
-        "nameMn": "Вьетнам",
-        "parent": 35364212,
-        "link": "https://www.nso.gov.vn",
-        "published": true,
-        "listOrder": 7,
-        "content": null
-    },
-    {
-        "id": 48807317,
-        "name": "Myanmar",
-        "nameMn": "Мьянмар",
-        "parent": 35364212,
-        "link": "https://www.mmsis.gov.mm/",
-        "published": true,
-        "listOrder": 8,
-        "content": null
-    },
-    {
-        "id": 47923103,
-        "name": "Malaysia",
-        "nameMn": "Малайз",
-        "parent": 35364212,
-        "link": "https://www.dosm.gov.my",
-        "published": true,
-        "listOrder": 9,
-        "content": null
-    },
-    {
-        "id": 47923104,
-        "name": "South Korea",
-        "nameMn": "Өмнөд Солонгос",
-        "parent": 35364212,
-        "link": "http://kostat.go.kr/portal/eng/index.action",
-        "published": true,
-        "listOrder": 10,
-        "content": null
-    },
-    {
-        "id": 47923122,
-        "name": "Pakistan",
-        "nameMn": "Пакистан",
-        "parent": 35364212,
-        "link": "https://www.pbs.gov.pk/",
-        "published": true,
-        "listOrder": 11,
-        "content": null
-    },
-    {
-        "id": 48807318,
-        "name": "Taiwan",
-        "nameMn": "Тайвань",
-        "parent": 35364212,
-        "link": "https://eng.stat.gov.tw/",
-        "published": true,
-        "listOrder": 12,
-        "content": null
-    },
-    {
-        "id": 47923105,
-        "name": "Thailand",
-        "nameMn": "Тайланд",
-        "parent": 35364212,
-        "link": "https://www.nso.go.th",
-        "published": true,
-        "listOrder": 13,
-        "content": null
-    },
-    {
-        "id": 47923106,
-        "name": "Philippines",
-        "nameMn": "Филиппин",
-        "parent": 35364212,
-        "link": "https://psa.gov.ph/",
-        "published": true,
-        "listOrder": 14,
-        "content": null
-    },
-    {
-        "id": 48160501,
-        "name": "Hong Kong",
-        "nameMn": "Хонг Конг",
-        "parent": 35364212,
-        "link": "https://www.censtatd.gov.hk/en/",
-        "published": true,
-        "listOrder": 15,
-        "content": null
-    },
-    {
-        "id": 48807902,
-        "name": "China",
-        "nameMn": "Хятад",
-        "parent": 35364212,
-        "link": "http://www.stats.gov.cn/english/",
-        "published": true,
-        "listOrder": 16,
-        "content": null
-    },
-    {
-        "id": 47923137,
-        "name": "Sri Lanka",
-        "nameMn": "Шри Ланка",
-        "parent": 35364212,
-        "link": "http://www.statistics.gov.lk/",
-        "published": true,
-        "listOrder": 17,
-        "content": null
-    },
-    {
-        "id": 47923112,
-        "name": "India",
-        "nameMn": "Энэтхэг",
-        "parent": 35364212,
-        "link": "https://www.mospi.gov.in",
-        "published": true,
-        "listOrder": 18,
-        "content": null
-    },
-    {
-        "id": 48807901,
-        "name": "Taiwan",
-        "nameMn": "Тайвань",
-        "parent": 35364212,
-        "link": null,
-        "published": true,
-        "listOrder": 19,
-        "content": null
-    },
-    {
-        "id": 47923110,
-        "name": "Japan",
-        "nameMn": "Япон",
-        "parent": 35364212,
-        "link": "https://www.stat.go.jp/english/",
-        "published": true,
-        "listOrder": 20,
-        "content": null
-    },
-    {
-        "id": 47923109,
-        "name": "Australia",
-        "nameMn": "Австрали",
-        "parent": 0,
-        "link": null,
-        "published": true,
-        "listOrder": 21,
-        "content": null
-    },
-    {
-        "id": 47923107,
-        "name": "Australia",
-        "nameMn": "Австрали",
-        "parent": 47923109,
-        "link": "https://www.abs.gov.au/",
-        "published": true,
-        "listOrder": 22,
-        "content": null
-    },
-    {
-        "id": 47923102,
-        "name": "New Zealand",
-        "nameMn": "Шинэ Зеланд",
-        "parent": 47923109,
-        "link": "https://www.stats.govt.nz/",
-        "published": true,
-        "listOrder": 23,
-        "content": null
-    },
-    {
-        "id": 35364217,
-        "name": "America",
-        "nameMn": "Америк",
-        "parent": 0,
-        "link": null,
-        "published": true,
-        "listOrder": 24,
-        "content": null
-    },
-    {
-        "id": 35364218,
-        "name": "USA",
-        "nameMn": "АНУ",
-        "parent": 35364217,
-        "link": "https://www.usa.gov/statistics",
-        "published": true,
-        "listOrder": 25,
-        "content": null
-    },
-    {
-        "id": 47923113,
-        "name": "Brazil",
-        "nameMn": "Бразил",
-        "parent": 35364217,
-        "link": "https://www.ibge.gov.br/en/home-eng.html",
-        "published": true,
-        "listOrder": 26,
-        "content": null
-    },
-    {
-        "id": 48160504,
-        "name": "Venezuela",
-        "nameMn": "Венесуэл",
-        "parent": 35364217,
-        "link": "http://www.ine.gov.ve/",
-        "published": true,
-        "listOrder": 27,
-        "content": null
-    },
-    {
-        "id": 35364219,
-        "name": "Canada",
-        "nameMn": "Канад",
-        "parent": 35364217,
-        "link": "https://www.statcan.gc.ca/en/start",
-        "published": true,
-        "listOrder": 28,
-        "content": null
-    },
-    {
-        "id": 47923121,
-        "name": "Cuba",
-        "nameMn": "Куба",
-        "parent": 35364217,
-        "link": "https://globaledge.msu.edu/global-resources/resource/5890",
-        "published": true,
-        "listOrder": 29,
-        "content": null
-    },
-    {
-        "id": 47923126,
-        "name": "Colombia",
-        "nameMn": "Колумб",
-        "parent": 35364217,
-        "link": "https://www.dane.gov.co/index.php/en/",
-        "published": true,
-        "listOrder": 30,
-        "content": null
-    },
-    {
-        "id": 35364220,
-        "name": "Mexico",
-        "nameMn": "Мексик",
-        "parent": 35364217,
-        "link": "https://ghdx.healthdata.org/organizations/national-institute-statistics-and-geography-inegi-mexico",
-        "published": true,
-        "listOrder": 31,
-        "content": null
-    },
-    {
-        "id": 48160505,
-        "name": "Jamaica",
-        "nameMn": "Ямайка",
-        "parent": 35364217,
-        "link": "https://statinja.gov.jm/",
-        "published": true,
-        "listOrder": 32,
-        "content": null
-    },
-    {
-        "id": 47923128,
-        "name": "Africa",
-        "nameMn": "Африк",
-        "parent": 0,
-        "link": null,
-        "published": true,
-        "listOrder": 33,
-        "content": null
-    },
-    {
-        "id": 47923124,
-        "name": "Algeria",
-        "nameMn": "Алжир",
-        "parent": 47923128,
-        "link": "https://ghdx.healthdata.org/organizations/national-office-statistics-algeria",
-        "published": true,
-        "listOrder": 34,
-        "content": null
-    },
-    {
-        "id": 48807904,
-        "name": "Ghana",
-        "nameMn": "Гана",
-        "parent": 47923128,
-        "link": "https://www.statsghana.gov.gh/",
-        "published": true,
-        "listOrder": 35,
-        "content": null
-    },
-    {
-        "id": 47923125,
-        "name": "Madagascar",
-        "nameMn": "Мадагаскар",
-        "parent": 47923128,
-        "link": "http://www.instat.mg/",
-        "published": true,
-        "listOrder": 36,
-        "content": null
-    },
-    {
-        "id": 47923129,
-        "name": "Morocco",
-        "nameMn": "Марокко",
-        "parent": 47923128,
-        "link": "https://www.men.gov.ma/en/Pages/Statistics.aspx",
-        "published": true,
-        "listOrder": 37,
-        "content": null
-    },
-    {
-        "id": 48807903,
-        "name": "Nigeria",
-        "nameMn": "Нигери",
-        "parent": 47923128,
-        "link": "https://www.nigerianstat.gov.ng/",
-        "published": true,
-        "listOrder": 38,
-        "content": null
-    },
-    {
-        "id": 47923131,
-        "name": "Tunisia",
-        "nameMn": "Тунис",
-        "parent": 47923128,
-        "link": "http://www.ins.tn/en",
-        "published": true,
-        "listOrder": 39,
-        "content": null
-    },
-    {
-        "id": 47923111,
-        "name": "Europe",
-        "nameMn": "Европ",
-        "parent": 0,
-        "link": null,
-        "published": true,
-        "listOrder": 40,
-        "content": null
-    },
-    {
-        "id": 47923133,
-        "name": "Austria",
-        "nameMn": "Австри",
-        "parent": 47923111,
-        "link": "https://www.statistik.at/en",
-        "published": true,
-        "listOrder": 41,
-        "content": null
-    },
-    {
-        "id": 47923134,
-        "name": "Belarus",
-        "nameMn": "Беларусь",
-        "parent": 47923111,
-        "link": "https://www.belstat.gov.by/en/",
-        "published": true,
-        "listOrder": 42,
-        "content": null
-    },
-    {
-        "id": 47923138,
-        "name": "United Kingdom",
-        "nameMn": "Британи",
-        "parent": 47923111,
-        "link": "https://www.ons.gov.uk/",
-        "published": true,
-        "listOrder": 43,
-        "content": null
-    },
-    {
-        "id": 47923108,
-        "name": "Germany",
-        "nameMn": "Герман",
-        "parent": 47923111,
-        "link": "https://www.destatis.de/EN/Home/_node.html",
-        "published": true,
-        "listOrder": 44,
-        "content": null
-    },
-    {
-        "id": 47923135,
-        "name": "Georgia",
-        "nameMn": "Гүрж",
-        "parent": 47923111,
-        "link": "https://www.geostat.ge/en",
-        "published": true,
-        "listOrder": 45,
-        "content": null
-    },
-    {
-        "id": 47923118,
-        "name": "Denmark",
-        "nameMn": "Дани",
-        "parent": 47923111,
-        "link": "https://www.dst.dk/en",
-        "published": true,
-        "listOrder": 46,
-        "content": null
-    },
-    {
-        "id": 47923139,
-        "name": "Ireland",
-        "nameMn": "Ирланд",
-        "parent": 47923111,
-        "link": "https://www.cso.ie/en/index.html",
-        "published": true,
-        "listOrder": 47,
-        "content": null
-    },
-    {
-        "id": 47923115,
-        "name": "Spain",
-        "nameMn": "Испани",
-        "parent": 47923111,
-        "link": "https://www.ine.es/en/",
-        "published": true,
-        "listOrder": 48,
-        "content": null
-    },
-    {
-        "id": 47923114,
-        "name": "Italy",
-        "nameMn": "Итали",
-        "parent": 47923111,
-        "link": "https://www.istat.it/en/",
-        "published": true,
-        "listOrder": 49,
-        "content": null
-    },
-    {
-        "id": 47923136,
-        "name": "Luxembourg",
-        "nameMn": "Люксембург",
-        "parent": 47923111,
-        "link": "https://statistiques.public.lu/en.html",
-        "published": true,
-        "listOrder": 50,
-        "content": null
-    },
-    {
-        "id": 47923117,
-        "name": "Netherlands",
-        "nameMn": "Нидерланд",
-        "parent": 47923111,
-        "link": "https://www.cbs.nl/en-gb",
-        "published": true,
-        "listOrder": 51,
-        "content": null
-    },
-    {
-        "id": 47923123,
-        "name": "Norway",
-        "nameMn": "Норвег",
-        "parent": 47923111,
-        "link": "https://www.ssb.no/en",
-        "published": true,
-        "listOrder": 52,
-        "content": null
-    },
-    {
-        "id": 47923120,
-        "name": "Poland",
-        "nameMn": "Польш",
-        "parent": 47923111,
-        "link": "https://stat.gov.pl/en/",
-        "published": true,
-        "listOrder": 53,
-        "content": null
-    },
-    {
-        "id": 48807908,
-        "name": "Portugal",
-        "nameMn": "Португал",
-        "parent": 47923111,
-        "link": "https://www.ine.pt/xportal/xmain?xpgid=ine_main&xpid=INE",
-        "published": true,
-        "listOrder": 54,
-        "content": null
-    },
-    {
-        "id": 47923116,
-        "name": "Turkey",
-        "nameMn": "Турк",
-        "parent": 47923111,
-        "link": "https://www.tuik.gov.tr/Home/Index",
-        "published": true,
-        "listOrder": 55,
-        "content": null
-    },
-    {
-        "id": 47923127,
-        "name": "Finland",
-        "nameMn": "Финланд",
-        "parent": 47923111,
-        "link": "https://www.stat.fi/index_en.html",
-        "published": true,
-        "listOrder": 56,
-        "content": null
-    },
-    {
-        "id": 47923130,
-        "name": "Sweden",
-        "nameMn": "Швед",
-        "parent": 47923111,
-        "link": "https://www.scb.se/en/",
-        "published": true,
-        "listOrder": 57,
-        "content": null
-    },
-    {
-        "id": 47923132,
-        "name": "Ukraine",
-        "nameMn": "Украин",
-        "parent": 47923111,
-        "link": "https://www.lv.ukrstat.gov.ua/eng/select.php?m=site",
-        "published": true,
-        "listOrder": 58,
-        "content": null
-    },
-    {
-        "id": 47923119,
-        "name": "Hungary",
-        "nameMn": "Унгар",
-        "parent": 47923111,
-        "link": "https://www.ksh.hu/?lang=en",
-        "published": true,
-        "listOrder": 59,
-        "content": null
-    }
+    // 🌏 Asia
+    { id: 35364212, name: "Asia", nameMn: "Ази", link: null },
+    { id: 35364213, name: "Azerbaijan", nameMn: "Азербайжан", link: "https://www.stat.gov.az/?lang=en" },
+    { id: 35364214, name: "United Arab Emirates", nameMn: "Арабын нэгдсэн Эмират", link: "https://ghdx.healthdata.org/organizations/national-bureau-statistics-united-arab-emirates" },
+    { id: 35364215, name: "Armenia", nameMn: "Армени", link: "https://armstat.am/en/?nid=301" },
+    { id: 35364216, name: "Bhutan", nameMn: "Балба", link: "https://www.nsb.gov.bt/" },
+    { id: 48160502, name: "Bangladesh", nameMn: "Бангладеш", link: "http://www.bbs.gov.bd/" },
+    { id: 48160503, name: "Brunei", nameMn: "Бруней", link: "https://deps.mofe.gov.bn/Theme/Home.aspx" },
+    { id: 47923101, name: "Vietnam", nameMn: "Вьетнам", link: "https://www.nso.gov.vn" },
+    { id: 48807317, name: "Myanmar", nameMn: "Мьянмар", link: "https://www.mmsis.gov.mm/" },
+    { id: 47923103, name: "Malaysia", nameMn: "Малайз", link: "https://www.dosm.gov.my" },
+    { id: 47923104, name: "South Korea", nameMn: "Өмнөд Солонгос", link: "http://kostat.go.kr/portal/eng/index.action" },
+    { id: 47923122, name: "Pakistan", nameMn: "Пакистан", link: "https://www.pbs.gov.pk/" },
+    { id: 48807318, name: "Taiwan", nameMn: "Тайвань", link: "https://eng.stat.gov.tw/" },
+    { id: 47923105, name: "Thailand", nameMn: "Тайланд", link: "https://www.nso.go.th" },
+    { id: 47923106, name: "Philippines", nameMn: "Филиппин", link: "https://psa.gov.ph/" },
+    { id: 48160501, name: "Hong Kong", nameMn: "Хонг Конг", link: "https://www.censtatd.gov.hk/en/" },
+    { id: 48807902, name: "China", nameMn: "Хятад", link: "http://www.stats.gov.cn/english/" },
+    { id: 47923137, name: "Sri Lanka", nameMn: "Шри Ланка", link: "http://www.statistics.gov.lk/" },
+    { id: 47923112, name: "India", nameMn: "Энэтхэг", link: "https://www.mospi.gov.in" },
+    { id: 47923110, name: "Japan", nameMn: "Япон", link: "https://www.stat.go.jp/english/" },
+
+    // 🌏 Australia & Oceania
+    { id: 47923109, name: "Australia & Oceania", nameMn: "Австрали ба Номхон далай", link: null },
+    { id: 47923107, name: "Australia", nameMn: "Австрали", link: "https://www.abs.gov.au/" },
+    { id: 47923102, name: "New Zealand", nameMn: "Шинэ Зеланд", link: "https://www.stats.govt.nz/" },
+
+    // 🌎 America
+    { id: 35364217, name: "America", nameMn: "Америк", link: null },
+    { id: 35364218, name: "USA", nameMn: "АНУ", link: "https://www.usa.gov/statistics" },
+    { id: 47923113, name: "Brazil", nameMn: "Бразил", link: "https://www.ibge.gov.br/en/home-eng.html" },
+    { id: 48160504, name: "Venezuela", nameMn: "Венесуэл", link: "http://www.ine.gov.ve/" },
+    { id: 35364219, name: "Canada", nameMn: "Канад", link: "https://www.statcan.gc.ca/en/start" },
+    { id: 47923121, name: "Cuba", nameMn: "Куба", link: "https://globaledge.msu.edu/global-resources/resource/5890" },
+    { id: 47923126, name: "Colombia", nameMn: "Колумб", link: "https://www.dane.gov.co/index.php/en/" },
+    { id: 35364220, name: "Mexico", nameMn: "Мексик", link: "https://ghdx.healthdata.org/organizations/national-institute-statistics-and-geography-inegi-mexico" },
+    { id: 48160505, name: "Jamaica", nameMn: "Ямайка", link: "https://statinja.gov.jm/" },
+
+    // 🌍 Africa
+    { id: 47923128, name: "Africa", nameMn: "Африк", link: null },
+    { id: 47923124, name: "Algeria", nameMn: "Алжир", link: "https://ghdx.healthdata.org/organizations/national-office-statistics-algeria" },
+    { id: 48807904, name: "Ghana", nameMn: "Гана", link: "https://www.statsghana.gov.gh/" },
+    { id: 47923125, name: "Madagascar", nameMn: "Мадагаскар", link: "http://www.instat.mg/" },
+    { id: 47923129, name: "Morocco", nameMn: "Марокко", link: "https://www.men.gov.ma/en/Pages/Statistics.aspx" },
+    { id: 48807903, name: "Nigeria", nameMn: "Нигери", link: "https://www.nigerianstat.gov.ng/" },
+    { id: 47923131, name: "Tunisia", nameMn: "Тунис", link: "http://www.ins.tn/en" },
+
+    // 🌍 Europe
+    { id: 47923111, name: "Europe", nameMn: "Европ", link: null },
+    { id: 47923133, name: "Austria", nameMn: "Австри", link: "https://www.statistik.at/en" },
+    { id: 47923134, name: "Belarus", nameMn: "Беларусь", link: "https://www.belstat.gov.by/en/" },
+    { id: 47923138, name: "United Kingdom", nameMn: "Британи", link: "https://www.ons.gov.uk/" },
+    { id: 47923108, name: "Germany", nameMn: "Герман", link: "https://www.destatis.de/EN/Home/_node.html" },
+    { id: 47923135, name: "Georgia", nameMn: "Гүрж", link: "https://www.geostat.ge/en" },
+    { id: 47923118, name: "Denmark", nameMn: "Дани", link: "https://www.dst.dk/en" },
+    { id: 47923139, name: "Ireland", nameMn: "Ирланд", link: "https://www.cso.ie/en/index.html" },
+    { id: 47923115, name: "Spain", nameMn: "Испани", link: "https://www.ine.es/en/" },
+    { id: 47923114, name: "Italy", nameMn: "Итали", link: "https://www.istat.it/en/" },
+    { id: 47923136, name: "Luxembourg", nameMn: "Люксембург", link: "https://statistiques.public.lu/en.html" },
+    { id: 47923117, name: "Netherlands", nameMn: "Нидерланд", link: "https://www.cbs.nl/en-gb" },
+    { id: 47923123, name: "Norway", nameMn: "Норвег", link: "https://www.ssb.no/en" },
+    { id: 47923120, name: "Poland", nameMn: "Польш", link: "https://stat.gov.pl/en/" },
+    { id: 48807908, name: "Portugal", nameMn: "Португал", link: "https://www.ine.pt/xportal/xmain?xpgid=ine_main&xpid=INE" },
+    { id: 47923116, name: "Turkey", nameMn: "Турк", link: "https://www.tuik.gov.tr/Home/Index" },
+    { id: 47923127, name: "Finland", nameMn: "Финланд", link: "https://www.stat.fi/index_en.html" },
+    { id: 47923130, name: "Sweden", nameMn: "Швед", link: "https://www.scb.se/en/" },
+    { id: 47923132, name: "Ukraine", nameMn: "Украин", link: "https://www.lv.ukrstat.gov.ua/eng/select.php?m=site" },
+    { id: 47923119, name: "Hungary", nameMn: "Унгар", link: "https://www.ksh.hu/?lang=en" }
 ];
+
 
 export default function Footer({ lng }) {
     const { t } = useTranslation(lng, "lng", "");
-    const router = useRouter();
 
     const [data, setData] = useState(null);
     const [navData, setNavData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [selectedType, setSelectedType] = useState(null);
     const [email, setEmail] = useState('');
-    const [subscribed, setSubscribed] = useState(false);
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -831,21 +296,21 @@ export default function Footer({ lng }) {
     }, [lng]);
 
     const getDialogShow = (dialogType) => {
-        if(dialogType === 101){
+        if (dialogType === 101) {
             const localizedData = GOVERNMENTAL_ORGANIZATIONS_NAVITEMS.map(item => ({
                 ...item,
                 displayName: lng === "mn" ? item.nameMn : item.name
             }));
             setNavData(localizedData);
         }
-        if(dialogType === 100){
+        if (dialogType === 100) {
             const localizedData = BRANCH_SITES_NAVITEMS.map(item => ({
                 ...item,
                 displayName: lng === "mn" ? item.nameMn : item.name
             }));
             setNavData(localizedData);
         }
-        if(dialogType === 99){
+        if (dialogType === 99) {
             const localizedData = FOREIGN_GOVERNMENT_ORGANIZATIONS_NAVITEMS.sort((a, b) => a.nameMn - b.nameMn).map(item => ({
                 ...item,
                 displayName: lng === "mn" ? item.nameMn : item.name
@@ -915,9 +380,7 @@ export default function Footer({ lng }) {
                                     <i className="pi pi-check"></i>
                                 </div>
                                 <span className="__text">
-                                    <a
-                                    onClick={() => router.push(`${lng === "mn" ? "www.nso.mn/mn/terms_of_use" : 'www.nso.mn/en/terms_of_use'}`)}
-                                    href="#" target="_blank" rel="noopener noreferrer">
+                                    <a href={`${lng === "mn" ? "https://www.nso.mn/mn/terms_of_use" : 'https://www.nso.mn/en/terms_of_use'}`} target="_blank" rel="noopener noreferrer">
                                         {lng === "mn" ? "Ашиглах нөхцөл" : "Terms of use"}
                                     </a>
                                 </span>
@@ -967,7 +430,7 @@ export default function Footer({ lng }) {
                                         type="email"
                                         name="email"
                                         autoComplete="off"
-                                        placeholder={t('Имэйл хаяг')}
+                                        placeholder={t('footer.email')}
                                         className="p-inputtext p-component"
                                         value={email}
                                         onChange={handleEmailChange}
@@ -1033,10 +496,10 @@ export default function Footer({ lng }) {
             </div>
 
             <NavbarDialog
-                lng={lng}
                 visible={dialogOpen}
                 onClose={() => setDialogOpen(false)}
                 data={navData}
+                lng={lng}
             />
         </div>
     );

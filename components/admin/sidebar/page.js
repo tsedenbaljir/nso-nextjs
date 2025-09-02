@@ -60,6 +60,7 @@ export default function Sidebar() {
                 <MenuItems name={"Ил тод байдал"} isActive={pth === "transparency"} link={"transparency"} />
                 <MenuItems name={"Хууль эрх зүй"} isActive={pth === "laws"} link={"laws"} />
                 <MenuItems name={"Онцлох үзүүлэлт"} isActive={pth === "indicator"} link={"indicator"} />
+                <MenuItems name={"Мета өгөгдөл"} isActive={pth === "metadata"} link={"metadata"} />
                 <MenuItems name={"Тайлан"} isActive={pth === "report"} link={"report"} />
                 <MenuItems name={"Тайлан эмхэтгэл"} isActive={pth === "file-library"} link={"file-library"} />
                 <MenuItems name={"Арга зүй"} isActive={pth === "methodology"} link={"methodology"} />
