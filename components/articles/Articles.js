@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import Image from 'next/image';
 
 export default function Articles({ article }) {
     const [imageError, setImageError] = useState(false);
@@ -13,10 +12,10 @@ export default function Articles({ article }) {
     }
 
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return 'https://www.nso.mn/images/default.jpg';
+        if (!imagePath) return 'https://www.1212.mn/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
-        if (imagePath.startsWith('/uploads/')) return `https://www.nso.mn/${imagePath}`;
-        return `https://www.nso.mn/uploads/${imagePath}`;
+        if (imagePath.startsWith('/uploads/')) return `https://www.1212.mn/${imagePath}`;
+        return `https://www.1212.mn/uploads/${imagePath}`;
     };
 
     const handleImageError = () => {
@@ -35,8 +34,8 @@ export default function Articles({ article }) {
         <article className="__about_post">
             <div className="__info_detail_page">
                 <div className="bg-gray">
-                    <Image
-                        src={imageError ? `https://www.nso.mn/uploads/${article.header_image}` : getImageUrl(article.header_image)}
+                    <img
+                        src={imageError ? `https://www.1212.mn/uploads/${article.header_image}` : getImageUrl(article.header_image)}
                         alt={article.name || 'Article image'}
                         width={500}
                         height={500}
