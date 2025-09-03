@@ -21,7 +21,14 @@ export async function POST(req) {
 
         // Create uploads directory if it doesn't exist
         const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        const filePath = path.join(uploadDir, file.name);
+        // Generate timestamped filename
+        const originalName = file.name || 'upload';
+        const ext = path.extname(originalName);
+        const baseName = path.basename(originalName, ext);
+        const safeBaseName = baseName.replace(/[^a-zA-Z0-9_.-]/g, '_');
+        const timestamp = Date.now();
+        const generatedName = `${safeBaseName}-${timestamp}${ext}`;
+        const filePath = path.join(uploadDir, generatedName);
 
         // Write the file
         await writeFile(filePath, buffer);
@@ -29,10 +36,9 @@ export async function POST(req) {
         return NextResponse.json({
             success: true,
             message: 'File uploaded successfully',
-            filename: file.name,
-            url: `/uploads/${file.name}`,
-            path: `/uploads/${file.name}`,
-            fullUrl: `/uploads/${file.name}`
+            url: `/uploads/${generatedName}`,
+            path: `/uploads/${generatedName}`,
+            fullUrl: `/uploads/${generatedName}`
         });
     } catch (error) {
         console.error('Upload error:', error);

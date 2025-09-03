@@ -19,7 +19,7 @@ export async function POST(req) {
         }
 
         const imageName = path.basename(new URL(imageUrl).pathname);
-        const dirPath = path.join(process.cwd(), 'public', 'uploads', 'images');
+        const dirPath = path.join(process.cwd(), 'public', 'uploads');
         const localPath = path.join(dirPath, imageName);
 
         if (!fs.existsSync(dirPath)) {
