@@ -97,7 +97,7 @@ export default function ContactAdmin({ params: { lng } }) {
     };
 
     const copyInputMessage = (body, slug) => {
-        const url = `https://www.nso.mn/mn/download/${body}/${slug}`;
+        const url = `https://www.1212.mn/mn/download/${body}/${slug}`;
 
         // Create a temporary input element
         const tempInput = document.createElement('input');
@@ -336,7 +336,7 @@ export default function ContactAdmin({ params: { lng } }) {
                             <Input
                                 readOnly
                                 className='bg-gray-200'
-                                value={`https://www.nso.mn/mn/download/${rowData.body}/${rowData.slug}`}
+                                value={`https://www.1212.mn/mn/download/${rowData.body}/${rowData.slug}`}
                                 style={{ border: 'none', backgroundColor: 'transparent' }}
                             />
                             <Button

@@ -21,7 +21,9 @@ export async function POST(req) {
 
         // Create uploads directory if it doesn't exist
         const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        const filePath = path.join(uploadDir, file.name);
+        const timestamp = Date.now();
+
+        const filePath = path.join(uploadDir, `${timestamp}-${file.name}`);
 
         // Write the file
         await writeFile(filePath, buffer);
@@ -29,10 +31,10 @@ export async function POST(req) {
         return NextResponse.json({
             success: true,
             message: 'File uploaded successfully',
-            filename: file.name,
-            url: `/uploads/${file.name}`,
-            path: `/uploads/${file.name}`,
-            fullUrl: `/uploads/${file.name}`
+            filename: `${timestamp}-${file.name}`,
+            url: `/uploads/${timestamp}-${file.name}`,
+            path: `/uploads/${timestamp}-${file.name}`,
+            fullUrl: `/uploads/${timestamp}-${file.name}`
         });
     } catch (error) {
         console.error('Upload error:', error);

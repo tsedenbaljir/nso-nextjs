@@ -32,7 +32,7 @@ async function processUploads(items, httpsAgent, myHeaders) {
         });
 
         try {
-            const result = await uploadWithRetry("https://beta.nso.mn/api/downloads", {
+            const result = await uploadWithRetry("https://www.1212.mn/api/downloads", {
                 method: "POST",
                 headers: myHeaders,
                 body: raw,
@@ -184,10 +184,25 @@ export async function GET(req) {
     // 92900523
     // 	)
 
+//     SELECT 
+//     CASE 
+//             WHEN PATINDEX('%/images/%', body) > 0
+//             THEN SUBSTRING(
+//                 body,
+//                 PATINDEX('%/images/%', body) + 8,
+//                 CHARINDEX('"', body, PATINDEX('%/images/%', body) + 8) - 
+//                 PATINDEX('%/images/%', body) - 8
+//             )
+//             ELSE NULL
+//         END AS pathName,
+//                     12 as size
+// FROM [NSOweb].[dbo].[web_1212_content]
+// WHERE news_type = N'LATEST'
+// AND content_type = N'NEWS'
+//     and body like N'%/images/%'
+
     try {
         const results = await db.raw(`
-        SELECT 'hun_am_oron%20suutsnii_2015%20toollogo.pdf' AS pathName,
-        0 size
     `);
 
         let uploadResults = await processUploads(results, httpsAgent, myHeaders);

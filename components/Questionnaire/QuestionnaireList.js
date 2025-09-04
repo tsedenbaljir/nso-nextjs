@@ -15,18 +15,18 @@ export default function QuestionnaireList({
   onPageChange,
   path,
 }) {
-  const [sortType, setSortType] = useState("Эхэнд шинэчлэгдсэн");
+  const [sortType, setSortType] = useState(isMn ? "Эхэнд шинэчлэгдсэн" : "Newest first");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const getSortedList = () => {
     const sorted = [...list];
-    if (sortType === "Эхэнд шинэчлэгдсэн") {
+    if (sortType === (isMn ? "Эхэнд шинэчлэгдсэн" : "Newest first")) {
       sorted.sort(
         (a, b) => new Date(b.published_date) - new Date(a.published_date)
       );
-    } else if (sortType === "Үсгийн дарааллаар") {
+    } else if (sortType === (isMn ? "Үсгийн дарааллаар" : "Alphabetical")) {
       sorted.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-    } else if (sortType === "Хандалтын тоогоор") {
+    } else if (sortType === (isMn ? "Хандалтын тоогоор" : "By views")) {
       sorted.sort((a, b) => (b.views || 0) - (a.views || 0));
     }
     return sorted;
@@ -43,8 +43,8 @@ export default function QuestionnaireList({
         }
       }
       return {
-        Гарчиг: item.name || "",
-        Тайлбар: item.info || "",
+        Гарчиг: isMn ? "Гарчиг" : "Name",
+        Тайлбар: isMn ? "Тайлбар" : "Info",
         Огноо: item.published_date
           ? new Date(item.published_date).toISOString().split("T")[0]
           : "",
@@ -78,10 +78,10 @@ export default function QuestionnaireList({
         {/* Header */}
         <div className="_filter_side ">
           <button
-            className="__download_button"
+            className="__download_button text-sm"
             onClick={handleDownloadExcel}
           >
-            <i className="pi pi-cloud-download"></i> Excel татах
+            <i className="pi pi-cloud-download"></i> {isMn ? "Excel татах" : "Download Excel"}
           </button>
 
           {/* Sort Dropdown */}
@@ -91,14 +91,14 @@ export default function QuestionnaireList({
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               <img src="/images/filter.png" className="filter " />
-              Эрэмбэлэх
+              {isMn ? "Эрэмбэлэх" : "Sort"}
             </button>
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-60 bg-white border rounded shadow-md z-10">
                 {[
-                  "Эхэнд шинэчлэгдсэн",
-                  "Үсгийн дарааллаар",
-                  "Хандалтын тоогоор",
+                  isMn ? "Эхэнд шинэчлэгдсэн" : "Newest first",
+                  isMn ? "Үсгийн дарааллаар" : "Alphabetical",
+                  // isMn ? "Хандалтын тоогоор" : "By views",
                 ].map((type) => (
                   <div
                     key={type}

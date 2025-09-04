@@ -192,7 +192,7 @@ export default function AdminLaws() {
         <div className={styles.adminLawsContainer}>
           {isAdding ? (
             <div className={styles.addForm}>
-              <h2>Хууль эрхзүй нэмэх</h2>
+              <h2>Хууль эрх зүй нэмэх</h2>
               <form onSubmit={handleSubmitNew}>
                 <div>
                   <label>Нэр:</label>
@@ -246,7 +246,7 @@ export default function AdminLaws() {
             </div>
           ) : isEditing && editingLaw ? (
             <div className={styles.addForm}>
-              <h2>Хууль эрхзүй засварлах</h2>
+              <h2>Хууль эрх зүй засварлах</h2>
               <form onSubmit={handleUpdate}>
                 <div>
                   <label>Нэр:</label>
@@ -288,7 +288,7 @@ export default function AdminLaws() {
           ) : (
             <>
               <div className={styles.header}>
-                <h1>Хууль эрхзүй</h1>
+                <h1>Хууль эрх зүй</h1>
                 <button onClick={handleAdd} className={styles.addButton}>
                   Шинээр нэмэх
                 </button>

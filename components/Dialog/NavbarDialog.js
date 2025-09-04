@@ -25,15 +25,26 @@ export default function NavbarDialog({ visible, onClose, data, lng }) {
             title={<div className="text-xl font-semibold border-b-2 border-gray-200 pb-4">{t('footer.links')}</div>}
         >
             <div className="w-full flex flex-row flex-wrap gap-4 py-4">
-                {data?.map((item) => (
-                    <div
-                        key={item.id}
-                        className="flex-[0_0_calc(24%-1rem)] cursor-pointer hover:underline font-semibold"
-                        onClick={() => handleLinkClick(item.link)}
-                    >
-                        {item.displayName}
-                    </div>
-                ))}
+                {data?.map((item) => {
+                    if (item.link) {
+                        return (
+                            <div
+                                key={item.id}
+                                className="flex-[0_0_calc(24%-1rem)] cursor-pointer hover:underline font-semibold"
+                                onClick={() => handleLinkClick(item.link)}
+                            >
+                                {item.displayName}
+                            </div>
+                        )
+                    } else {
+                        return <div
+                            key={item.id}
+                            className="flex-[0_0_calc(24%-1rem)] cursor-pointer text-blue-500 font-semibold"
+                        >
+                            {item.displayName}
+                        </div>
+                    }
+                })}
             </div>
         </Modal>
     );

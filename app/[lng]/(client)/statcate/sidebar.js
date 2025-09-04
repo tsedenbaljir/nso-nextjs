@@ -28,7 +28,7 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                 const result = await response.json();
 
                 var convert = [];
-
+                
                 convert.push(result.data[6]);
                 convert.push(result.data[5]);
                 convert.push(result.data[2]);
@@ -36,7 +36,7 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                 convert.push(result.data[7]);
                 convert.push(result.data[0]);
                 convert.push(result.data[1]);
-                convert.push(result.data[3]); //түүхэн статистик
+                // convert.push(result.data[3]); //түүхэн статистик
 
                 if (!Array.isArray(convert)) {
                     setError("Unexpected API response format. Check console.");

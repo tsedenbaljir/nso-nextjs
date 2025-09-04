@@ -29,12 +29,12 @@ export async function GET(req) {
   }
 
   if (year) {
-    query += ` AND YEAR(last_modified_date) = ?`;
+    query += ` AND YEAR(published_date) = ?`;
     queryParams.push(year);
   }
 
   if (month) {
-    query += ` AND MONTH(last_modified_date) = ?`;
+    query += ` AND MONTH(published_date) = ?`;
     queryParams.push(month);
   }
 
@@ -72,13 +72,13 @@ export async function GET(req) {
         AND news_type = ?
         AND published = 1
         ${searchTerm && searchTerm !== "" ? ` AND name LIKE '%${searchTerm}%'` : ''}
-        ${year ? ` AND YEAR(last_modified_date) = ${year}` : ''}
-        ${month ? ` AND MONTH(last_modified_date) = ${month}` : ''}
+        ${year ? ` AND YEAR(published_date) = ${year}` : ''}
+        ${month ? ` AND MONTH(published_date) = ${month}` : ''}
     `, [lng, type]);
 
     // ✅ Он, сар авах
     let yearsMonthsQuery = `
-      SELECT YEAR(last_modified_date) AS Year, MONTH(last_modified_date) AS Month
+      SELECT YEAR(published_date) AS Year, MONTH(published_date) AS Month
       FROM web_1212_content
       WHERE content_type = 'NEWS'
         AND language = ?
@@ -93,8 +93,8 @@ export async function GET(req) {
     }
 
     yearsMonthsQuery += `
-      GROUP BY YEAR(last_modified_date), MONTH(last_modified_date)
-      ORDER BY YEAR(last_modified_date) DESC, MONTH(last_modified_date) DESC
+      GROUP BY YEAR(published_date), MONTH(published_date)
+      ORDER BY YEAR(published_date) DESC, MONTH(published_date) DESC
     `;
 
     const yearsMonths = await db.raw(yearsMonthsQuery, yearsMonthsParams);

@@ -14,19 +14,19 @@
     "DZ": "Board of <br /> Directors",
     "AZBZ": "Permanent Board of Methodology",
     "D1": "Chairman of NSO",
-    "D2": "Vice-Chairman <br /><br /><br />",
+    "D2": "Vice-Chairman <br /><br />",
     "D3": "Director Administration<br /> Department<br />",
     "G1": "Integrated Statistics Department<br />",
-    "G1x1": "Cooperation and methodology division",
+    "G1x1": "Cooperation and Methodology Division",
     "G1x2": "National Accounts Division",
-    "G1x3": "Public Relations Division",
+    "G1x3": "Public Relation Division",
     "G2": "Economic Statistics Department<br /><br />",
     "G2x1": "Price Statistics Division",
     "G2x2": "Agriculture, Environment and Industrial Statistics Division",
     "G2x3": "Money, Finance and Service Statistics Division",
-    "G3": "Social Statistics department<br /><br />",
-    "G3x1": "Household-based survey division",
-    "G3x2": "Social Statistics division",
+    "G3": "Social Statistics Department<br /><br />",
+    "G3x1": "Household-based survey Division",
+    "G3x2": "Social Statistics Division",
     "G4": "Census and Data Analysis Department<br /><br />",
     "G4x1": "Research, Analysis and Sampling Division",
     "G4x2": "Population and housing Census Division",
@@ -50,18 +50,18 @@
     "address": "Address",
     "addressText": "Government III building, Baga toiruu - 44, Ulaanbaatar -11, Mongolia",
     "copyright": "National Statistics Office of Mongolia",
-    "email": "Email address",
+    "email": "E-mail address",
     "getLatestNews": "Get the latest news",
     "suggestionForNewReport": "If you would like to receive regular updates, please register by email here.",
     "today": "Today",
-    "week": "Week",
-    "thisMonth": "This month",
+    "week": "Current Week",
+    "thisMonth": "Current Month",
     "total": "Total",
     "traffic": "Website traffic",
     "links": "Links",
     "government": "Government organization",
     "otherSites": "Branch websites",
-    "foreignGovernment": "Foreign government agencies",
+    "foreignGovernment": "Foreign Statistical Agencies",
     "oldVersion1": "Old version v1",
     "oldVersion2": "Old version v2"
   },
@@ -78,8 +78,8 @@
     "messageV": "Writing violation:"
   },
   "news": {
-    "latest": "Latest news",
-    "future": "Future news",
+    "latest": "Latest release",
+    "future": "Future release",
     "scheduled": "Scheduled News",
     "more": "Show more"
   },
@@ -109,7 +109,7 @@
     "Command": "Command",
     "Rules": "Rules",
     "Documents": "Documents",
-    "LEGALFUND": "LEGAL FUND"
+    "LEGALFUND": "LEGAL DATABASE"
   },
   "Phone": "Contact phone number",
   "Registration": "Registration",
@@ -136,12 +136,12 @@
   "tran4": "Branch Council under the Statistics Committee of the National Council of Public Service",
   "goal": {
     "title": "Mission",
-    "desc": "Our mission is to deliver statistical data based on scientific approaches and to provide equal services to customers."
+    "desc": "We compile and disseminate the statistical information of Mongolia on a scientific basis and ensure equal access and service for all statistical users."
   },
   "Goals": "Goals",
   "vision": {
     "title": "Vision",
-    "desc": "Our vision is to produce qualified data for generic public, to maintain the continuity of evidence-based policies and decisions, and to lead the world with its statistical capabilities."
+    "desc": "We are committed to providing users with reliable and high-quality statistical data, sustaining the continuity of evidence-based policies and decisions, and advancing toward global leadership in statistical capacity."
   },
   "Objective": "Objective",
   "menuAboutUs": {

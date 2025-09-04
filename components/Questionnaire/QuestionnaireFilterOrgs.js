@@ -22,7 +22,7 @@ export default function QuestionnaireFilterObs({ filterList, selectedFilter, han
                                 className={`cursor-pointer ${selectedFilter?.id === item.id ? 'active' : ''}`}
                                 onClick={() => handleFilterChange(item)}
                             >
-                                {isMn ? item.fullname || item.name : item.name || item.name_eng}
+                                {isMn ? item.name : item.name_eng}
                                 <span className="count font-bold">{item.count}</span>
                             </li>
                         ))}

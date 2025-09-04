@@ -37,11 +37,12 @@ export default function DynamicSidebar({ sectorData, subsector, lng }) {
                 // ✅ Ensure the sectors appear in the correct order
                 let orderedSectors = [];
                 try {
+                    orderedSectors.push(sectorData[6]);
                     orderedSectors.push(sectorData[5]);
                     orderedSectors.push(sectorData[4]);
                     orderedSectors.push(sectorData[1]);
-                    orderedSectors.push(sectorData[3]);
-                    orderedSectors.push(sectorData[6]);
+                    // orderedSectors.push(sectorData[3]);
+                    orderedSectors.push(sectorData[7]);
                     orderedSectors.push(sectorData[0]);
                     // Skipping `sectorData[2]` as per your comment: // түүхэн статистик
                 } catch (err) {
@@ -99,7 +100,7 @@ export default function DynamicSidebar({ sectorData, subsector, lng }) {
                                                 className={`cursor-pointer ${sub.isActive ? "active-link" : ""}`}
                                                 onClick={sub.onClick}
                                             >
-                                                {sub.label}
+                                                {sub.label.split('_')[1] ? sub.label.split('_')[1] : sub.label}
                                             </span>
                                         ))}
                                     </div>

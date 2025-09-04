@@ -92,7 +92,7 @@ export default function AdminLaws() {
       <div className="w-full px-2 h-full">
         <div className={styles.adminLawsContainer}>
           <div className={styles.header}>
-            <h1>Хууль эрхзүй</h1>
+            <h1>Хууль эрх зүй</h1>
           </div>
           <TabView
             activeIndex={activeIndex}

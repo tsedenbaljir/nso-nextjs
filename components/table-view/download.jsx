@@ -140,7 +140,18 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
                 return record;
             });
 
-            const ws = XLSX.utils.json_to_sheet(table);
+            // Build worksheet with a title row (filename) at the top
+            const dataWs = XLSX.utils.json_to_sheet(table);
+            const dataRange = XLSX.utils.decode_range(dataWs['!ref']);
+            const columnCount = dataRange.e.c - dataRange.s.c + 1;
+
+            const ws = XLSX.utils.aoa_to_sheet([[filename]]);
+            ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: columnCount - 1 } }];
+            XLSX.utils.sheet_add_json(ws, table, { origin: 'A2' });
+
+            // Column widths
+            ws['!cols'] = new Array(columnCount).fill({ wch: 15 });
+
             const wb = XLSX.utils.book_new();
             const sheetName = filename
                 .replace(/[:\\/?*[\]]/g, '')
@@ -153,6 +164,23 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
                 .slice(0, 16)
                 .replace('T', '_')
                 .replace(':', '');
+
+            // Title style
+            if (ws['A1']) {
+                ws['A1'].s = { font: { bold: true, sz: 14 }, alignment: { horizontal: 'center' } };
+            }
+
+            // Header style (row 2 since row 1 is the title)
+            const headerStyle = {
+                font: { bold: true },
+                alignment: { horizontal: 'center' },
+                fill: { fgColor: { rgb: "F2F2F2" } }
+            };
+            for (let C = 0; C < columnCount; ++C) {
+                const cellRef = XLSX.utils.encode_cell({ r: 1, c: C });
+                if (!ws[cellRef]) ws[cellRef] = { v: '' };
+                ws[cellRef].s = headerStyle;
+            }
 
             const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
             const blob = new Blob([wbout], { type: 'application/octet-stream' });
@@ -332,6 +360,9 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             });
         });
 
+        // Add title row (filename) as the first row
+        const columnCount = table[0].length;
+        table.unshift([filename, ...Array(columnCount - 1).fill('')]);
         const ws = XLSX.utils.aoa_to_sheet(table);
 
         // Set column widths and styles for better readability
@@ -345,10 +376,16 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             fill: { fgColor: { rgb: "F2F2F2" } }
         };
 
-        // Apply header style to first row
+        // Merge title row across all columns and style it
+        ws['!merges'] = (ws['!merges'] || []).concat([{ s: { r: 0, c: 0 }, e: { r: 0, c: columnCount - 1 } }]);
+        if (ws['A1']) {
+            ws['A1'].s = { font: { bold: true, sz: 14 }, alignment: { horizontal: 'center' } };
+        }
+
+        // Apply header style to second row (index 1) since first row is title
         const range = XLSX.utils.decode_range(ws['!ref']);
         for (let C = range.s.c; C <= range.e.c; ++C) {
-            const cellRef = XLSX.utils.encode_cell({ r: 0, c: C });
+            const cellRef = XLSX.utils.encode_cell({ r: 1, c: C });
             if (!ws[cellRef]) ws[cellRef] = { v: table[0][C] };
             ws[cellRef].s = headerStyle;
         }

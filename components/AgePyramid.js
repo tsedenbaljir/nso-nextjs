@@ -153,12 +153,12 @@ const AgePyramid = () => {
       <div className="p-3 bg-white border">
         <div className="flex justify-between">
           <div className="text-center">
-            <img src="/man.png" />
+            <img src="/images/man.png" />
             <br />
             <strong>{jval.TotalMan.toLocaleString()}</strong>
           </div>
           <div className="text-center">
-            <img src="/woman.png" />
+            <img src="/images/woman.png" />
             <br />
             <strong>{jval.TotalWoman.toLocaleString()}</strong>
           </div>

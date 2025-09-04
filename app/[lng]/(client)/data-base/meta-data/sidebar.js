@@ -20,11 +20,11 @@ export default function SideBar({ lng }) {
     useEffect(() => {
         setMenuItems([
             {
-                label: 'Бүлэг',
+                label: lng === 'mn' ? 'Бүлэг' : 'Group',
                 id: 'group',
                 items: [
                     {
-                        label: 'Мэдээ, тооллого, судалгаа',
+                        label: t('metadata.questionnaire'),
                         id: 'questionnaire',
                         className: path.includes('questionnaire') ? 'active-link' : '',
                         command: () => {
@@ -32,7 +32,7 @@ export default function SideBar({ lng }) {
                         }
                     },
                     {
-                        label: 'Үзүүлэлт',
+                        label: t('metadata.indicator'),
                         id: 'indicator',
                         className: path.includes('indicator') ? 'active-link' : '',
                         command: () => {
@@ -40,7 +40,7 @@ export default function SideBar({ lng }) {
                         }
                     },
                     {
-                        label: 'Нэр, томьёоны тайлбар',
+                        label: t('metadata.glossary'),
                         id: 'glossary',
                         className: path.includes('glossary') ? 'active-link' : '',
                         command: () => {

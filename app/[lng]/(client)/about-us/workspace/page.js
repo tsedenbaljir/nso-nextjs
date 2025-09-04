@@ -114,7 +114,7 @@ export default function Home({ params: { lng } }) {
                                 return (
                                     <div
                                         key={index}
-                                        className="ws_body"
+                                        className="ws_body pb-10 pt-5"
                                     >
                                         <div className="ws_title text-2xl font-semibold">
                                             {dt.name}
