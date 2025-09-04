@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import "@/components/styles/news.scss";
 import { useRouter } from "next/navigation";
-import Layout from '@/components/baseLayout';
 import Articles from '@/components/articles/Articles';
 import TextLoading from '@/components/Loading/Text/Index';
 import ArticleSideBar from '@/components/articles/ArticleSideBar';
@@ -44,7 +43,7 @@ export default function Home({ params: { lng }, params }) {
         fetchArticles();
         const fetchSideBar = async () => {
             try {
-                const response = await fetch(`/api/articles`);
+                const response = await fetch(`/api/articles?lng=${lng}`);
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -59,14 +58,14 @@ export default function Home({ params: { lng }, params }) {
         };
 
         fetchSideBar();
-    }, []);
+    }, [lng]);
 
     return (
         <>
             {loading ? <div className='nso_about_us mt-35'>
                 <div className="nso_container">
                     <Articles article={article} />
-                    <ArticleSideBar article={sidebar} />
+                    <ArticleSideBar article={sidebar} lng={lng} />
                 </div>
             </div> : <div className='nso_about_us mt-35'>
                 <div className="nso_container">

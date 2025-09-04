@@ -78,8 +78,8 @@
     "messageV": "Writing violation:"
   },
   "news": {
-    "latest": "Latest news",
-    "future": "Future news",
+    "latest": "Latest release",
+    "future": "Future release",
     "scheduled": "Scheduled News",
     "more": "Show more"
   },
@@ -109,7 +109,7 @@
     "Command": "Command",
     "Rules": "Rules",
     "Documents": "Documents",
-    "LEGALFUND": "LEGAL FUND"
+    "LEGALFUND": "LEGAL DATABASE"
   },
   "Phone": "Contact phone number",
   "Registration": "Registration",
@@ -136,12 +136,12 @@
   "tran4": "Branch Council under the Statistics Committee of the National Council of Public Service",
   "goal": {
     "title": "Mission",
-    "desc": "Our mission is to deliver statistical data based on scientific approaches and to provide equal services to customers."
+    "desc": "We compile and disseminate the statistical information of Mongolia on a scientific basis and ensure equal access and service for all statistical users."
   },
   "Goals": "Goals",
   "vision": {
     "title": "Vision",
-    "desc": "Our vision is to produce qualified data for generic public, to maintain the continuity of evidence-based policies and decisions, and to lead the world with its statistical capabilities."
+    "desc": "We are committed to providing users with reliable and high-quality statistical data, sustaining the continuity of evidence-based policies and decisions, and advancing toward global leadership in statistical capacity."
   },
   "Objective": "Objective",
   "menuAboutUs": {

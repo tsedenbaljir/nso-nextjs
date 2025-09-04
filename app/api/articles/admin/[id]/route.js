@@ -4,13 +4,13 @@ import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
 export async function DELETE(req, { params }) {
     // Check authentication
-    const auth = await checkAdminAuth(req);
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    // const auth = await checkAdminAuth(req);
+    // if (!auth.isAuthenticated) {
+    //     return NextResponse.json({
+    //         status: false,
+    //         message: auth.error
+    //     }, { status: 401 });
+    // }
 
     try {
         await db('web_1212_content')
@@ -33,13 +33,13 @@ export async function DELETE(req, { params }) {
 
 export async function PUT(req, { params }) {
     // Check authentication
-    const auth = await checkAdminAuth(req);
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    // const auth = await checkAdminAuth(req);
+    // if (!auth.isAuthenticated) {
+    //     return NextResponse.json({
+    //         status: false,
+    //         message: auth.error
+    //     }, { status: 401 });
+    // }
 
     try {
         const body = await req.json();

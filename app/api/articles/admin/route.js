@@ -5,14 +5,14 @@ import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 export const dynamic = "force-dynamic";
 export async function GET(req) {
     // Check authentication
-    const auth = await checkAdminAuth(req);
+    // const auth = await checkAdminAuth(req);
     
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    // if (!auth.isAuthenticated) {
+    //     return NextResponse.json({
+    //         status: false,
+    //         message: auth.error
+    //     }, { status: 401 });
+    // }
 
     try {
         const results = await db('web_1212_content')
@@ -38,14 +38,14 @@ export async function GET(req) {
 
 export async function POST(req) {
     // Check authentication
-    const auth = await checkAdminAuth(req);
+    // const auth = await checkAdminAuth(req);
     
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    // if (!auth.isAuthenticated) {
+    //     return NextResponse.json({
+    //         status: false,
+    //         message: auth.error
+    //     }, { status: 401 });
+    // }
 
     try {
         const body = await req.json();

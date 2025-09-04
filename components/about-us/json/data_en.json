@@ -5,7 +5,7 @@
       "title": "Chairman of the National Statistics Committee",
       "fullName": "Batdavaa Batmunkh",
       "year": "After 2021",
-      "imgSrc": "/assets/images/about_us/daraga.png",
+      "imgSrc": "https://www.1212.mn/images/about_us/daraga.png",
       "status": "CFA, Chairman <br/> National Statistics <br/> Office",
       "education": [
         {
@@ -61,7 +61,7 @@
       "title": "Deputy Chairman of the National Statistics Committee",
       "fullName": "Lkhamsuren Damdinsuren",
       "year": "After 2021",
-      "imgSrc": "/assets/images/about_us/deddaraga.png",
+      "imgSrc": "https://www.1212.mn/images/about_us/deddaraga.png",
       "status": "Vice-Chairman",
       "education": [
         {
@@ -121,7 +121,7 @@
       "title": "Academy of Public Administration and Management Development, Master of Management",
       "fullName": "Lkhagva Byambasuren",
       "year": "After 2021",
-      "imgSrc": "/assets/images/about_us/Tdarga.png",
+      "imgSrc": "https://www.1212.mn/images/about_us/Tdarga.png",
       "status": "Director Administration<br/> Department",
       "education": [
         {
@@ -224,26 +224,26 @@
     },
     {
       "id": 2,
-      "title": "Нэгдсэн статистикийн газар",
+      "title": "INTEGRATED STATISTICS DEPARTMENT",
       "goals": "",
       "Objective": [
         {
-          "title": "Арга зүйн байнгын зөвлөлийн үйл ажиллагааг удирдан зохион байгуулах;"
+          "title": "To direct and coordinate the operations of the Standing Council on Statistical Methodology;"
         },
         {
-          "title": "Албан ёсны статистикийн хөгжлийн бодлого, түүнийг хэрэгжүүлэх стратегийн төлөвлөгөөний хэрэгжилтэд хяналт тавих, зөвлөмж чиглэл өгөх, холбогдох арга хэмжээг авах;"
+          "title": "To monitor the implementation of the national policy on official statistics and its associated strategic plan, provide recommendations and guidance, and undertake necessary measures;"
         },
         {
-          "title": "Нийгэм, эдийн засгийн албан ёсны статистикийн аргачлал, арга зүйн уялдааг хангах, хэрэгжилтэд хяналт тавих, зөвлөмж чиглэл өгөх;"
+          "title": "To ensure methodological consistency and harmonization across official socio-economic statistics, oversee their implementation, and issue relevant recommendations;"
         },
         {
-          "title": "Монгол Улсын нийгэм, эдийн засгийн сар, улирлын танилцуулга, жилийн эмхэтгэлийг хянах, холбогдох арга хэмжээг авах;"
+          "title": "To review and endorse Mongolia’s monthly, quarterly, and annual official statistical publications on socio-economic development, and take appropriate actions where required;"
         },
         {
-          "title": "Нийгэм, эдийн засгийн албан ёсны статистикийн тооллого, судалгаа,  үзүүлэлтийн тооцоо, тооцооллыг хянах, уялдуулах, холбогдох арга хэмжээг авах;"
+          "title": "To examine and coordinate official censuses, surveys, indicators, and statistical computations related to socio-economic statistics, ensuring methodological soundness and coherence, and to implement relevant measures;"
         },
         {
-          "title": "Удирдлагыг мэдээллээр хангах, дотоод үйл ажиллагаанд оролцох."
+          "title": "To provide statistical information and advisory support to senior leadership, and to contribute to internal institutional processes."
         }
       ],
       "duties": [
@@ -347,7 +347,7 @@
     },
     {
       "id": 4,
-      "title": "Public Relations Department",
+      "title": "Public Relation Division",
       "goals": "With the aim of implementing the goals of the department, to determine policy and strategy for the development of statistics and to ensure their implementation; to develop international relations and cooperation of the institution; and to prepare proposals and recommendations for improving the legal environment of statistics.",
       "Objective": [
         {
@@ -428,7 +428,7 @@
     },
     {
       "id": 5,
-      "title": "National Accounts Department",
+      "title": "National Accounts Division",
       "goals": "To accelerate the implementation process of system of national accounts, to compile the key macro economic indicators, to analyze and prepare the data for dissemination to users within the scope of Department goals.",
       "Objective": [
         {
@@ -488,7 +488,7 @@
     },
     {
       "id": 6,
-      "title": "Cooperation and dissemination division",
+      "title": "Cooperation and Methodology Division",
       "goals": "To build policy documents and manuals on internal relations and data dissemination, to support the capacity building of statistical activities, the implementation of projects and programs within the scope of Department goals.",
       "Objective": [
         {
@@ -560,7 +560,7 @@
     },
     {
       "id": 7,
-      "title": "Price Statistic Division",
+      "title": "Price Statistics Division",
       "goals": "To improve price statistics, to estimate price statistic indicators, to analyze outputs, and prepare them for dissemination within the scope Department goals and functions.",
       "Objective": [
         {
@@ -1118,7 +1118,7 @@
     },
     {
       "id": 15,
-      "title": "Department of Business Registration and Census",
+      "title": "Business registration and census division",
       "goals": "Improve the quality and coverage of business records within the framework of the implementation of land functions, organize the work of conducting censuses and surveys based on business records, maintain, enrich, and provide the foundation of business records.",
       "Objective": [
         {
@@ -1211,7 +1211,7 @@
     },
     {
       "id": 16,
-      "title": "Department of Research, Analysis and Sampling",
+      "title": "Research, analysis, and sampling division",
       "goals": "Within the framework of the implementation of land functions, the database of state institutions will be connected with statistical databases to create a base for research and analysis, to conduct analysis and research using them, and to develop and improve sampling methodology.",
       "Objective": [
         {
@@ -1306,7 +1306,7 @@
     },
     {
       "id": 18,
-      "title": "Human Resources and Training Department",
+      "title": "Human Resources and Training Division",
       "goals": "Definitely implement the sector's human resources policy, form and strengthen skilled human resources that meet the requirements of laws, laws, and regulations, train and empower employees, provide integrated management and support for the activities of local statistical units.",
       "Objective": [
         {
