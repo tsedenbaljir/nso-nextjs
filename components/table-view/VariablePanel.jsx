@@ -133,7 +133,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
                   checked={showOptions === 1}
                   onClick={() => setShowOptions(1)}
                 />
-                <label className='cursor-pointer font-light text-sm'>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
+                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
                 onClick={() => setShowOptions(2)}>
@@ -144,7 +144,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
                   checked={showOptions === 2}
                   onClick={() => setShowOptions(2)}
                 />
-                <label className='cursor-pointer font-light text-sm'>{lng === 'mn' ? 'Шугаман график' : 'Line charts'}</label>
+                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Шугаман график' : 'Line charts'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
                 onClick={() => setShowOptions(3)}>
@@ -155,7 +155,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
                   checked={showOptions === 3}
                   onClick={() => setShowOptions(3)}
                 />
-                <label className='cursor-pointer font-light text-sm'>{lng === 'mn' ? 'Баганан график' : 'Column charts'}</label>
+                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Баганан график' : 'Column charts'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
                 onClick={() => setShowOptions(4)}>
@@ -166,7 +166,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
                   checked={showOptions === 4}
                   onClick={() => setShowOptions(4)}
                 />
-                <label className='cursor-pointer font-light text-sm'>{lng === 'mn' ? 'Туузан график' : 'Bar charts'}</label>
+                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Туузан график' : 'Bar charts'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
                 onClick={() => setShowOptions(5)}>
@@ -177,7 +177,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
                   checked={showOptions === 5}
                   onClick={() => setShowOptions(5)}
                 />
-                <label className='cursor-pointer font-light text-sm'>{lng === 'mn' ? 'Талбайн график' : 'Area charts'}</label>
+                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Талбайн график' : 'Area charts'}</label>
               </div>
               <div className='flex flex-row flex-wrap gap-2 mt-1'
                 onClick={() => setShowOptions(6)}>
@@ -188,7 +188,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
                   checked={showOptions === 6}
                   onClick={() => setShowOptions(6)}
                 />
-                <label className='cursor-pointer font-light text-sm'>{lng === 'mn' ? 'Дугуй график' : 'Pie charts'}</label>
+                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Дугуй график' : 'Pie charts'}</label>
               </div>
             </div>
             <button
