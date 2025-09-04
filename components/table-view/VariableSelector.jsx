@@ -125,7 +125,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
     <>
       <div className='flex flex-row flex-wrap gap-2 col-span-4 w-full md:min-w-[24%] md:max-w-[270px]'>
         <div className="border border-gray-400 rounded-md bg-white shadow flex flex-col w-full col-span-4">
-          <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
+          <h2 className="bg-[#005baa] text-white font-medium py-2 px-4 rounded-t flex items-center justify-between">
             <span>{variable.text}</span>
           </h2>
           <div className='m-2 max-h-64 w-full md:min-w-[24%] md:max-w-[270px] overflow-y-auto h-full'>
@@ -193,7 +193,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
           <>
             {selected.length > 0 && (
               <SelectorBox
-                label={lng === 'mn' ? 'Аймаг:' : 'Aimag:'}
+                label={lng === 'mn' ? 'Аймаг' : 'Aimag'}
                 level='child'
                 list={childSelected}
                 dependsOn={selected}
@@ -207,7 +207,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             )}
             {childSelected.length > 0 && (
               <SelectorBox
-                label={lng === 'mn' ? 'Сум:' : 'Soum:'}
+                label={lng === 'mn' ? 'Сум' : 'Soum'}
                 level='grand'
                 list={grandChildSelected}
                 dependsOn={childSelected}
@@ -221,7 +221,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             )}
             {grandChildSelected.length > 0 && (
               <SelectorBox
-                label={lng === 'mn' ? 'Баг:' : 'Bag:'}
+                label={lng === 'mn' ? 'Баг' : 'Bag'}
                 level='great'
                 list={greatGrandChildSelected}
                 dependsOn={grandChildSelected}
@@ -261,7 +261,7 @@ const SelectorBox = ({
     filtered.length > 0 && (
       <div className='flex flex-row flex-wrap gap-2 col-span-4 w-full md:min-w-[24%] md:max-w-[270px]'>
         <div className="border border-gray-400 rounded-md bg-white shadow flex flex-col w-full">
-          <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
+          <h2 className="bg-[#005baa] text-white font-medium py-2 px-4 rounded-t flex items-center justify-between">
             <span>
               {label}
             </span>

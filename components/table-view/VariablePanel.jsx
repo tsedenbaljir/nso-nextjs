@@ -120,7 +120,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
         ))}
         <div className='flex flex-row flex-wrap gap-2 col-span-4 w-full md:min-w-[24%] md:max-w-[270px]'>
           <div className="border border-gray-400 rounded-md bg-white shadow flex flex-col w-full col-span-4">
-            <h2 className="bg-[#005baa] text-white font-bold py-2 px-4 rounded-t flex items-center justify-between">
+            <h2 className="bg-[#005baa] text-white font-medium py-2 px-4 rounded-t flex items-center justify-between">
               <span>{lng === 'mn' ? 'Харагдах төрөл' : 'View type'}</span>
             </h2>
             <div className='!min-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full px-2 py-1 mb-2 bg-white'>
