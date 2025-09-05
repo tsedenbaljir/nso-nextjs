@@ -13,8 +13,9 @@ export default function GlossaryList({
   rows,
   onPageChange,
   path,
+  lng,
 }) {
-  const [sortType, setSortType] = useState("Эхэнд шинэчлэгдсэн");
+  const [sortType, setSortType] = useState(lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleDownloadExcel = () => {
@@ -59,13 +60,13 @@ export default function GlossaryList({
 
   const getSortedList = () => {
     const sorted = [...list];
-    if (sortType === "Эхэнд шинэчлэгдсэн") {
+    if (sortType === (lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first")) {
       sorted.sort(
         (a, b) => new Date(b.published_date) - new Date(a.published_date)
       );
-    } else if (sortType === "Үсгийн дарааллаар") {
+    } else if (sortType === (lng === "mn" ? "Үсгийн дарааллаар" : "Alphabetical order")) {
       sorted.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-    } else if (sortType === "Хандалтын тоогоор") {
+    } else if (sortType === (lng === "mn" ? "Хандалтын тоогоор" : "Views order")) {
       sorted.sort((a, b) => (b.views || 0) - (a.views || 0));
     }
     return sorted;
@@ -78,10 +79,10 @@ export default function GlossaryList({
             <div className="__table_container pt-6">
               <div className="_filter_side ">
                 <button
-                  className="__download_button"
+                  className="__download_button whitespace-nowrap text-sm"
                   onClick={handleDownloadExcel}
                 >
-                  <i className="pi pi-cloud-download"></i> Excel татах
+                  <i className="pi pi-cloud-download"></i> {lng === "mn" ? "Excel татах" : "Download Excel"}
                 </button>
 
                 {/* Sort Dropdown */}
@@ -91,14 +92,14 @@ export default function GlossaryList({
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                   >
                     <img src="/images/filter.png" className="filter " />
-                    Эрэмбэлэх
+                    {lng === "mn" ? "Эрэмбэлэх" : "Sort"}
                   </button>
                   {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-60 bg-white border rounded shadow-md z-10">
                       {[
-                        "Эхэнд шинэчлэгдсэн",
-                        "Үсгийн дарааллаар",
-                        "Хандалтын тоогоор",
+                        lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first",
+                        lng === "mn" ? "Үсгийн дарааллаар" : "Alphabetical order",
+                        lng === "mn" ? "Хандалтын тоогоор" : "Views order",
                       ].map((type) => (
                         <div
                           key={type}
