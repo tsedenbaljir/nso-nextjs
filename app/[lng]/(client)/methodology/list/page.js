@@ -93,6 +93,7 @@ export default function Glossary({ params }) {
         first={first}
         rows={rows}
         onPageChange={onPageChange}
+        lng={lng}
       />
     </div>
   );

@@ -126,7 +126,7 @@ export default function Layout({ children, params: { lng } }) {
       <div className="nso_container mt-4">
         <div className="sm:col-12 md:col-4 lg:col-3">
           <Sidebar lng={lng} />
-          <div className="sm:col-12 md:col-12 lg:col-12">
+          <div className="sm:col-12 md:col-12 lg:col-12 p-0">
             {!pathname.includes('classification') && <GlossaryFilter
               filterList={filterList}
               selectedFilter={selectedFilter}

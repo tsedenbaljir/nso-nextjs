@@ -73,9 +73,9 @@ export default function GlossaryList({
   };
 
   return (
-    <div className="__table_container">
+    <div className="__table_container w-full">
       <div className="_filter_side ">
-        <button className="__download_button whitespace-nowrap" onClick={handleDownloadExcel}>
+        <button className="__download_button whitespace-nowrap text-sm" onClick={handleDownloadExcel}>
           <i className="pi pi-cloud-download"></i> {lng === "mn" ? "Excel татах" : "Download Excel"}
         </button>
 
