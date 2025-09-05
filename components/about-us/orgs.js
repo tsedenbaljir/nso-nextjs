@@ -17,8 +17,8 @@ export default function Orgs({ lng }) {
     const [where, setWhere] = useState(null);
     const [breadMapGazar, setBreadMapGazar] = useState([]);
 
-    const datas = lng === "mn" ? datamn.gazar : dataen.gazar;
-    const daragaData = lng === "mn" ? datamn.daraga : dataen.daraga;
+    const datas = lng === "mn" ? datamn?.gazar : dataen?.gazar;
+    const daragaData = lng === "mn" ? datamn?.daraga : dataen?.daraga;
 
     useEffect(() => {
         // Any initialization logic can go here
@@ -31,7 +31,7 @@ export default function Orgs({ lng }) {
             { label: t('home'), url: [lng === 'mn' ? 'mn' : 'en'] },
             { label: t('aboutUs') },
             { label: t('orgStructure') },
-            { label: daragaData[whereIs - 1].title }
+            { label: daragaData[whereIs - 1]?.title }
         ]);
     };
 
@@ -42,7 +42,7 @@ export default function Orgs({ lng }) {
             { label: t('home'), url: [lng === 'mn' ? 'mn' : 'en'] },
             { label: t('aboutUs') },
             { label: t('orgStructure') },
-            { label: datas[whereIs - 1].title }
+            { label: datas[whereIs - 1]?.title }
         ]);
     };
 
@@ -56,18 +56,18 @@ export default function Orgs({ lng }) {
                                 <Path name={''} breadMap={breadMapDaraga} />
                             } visible={daraga} baseZIndex={10000} modal onHide={() => setDaraga(false)}>
                                 <div>
-                                    <div className="title" style={{ color: "#333a3f", fontWeight: 700, fontSize: "xx-large", marginLeft: 20 }}>{daragaData[whereDaraga].title}</div>
+                                    <div className="title" style={{ color: "#333a3f", fontWeight: 700, fontSize: "xx-large", marginLeft: 20 }}>{daragaData[whereDaraga]?.title}</div>
                                     <div className="dialog-body">
                                         <div className="sb">
                                             <div className="name">
                                                 <div className="name_bg"></div>
-                                                <img src={daragaData[whereDaraga].imgSrc} alt="Daraga" />
-                                                <h5 style={{ color: "var(--accent)", fontWeight: 700 }}>{daragaData[whereDaraga].fullName}</h5>
+                                                <img src={daragaData[whereDaraga]?.imgSrc} alt="Daraga" />
+                                                <h5 style={{ color: "var(--accent)", fontWeight: 700 }}>{daragaData[whereDaraga]?.fullName}</h5>
                                             </div>
                                             <div className="desc">
-                                                <p>{daragaData[whereDaraga].year}</p>
+                                                <p>{daragaData[whereDaraga]?.year}</p>
                                                 <h4>
-                                                    <div className="ws_desc" dangerouslySetInnerHTML={{ __html: daragaData[whereDaraga].status }}></div>
+                                                    <div className="ws_desc" dangerouslySetInnerHTML={{ __html: daragaData[whereDaraga]?.status }}></div>
                                                 </h4>
                                             </div>
                                         </div>
@@ -76,18 +76,18 @@ export default function Orgs({ lng }) {
                                                 <div className="title">{t('orgEducation')}</div>
                                                 {daragaData[whereDaraga].education.map((education, index) => (
                                                     <div className="bfr" key={index}>
-                                                        <p className="f">{education.edu}</p>
-                                                        <p className="s">{education.year}</p>
+                                                        <p className="f">{education?.edu}</p>
+                                                        <p className="s">{education?.year}</p>
                                                     </div>
                                                 ))}
                                             </div>
                                             <div className="body">
                                                 <div className="title">{t('WorkExperience')}</div>
-                                                <Timeline value={daragaData[whereDaraga].history}
+                                                <Timeline value={daragaData[whereDaraga]?.history}
                                                     content={(event) => (
                                                         <div>
-                                                            <div className="time_line_title">{event.job}</div>
-                                                            <div className="date">{event.year}</div>
+                                                            <div className="time_line_title">{event?.job}</div>
+                                                            <div className="date">{event?.year}</div>
                                                         </div>
                                                     )}
                                                     marker={(event) => (
@@ -107,22 +107,22 @@ export default function Orgs({ lng }) {
                             <Dialog header={
                                 <Path name={''} breadMap={breadMapGazar} />
                             } visible={gazar} baseZIndex={10000} modal onHide={() => setGazar(false)}>
-                                <div className="title" style={{ color: "#333a3f", fontWeight: 700, fontSize: "xx-large", marginLeft: 20 }}>{datas[where].title}</div>
+                                <div className="title" style={{ color: "#333a3f", fontWeight: 700, fontSize: "xx-large", marginLeft: 20 }}>{datas[where]?.title}</div>
                                 <div className="dialog-body">
                                     <div className="header">
                                         <div className="title">{t('Goals')}</div>
                                         <div className="bfr">
-                                            <div>{datas[where].goals}</div>
+                                            <div>{datas[where]?.goals}</div>
                                         </div>
                                         <br />
                                         <div className="title">
-                                            {datas[where].id !== 24 ? t('Objective') : 'Даргын зөвлөлийн хурлын гишүүд: '}
+                                            {datas[where]?.id !== 24 ? t('Objective') : 'Даргын зөвлөлийн хурлын гишүүд: '}
                                         </div>
                                         <div className="bfr">
                                             <div>
-                                                {datas[where].Objective.map((data, index) => (
+                                                {datas[where]?.Objective.map((data, index) => (
                                                     <p key={index}>
-                                                        {index + 1}. {data.title}
+                                                        {index + 1}. {data?.title}
                                                     </p>
                                                 ))}
                                             </div>
@@ -130,21 +130,21 @@ export default function Orgs({ lng }) {
                                         {lng === "mn" && (
                                             <>
                                                 <div className="title">
-                                                    {datas[where].id === 24 ? "Даргын зөвлөлийн хурлын хуралдааны дэг:" :
-                                                        datas[where].id !== 16 ? "Чиг үүрэг" : ""}
+                                                    {datas[where]?.id === 24 ? "Даргын зөвлөлийн хурлын хуралдааны дэг:" :
+                                                        datas[where]?.id !== 16 ? "Чиг үүрэг" : ""}
                                                 </div>
                                                 <div className="bfr">
                                                     <div>
-                                                        {datas[where].duties.map((data, index) => (
+                                                        {datas[where]?.duties.map((data, index) => (
                                                             <p key={index}>
-                                                                {index + 1}. {data.title}
+                                                                {index + 1}. {data?.title}
                                                             </p>
                                                         ))}
                                                     </div>
                                                 </div>
                                             </>
                                         )}
-                                        {datas[where].id === 24 && (
+                                        {datas[where]?.id === 24 && (
                                             <>
                                                 <br />
                                                 <a className="underline" href="/uploads/16p_4dRstR2UyuZ-_tJK9cikjthfYtkQ47JZ64y-.pdf" target="_blank">
@@ -188,7 +188,8 @@ export default function Orgs({ lng }) {
                                             dangerouslySetInnerHTML={{ __html: t('aboutUsJson.D2') }}></h5>
                                         <ol className="level-3-wrapper">
                                             <li className="lvlded">
-                                                <h5 className="level-3 rectangle text-center" onClick={() => { showDialoggazar(27) }}
+                                                <h5 className="level-3 rectangle text-center" 
+                                                onClick={() => { showDialoggazar(27) }}
                                                     dangerouslySetInnerHTML={{ __html: t('aboutUsJson.AZBZ') }}></h5>
                                             </li>
                                             <li className="lvltamga">
