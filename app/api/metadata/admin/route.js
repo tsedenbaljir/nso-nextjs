@@ -17,36 +17,10 @@ export async function GET(req) {
         }
 
         const query = `
-            SELECT a.[id], a.[labelmn], a.[labelen], a.[last_modified_date], a.[descriptionen], a.[descriptionmn], a.[is_secure], 
-            CASE WHEN c.[namemn] = N'Салбар' THEN e.[namemn] WHEN c.[namemn] = N'Үзүүлэлтийг тооцох давтамж' THEN d.[namemn] WHEN c.[namemn] = N'Үзүүлэлтийг татах холбоос' THEN null ELSE b.[valuemn] END AS [valuemn], 
-            CASE WHEN c.[namemn] = N'Салбар' THEN e.[nameen] WHEN c.[namemn] = N'Үзүүлэлтийг тооцох давтамж' THEN d.[nameen] WHEN c.[namemn] = N'Үзүүлэлтийг татах холбоос' THEN null ELSE b.[valueen] END AS [valueen],
-            c.[namemn] as meta_name_mn, c.[nameen] as meta_name_en, c.[id] as meta_id, c.[app_order], a.[active]
-            FROM (
-                SELECT [id], [namemn] AS [labelmn], [nameen] AS [labelen], [last_modified_date], [descriptionen], [descriptionmn], [is_secure], [active]
-                FROM [NSOweb].[dbo].[question_pool]
-                ${poolFilter}
-            ) AS a
-            LEFT JOIN (
-                SELECT [id], [active], [type], [valueen], [valuemn], [classification_code_id], [meta_data_id], [questionpool_id]
-                FROM [NSOweb].[dbo].[meta_data_value]
-                WHERE [active] = 1 AND [meta_data_id] <> 8718114
-            ) AS b ON a.[id] = b.[questionpool_id]
-            LEFT JOIN (
-                SELECT [id], [namemn], [nameen], [app_order]
-                FROM [NSOweb].[dbo].[meta_data]
-                WHERE [active] = 1
-            ) AS c ON b.[meta_data_id] = c.[id]
-            LEFT JOIN (
-                SELECT  [id], [namemn], [nameen]
-                FROM [NSOweb].[dbo].[sub_classification_code]
-                WHERE [active] = 1
-            ) AS d ON TRY_CAST(b.[valuemn] AS INT) = d.[id]
-            LEFT JOIN (
-                SELECT  [id], [namemn], [nameen]
-                FROM [NSOweb].[dbo].[sub_classification_code]
-                WHERE [active] = 1
-            ) AS e ON TRY_CAST(b.[valuemn] AS INT) = e.[id]
-            ORDER BY TRY_CAST(c.[app_order] AS INT) ASC
+            SELECT [id], [version], [type], [active], [namemn], [nameen], [is_current], [previous_version], [is_secure], [status], [created_by], [created_date], [last_modified_by], [last_modified_date], [deleted], [descriptionen], [descriptionmn], [views]
+            FROM [NSOweb].[dbo].[question_pool]
+            ${poolFilter}
+            ORDER BY [id] ASC
             OFFSET ? ROWS FETCH NEXT ? ROWS ONLY`;
 
         const results = await db.raw(query, [offset, pageSize]);

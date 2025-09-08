@@ -14,7 +14,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
         if (!response.ok) throw new Error("Failed to fetch");
 
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
         
         if (result.status) {
           setData(result.data);
