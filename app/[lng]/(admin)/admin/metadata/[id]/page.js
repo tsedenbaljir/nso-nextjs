@@ -48,6 +48,19 @@ export default function MetadataEdit() {
       try {
         const res = await axios.get(`/api/metadata/admin/${id}`);
         const row = res.data?.data;
+        console.log("row", row);
+        const catalogueIds = [
+          ...new Set(
+            row.metaValues
+              ?.flatMap((m) =>
+                m.data_catalogue_ids
+                  ? m.data_catalogue_ids.split(",").map((id) => id.trim())
+                  : []
+              )
+              .filter(Boolean) || []
+          ),
+        ];
+
         if (row) {
           // question_pool утгууд
           form.setFieldsValue({
@@ -59,7 +72,9 @@ export default function MetadataEdit() {
             active: row.active,
             isCurrent: row.is_current,
             isSecure: row.is_secure,
+            dataCatalogues: catalogueIds, // олон сонголт
           });
+
 
           setCatalogues(row.catalogues || []);
           setSectors(row.subClassifications || []);
@@ -222,7 +237,7 @@ export default function MetadataEdit() {
         id,
         ...values,
         metaValues,
-        user: "Enebish_e",
+        user: "admin",
       });
 
       message.success("Амжилттай хадгаллаа");
@@ -240,7 +255,12 @@ export default function MetadataEdit() {
 
       <Form layout="vertical" form={form} onFinish={onFinish}>
         <Form.Item name="dataCatalogues" label="Дата каталог">
-          <Select mode="multiple" placeholder="Сонгоно уу" allowClear>
+          <Select
+            mode="multiple"
+            placeholder="Сонгоно уу"
+            allowClear
+            optionFilterProp="children"
+          >
             {catalogues.map((cat) => (
               <Select.Option key={cat.id} value={cat.id}>
                 {cat.namemn} ({cat.nameen})

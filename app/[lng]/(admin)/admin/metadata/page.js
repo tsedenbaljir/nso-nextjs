@@ -79,7 +79,7 @@ export default function MetadataAdmin() {
                         allowClear
                         style={{ width: 250 }}
                     />
-                    <Button type="primary" onClick={handleAdd}>Шинэ нэмэх</Button>
+                    {/* <Button type="primary" onClick={handleAdd}>Шинэ нэмэх</Button> */}
                 </div>
             </div>
             <Table
