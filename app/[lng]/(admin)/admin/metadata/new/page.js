@@ -247,11 +247,20 @@ export default function MetadataNew() {
             <Form.Item name="expert" label="Боловсруулсан мэргэжилтэн">
               <Input />
             </Form.Item>
-            <Form.Item name="lastModified" label="Хамгийн сүүлд өөрчлөгдсөн огноо">
+            <Form.Item
+              name="lastModified"
+              label="Хамгийн сүүлд өөрчлөгдсөн огноо"
+            >
               <DatePicker />
             </Form.Item>
             <Form.Item name="downloadLink" label="Үзүүлэлтийг татах холбоос">
-              <Input addonAfter={<a href="#" target="_blank">Линк</a>} />
+              <Input
+                addonAfter={
+                  <a href="#" target="_blank">
+                    Линк
+                  </a>
+                }
+              />
             </Form.Item>
           </Tabs.TabPane>
 
@@ -305,7 +314,13 @@ export default function MetadataNew() {
               <DatePicker />
             </Form.Item>
             <Form.Item name="downloadLinkEn" label="Download link">
-              <Input addonAfter={<a href="#" target="_blank">Link</a>} />
+              <Input
+                addonAfter={
+                  <a href="#" target="_blank">
+                    Link
+                  </a>
+                }
+              />
             </Form.Item>
           </Tabs.TabPane>
         </Tabs>
