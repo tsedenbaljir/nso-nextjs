@@ -15,6 +15,7 @@ export default function FileLibraryAdmin() {
     const [editingFile, setEditingFile] = useState(null);
     const [form] = Form.useForm();
 
+    const [FilesChangeValues, setFilesChangeValues] = useState({});
     // Statistics state
     const [stats, setStats] = useState({
         total: 0,
@@ -259,9 +260,10 @@ export default function FileLibraryAdmin() {
     };
 
     const handleSubmit = async (values) => {
+        console.log("values========>", values);
         try {
             const url = "/api/file-library/admin";
-            
+
             if (!editingFile) {
                 if (values.file && values.file.fileList && values.file.fileList.length > 0) {
                     // For new files, upload the actual file first
@@ -274,6 +276,7 @@ export default function FileLibraryAdmin() {
                     const fileInfo = {
                         ...createFileInfo(uploadedFileName),
                         fileName: uploadedFileName,
+                        fileSize: values.file.fileList[0].size,
                         filePath: `/uploads/${uploadedFileName}`,
                     };
                     // Create the file record in database
@@ -312,14 +315,11 @@ export default function FileLibraryAdmin() {
                     description: values.description,
                     type: values.type,
                     lng: values.lng,
-                    fileInfo: null,
-                    fileSize: 0,
                     isPublic: values.isPublic,
                 };
-
                 // Check if a new file was uploaded during editing
-                if (values.file && values.file.fileList && values.file.fileList.length > 0) {
-                    const file = values.file.fileList[0].originFileObj;
+                if (FilesChangeValues.file && FilesChangeValues.fileList.length > 0) {
+                    const file = FilesChangeValues.fileList[0].originFileObj;
 
                     // Upload the new file
                     const uploadedFileName = await uploadFile(file);
@@ -328,12 +328,10 @@ export default function FileLibraryAdmin() {
                     const fileInfo = {
                         ...createFileInfo(uploadedFileName),
                         fileName: uploadedFileName,
+                        fileSize: FilesChangeValues.fileList[0].size,
                         filePath: `/uploads/${uploadedFileName}`,
                     };
-
-                    // Add file info to request body
                     requestBody.fileInfo = fileInfo;
-                    requestBody.fileSize = fileInfo.fileSize;
                 }
 
                 const response = await fetch(url, {
@@ -795,21 +793,36 @@ export default function FileLibraryAdmin() {
                         </Select>
                     </Form.Item>
 
-                    {/* {!editingFile && ( */}
                     <Form.Item
                         name="file"
                         label={editingFile ? "Файл солих (сонгохгүй бол хуучин файл хэвээр үлдэнэ)" : "Файл сонгох"}
                         rules={[{ required: !editingFile ? true : false, message: "Файл сонгоно уу" }]}
                     >
-                        <Upload
-                            beforeUpload={() => false}
-                            maxCount={1}
-                            accept="*/*"
-                        >
-                            <Button icon={<UploadOutlined />}>
-                                {editingFile ? "Шинэ файл сонгох" : "Файл сонгох"}
-                            </Button>
-                        </Upload>
+                        {
+                            editingFile && editingFile.file_info ?
+                                <Upload
+                                    beforeUpload={() => false}
+                                    maxCount={1}
+                                    accept="*/*"
+                                    onChange={(values) => {
+                                        console.log("values========>", values);
+                                        setFilesChangeValues(values);
+                                    }}
+                                >
+                                    <Button icon={<UploadOutlined />}>
+                                        Шинэ файл сонгох
+                                    </Button>
+                                </Upload> :
+                                <Upload
+                                    beforeUpload={() => false}
+                                    maxCount={1}
+                                    accept="*/*"
+                                >
+                                    <Button icon={<UploadOutlined />}>
+                                        Файл сонгох
+                                    </Button>
+                                </Upload>
+                        }
                         {editingFile && editingFile.file_info && (
                             <div style={{ marginTop: 8, fontSize: 12, color: '#666' }}>
                                 Одоогийн файл: {(() => {
@@ -823,7 +836,6 @@ export default function FileLibraryAdmin() {
                             </div>
                         )}
                     </Form.Item>
-                    {/* )} */}
 
                     <Form.Item>
                         <Space>

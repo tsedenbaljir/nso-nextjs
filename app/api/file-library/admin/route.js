@@ -64,7 +64,7 @@ export async function GET(req) {
 
         // Get all results without pagination
         const result = await db.raw(query, params);
-
+        
         // Ensure we always return an array
         let files = [];
         if (result && result[0] && Array.isArray(result[0])) {
@@ -113,7 +113,7 @@ export async function POST(req) {
 
         // First, get the next available ID
         const [nextId] = await db.raw("SELECT max(id) as nextId FROM web_1212_download");
-
+        
         const insertResult = await db("web_1212_download").insert({
             id: parseInt(nextId.nextId) + 1 || 1,
             name: title,
@@ -173,18 +173,16 @@ export async function PUT(req) {
             info: description,
             file_type: type,
             language: lng,
-            file_info: fileInfo ? JSON.stringify(fileInfo) : null,
-            file_size: parseInt(fileInfo?.fileSize || 0),
             published: isPublic === true ? 1 : 0,
             last_modified_by: "admin",
             last_modified_date: new Date(),
         };
 
         // If new file info is provided, update it
-        // if (fileInfo) {
-        //     updateData.file_info = JSON.stringify(fileInfo);
-        //     updateData.file_size = parseInt(fileInfo.fileSize || 0);
-        // }
+        if (fileInfo) {
+            updateData.file_info = JSON.stringify(fileInfo);
+            updateData.file_size = parseInt(fileInfo.fileSize || 0);
+        }
 
         // Remove undefined values
         Object.keys(updateData).forEach(key =>
