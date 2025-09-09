@@ -264,7 +264,7 @@ export default function FileLibraryAdmin() {
 
                     // Create file info with the uploaded filename
                     const fileInfo = {
-                        ...createFileInfo(file),
+                        ...createFileInfo(uploadedFileName),
                         fileName: uploadedFileName,
                         filePath: `/uploads/${uploadedFileName}`,
                     };
@@ -317,7 +317,7 @@ export default function FileLibraryAdmin() {
 
                     // Create file info with the uploaded filename
                     const fileInfo = {
-                        ...createFileInfo(file),
+                        ...createFileInfo(uploadedFileName),
                         fileName: uploadedFileName,
                         filePath: `/uploads/${uploadedFileName}`,
                     };
