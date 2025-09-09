@@ -75,7 +75,6 @@ export default function MetadataEdit() {
             dataCatalogues: catalogueIds, // олон сонголт
           });
 
-
           setCatalogues(row.catalogues || []);
           setSectors(row.subClassifications || []);
           setFrequencies(row.frequencies || []);
@@ -103,13 +102,22 @@ export default function MetadataEdit() {
                 form.setFieldsValue({ subSector: valMn, subSectorEn: valEn });
                 break;
               case "Тодорхойлолт":
-                form.setFieldsValue({ descriptionmn: valMn, descriptionEn: valEn });
+                form.setFieldsValue({
+                  descriptionmn: valMn,
+                  descriptionEn: valEn,
+                });
                 break;
               case "Аргачлал, арга зүйн нэр":
-                form.setFieldsValue({ methodology: valMn, methodologyEn: valEn });
+                form.setFieldsValue({
+                  methodology: valMn,
+                  methodologyEn: valEn,
+                });
                 break;
               case "Тооцох аргачлал":
-                form.setFieldsValue({ calculation: valMn, calculationEn: valEn });
+                form.setFieldsValue({
+                  calculation: valMn,
+                  calculationEn: valEn,
+                });
                 break;
               case "Тооцож эхэлсэн хугацаа":
                 form.setFieldsValue({
@@ -187,7 +195,9 @@ export default function MetadataEdit() {
         },
         {
           meta_data_id: FIELD_META_MAP.startDate,
-          valuemn: values.startDate ? values.startDate.format("YYYY-MM-DD") : null,
+          valuemn: values.startDate
+            ? values.startDate.format("YYYY-MM-DD")
+            : null,
           valueen: values.startDateEn
             ? values.startDateEn.format("YYYY-MM-DD")
             : null,
@@ -347,11 +357,20 @@ export default function MetadataEdit() {
             <Form.Item name="expert" label="Боловсруулсан мэргэжилтэн">
               <Input />
             </Form.Item>
-            <Form.Item name="lastModified" label="Хамгийн сүүлд өөрчлөгдсөн огноо">
+            <Form.Item
+              name="lastModified"
+              label="Хамгийн сүүлд өөрчлөгдсөн огноо"
+            >
               <DatePicker />
             </Form.Item>
             <Form.Item name="downloadLink" label="Үзүүлэлтийг татах холбоос">
-              <Input addonAfter={<a href="#" target="_blank">Линк</a>} />
+              <Input
+                addonAfter={
+                  <a href="#" target="_blank">
+                    Линк
+                  </a>
+                }
+              />
             </Form.Item>
           </Tabs.TabPane>
 
@@ -405,7 +424,13 @@ export default function MetadataEdit() {
               <DatePicker />
             </Form.Item>
             <Form.Item name="downloadLinkEn" label="Download link">
-              <Input addonAfter={<a href="#" target="_blank">Link</a>} />
+              <Input
+                addonAfter={
+                  <a href="#" target="_blank">
+                    Link
+                  </a>
+                }
+              />
             </Form.Item>
           </Tabs.TabPane>
         </Tabs>
