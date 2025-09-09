@@ -55,12 +55,20 @@ export default function FileLibraryAdmin() {
         { value: 'livestock_census', label: 'Livestock Census' },
         { value: 'pahc', label: 'PAHC' }
     ];
-
+    const getExtension = (name) => {
+        if (typeof name !== 'string') return '';
+        const trimmed = name.trim();
+        const i = trimmed.lastIndexOf('.');
+        return i > 0 ? trimmed.slice(i + 1).toLowerCase() : trimmed.toLowerCase();
+    };
     // Create file info object with detailed metadata
-    const createFileInfo = (file) => {
+    const createFileInfo = (input) => {
         const currentDate = new Date().toISOString();
-        const extension = file.name.split('.').pop().toLowerCase();
-
+        const isStringInput = typeof input === 'string';
+        const name = isStringInput ? input : input?.name;
+        const size = isStringInput ? undefined : input?.size;
+        const type = isStringInput ? undefined : input?.type;
+        const extension = getExtension(name);
         // Determine media type based on extension
         const mediaTypes = {
             'pdf': 'application/pdf',
@@ -83,10 +91,10 @@ export default function FileLibraryAdmin() {
         };
 
         return {
-            originalName: file.name,
-            pathName: file.name,
-            fileSize: file.size,
-            type: file.type,
+            originalName: name || '',
+            pathName: name || '',
+            fileSize: size || 0,
+            type: type || '',
             extension: extension,
             mediaType: mediaTypes[extension] || 'application/octet-stream',
             pages: 1,
@@ -253,7 +261,7 @@ export default function FileLibraryAdmin() {
     const handleSubmit = async (values) => {
         try {
             const url = "/api/file-library/admin";
-
+            
             if (!editingFile) {
                 if (values.file && values.file.fileList && values.file.fileList.length > 0) {
                     // For new files, upload the actual file first
@@ -268,7 +276,6 @@ export default function FileLibraryAdmin() {
                         fileName: uploadedFileName,
                         filePath: `/uploads/${uploadedFileName}`,
                     };
-
                     // Create the file record in database
                     const requestBody = {
                         title: values.title,
@@ -290,11 +297,11 @@ export default function FileLibraryAdmin() {
                     const responseData = await response.json();
 
                     if (response.ok && responseData.success) {
-                        message.success("File uploaded successfully");
+                        message.success("Амжилттай нэмэгдлээ");
                         setIsModalVisible(false);
                         fetchFiles();
                     } else {
-                        message.error(responseData.error || "Failed to upload file");
+                        message.error(responseData.error || "Файл нэмэгдэхэд алдаа гарлаа");
                     }
                 }
             } else {

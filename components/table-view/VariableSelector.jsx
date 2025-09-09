@@ -193,7 +193,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
           <>
             {selected.length > 0 && (
               <SelectorBox
-                label={lng === 'mn' ? 'Аймаг' : 'Aimag'}
+                label={lng === 'mn' ? 'Аймаг/Нийслэл' : 'Provice/Capital'}
                 level='child'
                 list={childSelected}
                 dependsOn={selected}
@@ -207,7 +207,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             )}
             {childSelected.length > 0 && (
               <SelectorBox
-                label={lng === 'mn' ? 'Сум' : 'Soum'}
+                label={lng === 'mn' ? 'Сум/Дүүрэг' : 'Soum/District'}
                 level='grand'
                 list={grandChildSelected}
                 dependsOn={childSelected}
@@ -221,7 +221,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
             )}
             {grandChildSelected.length > 0 && (
               <SelectorBox
-                label={lng === 'mn' ? 'Баг' : 'Bag'}
+                label={lng === 'mn' ? 'Баг/Хороо' : 'Bag/Khoroo'}
                 level='great'
                 list={greatGrandChildSelected}
                 dependsOn={grandChildSelected}
