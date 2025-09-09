@@ -210,7 +210,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
           <div className='text-center'>
             <LoadingOutlined spin style={{ fontSize: '24px', color: '#005baa' }} />
             <br />
-            <p className='text-gray-500 text-lg'>Уншиж байна...</p>
+            <p className='text-gray-500 text-lg'>{lng === 'mn' ? 'Уншиж байна...' : 'Loading...'}</p>
           </div>
         </div>
       ) : resultData && (
