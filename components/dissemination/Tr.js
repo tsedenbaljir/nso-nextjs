@@ -1,8 +1,6 @@
 import React from 'react';
-import { useRouter } from "next/navigation";
 
 export default function Tr({ item, lng, index }) {
-    const router = useRouter();
     // Create a Date object once and reuse
     const published_date = new Date(item.published_date);
     const formattedDate = lng === "mn"
@@ -14,12 +12,13 @@ export default function Tr({ item, lng, index }) {
         <td>{item.slug}</td>
         <td>
             {item.news_type === "LATEST" ? (
-                <span
+                <a
                     className="cursor-pointer hover:text-blue-400 hover:underline"
-                    onClick={() => router.push(`/dissemination/${item.id}`)}
+                    href={`/${lng}/dissemination/${item.id}`}
+                    target="_blank"
                 >
                     {item.name}
-                </span>
+                </a>
             ) : (
                 item.name
             )}

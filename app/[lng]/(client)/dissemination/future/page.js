@@ -212,7 +212,7 @@ export default function AboutUs({ params: { lng } }) {
         </span>
       </div>
 
-      <img src="/images/disimg.jpg" width="100%" />
+      {lng === "mn" ? <img src="/images/disimg.jpg" width="100%" /> : <img src="/images/disimg_en.jpg" width="100%" />}
 
       <Main type="future" lng={lng} filterSection={filterSection}>
         <table className="w-full">
