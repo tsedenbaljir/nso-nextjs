@@ -1,7 +1,7 @@
 "use client";
 import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 var expandedRowsDate = null;
 // Name column body

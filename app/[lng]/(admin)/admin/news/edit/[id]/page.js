@@ -21,6 +21,8 @@ export default function EditNews({ params: { lng, id } }) {
     const [published, setPublished] = useState(true)
     const [headerImageFile, setHeaderImageFile] = useState(null)
     const [publishedDate, setPublishedDate] = useState('')
+    const [publishedDateInput, setPublishedDateInput] = useState('')
+    const [publishedTimeInput, setPublishedTimeInput] = useState('')
     const [currentImage, setCurrentImage] = useState('');
     const [user, setUser] = useState(null);
 
@@ -56,6 +58,15 @@ export default function EditNews({ params: { lng, id } }) {
                 setLanguage(article.language.toLowerCase())
                 setPublished(article.published)
                 setPublishedDate(article.published_date)
+                try {
+                    const dt = article.published_date ? new Date(article.published_date) : new Date()
+                    setPublishedDateInput(dt.toISOString().slice(0, 10))
+                    setPublishedTimeInput(dt.toTimeString().slice(0, 5))
+                } catch (e) {
+                    const now = new Date()
+                    setPublishedDateInput(now.toISOString().slice(0, 10))
+                    setPublishedTimeInput(now.toTimeString().slice(0, 5))
+                }
                 setCurrentImage(article.header_image)
             }
             setLoading(false)
@@ -102,13 +113,21 @@ export default function EditNews({ params: { lng, id } }) {
                 }
             }
 
+            let computedPublishedDate = new Date().toISOString()
+            if (publishedDateInput && publishedTimeInput) {
+                const dt = new Date(`${publishedDateInput}T${publishedTimeInput}`)
+                if (!isNaN(dt.getTime())) {
+                    computedPublishedDate = dt.toISOString()
+                }
+            }
+
             const articleData = {
                 name: title,
                 body: body,
                 language: language.toUpperCase(),
                 published: published,
                 news_type: newsType === 1 ? 'LATEST' : newsType === 2 ? 'MEDIA' : 'TENDER',
-                published_date: publishedDate || new Date().toISOString(),
+                published_date: computedPublishedDate,
                 header_image: imageUrl,
                 last_modified_by: user?.username || 'anonymousUser',
                 last_modified_date: new Date().toISOString()
@@ -176,6 +195,24 @@ export default function EditNews({ params: { lng, id } }) {
                                 className="mr-2"
                             />
                             <label htmlFor="publishedCheckbox">Нийтлэх</label>
+                        </div>
+                        <div className="flex items-center bg-gray-100 px-2 rounded-md">
+                            <label className="mr-2">Огноо</label>
+                            <input
+                                type="date"
+                                value={publishedDateInput}
+                                onChange={(e) => setPublishedDateInput(e.target.value)}
+                                className="py-1 px-2 rounded-md bg-white"
+                            />
+                        </div>
+                        <div className="flex items-center bg-gray-100 px-2 rounded-md">
+                            <label className="mr-2">Цаг</label>
+                            <input
+                                type="time"
+                                value={publishedTimeInput}
+                                onChange={(e) => setPublishedTimeInput(e.target.value)}
+                                className="py-1 px-2 rounded-md bg-white"
+                            />
                         </div>
                     </div>
                     <div className='flex flex-wrap gap-3 mb-4'>

@@ -5,6 +5,13 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { NameBodyTemplate, DateBodyTemplate } from "./body";
 
+const stripAfterLastBy = (text) => {
+    if (typeof text !== "string") return text;
+    const idx = text.toLowerCase().lastIndexOf(" by ");
+    if (idx === -1) return text;
+    return text.slice(0, idx).trim();
+};
+
 export default function Table({ sector, subsector, lng }) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,7 +25,7 @@ export default function Table({ sector, subsector, lng }) {
         return response.data.map((item, index) => ({
             id: index + 1,
             link: item.id,
-            name: item.text,
+            name: stripAfterLastBy(item.text),
             date: item.updated,
             category: item.type === "t" ? "Текст" : "Бусад",
         }));
@@ -40,7 +47,7 @@ export default function Table({ sector, subsector, lng }) {
                         return {
                             id: index + 1,
                             link: item?.id,
-                            name: item?.text,
+                            name: stripAfterLastBy(item?.text),
                             date: item?.updated,
                             sub,
                             category: item?.type === "t" ? "Текст" : "Бусад",
@@ -65,6 +72,7 @@ export default function Table({ sector, subsector, lng }) {
                 value={data}
                 paginator
                 rows={10}
+                emptyMessage={lng === "mn" ? "Мэдээлэл олдсонгүй" : "No data found"}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink"
                 currentPageReportTemplate={lng === "mn" ? "Нийт: {totalRecords}" : "Total: {totalRecords}"}
                 className="nso_table"

@@ -36,8 +36,9 @@ export default function Main({ sector, subsector, lng }) {
                 value={data}
                 paginator
                 rows={10}
+                emptyMessage={lng === "mn" ? "Мэдээлэл олдсонгүй" : "No data found"}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
-                currentPageReportTemplate={`Нийт: {totalRecords}`}
+                currentPageReportTemplate={lng === "mn" ? "Нийт: {totalRecords}" : "Total: {totalRecords}"}
                 className="nso_table"
                 loading={loading}
             >

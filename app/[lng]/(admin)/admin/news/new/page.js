@@ -18,6 +18,8 @@ const Dashboard = () => {
     const [language, setLanguage] = useState('mn');
     const [published, setPublished] = useState(true);
     const [user, setUser] = useState(null);
+    const [publishedDate, setPublishedDate] = useState(() => new Date().toISOString().slice(0, 10));
+    const [publishedTime, setPublishedTime] = useState(() => new Date().toTimeString().slice(0, 5));
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -69,6 +71,13 @@ const Dashboard = () => {
 
             if (imageUrl) {
                 const currentDate = new Date().toISOString();
+                let computedPublishedDate = currentDate;
+                if (publishedDate && publishedTime) {
+                    const dt = new Date(`${publishedDate}T${publishedTime}`);
+                    if (!isNaN(dt.getTime())) {
+                        computedPublishedDate = dt.toISOString();
+                    }
+                }
                 const articleData = {
                     name: title,
                     language: language.toUpperCase(),
@@ -80,7 +89,7 @@ const Dashboard = () => {
                     last_modified_date: currentDate,
                     content_type: 'NSONEWS',
                     news_type: newsType,
-                    published_date: currentDate,
+                    published_date: computedPublishedDate,
                     header_image: imageUrl,
                     views: 0
                 };
@@ -150,6 +159,24 @@ const Dashboard = () => {
                             className="mr-2"
                         />
                         <label htmlFor="publishedCheckbox">Нийтлэх</label>
+                    </div>
+                    <div className="flex items-center bg-gray-100 px-2 rounded-md">
+                        <label className="mr-2">Огноо</label>
+                        <input
+                            type="date"
+                            value={publishedDate}
+                            onChange={(e) => setPublishedDate(e.target.value)}
+                            className="py-1 px-2 rounded-md bg-white"
+                        />
+                    </div>
+                    <div className="flex items-center bg-gray-100 px-2 rounded-md">
+                        <label className="mr-2">Цаг</label>
+                        <input
+                            type="time"
+                            value={publishedTime}
+                            onChange={(e) => setPublishedTime(e.target.value)}
+                            className="py-1 px-2 rounded-md bg-white"
+                        />
                     </div>
                 </div>
                 <div className='flex flex-wrap gap-3 mb-4'>
