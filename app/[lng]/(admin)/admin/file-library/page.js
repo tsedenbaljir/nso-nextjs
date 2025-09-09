@@ -260,7 +260,6 @@ export default function FileLibraryAdmin() {
     };
 
     const handleSubmit = async (values) => {
-        console.log("values========>", values);
         try {
             const url = "/api/file-library/admin";
 
