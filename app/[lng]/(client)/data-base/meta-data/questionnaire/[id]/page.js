@@ -141,16 +141,33 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                   {sortedData.length > 2 ? index + 1 : index + 1}
                 </div>
                 <div className="w-1/3 text-left">{item.namemn ? item.namemn : item.name}</div>
-                <div className="w-1/3 text-left whitespace-pre-wrap">
-                  {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
-                    ? new Date(item.valuemn).toISOString().split('T')[0]
-                    : item.valuemn ? item.valuemn : ""}
-                </div>
-                <div className="w-1/3 text-left whitespace-pre-wrap">
-                  {item.namemn === "Маягт батлагдсан огноо" && item.valueen
-                    ? new Date(item.valueen).toISOString().split('T')[0]
-                    : item.valueen ? item.valueen : ""}
-                </div>
+                {
+                  item.namemn === "Маягт" && item.attachment_name ? (
+                    <>
+                      <a href={`/uploads/${item.attachment_name}`} target="_blank" className="underline cursor-pointer w-1/3 text-left whitespace-pre-wrap">
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
+                          ? new Date(item.valuemn).toISOString().split('T')[0]
+                          : item.valuemn ? item.valuemn : ""}
+                      </a>
+                      <a href={`/uploads/${item.attachment_name}`} target="_blank" className="underline cursor-pointer w-1/3 text-left whitespace-pre-wrap">
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valueen
+                          ? new Date(item.valueen).toISOString().split('T')[0]
+                          : item.valueen ? item.valueen : ""}
+                      </a>
+                    </>
+                  ):<>
+                  <div className="w-1/3 text-left whitespace-pre-wrap">
+                    {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
+                      ? new Date(item.valuemn).toISOString().split('T')[0]
+                      : item.valuemn ? item.valuemn : ""}
+                  </div>
+                  <div className="w-1/3 text-left whitespace-pre-wrap">
+                    {item.namemn === "Маягт батлагдсан огноо" && item.valueen
+                      ? new Date(item.valueen).toISOString().split('T')[0]
+                      : item.valueen ? item.valueen : ""}
+                  </div>
+                </>
+                }
               </div>
             )) : categoryOrder.map((item, index) => (
               <div

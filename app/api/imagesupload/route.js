@@ -203,6 +203,8 @@ export async function GET(req) {
 
     try {
         const results = await db.raw(`
+        SELECT [attachment_name] as pathName, 1 as size
+        FROM [NSOweb].[dbo].[metadata_value_attachment]
     `);
 
         let uploadResults = await processUploads(results, httpsAgent, myHeaders);
