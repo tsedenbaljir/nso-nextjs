@@ -312,6 +312,8 @@ export default function FileLibraryAdmin() {
                     description: values.description,
                     type: values.type,
                     lng: values.lng,
+                    fileInfo: null,
+                    fileSize: 0,
                     isPublic: values.isPublic,
                 };
 
@@ -331,7 +333,7 @@ export default function FileLibraryAdmin() {
 
                     // Add file info to request body
                     requestBody.fileInfo = fileInfo;
-                    requestBody.fileSize = file.size;
+                    requestBody.fileSize = fileInfo.fileSize;
                 }
 
                 const response = await fetch(url, {
