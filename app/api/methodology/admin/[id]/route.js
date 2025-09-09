@@ -103,13 +103,13 @@ export async function PUT(req, { params }) {
 
 export async function GET(req, { params }) {
     // Check authentication
-    const auth = await checkAdminAuth(req);
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    // const auth = await checkAdminAuth(req);
+    // if (!auth.isAuthenticated) {
+    //     return NextResponse.json({
+    //         status: false,
+    //         message: auth.error
+    //     }, { status: 401 });
+    // }
 
     try {
         const methodology = await db('web_1212_methodology')

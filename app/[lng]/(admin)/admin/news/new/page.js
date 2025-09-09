@@ -100,6 +100,7 @@ const Dashboard = () => {
                 }
 
                 alert('Мэдээ амжилттай нэмэгдлээ');
+                window.location.href = '/admin/news';
             } else {
                 alert('Нүүр зураг оруулаагүй байна.');
             }

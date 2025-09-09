@@ -99,7 +99,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <span className="text-black font-normal">
-                            {rowData.created_date.substr(0, 10)}
+                            {rowData.published_date.substr(0, 10)}
                         </span>
                     )}
                 />

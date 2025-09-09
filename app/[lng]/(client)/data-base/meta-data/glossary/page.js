@@ -85,6 +85,7 @@ export default function Glossary({ params: { lng }, searchParams }) {
 
     return (
         <GlossaryList
+            lng={lng}
             filterLoading={filterLoading}
             list={list}
             isMn={isMn}

@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Form, message, Button, Modal, Input, Select, Space, Card, Statistic, Row, Col } from 'antd';
+import { Form, message, Button, Modal, Input, Select, Space, Card, Statistic, Row, Col, DatePicker } from 'antd';
+import dayjs from 'dayjs';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import {
@@ -244,7 +245,8 @@ export default function ReportAdmin({ params: { lng } }) {
             language: item.language,
             file_type: item.file_type,
             info: item.info,
-            published: item.published
+            published: item.published,
+            published_date: item.published_date ? dayjs(item.published_date) : null
         });
         setIsEditModalVisible(true);
     };
@@ -364,6 +366,7 @@ export default function ReportAdmin({ params: { lng } }) {
                     file_info: fileInfo ? JSON.stringify(fileInfo) : null,
                     file_size: uploadedFile ? uploadedFile.size : 0,
                     published: values.published,
+                    published_date: values.published_date ? values.published_date.toDate().toISOString() : undefined,
                     created_by: 'admin',
                     last_modified_by: 'admin'
                 }),
@@ -420,6 +423,7 @@ export default function ReportAdmin({ params: { lng } }) {
                     file_info: fileInfo ? JSON.stringify(fileInfo) : null,
                     file_size: editUploadedFile ? editUploadedFile.size : editingItem.file_size,
                     published: values.published,
+                    published_date: values.published_date ? values.published_date.toDate().toISOString() : undefined,
                     last_modified_by: 'admin'
                 }),
             });
@@ -825,6 +829,13 @@ export default function ReportAdmin({ params: { lng } }) {
                     </Form.Item>
 
                     <Form.Item
+                        name="published_date"
+                        label="Нийтлэгдсэн огноо"
+                    >
+                        <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
+                    </Form.Item>
+
+                    <Form.Item
                         name="language"
                         label="Хэл"
                         rules={[{ required: true, message: 'Хэл сонгоно уу!' }]}
@@ -927,6 +938,13 @@ export default function ReportAdmin({ params: { lng } }) {
                         rules={[{ required: true, message: 'Файлын нэр оруулна уу!' }]}
                     >
                         <Input placeholder="Файлын нэр оруулна уу" />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="published_date"
+                        label="Нийтлэгдсэн огноо"
+                    >
+                        <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
                     </Form.Item>
 
                     <Form.Item

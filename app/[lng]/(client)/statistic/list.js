@@ -11,12 +11,12 @@ export default function Tabs({
     setPagination,
 }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [activeFilter, setActiveFilter] = useState("Эхэнд шинэчлэгдсэн");
+    const [activeFilter, setActiveFilter] = useState(lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first");
 
     const filters = [
-        "Эхэнд шинэчлэгдсэн",
-        "Үсгийн дарааллаар",
-        "Хандалтын тоогоор",
+        lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first",
+        lng === "mn" ? "Үсгийн дарааллаар" : "Alphabetical order",
+        lng === "mn" ? "Хандалтын тоогоор" : "Views order",
     ];
 
     const toggleDropdown = () => setIsOpen(!isOpen);
@@ -35,14 +35,14 @@ export default function Tabs({
 
     const getSortedItems = () => {
         const sorted = [...menuItems];
-        if (activeFilter === "Эхэнд шинэчлэгдсэн") {
+        if (activeFilter === (lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first")) {
             sorted.sort(
                 (a, b) =>
                     new Date(b.published_date || 0) - new Date(a.published_date || 0)
             );
-        } else if (activeFilter === "Үсгийн дарааллаар") {
+        } else if (activeFilter === (lng === "mn" ? "Үсгийн дарааллаар" : "Alphabetical order")) {
             sorted.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-        } else if (activeFilter === "Хандалтын тоогоор") {
+        } else if (activeFilter === (lng === "mn" ? "Хандалтын тоогоор" : "Views order")) {
             sorted.sort((a, b) => (b.views || 0) - (a.views || 0));
         }
         return sorted;
@@ -118,7 +118,7 @@ export default function Tabs({
                                             d="M3 4a1 1 0 011-1h16a1 1 0 011 1M4 8h16M4 12h16M4 16h16M4 20h16"
                                         />
                                     </svg>
-                                    Эрэмбэлэх
+                                    {lng === "mn" ? "Эрэмбэлэх" : "Sort"}
                                 </button>
 
                                 {/* Dropdown */}
@@ -170,12 +170,12 @@ export default function Tabs({
                                             className="clamp-title text-gray-800 hover:text-gray-800"
                                             onClick={() => onDownloadDirect(item.file_info, item.id)}
                                         >
-                                            {item.name || "Нэр байхгүй"}
+                                            {item.name || (lng === "mn" ? "Нэр байхгүй" : "Name is missing")}
                                         </div>
 
                                         {/* Тайлбар */}
                                         <div className="clamp-description mt-1 mb-2">
-                                            {item.info || "Тайлбар алга"}
+                                            {item.info || (lng === "mn" ? "Тайлбар алга" : "Info is missing")}
                                         </div>
 
                                         {/* Metadata */}
@@ -185,7 +185,7 @@ export default function Tabs({
                                                     ? new Date(item.published_date)
                                                         .toISOString()
                                                         .split("T")[0]
-                                                    : "Огноо байхгүй"}
+                                                    : lng === "mn" ? "Огноо байхгүй" : "Date is missing"}
                                             </div>
                                             <div className="_file_view">👁 {(item.views ?? 0).toLocaleString()}</div>
                                             <div className="_file_type">
@@ -194,7 +194,7 @@ export default function Tabs({
                                                 </span>
                                             </div>
                                             <div className="_file_size">
-                                                {lng === "mn" ? "Файлын хэмжээ:" : "File Size:"}{" "}
+                                                {lng === "mn" ? "Файлын хэмжээ:" : "File size:"}{" "}
                                                 {size}
                                             </div>
                                         </div>
