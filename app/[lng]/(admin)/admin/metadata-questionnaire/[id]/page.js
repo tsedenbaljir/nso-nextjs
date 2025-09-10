@@ -8,35 +8,33 @@ import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
-// === Meta IDs (label-аас хараат бус) ===
 const META_ID = {
   SHIFR: 3003,
   KEYWORDS: 9653,
   EXTRA_INFO: 35301,
   DEPT: 311803,
   PARTNER_ORG: 311804,
-  FORM_CONFIRMED_DATE: 311806, // Date
+  FORM_CONFIRMED_DATE: 311806, 
   ORDER_NO: 311807,
   CONTENT: 311808,
   INFORMANT: 311809,
-  OBS_PERIOD: 311810, // Multi
+  OBS_PERIOD: 311810, 
   COLLECT_MODE: 2163756,
   SAMPLE_TYPE: 3235254,
   FORM_NAME: 3235261,
   EXPERT: 7092157,
-  FREQ: 7487907, // Multi
+  FREQ: 7487907, 
   COLLECT_WORKER: 7487908,
   DATA_FLOW: 7487909,
   TX_TIME: 7487910,
-  DISAGG: 7487911, // Multi
-  CLASS_CODES: 7487912, // Multi
+  DISAGG: 7487911, 
+  CLASS_CODES: 7487912, 
   PUB_TIME: 7487913,
-  DERIVED_INDICATORS: 7487914, // Multi (indicator IDs)
+  DERIVED_INDICATORS: 7487914, 
   FUNDER: 7487915,
-  MEDEE_TURUL: 8551951, // “Мэдээ төрөл”
+  MEDEE_TURUL: 8551951, 
 };
 
-// аль нь огноо, аль нь multi ID талбар гэдгийг ялгана
 const DATE_META_IDS = new Set([META_ID.FORM_CONFIRMED_DATE]);
 const MULTI_ID_META_IDS = new Set([
   META_ID.OBS_PERIOD,
@@ -46,7 +44,6 @@ const MULTI_ID_META_IDS = new Set([
   META_ID.DERIVED_INDICATORS,
 ]);
 
-// CSV-г эхэнд parse хийхдээ тоо байвал number болгоно
 const toMaybeNumber = (s) => {
   const t = String(s ?? "").trim();
   return /^\d+$/.test(t) ? Number(t) : t;
@@ -64,7 +61,6 @@ const normalizeInitById = (metaId, v) => {
   return v;
 };
 
-// ✅ NULL → "" болгож, whitespace-ийг цэвэрлэнэ (DB NOT NULL-тэй тул)
 const encodeVal = (v) => {
   if (v == null) return "";
   if (dayjs.isDayjs(v)) return v.format("YYYY-MM-DD");
@@ -82,11 +78,10 @@ export default function MetadataEdit() {
   const [sectors, setSectors] = useState([]);
   const [frequencies, setFrequencies] = useState([]);
   const [organizations, setOrganizations] = useState([]);
-  const [metaValues, setMetaValues] = useState([]); // indicators from question_pool
-  const [rows, setRows] = useState([]); // view rows
-  const [mdvLatest, setMdvLatest] = useState({}); // { [meta_id]: { valuemn, valueen } }
+  const [metaValues, setMetaValues] = useState([]); 
+  const [rows, setRows] = useState([]); 
+  const [mdvLatest, setMdvLatest] = useState({}); 
 
-  // анхдагч options-оо label/value хэлбэрт оруулж, label харагдуулах
   const orgOptions = useMemo(
     () =>
       (organizations || []).map((o) => ({
@@ -129,7 +124,7 @@ export default function MetadataEdit() {
         const { data: outer } = await axios.get(`/api/metadata-questionnaire/admin/${id}`);
         if (!outer?.status) throw new Error("Invalid response");
         const payload = outer.data || {};
-        // console.log("payload", payload);
+        console.log("payload", payload);
 
         setRows(payload.rows || []);
         setCatalogues(payload.catalogues || []);
@@ -139,7 +134,6 @@ export default function MetadataEdit() {
         setMetaValues(payload.metaValues || []);
         setMdvLatest(payload.mdvLatest || {});
 
-        // dynamic init from mdvLatest
         const dynamicMn = {};
         const dynamicEn = {};
         Object.values(META_ID).forEach((mid) => {
@@ -150,21 +144,18 @@ export default function MetadataEdit() {
           }
         });
 
-        // header/top-level
         const header = (payload.rows && payload.rows[0]) || {};
         const labelMn = header.labelmn || header.label || "";
         const labelEn = header.labelen || header.label_en || "";
         const active = header.active ?? false;
         const isSecure = header.is_secret ?? false;
 
-        // data_catalogue ids from view (comma-separated)
         const dcIds = (header.data_catalogue_ids || "")
           .split(",")
           .map((s) => s.trim())
           .filter(Boolean)
           .map((x) => (isNaN(Number(x)) ? x : Number(x)));
 
-        // Сонгогдсон байгууллагууд (API буцаадаг)
         const selectedOrgIds = (payload.selectedOrganizationIds || []).map((n) => Number(n));
 
         form.setFieldsValue({
@@ -187,7 +178,6 @@ export default function MetadataEdit() {
 
   const onFinish = async (values) => {
     try {
-      // Dynamic meta — бүх талбарууд ID-аар
       const dynMn = values.dynamicMn || {};
       const dynEn = values.dynamicEn || {};
       const allKeys = new Set([...Object.keys(dynMn || {}), ...Object.keys(dynEn || {})]);
@@ -205,8 +195,7 @@ export default function MetadataEdit() {
         type: values.type,
         active: values.active,
         isSecure: values.isSecure,
-        organizations: (values.organizations || []).map((x) => Number(x)), // dynamic_object.organization_ids
-        // data_catalogue_ids өөр endpoint-тэй бол тусад нь хийнэ. Одоогоор илгээхгүй.
+        organizations: (values.organizations || []).map((x) => Number(x)), 
         metaValues: metaValuesPayload,
         user: "admin",
       });
@@ -226,7 +215,6 @@ export default function MetadataEdit() {
       </div>
 
       <Form layout="vertical" form={form} onFinish={onFinish}>
-        {/* Data catalogue (IDs expected) */}
         <Form.Item name="data_catalogue_ids" label="Дата каталог">
           <Select
             mode="multiple"
@@ -252,7 +240,7 @@ export default function MetadataEdit() {
           <Select
             placeholder="Сонгоно уу"
             options={[
-              { value: "census", label: "Тооллого" },
+              { value: "indicator", label: "Мэдээ" },
               { value: "survey", label: "Судалгаа" },
             ]}
           />

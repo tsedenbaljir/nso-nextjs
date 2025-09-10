@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config.js";
 
-// ==== helper: latest values per meta_data_id by questionnaire_id ====
 async function getLatestMdvMap(questionnaireId) {
   const rows = await db("meta_data_value")
     .select("meta_data_id", "valuemn", "valueen", "last_modified_date")
@@ -18,7 +17,6 @@ async function getLatestMdvMap(questionnaireId) {
   return map;
 }
 
-// ==== helper: read catalog ids for a question_pool id ====
 async function getCatalogueIdsStr(questionPoolId) {
   const rows = await db("question_pool_data_catalogue")
     .select("data_catalogue_id")
@@ -27,7 +25,6 @@ async function getCatalogueIdsStr(questionPoolId) {
   return rows.map((r) => String(r.data_catalogue_id)).join(", ");
 }
 
-// ==== helper: try a view safely ====
 async function tryView(query, id) {
   try {
     const res = await db.raw(query, [id]);
@@ -120,7 +117,6 @@ export async function GET(req, { params }) {
     }
 
     if (!rows.length) {
-      // header-ийг dynamic_object-оос авахыг илүүд үзье
       const qp = await db("dynamic_object")
         .where({ id: qpOrQnrId })
         .first([
@@ -175,10 +171,8 @@ export async function GET(req, { params }) {
       )
     );
 
-    // DB-д байгаа байгууллагууд
     let organizations = await db("organizations").select("id", { organization_id: "id" }, "name", "fullname");
 
-    // view-ээс ирсэн байж болох байгууллагуудыг merge
     const orgMap = new Map((organizations || []).map((o) => [Number(o.organization_id ?? o.id), o]));
     for (const r of rows) {
       if (r.organization_id != null) {
@@ -195,7 +189,6 @@ export async function GET(req, { params }) {
     }
     organizations = Array.from(orgMap.values());
 
-    // лавлахууд
     const metaValues = await db("question_pool").select("id", "namemn", "nameen");
     const catalogues = await db("data_catalogue")
       .select("id", "namemn", "nameen", "code")
@@ -233,7 +226,7 @@ export async function GET(req, { params }) {
 
 // ==================== PUT ====================
 export async function PUT(req, { params }) {
-  const { id } = params; // questionnaire_id / dynamic_object.id
+  const { id } = params; 
   try {
     const body = await req.json();
     const {
@@ -242,9 +235,9 @@ export async function PUT(req, { params }) {
       type,
       active,
       isSecure,
-      organizations = [], // [ids]
+      organizations = [], 
       user = "anonymousUser",
-      metaValues = [], // [{ meta_data_id, valuemn, valueen }]
+      metaValues = [], 
     } = body;
 
     const normalizeJoined = (val) => {
@@ -262,11 +255,9 @@ export async function PUT(req, { params }) {
         .join(",");
     };
 
-    // ✅ NOT NULL coercion
     const toNN = (s) => (s == null ? "" : String(s).trim());
 
     await db.transaction(async (trx) => {
-      // 1) (сонголт) dynamic_object: дээд хэсгийн хадгалалт хийх бол эндээ update-ээ идэвхжүүл
       // const orgCsv = (organizations || [])
       //   .map((x) => String(x).trim())
       //   .filter(Boolean)
@@ -297,7 +288,6 @@ export async function PUT(req, { params }) {
       //   })
       //   .catch(() => {});
 
-      // 2) meta_data_value: өөрчлөгдсөнд л шинэ INSERT; хуучныг soft-delete
       const curRows = await trx("meta_data_value")
         .select("meta_data_id", "valuemn", "valueen")
         .where({ questionnaire_id: id, active: 1 })
@@ -331,17 +321,15 @@ export async function PUT(req, { params }) {
           .where({ questionnaire_id: id, meta_data_id: metaId, active: 1 })
           .whereNull("deleted")
           .update({
-            deleted: 1, // ✅ илүү ойлгомжтой тэмдэглэгээ
+            deleted: 1, 
             last_modified_by: user,
             last_modified_date: trx.fn.now(),
           });
 
-        // дараагийн id
         const [{ nextId }] = await trx("meta_data_value").select(
           trx.raw("ISNULL(MAX(CAST(id AS BIGINT)), 0) + 1 AS nextId")
         );
 
-        // шинээр insert (deleted = NULL)
         await trx("meta_data_value").insert({
           id: String(nextId),
           active: 1,
