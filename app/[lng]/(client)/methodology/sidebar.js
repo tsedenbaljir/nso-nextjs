@@ -26,19 +26,19 @@ export default function SideBar({ lng }) {
                 id: 'group',
                 items: [
                     {
-                        label: t('statCate.methodologyText'),
-                        id: 'list',
-                        className: path.includes('list') ? 'active-link' : '',
-                        command: () => {
-                            router.push(`/${lng}/methodology/list`);
-                        }
-                    },
-                    {
                         label: t('metadata.classificationcode'),
                         id: 'classification',
                         className: path.includes('classification') ? 'active-link' : '',
                         command: () => {
                             router.push(`/${lng}/methodology/classification`);
+                        }
+                    },
+                    {
+                        label: t('statCate.methodologyText'),
+                        id: 'list',
+                        className: path.includes('list') ? 'active-link' : '',
+                        command: () => {
+                            router.push(`/${lng}/methodology/list`);
                         }
                     },
                 ],
