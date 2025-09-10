@@ -184,8 +184,8 @@ const VariableSelector = ({ variable, onChange, lng }) => {
         </div>
       </div>
 
-      {(variable.code === 'Аймаг' || variable.code === 'Aimag' ||
-        variable.code === 'Бүс' || variable.code === 'Region' ||
+      {(variable.code === 'Бүс' || variable.code === 'Region' ||
+        variable.code === 'Аймаг' || variable.code === 'Aimag' ||
         variable.code === 'Аймаг, сум' || variable.code === 'Aimag, soum' ||
         variable.code === 'Баг, хороо' || variable.code === 'Bag, khoroo' ||
         variable.code === 'Аймгийн код' || variable.code === 'Aimag code' ||
@@ -193,7 +193,7 @@ const VariableSelector = ({ variable, onChange, lng }) => {
           <>
             {selected.length > 0 && (
               <SelectorBox
-                label={lng === 'mn' ? 'Аймаг/Нийслэл' : 'Provice/Capital'}
+                label={lng === 'mn' ? 'Аймаг/Нийслэл' : 'Aimag/Capital'}
                 level='child'
                 list={childSelected}
                 dependsOn={selected}
