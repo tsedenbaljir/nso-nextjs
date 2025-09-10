@@ -18,7 +18,7 @@ export default function MetadataAdmin() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `/api/metadata/admin?page=${
+        `/api/metadata-questionnaire/admin?page=${
           pg - 1
         }&pageSize=${ps}&q=${encodeURIComponent(q)}`
       );
@@ -38,7 +38,7 @@ export default function MetadataAdmin() {
   }, []);
 
   const handleAdd = () => {
-    window.location.href = "/admin/metadata/new";
+    window.location.href = "/admin/metadata-questionnaire/new";
   };
 
   const handleSearch = (value) => {
@@ -50,9 +50,8 @@ export default function MetadataAdmin() {
   const columns = useMemo(
     () => [
       { title: "ID", dataIndex: "id", width: 80 },
-      { title: "Нэр (MN)", dataIndex: "namemn" },
-      { title: "Нэр (EN)", dataIndex: "nameen" },
-      { title: "Төрөл", dataIndex: "type" },
+      { title: "Нэр (MN)", dataIndex: "name" },
+      { title: "Нэр (EN)", dataIndex: "name_eng" },
       { title: "Хувилбар", dataIndex: "version" },
       { title: "Үүсгэсэн огноо", dataIndex: "created_date" },
       { title: "Өөрчилсөн огноо", dataIndex: "last_modified_date", width: 200 },
@@ -63,7 +62,7 @@ export default function MetadataAdmin() {
         width: 120,
         render: (_, record) => (
           <Space>
-            <Link href={`/admin/metadata/${record.id}`}>
+            <Link href={`/admin/metadata-questionnaire/${record.id}`}>
               <Button size="small">Засах</Button>
             </Link>
           </Space>
@@ -76,7 +75,7 @@ export default function MetadataAdmin() {
   return (
     <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
       <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-lg font-medium">Үзүүлэлт - Мета өгөгдөл</h2>
+        <h2 className="text-lg font-medium">Мэдээ, тооллого, судалгаа - Мета өгөгдөл</h2>
         <div className="flex gap-2">
           <Search
             placeholder="Нэрээр хайх..."

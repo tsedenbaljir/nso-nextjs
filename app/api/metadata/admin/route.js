@@ -17,12 +17,7 @@ export async function GET(req) {
         [namemn] LIKE N'%${q}%' OR
         [nameen] LIKE N'%${q}%' OR
         [descriptionmn] LIKE N'%${q}%' OR
-        [descriptionen] LIKE N'%${q}%' OR
-        [type] LIKE N'%${q}%' OR
-        [version] LIKE N'%${q}%' OR
-        [status] LIKE N'%${q}%' OR
-        [created_by] LIKE N'%${q}%' OR
-        [last_modified_by] LIKE N'%${q}%'
+        [descriptionen] LIKE N'%${q}%'
       )`;
     }
 
