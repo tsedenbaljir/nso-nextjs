@@ -64,6 +64,7 @@ export default function MetadataNew() {
   const [metaValues, setMetaValues] = useState([]); // indicators
   const [uploadFile, setUploadFile] = useState(null);
   const [uploadFile2, setUploadFile2] = useState(null);
+  const [saving, setSaving] = useState(false);
 
 
   // options (label/value)
@@ -146,6 +147,7 @@ export default function MetadataNew() {
   };
 
   const onFinish = async (values) => {
+    setSaving(true);
     try {
       let imageUrl = '';
       let imageUrl2 = '';
@@ -187,6 +189,8 @@ export default function MetadataNew() {
     } catch (e) {
       console.error(e);
       message.error("Хадгалах үед алдаа гарлаа");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -538,8 +542,8 @@ export default function MetadataNew() {
         </Tabs>
 
         <div className="flex justify-end gap-2 mt-4">
-          <Button onClick={() => router.back()}>Буцах</Button>
-          <Button type="primary" htmlType="submit">Хадгалах</Button>
+          <Button onClick={() => router.back()} disabled={saving}>Буцах</Button>
+          <Button type="primary" htmlType="submit" loading={saving}>Хадгалах</Button>
         </div>
       </Form>
     </div>

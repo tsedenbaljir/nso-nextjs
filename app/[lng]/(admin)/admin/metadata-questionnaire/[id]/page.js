@@ -83,6 +83,7 @@ export default function MetadataEdit() {
   const [mdvLatest, setMdvLatest] = useState({});
   const [uploadFile, setUploadFile] = useState(null);
   const [uploadFile2, setUploadFile2] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   const orgOptions = useMemo(
     () =>
@@ -201,6 +202,7 @@ export default function MetadataEdit() {
   };
 
   const onFinish = async (values) => {
+    setSaving(true);
     try {
       let imageUrl = '';
       let imageUrl2 = '';
@@ -239,6 +241,8 @@ export default function MetadataEdit() {
     } catch (e) {
       console.error(e);
       message.error("Хадгалах үед алдаа гарлаа");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -585,10 +589,8 @@ export default function MetadataEdit() {
         </Tabs>
 
         <div className="flex justify-end gap-2 mt-4">
-          <Button onClick={() => window.history.back()}>Буцах</Button>
-          <Button type="primary" htmlType="submit">
-            Хадгалах
-          </Button>
+          <Button onClick={() => window.history.back()} disabled={saving}>Буцах</Button>
+          <Button type="primary" htmlType="submit" loading={saving}>Хадгалах</Button>
         </div>
       </Form>
     </div>
