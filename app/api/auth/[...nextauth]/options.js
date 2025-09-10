@@ -38,8 +38,8 @@ export const options = {
             return {
               id: user.id,
               name: user.username,
-              email: user.email,
-              role: user.role
+              // email: user.email,
+              role: user.Roles
             };
           }
           return null;

@@ -37,7 +37,7 @@ const AdminLayout = ({ children }) => {
     return (
         <div className="flex h-screen overflow-hidden">
             {/* Sidebar */}
-            <Sidebar />
+            <Sidebar user={session.user} userstatus={status} />
             {/* Main Content */}
             <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
                 <Header />
