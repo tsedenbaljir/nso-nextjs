@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from "next/navigation";
 import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
 import Upload from "@/components/admin/Edits/UploadImages/Upload";
@@ -11,6 +12,8 @@ const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
 });
 
 const Dashboard = () => {
+    const router = useRouter();
+
     const [body, setBody] = useState('');
     const [headerImageFile, setHeaderImageFile] = useState([]);
     const [title, setTitle] = useState('');
@@ -109,7 +112,7 @@ const Dashboard = () => {
                 }
 
                 alert('Мэдээ амжилттай нэмэгдлээ');
-                window.location.href = '/admin/news';
+                router.push("/admin/news");
             } else {
                 alert('Нүүр зураг оруулаагүй байна.');
             }

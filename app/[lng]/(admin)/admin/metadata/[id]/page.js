@@ -39,30 +39,22 @@ export default function MetadataEdit() {
   const params = useParams();
   const id = params?.id;
 
-  const [catalogues, setCatalogues] = useState([]);
+  // const [catalogues, setCatalogues] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [frequencies, setFrequencies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const load = async () => {
+      setLoading(true);
       try {
-        const res = await axios.get(`/api/metadata/admin/${id}`);
-        const row = res.data?.data;
+        const [detailRes] = await axios.get(`/api/metadata/admin/${id}`)
+        console.log("detailRes", detailRes);
+        const row = detailRes.data?.data;
         console.log("row", row);
-        const catalogueIds = [
-          ...new Set(
-            row.metaValues
-              ?.flatMap((m) =>
-                m.data_catalogue_ids
-                  ? m.data_catalogue_ids.split(",").map((id) => id.trim())
-                  : []
-              )
-              .filter(Boolean) || []
-          ),
-        ];
 
         if (row) {
-          // question_pool утгууд
           form.setFieldsValue({
             namemn: row.namemn,
             nameen: row.nameen,
@@ -70,84 +62,81 @@ export default function MetadataEdit() {
             version: row.version,
             previousVersion: row.previous_version,
             active: row.active,
-            isCurrent: row.is_current,
-            isSecure: row.is_secure,
-            dataCatalogues: catalogueIds, // олон сонголт
+            is_current: row.is_current,
+            is_secure: row.is_secure,
           });
 
-          setCatalogues(row.catalogues || []);
           setSectors(row.subClassifications || []);
           setFrequencies(row.frequencies || []);
 
-          // metaValues → form mapping
           row.metaValues?.forEach((m) => {
             const fieldMn = m.namemn?.trim();
             const valMn = m.valuemn;
             const valEn = m.valueen;
 
             switch (fieldMn) {
-              case "Салбар":
+              case 'Салбар':
                 form.setFieldsValue({
-                  sector: valMn ? valMn.split(",") : [],
-                  sectorEn: valEn ? valEn.split(",") : [],
+                  sector: valMn ? valMn.split(',') : [],
+                  sectorEn: valEn ? valEn.split(',') : [],
                 });
                 break;
-              case "Үзүүлэлтийг тооцох давтамж":
+              case 'Үзүүлэлтийг тооцох давтамж':
                 form.setFieldsValue({
-                  frequency: valMn ? valMn.split(",") : [],
-                  frequencyEn: valEn ? valEn.split(",") : [],
+                  frequency: valMn ? valMn.split(',') : [],
+                  frequencyEn: valEn ? valEn.split(',') : [],
                 });
                 break;
-              case "Дэд салбар":
+              case 'Дэд салбар':
                 form.setFieldsValue({ subSector: valMn, subSectorEn: valEn });
                 break;
-              case "Тодорхойлолт":
+              case 'Тодорхойлолт':
                 form.setFieldsValue({
                   descriptionmn: valMn,
                   descriptionEn: valEn,
                 });
                 break;
-              case "Аргачлал, арга зүйн нэр":
+              case 'Аргачлал, арга зүйн нэр':
                 form.setFieldsValue({
                   methodology: valMn,
                   methodologyEn: valEn,
                 });
                 break;
-              case "Тооцох аргачлал":
+              case 'Тооцох аргачлал':
                 form.setFieldsValue({
                   calculation: valMn,
                   calculationEn: valEn,
                 });
                 break;
-              case "Тооцож эхэлсэн хугацаа":
+              case 'Тооцож эхэлсэн хугацаа':
                 form.setFieldsValue({
                   startDate: valMn ? dayjs(valMn) : null,
                   startDateEn: valEn ? dayjs(valEn) : null,
                 });
                 break;
-              case "Хэмжих нэгж":
+              case 'Хэмжих нэгж':
                 form.setFieldsValue({ unit: valMn, unitEn: valEn });
                 break;
-              case "Эх үүсвэр":
+              case 'Эх үүсвэр':
                 form.setFieldsValue({ source: valMn, sourceEn: valEn });
                 break;
-              case "Хэл":
+              case 'Хэл':
                 form.setFieldsValue({
-                  language: valMn?.split(","),
-                  languageEn: valEn?.split(","),
+                  language: valMn?.split(','),
+                  languageEn: valEn?.split(','),
                 });
                 break;
-              case "Боловсруулсан мэргэжилтэн":
+              case 'Боловсруулсан мэргэжилтэн':
                 form.setFieldsValue({ expert: valMn, expertEn: valEn });
                 break;
-              case "Сүүлд өөрчлөгдсөн огноо":
+              case 'Сүүлд өөрчлөгдсөн огноо':
                 form.setFieldsValue({
                   lastModified: valMn ? dayjs(valMn) : null,
                   lastModifiedEn: valEn ? dayjs(valEn) : null,
                 });
                 break;
-              case "Үзүүлэлтийг татах холбоос":
-              case "Хариуцагч":
+              case 'Үзүүлэлтийг татах холбоос':
+              case 'Хариуцагч':
                 form.setFieldsValue({
                   downloadLink: valMn,
                   downloadLinkEn: valEn,
@@ -159,7 +148,9 @@ export default function MetadataEdit() {
           });
         }
       } catch (e) {
-        message.error("Ачаалах үед алдаа гарлаа");
+        message.error('Ачаалах үед алдаа гарлаа');
+      } finally {
+        setLoading(false);
       }
     };
     if (id) load();
@@ -167,6 +158,7 @@ export default function MetadataEdit() {
 
   const onFinish = async (values) => {
     try {
+      setSubmitting(true);
       const metaValues = [
         {
           meta_data_id: FIELD_META_MAP.description,
@@ -254,6 +246,8 @@ export default function MetadataEdit() {
       router.push("/admin/metadata");
     } catch (e) {
       message.error("Алдаа гарлаа");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -263,22 +257,7 @@ export default function MetadataEdit() {
         <h2 className="text-lg font-medium">Мета өгөгдөл засах</h2>
       </div>
 
-      <Form layout="vertical" form={form} onFinish={onFinish}>
-        <Form.Item name="dataCatalogues" label="Дата каталог">
-          <Select
-            mode="multiple"
-            placeholder="Сонгоно уу"
-            allowClear
-            optionFilterProp="children"
-          >
-            {catalogues.map((cat) => (
-              <Select.Option key={cat.id} value={cat.id}>
-                {cat.namemn} ({cat.nameen})
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-
+      <Form layout="vertical" form={form} onFinish={onFinish} disabled={loading}>
         <Form.Item name="type" label="Төрөл">
           <Select placeholder="Сонгоно уу">
             <Select.Option value="indicator">Үзүүлэлт</Select.Option>
@@ -303,10 +282,10 @@ export default function MetadataEdit() {
         <Form.Item name="active" valuePropName="checked">
           <Checkbox>Идэвхтэй эсэх</Checkbox>
         </Form.Item>
-        <Form.Item name="isCurrent" valuePropName="checked">
+        <Form.Item name="is_current" valuePropName="checked">
           <Checkbox>Сүүлийн хувилбар</Checkbox>
         </Form.Item>
-        <Form.Item name="isSecure" valuePropName="checked">
+        <Form.Item name="is_secure" valuePropName="checked">
           <Checkbox>Нууцлалтай эсэх</Checkbox>
         </Form.Item>
 
@@ -437,7 +416,7 @@ export default function MetadataEdit() {
 
         <div className="flex justify-end gap-2 mt-4">
           <Button onClick={() => window.history.back()}>Буцах</Button>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={submitting}>
             Хадгалах
           </Button>
         </div>
