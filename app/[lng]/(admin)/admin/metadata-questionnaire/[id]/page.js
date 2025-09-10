@@ -48,7 +48,7 @@ const MULTI_ID_META_IDS = new Set([
 
 // CSV-г эхэнд parse хийхдээ тоо байвал number болгоно
 const toMaybeNumber = (s) => {
-  const t = String(s).trim();
+  const t = String(s ?? "").trim();
   return /^\d+$/.test(t) ? Number(t) : t;
 };
 
@@ -64,11 +64,12 @@ const normalizeInitById = (metaId, v) => {
   return v;
 };
 
+// ✅ NULL → "" болгож, whitespace-ийг цэвэрлэнэ (DB NOT NULL-тэй тул)
 const encodeVal = (v) => {
-  if (v == null) return null;
+  if (v == null) return "";
   if (dayjs.isDayjs(v)) return v.format("YYYY-MM-DD");
   if (Array.isArray(v)) return v.join(",");
-  return v;
+  return String(v).trim();
 };
 
 export default function MetadataEdit() {
@@ -128,8 +129,8 @@ export default function MetadataEdit() {
         const { data: outer } = await axios.get(`/api/metadata-questionnaire/admin/${id}`);
         if (!outer?.status) throw new Error("Invalid response");
         const payload = outer.data || {};
-        console.log("payload", payload);
-        
+        // console.log("payload", payload);
+
         setRows(payload.rows || []);
         setCatalogues(payload.catalogues || []);
         setSectors(payload.subClassifications || []);
@@ -251,8 +252,6 @@ export default function MetadataEdit() {
           <Select
             placeholder="Сонгоно уу"
             options={[
-              { value: "official", label: "Албан ёсны статистикийн мэдээ" },
-              { value: "administrative", label: "Захиргааны мэдээ" },
               { value: "census", label: "Тооллого" },
               { value: "survey", label: "Судалгаа" },
             ]}
@@ -268,6 +267,10 @@ export default function MetadataEdit() {
             optionFilterProp="label"
             options={orgOptions}
           />
+        </Form.Item>
+
+        <Form.Item name={["dynamicMn", META_ID.OBS_PERIOD]} label="Ажиглалтын хугацаа">
+          <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={freqOptions} />
         </Form.Item>
 
         <Form.Item name="active" valuePropName="checked">
@@ -345,7 +348,7 @@ export default function MetadataEdit() {
             </Form.Item>
 
             <Form.Item name={["dynamicMn", META_ID.DISAGG]} label="Үр дүнг тархаах түвшин буюу үзүүлэлтийн задаргаа">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={sectorOptions} />
+              <TextArea rows={2} />
             </Form.Item>
             <Form.Item name={["dynamicMn", META_ID.CLASS_CODES]} label="Ашиглагдсан ангилал, кодууд">
               <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={sectorOptions} />
@@ -394,7 +397,16 @@ export default function MetadataEdit() {
             </Form.Item>
 
             <Form.Item name={["dynamicEn", META_ID.OBS_PERIOD]} label="Observation period">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={freqOptions.map(o=>({value:o.value,label:o.label.split(" (")[1]?o.label.split(" (")[1].replace(")",""):o.label}))} />
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                options={freqOptions.map((o) => ({
+                  value: o.value,
+                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
+                }))}
+              />
             </Form.Item>
             <Form.Item name={["dynamicEn", META_ID.SAMPLE_TYPE]} label="Sampling procedure">
               <Select
@@ -407,7 +419,16 @@ export default function MetadataEdit() {
               />
             </Form.Item>
             <Form.Item name={["dynamicEn", META_ID.FREQ]} label="Frequency">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={freqOptions.map(o=>({value:o.value,label:o.label.split(" (")[1]?o.label.split(" (")[1].replace(")",""):o.label}))} />
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                options={freqOptions.map((o) => ({
+                  value: o.value,
+                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
+                }))}
+              />
             </Form.Item>
 
             <Form.Item name={["dynamicEn", META_ID.COLLECT_MODE]} label="Collection mode">
@@ -424,17 +445,44 @@ export default function MetadataEdit() {
             </Form.Item>
 
             <Form.Item name={["dynamicEn", META_ID.DISAGG]} label="Disaggregation">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={sectorOptions.map(o=>({value:o.value,label:o.label.split(" (")[1]?o.label.split(" (")[1].replace(")",""):o.label}))} />
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                options={sectorOptions.map((o) => ({
+                  value: o.value,
+                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
+                }))}
+              />
             </Form.Item>
             <Form.Item name={["dynamicEn", META_ID.CLASS_CODES]} label="Classifications & codes">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={sectorOptions.map(o=>({value:o.value,label:o.label.split(" (")[1]?o.label.split(" (")[1].replace(")",""):o.label}))} />
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                options={sectorOptions.map((o) => ({
+                  value: o.value,
+                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
+                }))}
+              />
             </Form.Item>
 
             <Form.Item name={["dynamicEn", META_ID.PUB_TIME]} label="Publication time">
               <TextArea rows={2} />
             </Form.Item>
             <Form.Item name={["dynamicEn", META_ID.DERIVED_INDICATORS]} label="Derived indicators">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={indicatorOptions.map(o=>({value:o.value,label:o.label.split(" (")[1]?o.label.split(" (")[1].replace(")",""):o.label}))} />
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                options={indicatorOptions.map((o) => ({
+                  value: o.value,
+                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
+                }))}
+              />
             </Form.Item>
 
             <Form.Item name={["dynamicEn", META_ID.FUNDER]} label="Funding organization">

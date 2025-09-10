@@ -105,7 +105,7 @@ export async function GET(req, { params }) {
             SELECT [id], [meta_data_id], [label] AS [labelmn], [label_en] AS [labelen],
                    [namemn], [nameen], [attachment_name],
                    [data_catalogue_id] AS data_catalogue_ids,
-                   [data_catalogogue_mn] AS data_catalogue_names_mn,
+                   [data_catalogue_mn] AS data_catalogue_names_mn,   -- ✅ Зөв бичвэр
                    [data_catalogue_en] AS data_catalogue_names_en,
                    [valuemn], [valueen], [last_modified_date], [is_secret], [active],
                    CAST(NULL AS INT) AS [organization_id],
@@ -120,7 +120,8 @@ export async function GET(req, { params }) {
     }
 
     if (!rows.length) {
-      const qp = await db("dynamic_object") // header-ийг dynamic_object-оос авахыг илүүд үзье
+      // header-ийг dynamic_object-оос авахыг илүүд үзье
+      const qp = await db("dynamic_object")
         .where({ id: qpOrQnrId })
         .first([
           "id",
@@ -202,7 +203,7 @@ export async function GET(req, { params }) {
       .whereNull("deleted");
     const subClassifications = await db("sub_classification_code")
       .select("id", "namemn", "nameen")
-      .where({ active: 1, classification_code_id: "8427702" });
+      .where({ active: 1 });
     const frequencies = await db("sub_classification_code")
       .select("id", "namemn", "nameen")
       .where({ active: 1, classification_code_id: "833001" });
@@ -248,8 +249,8 @@ export async function PUT(req, { params }) {
 
     const normalizeJoined = (val) => {
       if (val == null) return "";
-      const s = String(val);
-      if (!s.includes(",")) return s.trim();
+      const s = String(val).trim();
+      if (!s.includes(",")) return s;
       const set = new Set(
         s
           .split(",")
@@ -261,42 +262,42 @@ export async function PUT(req, { params }) {
         .join(",");
     };
 
+    // ✅ NOT NULL coercion
+    const toNN = (s) => (s == null ? "" : String(s).trim());
+
     await db.transaction(async (trx) => {
-      // 1) dynamic_object: дээд хэсгийн хадгалалт
-      const orgCsv = (organizations || [])
-        .map((x) => String(x).trim())
-        .filter(Boolean)
-        .join(",");
+      // 1) (сонголт) dynamic_object: дээд хэсгийн хадгалалт хийх бол эндээ update-ээ идэвхжүүл
+      // const orgCsv = (organizations || [])
+      //   .map((x) => String(x).trim())
+      //   .filter(Boolean)
+      //   .join(",");
+      // const prev = await trx("dynamic_object")
+      //   .where({ id })
+      //   .first([
+      //     "label",
+      //     "label_en",
+      //     "type",
+      //     "is_secret",
+      //     "active",
+      //     "organization_ids",
+      //     "descriptionmn",
+      //     "descriptionen",
+      //   ]);
+      // await trx("dynamic_object")
+      //   .where({ id })
+      //   .update({
+      //     label: namemn ?? prev?.label ?? null,
+      //     label_en: nameen ?? prev?.label_en ?? null,
+      //     type: type ?? prev?.type ?? null,
+      //     is_secret: typeof isSecure === "boolean" ? (isSecure ? 1 : 0) : prev?.is_secret ?? 0,
+      //     active: typeof active === "boolean" ? (active ? 1 : 0) : prev?.active ?? 1,
+      //     organization_ids: orgCsv || prev?.organization_ids || null,
+      //     last_modified_by: user,
+      //     last_modified_date: trx.fn.now(),
+      //   })
+      //   .catch(() => {});
 
-      // өмнөх мөрийг авч өөрчлөгдөөгүй талбаруудад хуучныг үлдээнэ
-      const prev = await trx("dynamic_object")
-        .where({ id })
-        .first([
-          "label",
-          "label_en",
-          "type",
-          "is_secret",
-          "active",
-          "organization_ids",
-          "descriptionmn",
-          "descriptionen",
-        ]);
-
-      await trx("dynamic_object")
-        .where({ id })
-        .update({
-          label: namemn ?? prev?.label ?? null,
-          label_en: nameen ?? prev?.label_en ?? null,
-          type: type ?? prev?.type ?? null,
-          is_secret: typeof isSecure === "boolean" ? (isSecure ? 1 : 0) : prev?.is_secret ?? 0,
-          active: typeof active === "boolean" ? (active ? 1 : 0) : prev?.active ?? 1,
-          organization_ids: orgCsv || prev?.organization_ids || null,
-          last_modified_by: user,
-          last_modified_date: trx.fn.now(),
-        })
-        .catch(() => {});
-
-      // 2) meta_data_value: өөрчлөгдсөнд л шинэ INSERT; хуучныг soft-delete (deleted=0)
+      // 2) meta_data_value: өөрчлөгдсөнд л шинэ INSERT; хуучныг soft-delete
       const curRows = await trx("meta_data_value")
         .select("meta_data_id", "valuemn", "valueen")
         .where({ questionnaire_id: id, active: 1 })
@@ -310,19 +311,19 @@ export async function PUT(req, { params }) {
         if (!m?.meta_data_id) continue;
         const metaId = Number(m.meta_data_id);
 
-        let newMn = m.valuemn == null ? null : String(m.valuemn);
-        let newEn = m.valueen == null ? null : String(m.valueen);
+        let newMn = toNN(m.valuemn);
+        let newEn = toNN(m.valueen);
 
         if (newMn && newMn.includes(",")) newMn = normalizeJoined(newMn);
         if (newEn && newEn.includes(",")) newEn = normalizeJoined(newEn);
 
         const old = curMap.get(metaId);
-        const oldMn = old?.valuemn == null ? null : String(old.valuemn);
-        const oldEn = old?.valueen == null ? null : String(old.valueen);
+        const oldMn = old?.valuemn == null ? "" : String(old.valuemn).trim();
+        const oldEn = old?.valueen == null ? "" : String(old.valueen).trim();
         const oldMnN = oldMn && oldMn.includes(",") ? normalizeJoined(oldMn) : oldMn;
         const oldEnN = oldEn && oldEn.includes(",") ? normalizeJoined(oldEn) : oldEn;
 
-        const changed = (newMn ?? "") !== (oldMnN ?? "") || (newEn ?? "") !== (oldEnN ?? "");
+        const changed = newMn !== oldMnN || newEn !== oldEnN;
         if (!changed) continue;
 
         // хуучныг soft-delete
@@ -330,7 +331,7 @@ export async function PUT(req, { params }) {
           .where({ questionnaire_id: id, meta_data_id: metaId, active: 1 })
           .whereNull("deleted")
           .update({
-            deleted: 0,
+            deleted: 1, // ✅ илүү ойлгомжтой тэмдэглэгээ
             last_modified_by: user,
             last_modified_date: trx.fn.now(),
           });
@@ -350,14 +351,14 @@ export async function PUT(req, { params }) {
           last_modified_by: user,
           last_modified_date: trx.fn.now(),
           questionnaire_code: null,
-          questionnaire_id: id, // ✅
+          questionnaire_id: id,
           status: null,
           type: type ?? null,
-          valuemn: newMn,
-          valueen: newEn,
+          valuemn: newMn, 
+          valueen: newEn, 
           classification_code_id: null,
           meta_data_id: metaId,
-          questionpool_id: id,
+          questionpool_id: id, 
         });
       }
     });
