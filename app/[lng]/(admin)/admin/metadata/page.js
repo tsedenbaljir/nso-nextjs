@@ -73,37 +73,31 @@ export default function MetadataAdmin() {
     []
   );
 
-  return (
-    <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-      <div className="mb-4 flex justify-between items-center">
-        <h2 className="text-lg font-medium">Үзүүлэлт - Мета өгөгдөл</h2>
-        <div className="flex gap-2">
-          <Search
-            placeholder="Нэрээр хайх..."
-            onSearch={handleSearch}
-            allowClear
-            style={{ width: 250 }}
-          />
-          {/* <Button type="primary" onClick={handleAdd}>Шинэ нэмэх</Button> */}
+    return (
+        <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <div className="mb-4 flex justify-between">
+                <h2 className="text-lg font-medium">Мета өгөгдөл</h2>
+                <Button type="primary" onClick={handleAdd}>Шинэ нэмэх</Button>
+            </div>
+            <Table
+                rowKey={(r) => r.id + '_' + (r.meta_id || 'x')}
+                dataSource={data}
+                columns={columns}
+                loading={loading}
+                pagination={{
+                    current: page,
+                    pageSize: pageSize,
+                    total: total,
+                    showSizeChanger: true,
+                    onChange: (p, ps) => {
+                        setPage(p);
+                        setPageSize(ps);
+                        fetchData(p, ps);
+                    }
+                }}
+            />
+
+            {/* modal removed; navigation to new/edit pages */}
         </div>
-      </div>
-      <Table
-        rowKey={(r) => r.id + "_" + (r.meta_id || "x")}
-        dataSource={data}
-        columns={columns}
-        loading={loading}
-        pagination={{
-          current: page,
-          pageSize: pageSize,
-          total: total,
-          showSizeChanger: true,
-          onChange: (p, ps) => {
-            setPage(p);
-            setPageSize(ps);
-            fetchData(p, ps, searchText);
-          },
-        }}
-      />
-    </div>
-  );
+    );
 }
