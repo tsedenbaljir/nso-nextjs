@@ -5,6 +5,7 @@ import { Button, Form, Input, message, Select, Checkbox, Tabs, DatePicker } from
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
+// import Upload from "@/components/admin/Edits/UploadImages/Upload";
 
 const { TextArea } = Input;
 
@@ -36,14 +37,14 @@ const META_ID = {
   MEDEE_TURUL: 8551951,
 };
 
-const DATE_META_IDS = new Set([META_ID.FORM_CONFIRMED_DATE]);
-const MULTI_ID_META_IDS = new Set([
-  META_ID.OBS_PERIOD,
-  META_ID.FREQ,
-  META_ID.DISAGG,
-  META_ID.CLASS_CODES,
-  META_ID.DERIVED_INDICATORS,
-]);
+// const DATE_META_IDS = new Set([META_ID.FORM_CONFIRMED_DATE]);
+// const MULTI_ID_META_IDS = new Set([
+//   META_ID.OBS_PERIOD,
+//   META_ID.FREQ,
+//   META_ID.DISAGG,
+//   META_ID.CLASS_CODES,
+//   META_ID.DERIVED_INDICATORS,
+// ]);
 
 const encodeVal = (v) => {
   if (v == null) return null;
@@ -61,6 +62,9 @@ export default function MetadataNew() {
   const [frequencies, setFrequencies] = useState([]);
   const [organizations, setOrganizations] = useState([]);
   const [metaValues, setMetaValues] = useState([]); // indicators
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadFile2, setUploadFile2] = useState(null);
+
 
   // options (label/value)
   const orgOptions = useMemo(
@@ -119,8 +123,40 @@ export default function MetadataNew() {
     loadOptions();
   }, []);
 
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Image upload failed');
+      }
+
+      const data = await response.json();
+      return data.filename;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  };
+
   const onFinish = async (values) => {
     try {
+      let imageUrl = '';
+      let imageUrl2 = '';
+      if (uploadFile) {
+        imageUrl = await uploadImage(uploadFile);
+      }
+
+      if (uploadFile2) {
+        imageUrl2 = await uploadImage(uploadFile2);
+      }
+
       const dynMn = values.dynamicMn || {};
       const dynEn = values.dynamicEn || {};
       const allKeys = new Set([...Object.keys(dynMn), ...Object.keys(dynEn)]);
@@ -139,6 +175,8 @@ export default function MetadataNew() {
         isSecure: !!values.isSecure,
         organizations: (values.organizations || []).map((x) => Number(x)),
         metaValues: metaValuesPayload,
+        file: imageUrl,
+        file2: imageUrl2,
         user: "admin",
       };
 
@@ -213,8 +251,42 @@ export default function MetadataNew() {
 
         <Tabs>
           <Tabs.TabPane tab="Монгол" key="mn">
-            <Form.Item name={["dynamicMn", META_ID.FORM_NAME]} label="Маягт">
+            {/* <Form.Item name={["dynamicMn", META_ID.FORM_NAME]} label="Маягт">
               <TextArea rows={3} />
+            </Form.Item> */}
+            <div className='flex flex-wrap gap-3 mb-6'>
+              <div className="w-full">
+                <div className="relative">
+                  <label
+                    className="block mb-2 text-sm font-medium text-gray-7 dark:text-white"
+                    htmlFor="file_input"
+                  >
+                    Файл оруулна уу
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex-1">
+                      <input
+                        className="block w-full text-sm text-gray-7 border border-gray-3 rounded-lg cursor-pointer bg-gray-1 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-gray-2 file:text-gray-7 hover:file:bg-gray-3 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        id="file_input"
+                        type="file"
+                        accept="*/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setUploadFile(file);
+                          if (file) {
+                            form.setFieldsValue({
+                              dynamicMn: { [META_ID.FORM_NAME]: file.name },
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Form.Item name={["dynamicMn", META_ID.FORM_NAME]} hidden>
+              <Input />
             </Form.Item>
             <Form.Item name={["dynamicMn", META_ID.SHIFR]} label="Шифр">
               <Input />
@@ -308,8 +380,42 @@ export default function MetadataNew() {
           </Tabs.TabPane>
 
           <Tabs.TabPane tab="English" key="en">
-            <Form.Item name={["dynamicEn", META_ID.FORM_NAME]} label="Form">
+            {/* <Form.Item name={["dynamicEn", META_ID.FORM_NAME]} label="Form">
               <TextArea rows={3} />
+            </Form.Item> */}
+            <div className='flex flex-wrap gap-3 mb-6'>
+              <div className="w-full">
+                <div className="relative">
+                  <label
+                    className="block mb-2 text-sm font-medium text-gray-7 dark:text-white"
+                    htmlFor="file_input"
+                  >
+                    Файл оруулна уу
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex-1">
+                      <input
+                        className="block w-full text-sm text-gray-7 border border-gray-3 rounded-lg cursor-pointer bg-gray-1 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-gray-2 file:text-gray-7 hover:file:bg-gray-3 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        id="file_input"
+                        type="file"
+                        accept="*/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setUploadFile2(file);
+                          if (file) {
+                            form.setFieldsValue({
+                              dynamicEn: { [META_ID.FORM_NAME]: file.name },
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Form.Item name={["dynamicEn", META_ID.FORM_NAME]} hidden>
+              <Input />
             </Form.Item>
             <Form.Item name={["dynamicEn", META_ID.SHIFR]} label="Cipher">
               <Input />

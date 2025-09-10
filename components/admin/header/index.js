@@ -26,10 +26,11 @@ export default function componentName(props) {
                                             pth === "dissemination" ? "/mn/admin/dissemination/new" :
                                                 pth === "workspace" ? "/mn/admin/workspace/new" :
                                                     pth === "menus" ? "/mn/admin/menus/new" :
-                                                        pth === "metadata" ? "/mn/admin/metadata/new" :
-                                                            pth === "indicator" ? "/mn/admin/indicator/new" :
-                                                                pth === "methodology" ? "/mn/admin/methodology/new" :
-                                                                    ""
+                                                        pth === "metadata-questionnaire" ? "/mn/admin/metadata-questionnaire/new" :
+                                                            pth === "metadata" ? "/mn/admin/metadata/new" :
+                                                                pth === "indicator" ? "/mn/admin/indicator/new" :
+                                                                    pth === "methodology" ? "/mn/admin/methodology/new" :
+                                                                        ""
                                 }>
                                     <div
                                         className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out dark:bg-white/10 text-white bg-blue-600`}

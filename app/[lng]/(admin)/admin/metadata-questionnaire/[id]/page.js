@@ -14,25 +14,25 @@ const META_ID = {
   EXTRA_INFO: 35301,
   DEPT: 311803,
   PARTNER_ORG: 311804,
-  FORM_CONFIRMED_DATE: 311806, 
+  FORM_CONFIRMED_DATE: 311806,
   ORDER_NO: 311807,
   CONTENT: 311808,
   INFORMANT: 311809,
-  OBS_PERIOD: 311810, 
+  OBS_PERIOD: 311810,
   COLLECT_MODE: 2163756,
   SAMPLE_TYPE: 3235254,
   FORM_NAME: 3235261,
   EXPERT: 7092157,
-  FREQ: 7487907, 
+  FREQ: 7487907,
   COLLECT_WORKER: 7487908,
   DATA_FLOW: 7487909,
   TX_TIME: 7487910,
-  DISAGG: 7487911, 
-  CLASS_CODES: 7487912, 
+  DISAGG: 7487911,
+  CLASS_CODES: 7487912,
   PUB_TIME: 7487913,
-  DERIVED_INDICATORS: 7487914, 
+  DERIVED_INDICATORS: 7487914,
   FUNDER: 7487915,
-  MEDEE_TURUL: 8551951, 
+  MEDEE_TURUL: 8551951,
 };
 
 const DATE_META_IDS = new Set([META_ID.FORM_CONFIRMED_DATE]);
@@ -78,9 +78,11 @@ export default function MetadataEdit() {
   const [sectors, setSectors] = useState([]);
   const [frequencies, setFrequencies] = useState([]);
   const [organizations, setOrganizations] = useState([]);
-  const [metaValues, setMetaValues] = useState([]); 
-  const [rows, setRows] = useState([]); 
-  const [mdvLatest, setMdvLatest] = useState({}); 
+  const [metaValues, setMetaValues] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [mdvLatest, setMdvLatest] = useState({});
+  const [uploadFile, setUploadFile] = useState(null);
+  const [uploadFile2, setUploadFile2] = useState(null);
 
   const orgOptions = useMemo(
     () =>
@@ -176,8 +178,40 @@ export default function MetadataEdit() {
     if (id) load();
   }, [id]);
 
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Image upload failed');
+      }
+
+      const data = await response.json();
+      return data.filename;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+  };
+
   const onFinish = async (values) => {
     try {
+      let imageUrl = '';
+      let imageUrl2 = '';
+      if (uploadFile) {
+        imageUrl = await uploadImage(uploadFile);
+      }
+
+      if (uploadFile2) {
+        imageUrl2 = await uploadImage(uploadFile2);
+      }
+
       const dynMn = values.dynamicMn || {};
       const dynEn = values.dynamicEn || {};
       const allKeys = new Set([...Object.keys(dynMn || {}), ...Object.keys(dynEn || {})]);
@@ -195,7 +229,7 @@ export default function MetadataEdit() {
         type: values.type,
         active: values.active,
         isSecure: values.isSecure,
-        organizations: (values.organizations || []).map((x) => Number(x)), 
+        organizations: (values.organizations || []).map((x) => Number(x)),
         metaValues: metaValuesPayload,
         user: "admin",
       });
@@ -270,6 +304,37 @@ export default function MetadataEdit() {
 
         <Tabs>
           <Tabs.TabPane tab="Монгол" key="mn">
+            <div className='flex flex-wrap gap-3 mb-6'>
+              <div className="w-full">
+                <div className="relative">
+                  <label
+                    className="block mb-2 text-sm font-medium text-gray-7 dark:text-white"
+                    htmlFor="file_input_mn"
+                  >
+                    Файл оруулна уу
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex-1">
+                      <input
+                        className="block w-full text-sm text-gray-7 border border-gray-3 rounded-lg cursor-pointer bg-gray-1 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-gray-2 file:text-gray-7 hover:file:bg-gray-3 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        id="file_input_mn"
+                        type="file"
+                        accept="*/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setUploadFile(file);
+                          if (file) {
+                            form.setFieldsValue({
+                              dynamicMn: { [META_ID.FORM_NAME]: file.name },
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <Form.Item name={["dynamicMn", META_ID.FORM_NAME]} label="Маягт">
               <TextArea rows={3} />
             </Form.Item>
@@ -365,6 +430,37 @@ export default function MetadataEdit() {
           </Tabs.TabPane>
 
           <Tabs.TabPane tab="English" key="en">
+            <div className='flex flex-wrap gap-3 mb-6'>
+              <div className="w-full">
+                <div className="relative">
+                  <label
+                    className="block mb-2 text-sm font-medium text-gray-7 dark:text-white"
+                    htmlFor="file_input_en"
+                  >
+                    Upload file
+                  </label>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex-1">
+                      <input
+                        className="block w-full text-sm text-gray-7 border border-gray-3 rounded-lg cursor-pointer bg-gray-1 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-gray-2 file:text-gray-7 hover:file:bg-gray-3 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        id="file_input_en"
+                        type="file"
+                        accept="*/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setUploadFile2(file);
+                          if (file) {
+                            form.setFieldsValue({
+                              dynamicEn: { [META_ID.FORM_NAME]: file.name },
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <Form.Item name={["dynamicEn", META_ID.FORM_NAME]} label="Form">
               <TextArea rows={3} />
             </Form.Item>
