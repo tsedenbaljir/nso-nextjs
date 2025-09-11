@@ -155,18 +155,30 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                           : item.valueen ? item.valueen : ""}
                       </a>
                     </>
-                  ) : <>
-                    <div className="w-1/3 text-left whitespace-pre-wrap">
-                      {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
-                        ? new Date(item.valuemn).toISOString().split('T')[0]
-                        : item.valuemn ? item.valuemn : ""}
-                    </div>
-                    <div className="w-1/3 text-left whitespace-pre-wrap">
-                      {item.namemn === "Маягт батлагдсан огноо" && item.valueen
-                        ? new Date(item.valueen).toISOString().split('T')[0]
-                        : item.valueen ? item.valueen : ""}
-                    </div>
-                  </>
+                  ) : item.namemn === "Мэдээ төрөл" ?
+                    <>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.valuemn === "official" && "Албан ёсны статистикийн мэдээ"}
+                        {item.valuemn === "administrative" && "Захиргааны мэдээ"}
+                        {item.valuemn === "census" && "Тооллого"}
+                        {item.valuemn === "survey" && "Судалгаа"}
+                      </div>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.valuemn}
+                      </div>
+                    </>
+                    : <>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
+                          ? new Date(item.valuemn).toISOString().split('T')[0]
+                          : item.valuemn ? item.valuemn : ""}
+                      </div>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valueen
+                          ? new Date(item.valueen).toISOString().split('T')[0]
+                          : item.valueen ? item.valueen : ""}
+                      </div>
+                    </>
                 }
               </div>
             )) : categoryOrder.map((item, index) => (

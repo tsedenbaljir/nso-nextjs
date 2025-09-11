@@ -260,13 +260,13 @@ export default function MetadataNew() {
   }
 
   if (saving) {
-    return <Loader text="Хадгалаж байна..." />
+    return <Loader text="Хадгалж байна..." />
   }
 
   return (
     <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-8">
       <div className="mb-4 flex justify-between">
-        <h2 className="text-lg font-medium">Мета өгөгдөл — Шинээр нэмэх</h2>
+        <h2 className="text-2xl font-bold">Мета өгөгдөл — Шинээр нэмэх</h2>
       </div>
 
       <form onSubmit={async (e) => {
@@ -276,7 +276,7 @@ export default function MetadataNew() {
       }}>
         {/* Data catalogue (IDs expected) */}
         <div className="mb-4">
-          <label className="block mb-2">Дата каталог</label>
+          <label className="block mb-2 font-bold">Дата каталог</label>
           <select
             multiple
             name="data_catalogue_ids"
@@ -297,7 +297,7 @@ export default function MetadataNew() {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-2">Нэр (MN)</label>
+          <label className="block mb-2 font-bold">Нэр (MN)</label>
           <input
             name="namemn"
             className="block w-full border border-gray-300 rounded p-2"
@@ -307,7 +307,7 @@ export default function MetadataNew() {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-2">Нэр (EN)</label>
+          <label className="block mb-2 font-bold">Нэр (EN)</label>
           <input
             name="nameen"
             className="block w-full border border-gray-300 rounded p-2"
@@ -317,7 +317,7 @@ export default function MetadataNew() {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-2">Төрөл</label>
+          <label className="block mb-2 font-bold">Төрөл</label>
           <select
             name="type"
             className="block w-full border border-gray-300 rounded p-2"
@@ -333,7 +333,7 @@ export default function MetadataNew() {
         </div>
 
         <div className="mb-4">
-          <label className="block mb-2">Төрийн байгууллага</label>
+          <label className="block mb-2 font-bold">Төрийн байгууллага</label>
           <select
             multiple
             name="organizations"
@@ -398,19 +398,19 @@ export default function MetadataNew() {
             </div>
             {/* file name kept in state; no hidden field */}
             <div className="mb-4">
-              <label className="block mb-2">Шифр</label>
+              <label className="block mb-2 font-bold">Шифр</label>
               <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.SHIFR] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SHIFR, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Хариуцах газар/хэлтэс</label>
+              <label className="block mb-2 font-bold">Хариуцах газар/хэлтэс</label>
               <textarea rows={3} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.DEPT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DEPT, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Статистик мэдээг хамтран гаргадаг байгууллага</label>
+              <label className="block mb-2 font-bold">Статистик мэдээг хамтран гаргадаг байгууллага</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.PARTNER_ORG] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.PARTNER_ORG, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Мэдээ төрөл</label>
+              <label className="block mb-2 font-bold">Мэдээ төрөл</label>
               <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.MEDEE_TURUL] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.MEDEE_TURUL, e.target.value)}>
                 <option value="">Сонгоно уу</option>
                 <option value="official">Албан ёсны статистикийн мэдээ</option>
@@ -420,24 +420,24 @@ export default function MetadataNew() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Маягт батлагдсан огноо</label>
+              <label className="block mb-2 font-bold">Маягт батлагдсан огноо</label>
               <input type="date" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.FORM_CONFIRMED_DATE] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.FORM_CONFIRMED_DATE, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Тушаалын дугаар</label>
+              <label className="block mb-2 font-bold">Тушаалын дугаар</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.ORDER_NO] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.ORDER_NO, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Агуулга</label>
+              <label className="block mb-2 font-bold">Агуулга</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.CONTENT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.CONTENT, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Анхан шатны мэдээлэгч</label>
+              <label className="block mb-2 font-bold">Анхан шатны мэдээлэгч</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.INFORMANT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.INFORMANT, e.target.value)} />
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Ажиглалтын хугацаа</label>
+              <label className="block mb-2 font-bold">Ажиглалтын хугацаа</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.OBS_PERIOD] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.OBS_PERIOD, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {freqOptions.map((o) => (
                   <option key={o.value} value={String(o.value)}>{o.label}</option>
@@ -445,7 +445,7 @@ export default function MetadataNew() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Статистик ажиглалтын төрөл</label>
+              <label className="block mb-2 font-bold">Статистик ажиглалтын төрөл</label>
               <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.SAMPLE_TYPE] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SAMPLE_TYPE, e.target.value)}>
                 <option value="">Сонгоно уу</option>
                 <option value="sample">Түүвэр ажиглалт</option>
@@ -454,7 +454,7 @@ export default function MetadataNew() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Мэдээлэл цуглуулах давтамж</label>
+              <label className="block mb-2 font-bold">Мэдээлэл цуглуулах давтамж</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.FREQ] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.FREQ, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {freqOptions.map((o) => (
                   <option key={o.value} value={String(o.value)}>{o.label}</option>
@@ -462,32 +462,33 @@ export default function MetadataNew() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Мэдээлэл цуглуулах хэлбэр</label>
+              <label className="block mb-2 font-bold">Мэдээлэл цуглуулах хэлбэр</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.COLLECT_MODE] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.COLLECT_MODE, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Мэдээлэл цуглуулах ажилтан</label>
+              <label className="block mb-2 font-bold">Мэдээлэл цуглуулах ажилтан</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.COLLECT_WORKER] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.COLLECT_WORKER, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Мэдээлэл дамжуулах урсгал</label>
+              <label className="block mb-2 font-bold">Мэдээлэл дамжуулах урсгал</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.DATA_FLOW] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DATA_FLOW, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Мэдээлэл дамжуулах хугацаа</label>
+              <label className="block mb-2 font-bold">Мэдээлэл дамжуулах хугацаа</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.TX_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.TX_TIME, e.target.value)} />
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Үр дүнг тархаах түвшин буюу үзүүлэлтийн задаргаа</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.DISAGG] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DISAGG, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {sectorOptions.map((o) => (
-                  <option key={o.value} value={String(o.value)}>{o.label}</option>
-                ))}
-              </select>
+              <label className="block mb-2 font-bold">Үр дүнг тархаах түвшин буюу үзүүлэлтийн задаргаа</label>
+              <textarea
+                rows={3}
+                className="block w-full border border-gray-300 rounded p-2"
+                value={Array.isArray(values.dynamicMn[META_ID.DISAGG]) ? (values.dynamicMn[META_ID.DISAGG] || []).join(", ") : (values.dynamicMn[META_ID.DISAGG] || "")}
+                onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DISAGG, e.target.value)}
+              />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Ашиглагдсан ангилал, кодууд</label>
+              <label className="block mb-2 font-bold">Ашиглагдсан ангилал, кодууд</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.CLASS_CODES] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.CLASS_CODES, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {sectorOptions.map((o) => (
                   <option key={o.value} value={String(o.value)}>{o.label}</option>
@@ -496,12 +497,12 @@ export default function MetadataNew() {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Мэдээлэл тархаах хугацаа</label>
+              <label className="block mb-2 font-bold">Мэдээлэл тархаах хугацаа</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.PUB_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.PUB_TIME, e.target.value)} />
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Тооцон гаргадаг үзүүлэлтүүд</label>
+              <label className="block mb-2 font-bold">Тооцон гаргадаг үзүүлэлтүүд</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.DERIVED_INDICATORS] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DERIVED_INDICATORS, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {indicatorOptions.map((o) => (
                   <option key={o.value} value={String(o.value)}>{o.label}</option>
@@ -510,19 +511,19 @@ export default function MetadataNew() {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Санхүүжүүлэгч байгууллага</label>
+              <label className="block mb-2 font-bold">Санхүүжүүлэгч байгууллага</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.FUNDER] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.FUNDER, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Нэмэлт мэдээлэл</label>
+              <label className="block mb-2 font-bold">Нэмэлт мэдээлэл</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.EXTRA_INFO] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.EXTRA_INFO, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Түлхүүр үг</label>
+              <label className="block mb-2 font-bold">Түлхүүр үг</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.KEYWORDS] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.KEYWORDS, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Боловсруулсан мэргэжилтэн</label>
+              <label className="block mb-2 font-bold">Боловсруулсан мэргэжилтэн</label>
               <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.EXPERT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.EXPERT, e.target.value)} />
             </div>
           </div>
@@ -530,7 +531,7 @@ export default function MetadataNew() {
 
         {activeTab === 'en' && (
           <div>
-            <div className='flex flex-wrap gap-3 mb-6'>
+            {/* <div className='flex flex-wrap gap-3 mb-6'>
               <div className="w-full">
                 <div className="relative">
                   <label className="block mb-2 text-sm font-medium text-gray-7 dark:text-white" htmlFor="file_input_en">Файл оруулна уу</label>
@@ -540,7 +541,6 @@ export default function MetadataNew() {
                         className="block w-full text-sm text-gray-7 border border-gray-3 rounded-lg cursor-pointer bg-gray-1 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-gray-2 file:text-gray-7 hover:file:bg-gray-3 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         id="file_input_en"
                         type="file"
-                        accept="*/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           setUploadFile2(file || null);
@@ -551,31 +551,31 @@ export default function MetadataNew() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="mb-4">
-              <label className="block mb-2">Cipher</label>
+              <label className="block mb-2 font-bold">Cipher</label>
               <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SHIFR] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SHIFR, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Form confirmed date</label>
+              <label className="block mb-2 font-bold">Form confirmed date</label>
               <input type="date" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.FORM_CONFIRMED_DATE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FORM_CONFIRMED_DATE, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Order No.</label>
+              <label className="block mb-2 font-bold">Order No.</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.ORDER_NO] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.ORDER_NO, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">About</label>
+              <label className="block mb-2 font-bold">About</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.CONTENT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.CONTENT, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Informant</label>
+              <label className="block mb-2 font-bold">Informant</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.INFORMANT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.INFORMANT, e.target.value)} />
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Observation period</label>
+              <label className="block mb-2 font-bold">Observation period</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.OBS_PERIOD] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.OBS_PERIOD, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {freqOptions.map((o) => {
                   const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
@@ -584,7 +584,7 @@ export default function MetadataNew() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Sampling procedure</label>
+              <label className="block mb-2 font-bold">Sampling procedure</label>
               <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SAMPLE_TYPE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SAMPLE_TYPE, e.target.value)}>
                 <option value="">Select</option>
                 <option value="sample">Sample survey</option>
@@ -593,7 +593,7 @@ export default function MetadataNew() {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Frequency</label>
+              <label className="block mb-2 font-bold">Frequency</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.FREQ] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FREQ, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {freqOptions.map((o) => {
                   const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
@@ -603,33 +603,33 @@ export default function MetadataNew() {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Collection mode</label>
+              <label className="block mb-2 font-bold">Collection mode</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.COLLECT_MODE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.COLLECT_MODE, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Enumerator</label>
+              <label className="block mb-2 font-bold">Enumerator</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.COLLECT_WORKER] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.COLLECT_WORKER, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Data flow</label>
+              <label className="block mb-2 font-bold">Data flow</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.DATA_FLOW] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DATA_FLOW, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Transmission time</label>
+              <label className="block mb-2 font-bold">Transmission time</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.TX_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.TX_TIME, e.target.value)} />
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Disaggregation</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.DISAGG] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DISAGG, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {sectorOptions.map((o) => {
-                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
-                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
-                })}
-              </select>
+              <label className="block mb-2 font-bold">Disaggregation</label>
+              <textarea
+                rows={3}
+                className="block w-full border border-gray-300 rounded p-2"
+                value={Array.isArray(values.dynamicEn[META_ID.DISAGG]) ? (values.dynamicEn[META_ID.DISAGG] || []).join(", ") : (values.dynamicEn[META_ID.DISAGG] || "")}
+                onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DISAGG, e.target.value)}
+              />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Classifications & codes</label>
+              <label className="block mb-2 font-bold">Classifications & codes</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.CLASS_CODES] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.CLASS_CODES, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {sectorOptions.map((o) => {
                   const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
@@ -639,12 +639,12 @@ export default function MetadataNew() {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Publication time</label>
+              <label className="block mb-2 font-bold">Publication time</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.PUB_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.PUB_TIME, e.target.value)} />
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Derived indicators</label>
+              <label className="block mb-2 font-bold">Derived indicators</label>
               <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.DERIVED_INDICATORS] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DERIVED_INDICATORS, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
                 {indicatorOptions.map((o) => {
                   const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
@@ -654,19 +654,19 @@ export default function MetadataNew() {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Funding organization</label>
+              <label className="block mb-2 font-bold">Funding organization</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.FUNDER] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FUNDER, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Additional information</label>
+              <label className="block mb-2 font-bold">Additional information</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.EXTRA_INFO] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.EXTRA_INFO, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Keywords</label>
+              <label className="block mb-2 font-bold">Keywords</label>
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.KEYWORDS] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.KEYWORDS, e.target.value)} />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Expert</label>
+              <label className="block mb-2 font-bold">Expert</label>
               <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.EXPERT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.EXPERT, e.target.value)} />
             </div>
           </div>
