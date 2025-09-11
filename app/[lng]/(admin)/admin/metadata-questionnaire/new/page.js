@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { Button, Form, Input, message, Select, Checkbox, Tabs, DatePicker } from "antd";
+import { message } from "antd";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 // import Upload from "@/components/admin/Edits/UploadImages/Upload";
+import Loader from "@/components/Loader";
 
-const { TextArea } = Input;
+// removed antd Input/TextArea; will use native inputs
 
 // === Meta IDs ===
 const META_ID = {
@@ -54,7 +55,6 @@ const encodeVal = (v) => {
 };
 
 export default function MetadataNew() {
-  const [form] = Form.useForm();
   const router = useRouter();
 
   const [catalogues, setCatalogues] = useState([]);
@@ -64,50 +64,108 @@ export default function MetadataNew() {
   const [metaValues, setMetaValues] = useState([]); // indicators
   const [uploadFile, setUploadFile] = useState(null);
   const [uploadFile2, setUploadFile2] = useState(null);
+  const [originalUploadFile, setOriginalUploadFile] = useState(null);
+  const [originalUploadFile2, setOriginalUploadFile2] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  const [values, setValues] = useState({
+    data_catalogue_ids: [],
+    namemn: "",
+    nameen: "",
+    type: "",
+    organizations: [],
+    active: false,
+    isSecure: false,
+    dynamicMn: {},
+    dynamicEn: {},
+  });
+
+  const [activeTab, setActiveTab] = useState("mn");
+
+  const getSelectedValues = (e) => Array.from(e.target.selectedOptions).map((o) => o.value);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setValues((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? !!checked : value,
+    }));
+  };
+
+  const handleMultiSelectChange = (name, arr, toNumber = false) => {
+    const next = toNumber ? arr.map((v) => Number(v)) : arr;
+    setValues((prev) => ({ ...prev, [name]: next }));
+  };
+
+  const handleDynamicChange = (langKey, metaKey, val) => {
+    setValues((prev) => ({
+      ...prev,
+      [langKey]: {
+        ...(prev[langKey] || {}),
+        [metaKey]: val,
+      },
+    }));
+  };
 
   // options (label/value)
-  const orgOptions = useMemo(
-    () =>
-      (organizations || []).map((o) => ({
-        value: Number(o.organization_id ?? o.id),
-        label: `${o.fullname} (${o.name})`,
-      })),
-    [organizations]
-  );
+  const orgOptions = useMemo(() => {
+    const list = Array.isArray(organizations) ? organizations : [];
+    return list.reduce((acc, o) => {
+      const id = String(o?.organization_id ?? o?.id ?? "");
+      if (id) {
+        const fullname = o?.fullname ?? "";
+        const name = o?.name ?? "";
+        acc.push({ value: id, label: `${fullname} (${name})` });
+      }
+      return acc;
+    }, []);
+  }, [organizations]);
 
-  const freqOptions = useMemo(
-    () =>
-      (frequencies || []).map((f) => ({
-        value: Number(f.id),
-        label: `${f.namemn}${f.nameen ? " (" + f.nameen + ")" : ""}`,
-      })),
-    [frequencies]
-  );
+  const freqOptions = useMemo(() => {
+    const list = Array.isArray(frequencies) ? frequencies : [];
+    return list.reduce((acc, f) => {
+      const id = Number(f?.id);
+      if (Number.isFinite(id)) {
+        const mn = f?.namemn ?? "";
+        const en = f?.nameen ?? "";
+        acc.push({ value: id, label: `${mn}${en ? " (" + en + ")" : ""}` });
+      }
+      return acc;
+    }, []);
+  }, [frequencies]);
 
-  const sectorOptions = useMemo(
-    () =>
-      (sectors || []).map((s) => ({
-        value: Number(s.id),
-        label: `${s.namemn}${s.nameen ? " (" + s.nameen + ")" : ""}`,
-      })),
-    [sectors]
-  );
+  const sectorOptions = useMemo(() => {
+    const list = Array.isArray(sectors) ? sectors : [];
+    return list.reduce((acc, s) => {
+      const id = Number(s?.id);
+      if (Number.isFinite(id)) {
+        const mn = s?.namemn ?? "";
+        const en = s?.nameen ?? "";
+        acc.push({ value: id, label: `${mn}${en ? " (" + en + ")" : ""}` });
+      }
+      return acc;
+    }, []);
+  }, [sectors]);
 
-  const indicatorOptions = useMemo(
-    () =>
-      (metaValues || []).map((s) => ({
-        value: Number(s.id),
-        label: `${s.namemn}${s.nameen ? " (" + s.nameen + ")" : ""}`,
-      })),
-    [metaValues]
-  );
+  const indicatorOptions = useMemo(() => {
+    const list = Array.isArray(metaValues) ? metaValues : [];
+    return list.reduce((acc, s) => {
+      const id = Number(s?.id);
+      if (Number.isFinite(id)) {
+        const mn = s?.namemn ?? "";
+        const en = s?.nameen ?? "";
+        acc.push({ value: id, label: `${mn}${en ? " (" + en + ")" : ""}` });
+      }
+      return acc;
+    }, []);
+  }, [metaValues]);
 
   // Options ачаалах
   useEffect(() => {
     const loadOptions = async () => {
       try {
+        setLoading(true);
         const { data: outer } = await axios.get(`/api/metadata-questionnaire/admin/options`);
         if (!outer?.status) throw new Error("Invalid response");
         const p = outer.data || {};
@@ -119,6 +177,8 @@ export default function MetadataNew() {
       } catch (e) {
         console.error(e);
         message.error("Сонголтууд ачаалахад алдаа гарлаа");
+      } finally {
+        setLoading(false);
       }
     };
     loadOptions();
@@ -175,11 +235,12 @@ export default function MetadataNew() {
         type: values.type || null,
         active: !!values.active,
         isSecure: !!values.isSecure,
-        organizations: (values.organizations || []).map((x) => Number(x)),
+        organizations: Array.isArray(values.organizations) ? values.organizations : [],
         metaValues: metaValuesPayload,
         file: imageUrl,
         file2: imageUrl2,
-        user: "admin",
+        originalUploadFile: originalUploadFile || null,
+        originalUploadFile2: originalUploadFile2 || null,
       };
 
       const { data: res } = await axios.post(`/api/metadata-questionnaire/admin`, payload);
@@ -194,70 +255,120 @@ export default function MetadataNew() {
     }
   };
 
+  if (loading) {
+    return <Loader text="Ачаалж байна..." />
+  }
+
+  if (saving) {
+    return <Loader text="Хадгалаж байна..." />
+  }
+
   return (
     <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-8">
       <div className="mb-4 flex justify-between">
         <h2 className="text-lg font-medium">Мета өгөгдөл — Шинээр нэмэх</h2>
       </div>
 
-      <Form layout="vertical" form={form} onFinish={onFinish}>
+      <form onSubmit={async (e) => {
+        e.preventDefault();
+        // temporary bridge to reuse onFinish shape
+        await onFinish(values);
+      }}>
         {/* Data catalogue (IDs expected) */}
-        <Form.Item name="data_catalogue_ids" label="Дата каталог">
-          <Select
-            mode="multiple"
-            placeholder="Сонгоно уу"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            options={(catalogues || []).map((c) => ({
-              value: Number(c.id),
-              label: `${c.namemn} (${c.nameen})`,
-            }))}
+        <div className="mb-4">
+          <label className="block mb-2">Дата каталог</label>
+          <select
+            multiple
+            name="data_catalogue_ids"
+            className="block w-full border border-gray-300 rounded p-2"
+            value={(values.data_catalogue_ids || []).map(String)}
+            onChange={(e) => handleMultiSelectChange("data_catalogue_ids", Array.from(e.target.selectedOptions).map(o => o.value), true)}
+          >
+            {(Array.isArray(catalogues) ? catalogues : []).map((c) => {
+              const id = Number(c?.id);
+              if (!Number.isFinite(id)) return null;
+              const mn = c?.namemn ?? "";
+              const en = c?.nameen ?? "";
+              return (
+                <option key={id} value={String(id)}>{`${mn} (${en})`}</option>
+              );
+            })}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-2">Нэр (MN)</label>
+          <input
+            name="namemn"
+            className="block w-full border border-gray-300 rounded p-2"
+            value={values.namemn}
+            onChange={handleInputChange}
+            required
           />
-        </Form.Item>
-
-        <Form.Item name="namemn" label="Нэр (MN)" rules={[{ required: true, message: "Нэр (MN) шаардлагатай" }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="nameen" label="Нэр (EN)">
-          <Input />
-        </Form.Item>
-
-        <Form.Item name="type" label="Төрөл">
-          <Select
-            placeholder="Сонгоно уу"
-            options={[
-              { value: "official", label: "Албан ёсны статистикийн мэдээ" },
-              { value: "administrative", label: "Захиргааны мэдээ" },
-              { value: "census", label: "Тооллого" },
-              { value: "survey", label: "Судалгаа" },
-            ]}
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2">Нэр (EN)</label>
+          <input
+            name="nameen"
+            className="block w-full border border-gray-300 rounded p-2"
+            value={values.nameen}
+            onChange={handleInputChange}
           />
-        </Form.Item>
+        </div>
 
-        <Form.Item name="organizations" label="Төрийн байгууллага">
-          <Select
-            mode="multiple"
-            placeholder="Сонгоно уу"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-            options={orgOptions}
-          />
-        </Form.Item>
+        <div className="mb-4">
+          <label className="block mb-2">Төрөл</label>
+          <select
+            name="type"
+            className="block w-full border border-gray-300 rounded p-2"
+            value={values.type || ""}
+            onChange={handleInputChange}
+          >
+            <option value="">Сонгоно уу</option>
+            <option value="official">Албан ёсны статистикийн мэдээ</option>
+            <option value="administrative">Захиргааны мэдээ</option>
+            <option value="census">Тооллого</option>
+            <option value="survey">Судалгаа</option>
+          </select>
+        </div>
 
-        <Form.Item name="active" valuePropName="checked">
-          <Checkbox>Идэвхтэй эсэх</Checkbox>
-        </Form.Item>
-        <Form.Item name="isSecure" valuePropName="checked">
-          <Checkbox>Нууцлалтай эсэх</Checkbox>
-        </Form.Item>
+        <div className="mb-4">
+          <label className="block mb-2">Төрийн байгууллага</label>
+          <select
+            multiple
+            name="organizations"
+            className="block w-full border border-gray-300 rounded p-2"
+            value={(values.organizations || []).map(String)}
+            onChange={(e) => handleMultiSelectChange("organizations", Array.from(e.target.selectedOptions).map(o => o.value), false)}
+          >
+            {orgOptions.map((o) => (
+              <option key={o.value} value={String(o.value)}>{o.label}</option>
+            ))}
+          </select>
+        </div>
 
-        <Tabs>
-          <Tabs.TabPane tab="Монгол" key="mn">
-            {/* <Form.Item name={["dynamicMn", META_ID.FORM_NAME]} label="Маягт">
-              <TextArea rows={3} />
-            </Form.Item> */}
+        <div className="mb-2">
+          <label className="inline-flex items-center gap-2">
+            <input type="checkbox" name="active" checked={!!values.active} onChange={handleInputChange} />
+            <span>Идэвхтэй эсэх</span>
+          </label>
+        </div>
+        <div className="mb-6">
+          <label className="inline-flex items-center gap-2">
+            <input type="checkbox" name="isSecure" checked={!!values.isSecure} onChange={handleInputChange} />
+            <span>Нууцлалтай эсэх</span>
+          </label>
+        </div>
+
+        <div className="mb-4 border-b border-gray-200">
+          <nav className="flex gap-2">
+            <button type="button" className={`px-3 py-2 ${activeTab === 'mn' ? 'border-b-2 border-blue-500' : ''}`} onClick={() => setActiveTab('mn')}>Монгол</button>
+            <button type="button" className={`px-3 py-2 ${activeTab === 'en' ? 'border-b-2 border-blue-500' : ''}`} onClick={() => setActiveTab('en')}>English</button>
+          </nav>
+        </div>
+
+        {activeTab === 'mn' && (
+          <div>
             <div className='flex flex-wrap gap-3 mb-6'>
               <div className="w-full">
                 <div className="relative">
@@ -277,11 +388,7 @@ export default function MetadataNew() {
                         onChange={(e) => {
                           const file = e.target.files[0];
                           setUploadFile(file);
-                          if (file) {
-                            form.setFieldsValue({
-                              dynamicMn: { [META_ID.FORM_NAME]: file.name },
-                            });
-                          }
+                          setOriginalUploadFile(file.name);
                         }}
                       />
                     </div>
@@ -289,128 +396,155 @@ export default function MetadataNew() {
                 </div>
               </div>
             </div>
-            <Form.Item name={["dynamicMn", META_ID.FORM_NAME]} hidden>
-              <Input />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.SHIFR]} label="Шифр">
-              <Input />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.DEPT]} label="Хариуцах газар/хэлтэс">
-              <TextArea rows={3} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.PARTNER_ORG]} label="Статистик мэдээг хамтран гаргадаг байгууллага">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.MEDEE_TURUL]} label="Мэдээ төрөл">
-              <Select
-                placeholder="Сонгоно уу"
-                options={[
-                  { value: "official", label: "Албан ёсны статистикийн мэдээ" },
-                  { value: "administrative", label: "Захиргааны мэдээ" },
-                  { value: "census", label: "Тооллого" },
-                  { value: "survey", label: "Судалгаа" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.FORM_CONFIRMED_DATE]} label="Маягт батлагдсан огноо">
-              <DatePicker />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.ORDER_NO]} label="Тушаалын дугаар">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.CONTENT]} label="Агуулга">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.INFORMANT]} label="Анхан шатны мэдээлэгч">
-              <TextArea rows={2} />
-            </Form.Item>
+            {/* file name kept in state; no hidden field */}
+            <div className="mb-4">
+              <label className="block mb-2">Шифр</label>
+              <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.SHIFR] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SHIFR, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Хариуцах газар/хэлтэс</label>
+              <textarea rows={3} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.DEPT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DEPT, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Статистик мэдээг хамтран гаргадаг байгууллага</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.PARTNER_ORG] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.PARTNER_ORG, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Мэдээ төрөл</label>
+              <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.MEDEE_TURUL] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.MEDEE_TURUL, e.target.value)}>
+                <option value="">Сонгоно уу</option>
+                <option value="official">Албан ёсны статистикийн мэдээ</option>
+                <option value="administrative">Захиргааны мэдээ</option>
+                <option value="census">Тооллого</option>
+                <option value="survey">Судалгаа</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Маягт батлагдсан огноо</label>
+              <input type="date" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.FORM_CONFIRMED_DATE] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.FORM_CONFIRMED_DATE, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Тушаалын дугаар</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.ORDER_NO] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.ORDER_NO, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Агуулга</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.CONTENT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.CONTENT, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Анхан шатны мэдээлэгч</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.INFORMANT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.INFORMANT, e.target.value)} />
+            </div>
 
-            <Form.Item name={["dynamicMn", META_ID.OBS_PERIOD]} label="Ажиглалтын хугацаа">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={freqOptions} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.SAMPLE_TYPE]} label="Статистик ажиглалтын төрөл">
-              <Select
-                placeholder="Сонгоно уу"
-                options={[
-                  { value: "sample", label: "Түүвэр ажиглалт" },
-                  { value: "sample2", label: "Түүвэр ажиглалт-2" },
-                  { value: "complete", label: "Нэлэнхүй ажиглалт" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.FREQ]} label="Мэдээлэл цуглуулах давтамж">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={freqOptions} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.COLLECT_MODE]} label="Мэдээлэл цуглуулах хэлбэр">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.COLLECT_WORKER]} label="Мэдээлэл цуглуулах ажилтан">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.DATA_FLOW]} label="Мэдээлэл дамжуулах урсгал">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.TX_TIME]} label="Мэдээлэл дамжуулах хугацаа">
-              <TextArea rows={2} />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Ажиглалтын хугацаа</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.OBS_PERIOD] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.OBS_PERIOD, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {freqOptions.map((o) => (
+                  <option key={o.value} value={String(o.value)}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Статистик ажиглалтын төрөл</label>
+              <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.SAMPLE_TYPE] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SAMPLE_TYPE, e.target.value)}>
+                <option value="">Сонгоно уу</option>
+                <option value="sample">Түүвэр ажиглалт</option>
+                <option value="sample2">Түүвэр ажиглалт-2</option>
+                <option value="complete">Нэлэнхүй ажиглалт</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Мэдээлэл цуглуулах давтамж</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.FREQ] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.FREQ, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {freqOptions.map((o) => (
+                  <option key={o.value} value={String(o.value)}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Мэдээлэл цуглуулах хэлбэр</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.COLLECT_MODE] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.COLLECT_MODE, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Мэдээлэл цуглуулах ажилтан</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.COLLECT_WORKER] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.COLLECT_WORKER, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Мэдээлэл дамжуулах урсгал</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.DATA_FLOW] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DATA_FLOW, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Мэдээлэл дамжуулах хугацаа</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.TX_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.TX_TIME, e.target.value)} />
+            </div>
 
-            <Form.Item name={["dynamicMn", META_ID.DISAGG]} label="Үр дүнг тархаах түвшин буюу үзүүлэлтийн задаргаа">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={sectorOptions} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.CLASS_CODES]} label="Ашиглагдсан ангилал, кодууд">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={sectorOptions} />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Үр дүнг тархаах түвшин буюу үзүүлэлтийн задаргаа</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.DISAGG] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DISAGG, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {sectorOptions.map((o) => (
+                  <option key={o.value} value={String(o.value)}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Ашиглагдсан ангилал, кодууд</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.CLASS_CODES] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.CLASS_CODES, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {sectorOptions.map((o) => (
+                  <option key={o.value} value={String(o.value)}>{o.label}</option>
+                ))}
+              </select>
+            </div>
 
-            <Form.Item name={["dynamicMn", META_ID.PUB_TIME]} label="Мэдээлэл тархаах хугацаа">
-              <TextArea rows={2} />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Мэдээлэл тархаах хугацаа</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.PUB_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.PUB_TIME, e.target.value)} />
+            </div>
 
-            <Form.Item name={["dynamicMn", META_ID.DERIVED_INDICATORS]} label="Тооцон гаргадаг үзүүлэлтүүд">
-              <Select mode="multiple" allowClear showSearch optionFilterProp="label" options={indicatorOptions} />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Тооцон гаргадаг үзүүлэлтүүд</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.DERIVED_INDICATORS] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DERIVED_INDICATORS, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {indicatorOptions.map((o) => (
+                  <option key={o.value} value={String(o.value)}>{o.label}</option>
+                ))}
+              </select>
+            </div>
 
-            <Form.Item name={["dynamicMn", META_ID.FUNDER]} label="Санхүүжүүлэгч байгууллага">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.EXTRA_INFO]} label="Нэмэлт мэдээлэл">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.KEYWORDS]} label="Түлхүүр үг">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicMn", META_ID.EXPERT]} label="Боловсруулсан мэргэжилтэн">
-              <Input />
-            </Form.Item>
-          </Tabs.TabPane>
+            <div className="mb-4">
+              <label className="block mb-2">Санхүүжүүлэгч байгууллага</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.FUNDER] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.FUNDER, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Нэмэлт мэдээлэл</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.EXTRA_INFO] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.EXTRA_INFO, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Түлхүүр үг</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.KEYWORDS] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.KEYWORDS, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Боловсруулсан мэргэжилтэн</label>
+              <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.EXPERT] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.EXPERT, e.target.value)} />
+            </div>
+          </div>
+        )}
 
-          <Tabs.TabPane tab="English" key="en">
-            {/* <Form.Item name={["dynamicEn", META_ID.FORM_NAME]} label="Form">
-              <TextArea rows={3} />
-            </Form.Item> */}
+        {activeTab === 'en' && (
+          <div>
             <div className='flex flex-wrap gap-3 mb-6'>
               <div className="w-full">
                 <div className="relative">
-                  <label
-                    className="block mb-2 text-sm font-medium text-gray-7 dark:text-white"
-                    htmlFor="file_input"
-                  >
-                    Файл оруулна уу
-                  </label>
+                  <label className="block mb-2 text-sm font-medium text-gray-7 dark:text-white" htmlFor="file_input_en">Файл оруулна уу</label>
                   <div className="flex items-center space-x-2">
                     <div className="flex-1">
                       <input
                         className="block w-full text-sm text-gray-7 border border-gray-3 rounded-lg cursor-pointer bg-gray-1 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-gray-2 file:text-gray-7 hover:file:bg-gray-3 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        id="file_input"
+                        id="file_input_en"
                         type="file"
                         accept="*/*"
                         onChange={(e) => {
-                          const file = e.target.files[0];
-                          setUploadFile2(file);
-                          if (file) {
-                            form.setFieldsValue({
-                              dynamicEn: { [META_ID.FORM_NAME]: file.name },
-                            });
-                          }
+                          const file = e.target.files?.[0];
+                          setUploadFile2(file || null);
+                          setOriginalUploadFile2(file.name);
                         }}
                       />
                     </div>
@@ -418,134 +552,131 @@ export default function MetadataNew() {
                 </div>
               </div>
             </div>
-            <Form.Item name={["dynamicEn", META_ID.FORM_NAME]} hidden>
-              <Input />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.SHIFR]} label="Cipher">
-              <Input />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.FORM_CONFIRMED_DATE]} label="Form confirmed date">
-              <DatePicker />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.ORDER_NO]} label="Order No.">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.CONTENT]} label="About">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.INFORMANT]} label="Informant">
-              <TextArea rows={2} />
-            </Form.Item>
 
-            <Form.Item name={["dynamicEn", META_ID.OBS_PERIOD]} label="Observation period">
-              <Select
-                mode="multiple"
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                options={freqOptions.map((o) => ({
-                  value: o.value,
-                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
-                }))}
-              />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.SAMPLE_TYPE]} label="Sampling procedure">
-              <Select
-                placeholder="Select"
-                options={[
-                  { value: "sample", label: "Sample survey" },
-                  { value: "sample2", label: "Sample survey 2" },
-                  { value: "complete", label: "Complete enumeration" },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.FREQ]} label="Frequency">
-              <Select
-                mode="multiple"
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                options={freqOptions.map((o) => ({
-                  value: o.value,
-                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
-                }))}
-              />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Cipher</label>
+              <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SHIFR] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SHIFR, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Form confirmed date</label>
+              <input type="date" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.FORM_CONFIRMED_DATE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FORM_CONFIRMED_DATE, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Order No.</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.ORDER_NO] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.ORDER_NO, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">About</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.CONTENT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.CONTENT, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Informant</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.INFORMANT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.INFORMANT, e.target.value)} />
+            </div>
 
-            <Form.Item name={["dynamicEn", META_ID.COLLECT_MODE]} label="Collection mode">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.COLLECT_WORKER]} label="Enumerator">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.DATA_FLOW]} label="Data flow">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.TX_TIME]} label="Transmission time">
-              <TextArea rows={2} />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Observation period</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.OBS_PERIOD] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.OBS_PERIOD, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {freqOptions.map((o) => {
+                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
+                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
+                })}
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Sampling procedure</label>
+              <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SAMPLE_TYPE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SAMPLE_TYPE, e.target.value)}>
+                <option value="">Select</option>
+                <option value="sample">Sample survey</option>
+                <option value="sample2">Sample survey 2</option>
+                <option value="complete">Complete enumeration</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Frequency</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.FREQ] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FREQ, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {freqOptions.map((o) => {
+                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
+                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
+                })}
+              </select>
+            </div>
 
-            <Form.Item name={["dynamicEn", META_ID.DISAGG]} label="Disaggregation">
-              <Select
-                mode="multiple"
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                options={sectorOptions.map((o) => ({
-                  value: o.value,
-                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
-                }))}
-              />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.CLASS_CODES]} label="Classifications & codes">
-              <Select
-                mode="multiple"
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                options={sectorOptions.map((o) => ({
-                  value: o.value,
-                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
-                }))}
-              />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Collection mode</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.COLLECT_MODE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.COLLECT_MODE, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Enumerator</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.COLLECT_WORKER] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.COLLECT_WORKER, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Data flow</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.DATA_FLOW] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DATA_FLOW, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Transmission time</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.TX_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.TX_TIME, e.target.value)} />
+            </div>
 
-            <Form.Item name={["dynamicEn", META_ID.PUB_TIME]} label="Publication time">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.DERIVED_INDICATORS]} label="Derived indicators">
-              <Select
-                mode="multiple"
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                options={indicatorOptions.map((o) => ({
-                  value: o.value,
-                  label: o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label,
-                }))}
-              />
-            </Form.Item>
+            <div className="mb-4">
+              <label className="block mb-2">Disaggregation</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.DISAGG] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DISAGG, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {sectorOptions.map((o) => {
+                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
+                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
+                })}
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Classifications & codes</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.CLASS_CODES] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.CLASS_CODES, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {sectorOptions.map((o) => {
+                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
+                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
+                })}
+              </select>
+            </div>
 
-            <Form.Item name={["dynamicEn", META_ID.FUNDER]} label="Funding organization">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.EXTRA_INFO]} label="Additional information">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.KEYWORDS]} label="Keywords">
-              <TextArea rows={2} />
-            </Form.Item>
-            <Form.Item name={["dynamicEn", META_ID.EXPERT]} label="Expert">
-              <Input />
-            </Form.Item>
-          </Tabs.TabPane>
-        </Tabs>
+            <div className="mb-4">
+              <label className="block mb-2">Publication time</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.PUB_TIME] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.PUB_TIME, e.target.value)} />
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Derived indicators</label>
+              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.DERIVED_INDICATORS] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DERIVED_INDICATORS, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
+                {indicatorOptions.map((o) => {
+                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
+                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
+                })}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Funding organization</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.FUNDER] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FUNDER, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Additional information</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.EXTRA_INFO] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.EXTRA_INFO, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Keywords</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.KEYWORDS] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.KEYWORDS, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Expert</label>
+              <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.EXPERT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.EXPERT, e.target.value)} />
+            </div>
+          </div>
+        )}
 
         <div className="flex justify-end gap-2 mt-4">
-          <Button onClick={() => router.back()} disabled={saving}>Буцах</Button>
-          <Button type="primary" htmlType="submit" loading={saving}>Хадгалах</Button>
+          <button type="button" onClick={() => router.back()} disabled={saving} className="px-4 py-2 border rounded">Буцах</button>
+          <button type="submit" disabled={saving} className="px-4 py-2 bg-blue-600 text-white rounded">{saving ? 'Хадгалж байна...' : 'Хадгалах'}</button>
         </div>
-      </Form>
+      </form>
     </div>
   );
 }

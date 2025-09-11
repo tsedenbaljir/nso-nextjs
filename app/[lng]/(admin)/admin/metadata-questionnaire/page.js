@@ -47,6 +47,27 @@ export default function MetadataAdmin() {
     fetchData(1, pageSize, value);
   };
 
+  const handleDelete = async (id) => {
+    if (!id) return;
+    const ok = window.confirm("Энэ бичлэгийг идэвхгүй болгох уу?");
+    if (!ok) return;
+    try {
+      setLoading(true);
+      const res = await axios.delete(`/api/metadata-questionnaire/admin/${id}`);
+      if (res.data?.status) {
+        message.success("Амжилттай идэвхгүй болголоо");
+        // refresh current page
+        fetchData(page, pageSize, searchText);
+      } else {
+        message.error(res.data?.message || "Амжилтгүй");
+      }
+    } catch (e) {
+      message.error("Устгах үед алдаа гарлаа");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const columns = useMemo(
     () => [
       { title: "ID", dataIndex: "id", width: 80 },
@@ -59,17 +80,18 @@ export default function MetadataAdmin() {
       { title: "Өөрчилсөн хэрэглэгч", dataIndex: "last_modified_by" },
       {
         title: "Үйлдэл",
-        width: 120,
+        width: 200,
         render: (_, record) => (
           <Space>
             <Link href={`/admin/metadata-questionnaire/${record.id}`}>
               <Button size="small">Засах</Button>
             </Link>
+            <Button danger size="small" onClick={() => handleDelete(record.id)}>Идэвхгүй болгох</Button>
           </Space>
         ),
       },
     ],
-    []
+    [page, pageSize, searchText]
   );
 
   return (

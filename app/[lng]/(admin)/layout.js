@@ -13,10 +13,9 @@ export const metadata = {
   description: 'Мэдээллийг удирдах самбар',
 }
 
-export default function RootLayout({
-  children }) {
+export default function RootLayout({ children, params }) {
   return (
-    <html lang="en">
+    <html lang={(params && params.lng) ? params.lng : 'mn'}>
       <body>
         <AdminLayout>
           {children}
