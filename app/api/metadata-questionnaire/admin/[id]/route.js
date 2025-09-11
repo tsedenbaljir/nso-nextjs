@@ -291,17 +291,18 @@ export async function PUT(req, { params }) {
       const insertAttachment = async (attachmentName, originalName, language, oldAttachmentName) => {
         if (!attachmentName) return;
 
-        if (language === "mn" && oldAttachmentName) {
-          await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
-            attachment_name: attachmentName,
-            original_name: originalName,
-          });
-        } else {
-          await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
-            attachment_name: attachmentName,
-            original_name: originalName,
-          });
-        }
+        // if (language === "mn" && oldAttachmentName) {
+        await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
+          attachment_name: attachmentName,
+          original_name: originalName,
+        });
+        // } 
+        // else {
+        //   await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
+        //     attachment_name: attachmentName,
+        //     original_name: originalName,
+        //   });
+        // }
       };
 
       if (file) {

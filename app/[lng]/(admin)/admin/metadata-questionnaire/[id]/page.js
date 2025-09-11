@@ -200,9 +200,8 @@ export default function MetadataEdit() {
         setOrganizations(payload.organizations || []);
         setMetaValues(payload.metaValues || []);
         setMdvLatest(payload.mdvLatest || {});
-
-        setOldUploadFile(payload.file || null);
-        setOldUploadFile2(payload.file2 || null);
+        setOldUploadFile(payload.rows.filter(row => row.meta_data_id === "3235261").attachment_name || null);
+        // setOldUploadFile2(payload.rows[0].file2 || null);
 
         const dynamicMn = {};
         const dynamicEn = {};
@@ -308,8 +307,8 @@ export default function MetadataEdit() {
         metaValues: metaValuesPayload,
         file: uploadFile?.File?.name || null,
         file2: uploadFile2?.File?.name || null,
-        oldUploadFile: oldUploadFile?.File?.name || null,
-        oldUploadFile2: oldUploadFile2?.File?.name || null,
+        oldUploadFile: oldUploadFile || null,
+        oldUploadFile2: oldUploadFile2 || null,
       });
 
       message.success("Амжилттай хадгаллаа");

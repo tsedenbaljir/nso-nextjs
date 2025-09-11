@@ -137,14 +137,15 @@ export async function POST(req) {
           metaValues.push({
             meta_data_id: 3235261,
             valuemn: nextId,
+            valueen: null,
           })
         }
-        if (language === "en") {
-          metaValues.push({
-            meta_data_id: 3235261,
-            valueen: nextId,
-          })
-        }
+        // if (language === "en") {
+        //   metaValues.push({
+        //     meta_data_id: 3235261,
+        //     valueen: nextId,
+        //   })
+        // }
 
         await trx("metadata_value_attachment").insert({
           id: String(nextId),
