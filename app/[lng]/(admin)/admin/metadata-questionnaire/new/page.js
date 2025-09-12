@@ -324,9 +324,7 @@ export default function MetadataNew() {
             onChange={handleInputChange}
           >
             <option value="">Сонгоно уу</option>
-            <option value="official">Албан ёсны статистикийн мэдээ</option>
-            <option value="administrative">Захиргааны мэдээ</option>
-            <option value="census">Тооллого</option>
+            <option value="indicator">Мэдээ</option>
             <option value="survey">Судалгаа</option>
           </select>
         </div>

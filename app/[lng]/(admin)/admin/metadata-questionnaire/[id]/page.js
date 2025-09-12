@@ -374,9 +374,7 @@ export default function MetadataEdit() {
           {console.log("values.type", values)}
           <select name="type" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.MEDEE_TURUL] || ""} onChange={handleInputChange}>
             <option value="">Сонгоно уу</option>
-            <option value="official">Албан ёсны статистикийн мэдээ</option>
-            <option value="administrative">Захиргааны мэдээ</option>
-            <option value="census">Тооллого</option>
+            <option value="indicator">Мэдээ</option>
             <option value="survey">Судалгаа</option>
           </select>
         </div>

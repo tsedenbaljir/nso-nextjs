@@ -172,12 +172,12 @@ export default function Methodology() {
                     <td className="px-6 py-1">{item.namemn}</td>
                     <td className="px-6 py-1">
                       {item.valuemn && !isNaN(Date.parse(item.valuemn))
-                        ? new Date(item.valuemn).toISOString().split('T')[0]
+                        ? new Date(item.valuemn)?.toISOString()?.split('T')[0]
                         : item.valuemn}
                     </td>
                     <td className="px-6 py-1">
                       {item.valueen && !isNaN(Date.parse(item.valueen))
-                        ? new Date(item.valueen).toISOString().split('T')[0]
+                        ? new Date(item.valueen)?.toISOString()?.split('T')[0]
                         : item.valueen}
                     </td>
                   </tr>
