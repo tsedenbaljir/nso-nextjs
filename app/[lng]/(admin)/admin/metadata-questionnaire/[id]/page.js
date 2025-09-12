@@ -225,8 +225,9 @@ export default function MetadataEdit() {
         const header = (payload.rows && payload.rows[0]) || {};
         const labelMn = header.labelmn || header.label || "";
         const labelEn = header.labelen || header.label_en || "";
-        const active = header.active ?? false;
-        const isSecure = header?.is_secret;
+        const active = header.active === 1 || header.active === true || String(header.active).trim() === '1';
+        const isSecureRaw = header?.is_secret ?? header?.is_secure ?? 0;
+        const isSecure = isSecureRaw === 1 || isSecureRaw === true || String(isSecureRaw).trim() === '1';
 
         const dcIds = (header.data_catalogue_ids || "")
           .split(",")
@@ -240,8 +241,8 @@ export default function MetadataEdit() {
           nameen: labelEn,
           dynamicMn,
           dynamicEn,
-          active: !!active,
-          isSecure: !!isSecure,
+          active: active,
+          isSecure: isSecure,
           data_catalogue_ids: dcIds,
           // orgs are UUIDs now in new page; here coerce to strings
           organizations: (payload.selectedOrganizationIds || []).map((x) => String(x)),
@@ -397,6 +398,7 @@ export default function MetadataEdit() {
         </div>
         <div className="mb-6">
           <label className="inline-flex items-center gap-2">
+          {console.log("activeTab2",!!values.isSecure)}
             <input type="checkbox" name="isSecure" checked={!!values.isSecure} onChange={handleInputChange} />
             <span>Нууцлалтай эсэх</span>
           </label>
