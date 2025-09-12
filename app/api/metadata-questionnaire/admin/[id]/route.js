@@ -175,21 +175,21 @@ export async function GET(req, { params }) {
 
     let organizations = await db("organizations").select("id", { organization_id: "id" }, "name", "fullname");
 
-    const orgMap = new Map((organizations || []).map((o) => [Number(o.organization_id ?? o.id), o]));
-    for (const r of rows) {
-      if (r.organization_id != null) {
-        const key = Number(r.organization_id);
-        if (!orgMap.has(key)) {
-          orgMap.set(key, {
-            id: key,
-            organization_id: key,
-            name: r.organization_name || "",
-            fullname: r.organization_fullname || "",
-          });
-        }
-      }
-    }
-    organizations = Array.from(orgMap.values());
+    // const orgMap = new Map((organizations || []).map((o) => [Number(o.organization_id ?? o.id), o]));
+    // for (const r of rows) {
+    //   if (r.organization_id != null) {
+    //     const key = Number(r.organization_id);
+    //     if (!orgMap.has(key)) {
+    //       orgMap.set(key, {
+    //         id: key,
+    //         organization_id: key,
+    //         name: r.organization_name || "",
+    //         fullname: r.organization_fullname || "",
+    //       });
+    //     }
+    //   }
+    // }
+    // organizations = Array.from(orgMap.values());
 
     const metaValues = await db("question_pool").select("id", "namemn", "nameen");
     const catalogues = await db("data_catalogue")

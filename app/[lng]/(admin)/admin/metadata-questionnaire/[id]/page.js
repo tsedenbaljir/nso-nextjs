@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { message } from "antd";
+import { message, Select } from "antd";
 import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
 import dayjs from "dayjs";
@@ -319,7 +319,7 @@ export default function MetadataEdit() {
       });
 
       message.success("Амжилттай хадгаллаа");
-      router.push("/admin/metadata-questionnaire");
+      // router.push("/admin/metadata-questionnaire");
     } catch (e) {
       console.error(e);
       message.error("Хадгалах үед алдаа гарлаа");
@@ -342,20 +342,23 @@ export default function MetadataEdit() {
       </div>
 
       <form onSubmit={async (e) => { e.preventDefault(); await onFinish(values); }}>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block mb-2 font-bold">Дата каталог</label>
-          <select
-            multiple
-            name="data_catalogue_ids"
-            className="block w-full border border-gray-300 rounded p-2"
+          {console.log("values.data_catalogue_ids",values.data_catalogue_ids)
+          }
+          <Select
+            mode="multiple"
+            allowClear
+            showSearch
+            style={{ width: '100%' }}
+            placeholder="Сонгоно уу"
             value={(values.data_catalogue_ids || []).map(String)}
-            onChange={(e) => handleMultiSelectChange("data_catalogue_ids", getSelectedValues(e), true)}
-          >
-            {catalogueOptions.map((o) => (
-              <option key={o.value} value={String(o.value)}>{o.label}</option>
-            ))}
-          </select>
-        </div>
+            onChange={(arr) => handleMultiSelectChange("data_catalogue_ids", arr, true)}
+            options={catalogueOptions.map(o => ({ value: String(o.value), label: o.label }))}
+            optionFilterProp="label"
+            filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+          />
+        </div> */}
 
         <div className="mb-4">
           <label className="block mb-2 font-bold">Нэр (MN)</label>
@@ -368,26 +371,30 @@ export default function MetadataEdit() {
 
         <div className="mb-4">
           <label className="block mb-2 font-bold">Төрөл</label>
-          <select name="type" className="block w-full border border-gray-300 rounded p-2" value={values.type || ""} onChange={handleInputChange}>
+          {console.log("values.type", values)}
+          <select name="type" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.MEDEE_TURUL] || ""} onChange={handleInputChange}>
             <option value="">Сонгоно уу</option>
-            <option value="indicator">Мэдээ</option>
+            <option value="official">Албан ёсны статистикийн мэдээ</option>
+            <option value="administrative">Захиргааны мэдээ</option>
+            <option value="census">Тооллого</option>
             <option value="survey">Судалгаа</option>
           </select>
         </div>
 
         <div className="mb-4">
           <label className="block mb-2 font-bold">Төрийн байгууллага</label>
-          <select
-            multiple
-            name="organizations"
-            className="block w-full border border-gray-300 rounded p-2"
+          <Select
+            mode="multiple"
+            allowClear
+            showSearch
+            style={{ width: '100%' }}
+            placeholder="Сонгоно уу"
             value={(values.organizations || []).map(String)}
-            onChange={(e) => handleMultiSelectChange("organizations", getSelectedValues(e), false)}
-          >
-            {orgOptions.map((o) => (
-              <option key={o.value} value={String(o.value)}>{o.label}</option>
-            ))}
-          </select>
+            onChange={(arr) => handleMultiSelectChange("organizations", arr, false)}
+            options={orgOptions.map(o => ({ value: String(o.value), label: o.label }))}
+            optionFilterProp="label"
+            filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+          />
         </div>
 
         <div className="mb-2">
@@ -398,7 +405,7 @@ export default function MetadataEdit() {
         </div>
         <div className="mb-6">
           <label className="inline-flex items-center gap-2">
-          {console.log("activeTab2",!!values.isSecure)}
+            {console.log("activeTab2", !!values.isSecure)}
             <input type="checkbox" name="isSecure" checked={!!values.isSecure} onChange={handleInputChange} />
             <span>Нууцлалтай эсэх</span>
           </label>
@@ -485,11 +492,18 @@ export default function MetadataEdit() {
 
             <div className="mb-4">
               <label className="block mb-2 font-bold">Ажиглалтын хугацаа</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.OBS_PERIOD] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.OBS_PERIOD, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {freqOptions.map((o) => (
-                  <option key={o.value} value={String(o.value)}>{o.label}</option>
-                ))}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Сонгоно уу"
+                value={(values.dynamicMn[META_ID.OBS_PERIOD] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicMn', META_ID.OBS_PERIOD, (arr || []).map((v) => Number(v)))}
+                options={freqOptions.map(o => ({ value: String(o.value), label: o.label }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Статистик ажиглалтын төрөл</label>
@@ -502,11 +516,18 @@ export default function MetadataEdit() {
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Мэдээлэл цуглуулах давтамж</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.FREQ] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.FREQ, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {freqOptions.map((o) => (
-                  <option key={o.value} value={String(o.value)}>{o.label}</option>
-                ))}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Сонгоно уу"
+                value={(values.dynamicMn[META_ID.FREQ] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicMn', META_ID.FREQ, (arr || []).map((v) => Number(v)))}
+                options={freqOptions.map(o => ({ value: String(o.value), label: o.label }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Мэдээлэл цуглуулах хэлбэр</label>
@@ -536,11 +557,18 @@ export default function MetadataEdit() {
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Ашиглагдсан ангилал, кодууд</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.CLASS_CODES] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.CLASS_CODES, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {sectorOptions.map((o) => (
-                  <option key={o.value} value={String(o.value)}>{o.label}</option>
-                ))}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Сонгоно уу"
+                value={(values.dynamicMn[META_ID.CLASS_CODES] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicMn', META_ID.CLASS_CODES, (arr || []).map((v) => Number(v)))}
+                options={sectorOptions.map(o => ({ value: String(o.value), label: o.label }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
 
             <div className="mb-4">
@@ -550,11 +578,18 @@ export default function MetadataEdit() {
 
             <div className="mb-4">
               <label className="block mb-2 font-bold">Тооцон гаргадаг үзүүлэлтүүд</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicMn[META_ID.DERIVED_INDICATORS] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.DERIVED_INDICATORS, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {indicatorOptions.map((o) => (
-                  <option key={o.value} value={String(o.value)}>{o.label}</option>
-                ))}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Сонгоно уу"
+                value={(values.dynamicMn[META_ID.DERIVED_INDICATORS] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicMn', META_ID.DERIVED_INDICATORS, (arr || []).map((v) => Number(v)))}
+                options={indicatorOptions.map(o => ({ value: String(o.value), label: o.label }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
 
             <div className="mb-4">
@@ -632,12 +667,18 @@ export default function MetadataEdit() {
 
             <div className="mb-4">
               <label className="block mb-2 font-bold">Observation period</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.OBS_PERIOD] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.OBS_PERIOD, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {freqOptions.map((o) => {
-                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
-                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
-                })}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Select"
+                value={(values.dynamicEn[META_ID.OBS_PERIOD] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicEn', META_ID.OBS_PERIOD, (arr || []).map((v) => Number(v)))}
+                options={freqOptions.map(o => ({ value: String(o.value), label: (o.label.split(' (')[1] ? o.label.split(' (')[1].replace(')', '') : o.label) }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Sampling procedure</label>
@@ -650,12 +691,18 @@ export default function MetadataEdit() {
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Frequency</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.FREQ] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FREQ, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {freqOptions.map((o) => {
-                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
-                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
-                })}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Select"
+                value={(values.dynamicEn[META_ID.FREQ] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicEn', META_ID.FREQ, (arr || []).map((v) => Number(v)))}
+                options={freqOptions.map(o => ({ value: String(o.value), label: (o.label.split(' (')[1] ? o.label.split(' (')[1].replace(')', '') : o.label) }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
 
             <div className="mb-4">
@@ -686,12 +733,18 @@ export default function MetadataEdit() {
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Classifications & codes</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.CLASS_CODES] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.CLASS_CODES, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {sectorOptions.map((o) => {
-                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
-                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
-                })}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Select"
+                value={(values.dynamicEn[META_ID.CLASS_CODES] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicEn', META_ID.CLASS_CODES, (arr || []).map((v) => Number(v)))}
+                options={sectorOptions.map(o => ({ value: String(o.value), label: (o.label.split(' (')[1] ? o.label.split(' (')[1].replace(')', '') : o.label) }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
 
             <div className="mb-4">
@@ -701,12 +754,18 @@ export default function MetadataEdit() {
 
             <div className="mb-4">
               <label className="block mb-2 font-bold">Derived indicators</label>
-              <select multiple className="block w-full border border-gray-300 rounded p-2" value={(values.dynamicEn[META_ID.DERIVED_INDICATORS] || []).map(String)} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DERIVED_INDICATORS, Array.from(e.target.selectedOptions).map(o => Number(o.value)))}>
-                {indicatorOptions.map((o) => {
-                  const enLabel = o.label.split(" (")[1] ? o.label.split(" (")[1].replace(")", "") : o.label;
-                  return <option key={o.value} value={String(o.value)}>{enLabel}</option>;
-                })}
-              </select>
+              <Select
+                mode="multiple"
+                allowClear
+                showSearch
+                style={{ width: '100%' }}
+                placeholder="Select"
+                value={(values.dynamicEn[META_ID.DERIVED_INDICATORS] || []).map(String)}
+                onChange={(arr) => handleDynamicChange('dynamicEn', META_ID.DERIVED_INDICATORS, (arr || []).map((v) => Number(v)))}
+                options={indicatorOptions.map(o => ({ value: String(o.value), label: (o.label.split(' (')[1] ? o.label.split(' (')[1].replace(')', '') : o.label) }))}
+                optionFilterProp="label"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+              />
             </div>
 
             <div className="mb-4">
