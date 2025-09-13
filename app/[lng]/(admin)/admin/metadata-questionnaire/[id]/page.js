@@ -141,25 +141,25 @@ export default function MetadataEdit() {
     }, []);
   }, [organizations]);
 
-  const catalogueOptions = useMemo(() => {
-    const byId = new Map();
-    const list = Array.isArray(catalogues) ? catalogues : [];
-    for (const c of list) {
-      const idc = Number(c?.id);
-      if (Number.isFinite(idc)) {
-        const key = String(idc);
-        byId.set(key, `${c?.namemn ?? ""} (${c?.nameen ?? ""})`);
-      }
-    }
-    const selected = Array.isArray(values?.data_catalogue_ids) ? values.data_catalogue_ids : [];
-    for (const v of selected) {
-      const key = String(v);
-      if (!byId.has(key)) {
-        byId.set(key, key);
-      }
-    }
-    return Array.from(byId, ([value, label]) => ({ value, label }));
-  }, [catalogues, values?.data_catalogue_ids]);
+  // const catalogueOptions = useMemo(() => {
+  //   const byId = new Map();
+  //   const list = Array.isArray(catalogues) ? catalogues : [];
+  //   for (const c of list) {
+  //     const idc = Number(c?.id);
+  //     if (Number.isFinite(idc)) {
+  //       const key = String(idc);
+  //       byId.set(key, `${c?.namemn ?? ""} (${c?.nameen ?? ""})`);
+  //     }
+  //   }
+  //   const selected = Array.isArray(values?.data_catalogue_ids) ? values.data_catalogue_ids : [];
+  //   for (const v of selected) {
+  //     const key = String(v);
+  //     if (!byId.has(key)) {
+  //       byId.set(key, key);
+  //     }
+  //   }
+  //   return Array.from(byId, ([value, label]) => ({ value, label }));
+  // }, [catalogues, values?.data_catalogue_ids]);
 
   const freqOptions = useMemo(() => {
     const list = Array.isArray(frequencies) ? frequencies : [];
@@ -209,7 +209,10 @@ export default function MetadataEdit() {
         setOrganizations(payload.organizations || []);
         setMetaValues(payload.metaValues || []);
         setMdvLatest(payload.mdvLatest || {});
-        setOldUploadFile(payload.rows.filter(row => row.meta_data_id === "3235261").attachment_name || null);
+        const formRow = (payload.rows || []).find(r => String(r.meta_data_id) === String(META_ID.FORM_NAME));
+        setOldUploadFile(formRow?.attachment_name || null);
+        // console.log("aaaaaaaaaaaaaaaa3", payload.rows.dynamicMn[META_ID.MEDEE_TURUL]);
+        console.log("aaaaaaaaaaaaaaaa3", payload);
         // setOldUploadFile2(payload.rows[0].file2 || null);
 
         const dynamicMn = {};
@@ -246,7 +249,7 @@ export default function MetadataEdit() {
           data_catalogue_ids: dcIds,
           // orgs are UUIDs now in new page; here coerce to strings
           organizations: (payload.selectedOrganizationIds || []).map((x) => String(x)),
-          type: "",
+          type: header?.type ?? "",
         });
       } catch (e) {
         console.error(e);
@@ -285,13 +288,14 @@ export default function MetadataEdit() {
     try {
       let imageUrl = '';
       let imageUrl2 = '';
+      let newName = uploadFile?.name || null;
       if (uploadFile) {
         imageUrl = await uploadImage(uploadFile);
       }
 
-      if (uploadFile2) {
-        imageUrl2 = await uploadImage(uploadFile2);
-      }
+      // if (uploadFile2) {
+      //   imageUrl2 = await uploadImage(uploadFile2);
+      // }
 
       const dynMn = values.dynamicMn || {};
       const dynEn = values.dynamicEn || {};
@@ -303,7 +307,7 @@ export default function MetadataEdit() {
         valueen: encodeVal(dynEn[k]),
       }));
       // return;
-      await axios.put(`/api/metadata-questionnaire/admin/${id}`, {
+      const payload = {
         id,
         namemn: values.namemn,
         nameen: values.nameen,
@@ -312,11 +316,16 @@ export default function MetadataEdit() {
         isSecure: !!values.isSecure,
         organizations: Array.isArray(values.organizations) ? values.organizations : [],
         metaValues: metaValuesPayload,
-        file: uploadFile?.File?.name || null,
-        file2: uploadFile2?.File?.name || null,
+        file: imageUrl,
+        // file2: imageUrl2,
+        originalUploadFile: newName || null,
         oldUploadFile: oldUploadFile || null,
-        oldUploadFile2: oldUploadFile2 || null,
-      });
+        // oldUploadFile2: oldUploadFile2 || null,
+      }
+      // console.log("payload", payload);
+      // message.success("Амжилттай хадгаллаа-TEST");
+      // return;
+      await axios.put(`/api/metadata-questionnaire/admin/${id}`, payload);
 
       message.success("Амжилттай хадгаллаа");
       // router.push("/admin/metadata-questionnaire");
@@ -371,8 +380,7 @@ export default function MetadataEdit() {
 
         <div className="mb-4">
           <label className="block mb-2 font-bold">Төрөл</label>
-          {console.log("values.type", values)}
-          <select name="type" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.MEDEE_TURUL] || ""} onChange={handleInputChange}>
+          <select name="type" className="block w-full border border-gray-300 rounded p-2" value={values.type || ""} onChange={handleInputChange}>
             <option value="">Сонгоно уу</option>
             <option value="indicator">Мэдээ</option>
             <option value="survey">Судалгаа</option>
@@ -403,7 +411,6 @@ export default function MetadataEdit() {
         </div>
         <div className="mb-6">
           <label className="inline-flex items-center gap-2">
-            {console.log("activeTab2", !!values.isSecure)}
             <input type="checkbox" name="isSecure" checked={!!values.isSecure} onChange={handleInputChange} />
             <span>Нууцлалтай эсэх</span>
           </label>
@@ -442,6 +449,7 @@ export default function MetadataEdit() {
                     </div>
                   </div>
                 </div>
+                <span className="text-sm text-gray-500 ml-2">Одоогийн файлын нэр: {oldUploadFile}</span>
               </div>
             </div>
             <div className="mb-4">

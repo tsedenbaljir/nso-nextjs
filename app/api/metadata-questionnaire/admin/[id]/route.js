@@ -142,7 +142,7 @@ export async function GET(req, { params }) {
           data_catalogue_ids: dcIdsStr,
           data_catalogue_names_mn: null,
           data_catalogue_names_en: null,
-          type: qp?.type ?? null,
+          type: qp?.type ?? "indicator",
           labelmn: qp?.labelmn ?? "",
           labelen: qp?.labelen ?? "",
           namemn: null,
@@ -240,17 +240,17 @@ export async function PUT(req, { params }) {
     const {
       namemn,
       nameen,
-      type,
+      type = "indicator",
       active,
       isSecure,
       organizations = [],
       metaValues = [],
       file,
-      file2,
+      // file2,
       originalUploadFile,
-      originalUploadFile2,
+      // originalUploadFile2,
       oldUploadFile,
-      oldUploadFile2,
+      // oldUploadFile2,
     } = body;
 
     const normalizeJoined = (val) => {
@@ -292,10 +292,10 @@ export async function PUT(req, { params }) {
         if (!attachmentName) return;
 
         // if (language === "mn" && oldAttachmentName) {
-        await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
-          attachment_name: attachmentName,
+        await trx("metadata_value_attachment").update({
           original_name: originalName,
-        });
+          attachment_name: attachmentName,
+        }).where({ attachment_name: oldAttachmentName, created_by: actor });
         // } 
         // else {
         //   await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
@@ -378,7 +378,11 @@ export async function PUT(req, { params }) {
             last_modified_by: actor,
             last_modified_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           })
-          .where({ questionnaire_id: id, meta_data_id: metaId, active: 1 })
+          // .where({ questionnaire_id: id, meta_data_id: metaId, active: 1 })
+          .where(function () {
+            this.where({ questionnaire_id: id }).orWhere({ questionpool_id: id });
+          })
+          .andWhere({ meta_data_id: metaId, active: 1 })
           .whereNull("deleted");
 
         const [{ nextId }] = await trx("meta_data_value").select(
@@ -396,7 +400,7 @@ export async function PUT(req, { params }) {
           questionnaire_code: null,
           questionnaire_id: id,
           status: null,
-          type: type ?? null,
+          type: type ?? "indicator",
           valuemn: newMn,
           valueen: newEn,
           classification_code_id: null,

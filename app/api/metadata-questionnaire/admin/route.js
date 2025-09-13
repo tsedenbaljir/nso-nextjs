@@ -89,7 +89,7 @@ export async function POST(req) {
     const {
       namemn,
       nameen,
-      type,
+      type = "indicator",
       active,
       isSecure,
       organizations = [],
@@ -98,9 +98,9 @@ export async function POST(req) {
       last_modified_by = auth.user.name || "anonymousUser",
       metaValues = [],
       file,
-      file2,
+      // file2,
       originalUploadFile,
-      originalUploadFile2,
+      // originalUploadFile2,
     } = body;
 
     const normalizeJoined = (val) => {
@@ -222,7 +222,7 @@ export async function POST(req) {
           questionnaire_code: null,
           questionnaire_id: newId,
           status: null,
-          // type: type ?? null, // column not present in meta_data_value
+          type: type ?? "indicator",
           valuemn: newMn,
           valueen: newEn,
           classification_code_id: null,
