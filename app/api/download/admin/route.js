@@ -186,9 +186,11 @@ export async function PUT(req) {
             new Date(data.published_date).toISOString().slice(0, 19).replace('T', ' ') : 
             currentDate;
 
-        // Parse file_info JSON if provided
+        // If a new file is provided, construct file_info. Otherwise we will not touch file_info/file_size.
+        let shouldUpdateFileFields = false;
         let fileInfo = null;
         if (data.file_url) {
+            shouldUpdateFileFields = true;
             fileInfo = JSON.stringify({
                 originalName: data.file_url.split('/').pop() || data.file_url,
                 pathName: data.file_url,
@@ -202,29 +204,24 @@ export async function PUT(req) {
             });
         }
 
-        // Update the download item
-        const result = await db.raw(`
-            UPDATE [NSOweb].[dbo].[web_1212_download] 
-            SET name = ?,
-                language = ?,
-                file_type = ?,
-                file_info = ?,
-                file_size = ?,
-                views = ?,
-                published = ?,
-                published_date = ?,
-                list_order = ?,
-                last_modified_by = ?,
-                last_modified_date = ?,
-                info = ?,
-                data_viz_id = ?
-            WHERE id = ?
-        `, [
+        // Build dynamic update to preserve file_info/file_size when no new file uploaded
+        const setClauses = [
+            'name = ?',
+            'language = ?',
+            'file_type = ?',
+            'views = ?',
+            'published = ?',
+            'published_date = ?',
+            'list_order = ?',
+            'last_modified_by = ?',
+            'last_modified_date = ?',
+            'info = ?',
+            'data_viz_id = ?'
+        ];
+        const params = [
             data.name,
             data.language,
             data.file_type,
-            fileInfo,
-            data.file_size || 0,
             data.views || 0,
             data.published !== undefined ? data.published : 1,
             publishedDate,
@@ -232,9 +229,22 @@ export async function PUT(req) {
             data.last_modified_by || 'admin',
             currentDate,
             data.info || data.name,
-            data.data_viz_id || null,
-            data.id
-        ]);
+            data.data_viz_id || null
+        ];
+
+        if (shouldUpdateFileFields) {
+            setClauses.splice(3, 0, 'file_info = ?', 'file_size = ?');
+            params.splice(3, 0, fileInfo, data.file_size || 0);
+        }
+
+        const updateSql = `
+            UPDATE [NSOweb].[dbo].[web_1212_download]
+            SET ${setClauses.join(', ')}
+            WHERE id = ?
+        `;
+        params.push(data.id);
+
+        const result = await db.raw(updateSql, params);
 
         if (result.affectedRows === 0) {
             return NextResponse.json({

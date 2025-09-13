@@ -394,13 +394,24 @@ export default function ReportAdmin({ params: { lng } }) {
     const handleEditSubmit = async (values) => {
         setEditLoading(true);
         try {
-            let fileUrl = editingItem.file_url;
-            let fileInfo = null;
+            let payload = {
+                id: editingItem.id,
+                name: values.name,
+                language: values.language,
+                file_type: values.file_type,
+                info: values.info,
+                published: values.published,
+                published_date: values.published_date ? values.published_date.toDate().toISOString() : undefined,
+                last_modified_by: 'admin'
+            };
 
             if (editUploadedFile) {
                 try {
-                    fileUrl = await uploadFile(editUploadedFile);
-                    fileInfo = createFileInfo(editUploadedFile, fileUrl);
+                    const fileUrl = await uploadFile(editUploadedFile);
+                    const fileInfo = createFileInfo(editUploadedFile, fileUrl);
+                    payload.file_url = fileUrl;
+                    payload.file_info = JSON.stringify(fileInfo);
+                    payload.file_size = editUploadedFile.size;
                 } catch (error) {
                     message.error('Файл хуулахад алдаа гарлаа!');
                     setEditLoading(false);
@@ -413,19 +424,7 @@ export default function ReportAdmin({ params: { lng } }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    id: editingItem.id,
-                    name: values.name,
-                    language: values.language,
-                    file_type: values.file_type,
-                    info: values.info,
-                    file_url: fileUrl,
-                    file_info: fileInfo ? JSON.stringify(fileInfo) : null,
-                    file_size: editUploadedFile ? editUploadedFile.size : editingItem.file_size,
-                    published: values.published,
-                    published_date: values.published_date ? values.published_date.toDate().toISOString() : undefined,
-                    last_modified_by: 'admin'
-                }),
+                body: JSON.stringify(payload),
             });
 
             const result = await response.json();
