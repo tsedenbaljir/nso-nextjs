@@ -22,7 +22,7 @@ export default function SideBar({ lng }) {
     useEffect(() => {
         setMenuItems([
             {
-                label: t('statCate.methodologyText'),
+                label: t('statCate.methodologyTextHead'),
                 id: 'group',
                 items: [
                     {

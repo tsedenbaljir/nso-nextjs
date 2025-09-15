@@ -513,11 +513,13 @@ export default function MetadataEdit() {
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Статистик ажиглалтын төрөл</label>
-              <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicMn[META_ID.SAMPLE_TYPE] || ""} onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SAMPLE_TYPE, e.target.value)}>
+              <select className="block w-full border border-gray-300 rounded p-2" 
+              value={values.dynamicMn[META_ID.SAMPLE_TYPE] || ""} 
+              onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SAMPLE_TYPE, e.target.value)}>
                 <option value="">Сонгоно уу</option>
-                <option value="sample">Түүвэр ажиглалт</option>
-                <option value="sample2">Түүвэр ажиглалт-2</option>
-                <option value="complete">Нэлэнхүй ажиглалт</option>
+                <option value="70851">Түүвэр ажиглалт</option>
+                <option value="70854">Түүвэр ажиглалт-2</option>
+                <option value="8784217">Нэлэнхүй ажиглалт</option>
               </select>
             </div>
             <div className="mb-4">
@@ -650,6 +652,14 @@ export default function MetadataEdit() {
               <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SHIFR] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SHIFR, e.target.value)} />
             </div>
             <div className="mb-4">
+              <label className="block mb-2 font-bold">Respondent organization</label>
+              <textarea rows={3} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.DEPT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DEPT, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2 font-bold">Partner organization</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.PARTNER_ORG] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.PARTNER_ORG, e.target.value)} />
+            </div>
+            <div className="mb-4">
               <label className="block mb-2 font-bold">Form confirmed date</label>
               <input
                 type="date"
@@ -671,7 +681,7 @@ export default function MetadataEdit() {
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.INFORMANT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.INFORMANT, e.target.value)} />
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block mb-2 font-bold">Observation period</label>
               <Select
                 mode="multiple"
@@ -685,17 +695,17 @@ export default function MetadataEdit() {
                 optionFilterProp="label"
                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
               />
-            </div>
+            </div> */}
             <div className="mb-4">
               <label className="block mb-2 font-bold">Sampling procedure</label>
               <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SAMPLE_TYPE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SAMPLE_TYPE, e.target.value)}>
                 <option value="">Select</option>
-                <option value="sample">Sample survey</option>
-                <option value="sample2">Sample survey 2</option>
-                <option value="complete">Complete enumeration</option>
+                <option value="70851">Sample survey</option>
+                <option value="70854">Sample survey 2</option>
+                <option value="8784217">Complete enumeration</option>
               </select>
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block mb-2 font-bold">Frequency</label>
               <Select
                 mode="multiple"
@@ -709,7 +719,7 @@ export default function MetadataEdit() {
                 optionFilterProp="label"
                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
               />
-            </div>
+            </div> */}
 
             <div className="mb-4">
               <label className="block mb-2 font-bold">Collection mode</label>

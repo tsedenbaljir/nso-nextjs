@@ -584,6 +584,14 @@ export default function MetadataNew() {
               <input className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SHIFR] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SHIFR, e.target.value)} />
             </div>
             <div className="mb-4">
+              <label className="block mb-2 font-bold">Respondent organization</label>
+              <textarea rows={3} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.DEPT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.DEPT, e.target.value)} />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2 font-bold">Partner organization</label>
+              <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.PARTNER_ORG] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.PARTNER_ORG, e.target.value)} />
+            </div>
+            <div className="mb-4">
               <label className="block mb-2 font-bold">Form confirmed date</label>
               <input type="date" className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.FORM_CONFIRMED_DATE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.FORM_CONFIRMED_DATE, e.target.value)} />
             </div>
@@ -600,7 +608,7 @@ export default function MetadataNew() {
               <textarea rows={2} className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.INFORMANT] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.INFORMANT, e.target.value)} />
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block mb-2 font-bold">Observation period</label>
               <Select
                 mode="multiple"
@@ -614,7 +622,7 @@ export default function MetadataNew() {
                 optionFilterProp="label"
                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
               />
-            </div>
+            </div> */}
             <div className="mb-4">
               <label className="block mb-2 font-bold">Sampling procedure</label>
               <select className="block w-full border border-gray-300 rounded p-2" value={values.dynamicEn[META_ID.SAMPLE_TYPE] || ""} onChange={(e) => handleDynamicChange('dynamicEn', META_ID.SAMPLE_TYPE, e.target.value)}>
@@ -624,7 +632,7 @@ export default function MetadataNew() {
                 <option value="complete">Complete enumeration</option>
               </select>
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block mb-2 font-bold">Frequency</label>
               <Select
                 mode="multiple"
@@ -638,7 +646,7 @@ export default function MetadataNew() {
                 optionFilterProp="label"
                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
               />
-            </div>
+            </div> */}
 
             <div className="mb-4">
               <label className="block mb-2 font-bold">Collection mode</label>
