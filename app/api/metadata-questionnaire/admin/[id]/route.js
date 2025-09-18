@@ -295,7 +295,9 @@ export async function PUT(req, { params }) {
         await trx("metadata_value_attachment").update({
           original_name: originalName,
           attachment_name: attachmentName,
-        }).where({ attachment_name: oldAttachmentName, created_by: actor });
+          created_by: actor
+        }).where({ attachment_name: oldAttachmentName });
+
         // } 
         // else {
         //   await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
