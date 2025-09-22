@@ -29,6 +29,16 @@ export default function Main({ sector, subsector, lng }) {
         fetchSubcategories();
     }, [sector, subsector, lng]);
 
+    const incrementViews = async (id) => {
+        try {
+            await fetch('/api/download', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+        } catch (_) { /* ignore */ }
+    };
+
     return (
         <div className="bg-white">
             <DataTable
@@ -58,6 +68,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {
+                            incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
                                 window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
@@ -120,6 +131,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {
+                            incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
                                 window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");

@@ -70,3 +70,34 @@ export async function GET(req) {
         }, { status: 500 });
     }
 }
+
+export async function PUT(req) {
+    try {
+        const body = await req.json();
+        const { id } = body || {};
+
+        if (!id) {
+            return NextResponse.json({
+                status: false,
+                message: 'id is required'
+            }, { status: 400 });
+        }
+
+        await db.raw(`
+            UPDATE [NSOweb].[dbo].[web_1212_methodology]
+            SET views = COALESCE(CAST(views AS INT), 0) + 1
+            WHERE id = ?
+        `, [id]);
+
+        return NextResponse.json({
+            status: true,
+            message: 'Views incremented'
+        });
+    } catch (error) {
+        console.error('Error updating download views:', error);
+        return NextResponse.json({
+            status: false,
+            message: 'Failed to update views: ' + error.message
+        }, { status: 500 });
+    }
+}

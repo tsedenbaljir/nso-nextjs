@@ -12,6 +12,16 @@ export default function Methodology() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const incrementViews = async (id) => {
+            try {
+                await fetch('/api/download', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+            } catch (_) { /* ignore */ }
+        };
+        incrementViews(methodologyId);
         const fetchMethodology = async () => {
             try {
                 const response = await fetch("/api/methodology/listDetail", {
