@@ -18,8 +18,7 @@ export default function MetadataAdmin() {
     setLoading(true);
     try {
       const res = await axios.get(
-        `/api/metadata-questionnaire/admin?page=${
-          pg - 1
+        `/api/metadata-questionnaire/admin?page=${pg - 1
         }&pageSize=${ps}&q=${encodeURIComponent(q)}`
       );
       setData(res.data?.data || []);
@@ -36,10 +35,6 @@ export default function MetadataAdmin() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const handleAdd = () => {
-    window.location.href = "/admin/metadata-questionnaire/new";
-  };
 
   const handleSearch = (value) => {
     setSearchText(value);
@@ -73,11 +68,32 @@ export default function MetadataAdmin() {
       { title: "ID", dataIndex: "id", width: 80 },
       { title: "Нэр (MN)", dataIndex: "name" },
       { title: "Нэр (EN)", dataIndex: "name_eng" },
-      { title: "Хувилбар", dataIndex: "version" },
-      { title: "Үүсгэсэн огноо", dataIndex: "created_date" },
-      { title: "Өөрчилсөн огноо", dataIndex: "last_modified_date", width: 200 },
-      { title: "Идэвхтэй эсэх", dataIndex: "active" },
+      // { title: "Хувилбар", dataIndex: "version" },
+      {
+        title: "Үүсгэсэн огноо", dataIndex: "created_date",
+        render: (_, record) => (
+          <span className='whitespace-nowrap'>{record?.created_date?.substring(0, 10)}</span>
+        ),
+      },
+      {
+        title: "Өөрчилсөн огноо", dataIndex: "last_modified_date", width: 200,
+        render: (_, record) => (
+          <span className='whitespace-nowrap'>{record?.last_modified_date?.substring(0, 10)}</span>
+        ),
+      },
+      {
+        title: "Идэвхтэй эсэх", dataIndex: "active",
+        render: (_, record) => (
+          <span className={`whitespace-nowrap ${record?.active.toString() === "1" ? "bg-green-500 text-white" : "bg-red-500 text-white"} px-2 py-1 rounded-md`}>{record?.active.toString() === "1" ? "Идэвхтэй" : "Идэвхгүй"}</span>
+        ),
+      },
       { title: "Өөрчилсөн хэрэглэгч", dataIndex: "last_modified_by" },
+      {
+        title: "Нээлттэй эсэх", dataIndex: "is_secret",
+        render: (_, record) => (
+          <span className={`whitespace-nowrap ${record?.is_secret.toString() === "1" ? "bg-gray-500 text-white" : "bg-blue-500 text-white"} px-2 py-1 rounded-md`}>{record?.is_secret.toString() === "1" ? "Хаалттай" : "Нээлттэй"}</span>
+        ),
+      },
       {
         title: "Үйлдэл",
         width: 200,
@@ -95,8 +111,8 @@ export default function MetadataAdmin() {
   );
 
   return (
-    <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-      <div className="mb-4 flex justify-between items-center">
+    <div className="max-w-screen">
+      <div className="mb-4 flex justify-between items-center p-5">
         <h2 className="text-lg font-medium">Мэдээ, тооллого, судалгаа - Мета өгөгдөл</h2>
         <div className="flex gap-2">
           <Search

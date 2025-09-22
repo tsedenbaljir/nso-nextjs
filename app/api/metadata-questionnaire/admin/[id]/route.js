@@ -37,6 +37,37 @@ async function tryView(query, id) {
   }
 }
 
+async function tryProcMdvAdmin(id) {
+  try {
+    const res = await db.raw('EXEC [dbo].[sp_meta_data_value_admin] @id = ?', [id]);
+    const arr = Array.isArray(res) ? res : res?.[0]?.recordset || res?.recordset || [];
+    const rows = Array.isArray(arr) ? arr : [];
+    // Normalize to expected shape similar to vw_meta_data_value_admin
+    return rows.map((r) => ({
+      id: r.id,
+      meta_data_id: r.meta_data_id,
+      labelmn: r.labelmn ?? r.label ?? '',
+      labelen: r.labelen ?? r.label_en ?? '',
+      namemn: r.namemn,
+      nameen: r.nameen,
+      attachment_name: r.attachment_name,
+      data_catalogue_ids: r.data_catalogue_ids ?? r.data_catalogue_id ?? '',
+      data_catalogue_names_mn: r.data_catalogue_names_mn ?? r.data_catalogue_mn ?? null,
+      data_catalogue_names_en: r.data_catalogue_names_en ?? r.data_catalogue_en ?? null,
+      valuemn: r.valuemn,
+      valueen: r.valueen,
+      last_modified_date: r.last_modified_date,
+      is_secret: r.is_secret,
+      active: r.active,
+      organization_id: r.organization_id ?? null,
+      organization_name: r.organization_name ?? null,
+      organization_fullname: r.organization_fullname ?? null,
+    }));
+  } catch (_) {
+    return [];
+  }
+}
+
 // ==================== GET ====================
 export async function GET(req, { params }) {
   const { id } = params;
@@ -74,20 +105,7 @@ export async function GET(req, { params }) {
     let rows = await tryView(Q1, qpOrQnrId);
 
     if (!rows.length) {
-      const Q2 = `
-        SELECT [id], [meta_data_id], [label] AS [labelmn], [label_en] AS [labelen],
-          [namemn], [nameen], [attachment_name],
-          [data_catalogue_id] AS data_catalogue_ids,
-          [data_catalogue_mn] AS data_catalogue_names_mn,
-          [data_catalogue_en] AS data_catalogue_names_en,
-          [valuemn], [valueen], [last_modified_date], [is_secret], [active],
-          CAST(NULL AS INT) AS [organization_id],
-          CAST(NULL AS NVARCHAR(200)) AS [organization_name],
-          CAST(NULL AS NVARCHAR(400)) AS [organization_fullname]
-        FROM [NSOweb].[dbo].[vw_meta_data_value_admin]
-        WHERE [id] = ?;
-      `;
-      rows = await tryView(Q2, qpOrQnrId);
+      rows = await tryProcMdvAdmin(qpOrQnrId);
     }
 
     if (!rows.length) {
@@ -100,20 +118,7 @@ export async function GET(req, { params }) {
       if (link?.questionpool_id) {
         rows = await tryView(Q1, String(link.questionpool_id));
         if (!rows.length) {
-          const Q2b = `
-            SELECT [id], [meta_data_id], [label] AS [labelmn], [label_en] AS [labelen],
-              [namemn], [nameen], [attachment_name],
-              [data_catalogue_id] AS data_catalogue_ids,
-              [data_catalogue_mn] AS data_catalogue_names_mn,   -- ✅ Зөв бичвэр
-              [data_catalogue_en] AS data_catalogue_names_en,
-              [valuemn], [valueen], [last_modified_date], [is_secret], [active],
-              CAST(NULL AS INT) AS [organization_id],
-              CAST(NULL AS NVARCHAR(200)) AS [organization_name],
-              CAST(NULL AS NVARCHAR(400)) AS [organization_fullname]
-            FROM [NSOweb].[dbo].[vw_meta_data_value_admin]
-            WHERE [id] = ?;
-          `;
-          rows = await tryView(Q2b, String(link.questionpool_id));
+          rows = await tryProcMdvAdmin(String(link.questionpool_id));
         }
       }
     }
@@ -174,7 +179,7 @@ export async function GET(req, { params }) {
     );
 
     let organizations = await db("organizations").select("id", { organization_id: "id" }, "name", "fullname");
-
+    console.log("organizations----------------->", organizations);
     // const orgMap = new Map((organizations || []).map((o) => [Number(o.organization_id ?? o.id), o]));
     // for (const r of rows) {
     //   if (r.organization_id != null) {

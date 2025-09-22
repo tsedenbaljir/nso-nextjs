@@ -13,14 +13,10 @@ export const metadata = {
   description: 'Мэдээллийг удирдах самбар',
 }
 
-export default function RootLayout({ children, params }) {
+export default function AdminLayoutWrapper({ children, params }) {
   return (
-    <html lang={(params && params.lng) ? params.lng : 'mn'}>
-      <body>
-        <AdminLayout>
-          {children}
-        </AdminLayout>
-      </body>
-    </html>
+    <AdminLayout>
+      {children}
+    </AdminLayout>
   )
 }

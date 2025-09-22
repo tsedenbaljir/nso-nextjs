@@ -76,7 +76,6 @@ const toDateInputValue = (v) => {
 };
 
 export default function MetadataEdit() {
-  const router = useRouter();
   const params = useParams();
   const id = params?.id;
 
@@ -88,10 +87,10 @@ export default function MetadataEdit() {
   const [rows, setRows] = useState([]);
   const [mdvLatest, setMdvLatest] = useState({});
   const [uploadFile, setUploadFile] = useState(null);
-  const [uploadFile2, setUploadFile2] = useState(null);
+  // const [uploadFile2, setUploadFile2] = useState(null);
 
   const [oldUploadFile, setOldUploadFile] = useState(null);
-  const [oldUploadFile2, setOldUploadFile2] = useState(null);
+  // const [oldUploadFile2, setOldUploadFile2] = useState(null);
 
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -109,7 +108,7 @@ export default function MetadataEdit() {
   });
   const [activeTab, setActiveTab] = useState("mn");
 
-  const getSelectedValues = (e) => Array.from(e.target.selectedOptions).map((o) => o.value);
+  // const getSelectedValues = (e) => Array.from(e.target.selectedOptions).map((o) => o.value);
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setValues((prev) => ({ ...prev, [name]: type === "checkbox" ? !!checked : value }));
@@ -139,6 +138,7 @@ export default function MetadataEdit() {
       }
       return acc;
     }, []);
+
   }, [organizations]);
 
   // const catalogueOptions = useMemo(() => {
@@ -212,7 +212,7 @@ export default function MetadataEdit() {
         const formRow = (payload.rows || []).find(r => String(r.meta_data_id) === String(META_ID.FORM_NAME));
         setOldUploadFile(formRow?.attachment_name || null);
         // console.log("aaaaaaaaaaaaaaaa3", payload.rows.dynamicMn[META_ID.MEDEE_TURUL]);
-        console.log("aaaaaaaaaaaaaaaa3", payload);
+        // console.log("aaaaaaaaaaaaaaaa3", payload);
         // setOldUploadFile2(payload.rows[0].file2 || null);
 
         const dynamicMn = {};
@@ -238,7 +238,6 @@ export default function MetadataEdit() {
           .filter(Boolean)
           .map((x) => (isNaN(Number(x)) ? x : Number(x)));
 
-        const selectedOrgIds = (payload.selectedOrganizationIds || []).map((n) => Number(n));
         setValues({
           namemn: labelMn,
           nameen: labelEn,
@@ -247,8 +246,9 @@ export default function MetadataEdit() {
           active: active,
           isSecure: isSecure,
           data_catalogue_ids: dcIds,
-          // orgs are UUIDs now in new page; here coerce to strings
-          organizations: (payload.selectedOrganizationIds || []).map((x) => String(x)),
+          organizations: header.organization_id && typeof header.organization_id === 'string'
+            ? header.organization_id.split(',').map(id => id.trim()).filter(id => id)
+            : [],
           type: header?.type ?? "",
         });
       } catch (e) {
@@ -314,7 +314,7 @@ export default function MetadataEdit() {
         type: values.type,
         active: !!values.active,
         isSecure: !!values.isSecure,
-        organizations: Array.isArray(values.organizations) ? values.organizations : [],
+        organizations: values.organizations,
         metaValues: metaValuesPayload,
         file: imageUrl,
         // file2: imageUrl2,
@@ -377,7 +377,7 @@ export default function MetadataEdit() {
           <label className="block mb-2 font-bold">Нэр (EN)</label>
           <input name="nameen" className="block w-full border border-gray-300 rounded p-2" value={values.nameen} onChange={handleInputChange} />
         </div>
-
+        {/* 
         <div className="mb-4">
           <label className="block mb-2 font-bold">Төрөл</label>
           <select name="type" className="block w-full border border-gray-300 rounded p-2" value={values.type || ""} onChange={handleInputChange}>
@@ -385,7 +385,7 @@ export default function MetadataEdit() {
             <option value="indicator">Мэдээ</option>
             <option value="survey">Судалгаа</option>
           </select>
-        </div>
+        </div> */}
 
         <div className="mb-4">
           <label className="block mb-2 font-bold">Төрийн байгууллага</label>
@@ -395,7 +395,7 @@ export default function MetadataEdit() {
             showSearch
             style={{ width: '100%' }}
             placeholder="Сонгоно уу"
-            value={(values.organizations || []).map(String)}
+            value={Array.isArray(values.organizations) ? values.organizations : []}
             onChange={(arr) => handleMultiSelectChange("organizations", arr, false)}
             options={orgOptions.map(o => ({ value: String(o.value), label: o.label }))}
             optionFilterProp="label"
@@ -513,9 +513,9 @@ export default function MetadataEdit() {
             </div>
             <div className="mb-4">
               <label className="block mb-2 font-bold">Статистик ажиглалтын төрөл</label>
-              <select className="block w-full border border-gray-300 rounded p-2" 
-              value={values.dynamicMn[META_ID.SAMPLE_TYPE] || ""} 
-              onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SAMPLE_TYPE, e.target.value)}>
+              <select className="block w-full border border-gray-300 rounded p-2"
+                value={values.dynamicMn[META_ID.SAMPLE_TYPE] || ""}
+                onChange={(e) => handleDynamicChange('dynamicMn', META_ID.SAMPLE_TYPE, e.target.value)}>
                 <option value="">Сонгоно уу</option>
                 <option value="70851">Түүвэр ажиглалт</option>
                 <option value="70854">Түүвэр ажиглалт-2</option>

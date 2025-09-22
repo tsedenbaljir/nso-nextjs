@@ -1,6 +1,4 @@
 import "./globals.scss";
-import Providers from "@/utils/providers/providers";
-
 export const metadata = {
   title: "ҮСХ - Үндэсний статистикийн хороо",
   description: "Үндэсний статистикийн хороо – Монгол Улсын албан ёсны статистик мэдээллийн нэгдсэн сан. Эдийн засаг, хүн ам, нийгэм, байгаль орчны статистик мэдээ, тайлан, дата.",
@@ -59,10 +57,6 @@ export const metadata = {
   }
 };
 
-export default function RootLayout({ children }) {
-  return (
-    <Providers>
-      {children}
-    </Providers>
-  );
+export default function LanguageLayout({ children }) {
+  return children;
 }

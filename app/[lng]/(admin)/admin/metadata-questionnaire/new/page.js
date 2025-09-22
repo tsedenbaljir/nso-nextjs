@@ -315,7 +315,7 @@ export default function MetadataNew() {
           />
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block mb-2 font-bold">Төрөл</label>
           <select
             name="type"
@@ -327,7 +327,7 @@ export default function MetadataNew() {
             <option value="indicator">Мэдээ</option>
             <option value="survey">Судалгаа</option>
           </select>
-        </div>
+        </div> */}
 
         <div className="mb-4">
           <label className="block mb-2 font-bold">Төрийн байгууллага</label>
@@ -337,7 +337,6 @@ export default function MetadataNew() {
             showSearch
             style={{ width: '100%' }}
             placeholder="Сонгоно уу"
-            // value={(values.organizations || []).map(String)}
             onChange={(arr) => handleMultiSelectChange("organizations", arr, false)}
             options={orgOptions.map(o => ({ value: String(o.value), label: o.label }))}
             optionFilterProp="label"
