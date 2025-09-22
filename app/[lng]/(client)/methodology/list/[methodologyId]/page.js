@@ -14,7 +14,7 @@ export default function Methodology() {
     useEffect(() => {
         const incrementViews = async (id) => {
             try {
-                await fetch('/api/download', {
+                await fetch('/api/methodology/list', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id })
