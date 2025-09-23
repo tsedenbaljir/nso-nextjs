@@ -17,19 +17,24 @@ export default function Table({ sector, subsector, lng }) {
     const [loading, setLoading] = useState(true);
 
     // Fetch subtables for non-px items
-    const subFetch = async (rowLink) => {
-        const res = await fetch(`/api/sectortablename/subtable?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}&subtables=${decodeURIComponent(rowLink)}&lng=${lng}`, {
-            cache: "no-store",
-        });
-        const response = await res.json();
-        return response.data.map((item, index) => ({
-            id: index + 1,
-            link: item.id,
-            name: stripAfterLastBy(item.text),
-            date: item.updated,
-            category: item.type === "t" ? "Текст" : "Бусад",
-        }));
-    };
+	const subFetch = async (rowLink) => {
+		try {
+			const res = await fetch(`/api/sectortablename/subtable?sector=${decodeURIComponent(sector)}&subsector=${decodeURIComponent(subsector)}&subtables=${decodeURIComponent(rowLink)}&lng=${lng}`, {
+				cache: "no-store",
+			});
+			const response = await res.json();
+			return response.data.map((item, index) => ({
+				id: index + 1,
+				link: item.id,
+				name: stripAfterLastBy(item.text),
+				date: item.updated,
+				category: item.type === "t" ? "Текст" : "Бусад",
+			}));
+		} catch (error) {
+			console.error("Failed to fetch subtables for:", rowLink, error);
+			return [];
+		}
+	};
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,21 +44,28 @@ export default function Table({ sector, subsector, lng }) {
                 });
                 const response = await res.json();
 
-                // Fetch subtables for non-px items
-                const formattedData = await Promise.all(
-                    response.data.map(async (item, index) => {
-                        const isPx = item.id.includes(".px");
-                        const sub = !isPx ? await subFetch(item?.id) : null;
-                        return {
-                            id: index + 1,
-                            link: item?.id,
-                            name: stripAfterLastBy(item?.text),
-                            date: item?.updated,
-                            sub,
-                            category: item?.type === "t" ? "Текст" : "Бусад",
-                        };
-                    })
-                );
+				// Fetch subtables for non-px items, but continue even if some fail
+				const formattedData = await Promise.all(
+					response.data.map(async (item, index) => {
+						let sub = null;
+						try {
+							const isPx = item.id.includes(".px");
+							sub = !isPx ? await subFetch(item?.id) : null;
+						} catch (error) {
+							console.error("Sub-fetch failed for:", item?.id, error);
+							sub = null;
+						}
+
+						return {
+							id: index + 1,
+							link: item?.id,
+							name: stripAfterLastBy(item?.text),
+							date: item?.updated,
+							sub,
+							category: item?.type === "t" ? "Текст" : "Бусад",
+						};
+					})
+				);
 
                 setData(formattedData);
             } catch (err) {
