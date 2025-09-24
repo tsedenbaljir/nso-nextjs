@@ -60,8 +60,8 @@ const Dashboard = () => {
 
             // Create file_info object with metadata
             const fileInfo = {
-                originalName: file.name,
-                pathName: data.filename,
+                originalName: data.filename,
+                pathName: data.url || file.name,
                 fileSize: file.size,
                 extension: file.name.split('.').pop().toLowerCase(),
                 mediaType: file.type,
