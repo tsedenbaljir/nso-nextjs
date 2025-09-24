@@ -259,7 +259,7 @@ export async function PUT(req, { params }) {
 
     await db.transaction(async (trx) => {
       const metaValuesArr = Array.isArray(metaValues) ? [...metaValues] : [];
-      
+
       // Merge duplicate meta entries by meta_data_id so we write exactly one row per meta
       const mergedByMeta = new Map();
       for (const m of metaValuesArr) {
@@ -287,18 +287,19 @@ export async function PUT(req, { params }) {
           created_by: actor
         }).where({ attachment_name: oldAttachmentName });
 
-        const [{ nextId }] = await trx("metadata_value_attachment").select(
-          trx.raw("ISNULL(MAX(CAST(id AS BIGINT)), 0) + 1 AS nextId")
-        );
-
-        mergedMetaValues.push({
-          meta_data_id: 3235261,
-          valuemn: nextId,
-          valueen: "",
-        });
-
         // If no rows were updated (meaning no existing record found), insert a new one
         if (updateResult === 0 || updateResult === undefined) {
+
+          const [{ nextId }] = await trx("metadata_value_attachment").select(
+            trx.raw("ISNULL(MAX(CAST(id AS BIGINT)), 0) + 1 AS nextId")
+          );
+
+          mergedMetaValues.push({
+            meta_data_id: 3235261,
+            valuemn: nextId,
+            valueen: "",
+          });
+
           await trx("metadata_value_attachment").insert({
             id: String(nextId),
             attachment_name: attachmentName,
