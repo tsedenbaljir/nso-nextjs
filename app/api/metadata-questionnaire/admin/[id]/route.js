@@ -179,7 +179,6 @@ export async function GET(req, { params }) {
     );
 
     let organizations = await db("organizations").select("id", { organization_id: "id" }, "name", "fullname");
-    console.log("organizations----------------->", organizations);
     // const orgMap = new Map((organizations || []).map((o) => [Number(o.organization_id ?? o.id), o]));
     // for (const r of rows) {
     //   if (r.organization_id != null) {
@@ -238,7 +237,7 @@ export async function PUT(req, { params }) {
   if (!auth.isAuthenticated) {
     return NextResponse.json({ status: false, message: auth.error }, { status: 401 });
   }
-  const actor = auth.user?.name || "anonymousUser";
+  const actor = auth?.user?.name || "anonymousUser";
 
   try {
     const body = await req.json();
@@ -258,25 +257,9 @@ export async function PUT(req, { params }) {
       // oldUploadFile2,
     } = body;
 
-    const normalizeJoined = (val) => {
-      if (val == null) return "";
-      const s = String(val).trim();
-      if (!s.includes(",")) return s;
-      const set = new Set(
-        s
-          .split(",")
-          .map((x) => x.trim())
-          .filter(Boolean)
-      );
-      return Array.from(set)
-        .sort((a, b) => (a > b ? 1 : a < b ? -1 : 0))
-        .join(",");
-    };
-
-    const toNN = (s) => (s == null ? "" : String(s).trim());
-
     await db.transaction(async (trx) => {
       const metaValuesArr = Array.isArray(metaValues) ? [...metaValues] : [];
+      
       // Merge duplicate meta entries by meta_data_id so we write exactly one row per meta
       const mergedByMeta = new Map();
       for (const m of metaValuesArr) {
@@ -284,14 +267,15 @@ export async function PUT(req, { params }) {
         const key = Number(m.meta_data_id);
         if (!Number.isFinite(key)) continue;
         const prev = mergedByMeta.get(key) || { meta_data_id: key, valuemn: "", valueen: "" };
-        const mn = toNN(m.valuemn);
-        const en = toNN(m.valueen);
+        // const mn = toNN(m.valuemn);
+        // const en = toNN(m.valueen);
+        const mn = m.valuemn;
+        const en = m.valueen;
         if (mn) prev.valuemn = mn;
         if (en) prev.valueen = en;
         mergedByMeta.set(key, prev);
       }
       const mergedMetaValues = Array.from(mergedByMeta.values());
-
       // Insert attachment records if provided
       const insertAttachment = async (attachmentName, originalName, language, oldAttachmentName) => {
         if (!attachmentName) return;
@@ -303,13 +287,25 @@ export async function PUT(req, { params }) {
           created_by: actor
         }).where({ attachment_name: oldAttachmentName });
 
+        const [{ nextId }] = await trx("metadata_value_attachment").select(
+          trx.raw("ISNULL(MAX(CAST(id AS BIGINT)), 0) + 1 AS nextId")
+        );
+
+        mergedMetaValues.push({
+          meta_data_id: 3235261,
+          valuemn: nextId,
+          valueen: "",
+        });
+
         // If no rows were updated (meaning no existing record found), insert a new one
         if (updateResult === 0 || updateResult === undefined) {
           await trx("metadata_value_attachment").insert({
+            id: String(nextId),
             attachment_name: attachmentName,
             original_name: originalName,
             created_by: actor,
-            created_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+            created_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+            meta_data_id: 3235261,
           });
         }
       };
@@ -363,21 +359,12 @@ export async function PUT(req, { params }) {
       for (const m of mergedMetaValues) {
         if (!m?.meta_data_id) continue;
         const metaId = Number(m.meta_data_id);
+        let newMn = m.valuemn;
+        let newEn = m.valueen;
 
-        let newMn = toNN(m.valuemn);
-        let newEn = toNN(m.valueen);
-
-        if (newMn && newMn.includes(",")) newMn = normalizeJoined(newMn);
-        if (newEn && newEn.includes(",")) newEn = normalizeJoined(newEn);
-
-        const old = curMap.get(metaId);
-        const oldMn = old?.valuemn == null ? "" : String(old.valuemn).trim();
-        const oldEn = old?.valueen == null ? "" : String(old.valueen).trim();
-        const oldMnN = oldMn && oldMn.includes(",") ? normalizeJoined(oldMn) : oldMn;
-        const oldEnN = oldEn && oldEn.includes(",") ? normalizeJoined(oldEn) : oldEn;
-
-        const changed = newMn !== oldMnN || newEn !== oldEnN;
-        if (!changed) continue;
+        const old = m;
+        const oldMn = old?.valuemn == null ? "" : old.valuemn;
+        const oldEn = old?.valueen == null ? "" : old.valueen;
 
         // хуучныг идэвхгүй/устгасан тэмдэглэлтэй болгоно (view-ээс давхцахгүй)
         await trx("meta_data_value")

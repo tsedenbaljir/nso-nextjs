@@ -84,7 +84,7 @@ export default function MetadataNew() {
 
   const [activeTab, setActiveTab] = useState("mn");
 
-  const getSelectedValues = (e) => Array.from(e.target.selectedOptions).map((o) => o.value);
+  // const getSelectedValues = (e) => Array.from(e.target.selectedOptions).map((o) => o.value);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

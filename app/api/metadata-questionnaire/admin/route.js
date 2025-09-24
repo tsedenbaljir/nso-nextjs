@@ -94,8 +94,8 @@ export async function POST(req) {
       isSecure,
       organizations = [],
       data_catalogue_ids = [],
-      user = auth.user.name || "anonymousUser",
-      last_modified_by = auth.user.name || "anonymousUser",
+      user = auth?.user?.name || "anonymousUser",
+      last_modified_by = auth?.user?.name || "anonymousUser",
       metaValues = [],
       file,
       // file2,
@@ -155,7 +155,7 @@ export async function POST(req) {
           attachment_id: null,
           attachment_name: String(attachmentName),
           original_name: String(originalName || attachmentName),
-          created_by: auth.user.name || "anonymousUser",
+          created_by: auth?.user?.name || "anonymousUser",
           created_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           meta_data_id: 3235261,
         });
@@ -181,9 +181,9 @@ export async function POST(req) {
         is_secret: typeof isSecure === "boolean" ? (isSecure ? 1 : 0) : 0,
         active: typeof active === "boolean" ? (active ? 1 : 0) : 1,
         organization_ids: orgCsv || null,
-        created_by: auth.user.name || "anonymousUser",
+        created_by: auth?.user?.name || "anonymousUser",
         created_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-        last_modified_by: auth.user.name || "anonymousUser",
+        last_modified_by: auth?.user?.name || "anonymousUser",
         last_modified_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
       });
 
@@ -202,10 +202,12 @@ export async function POST(req) {
       for (const m of metaValues || []) {
         if (!m?.meta_data_id) continue;
         const metaId = Number(m.meta_data_id);
-        let newMn = toNN(m.valuemn);
-        let newEn = toNN(m.valueen);
-        if (newMn && newMn.includes(",")) newMn = normalizeJoined(newMn);
-        if (newEn && newEn.includes(",")) newEn = normalizeJoined(newEn);
+        // let newMn = toNN(m.valuemn);
+        // let newEn = toNN(m.valueen);
+        let newMn = m.valuemn;
+        let newEn = m.valueen;
+        // if (newMn && newMn.includes(",")) newMn = normalizeJoined(newMn);
+        // if (newEn && newEn.includes(",")) newEn = normalizeJoined(newEn);
 
         const [{ nextId }] = await trx("meta_data_value").select(
           trx.raw("ISNULL(MAX(CAST(id AS BIGINT)), 0) + 1 AS nextId")
@@ -214,10 +216,10 @@ export async function POST(req) {
         const row = {
           id: String(nextId),
           active: 1,
-          created_by: auth.user.name || "anonymousUser",
+          created_by: auth?.user?.name || "anonymousUser",
           created_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           deleted: null,
-          last_modified_by: auth.user.name || "anonymousUser",
+          last_modified_by: auth?.user?.name || "anonymousUser",
           last_modified_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           questionnaire_code: null,
           questionnaire_id: newId,
