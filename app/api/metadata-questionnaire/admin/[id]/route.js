@@ -296,20 +296,22 @@ export async function PUT(req, { params }) {
       const insertAttachment = async (attachmentName, originalName, language, oldAttachmentName) => {
         if (!attachmentName) return;
 
-        // if (language === "mn" && oldAttachmentName) {
-        await trx("metadata_value_attachment").update({
+        // Try to update existing record first
+        const updateResult = await trx("metadata_value_attachment").update({
           original_name: originalName,
           attachment_name: attachmentName,
           created_by: actor
         }).where({ attachment_name: oldAttachmentName });
 
-        // } 
-        // else {
-        //   await trx("metadata_value_attachment").where({ attachment_name: oldAttachmentName, created_by: actor }).update({
-        //     attachment_name: attachmentName,
-        //     original_name: originalName,
-        //   });
-        // }
+        // If no rows were updated (meaning no existing record found), insert a new one
+        if (updateResult === 0 || updateResult === undefined) {
+          await trx("metadata_value_attachment").insert({
+            attachment_name: attachmentName,
+            original_name: originalName,
+            created_by: actor,
+            created_date: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss')
+          });
+        }
       };
 
       if (file) {
