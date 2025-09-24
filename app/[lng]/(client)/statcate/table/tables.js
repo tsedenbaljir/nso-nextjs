@@ -60,7 +60,8 @@ export default function Table({ sector, subsector, lng }) {
 						return {
 							id: index + 1,
 							link: item?.id,
-							name: stripAfterLastBy(item?.text),
+							name: item?.text,
+							// name: stripAfterLastBy(item?.text),
 							date: item?.updated,
 							sub,
 							category: item?.type === "t" ? "Текст" : "Бусад",
