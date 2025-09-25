@@ -91,7 +91,7 @@ export default function MetadataAdmin() {
       {
         title: "Нээлттэй эсэх", dataIndex: "is_secret",
         render: (_, record) => (
-          <span className={`whitespace-nowrap ${record?.is_secret.toString() === "1" ? "bg-gray-500 text-white" : "bg-blue-500 text-white"} px-2 py-1 rounded-md`}>{record?.is_secret.toString() === "1" ? "Хаалттай" : "Нээлттэй"}</span>
+          <span className={`whitespace-nowrap ${record?.is_secret.toString() === "1" ? "bg-gray-500 text-white" : "bg-blue-500 text-white"} px-2 py-1 rounded-md`}>{record?.is_secret.toString() === "1" ? "Нууцлалттай" : "Нууцлалгүй"}</span>
         ),
       },
       {
