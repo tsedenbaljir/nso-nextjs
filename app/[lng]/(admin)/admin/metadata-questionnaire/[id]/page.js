@@ -755,9 +755,10 @@ export default function MetadataEdit() {
                 showSearch
                 style={{ width: '100%' }}
                 placeholder="Select"
-                value={(values.dynamicEn[META_ID.CLASS_CODES] || []).map(String)}
+                value={(values.dynamicMn[META_ID.CLASS_CODES] || []).map(String)}
                 onChange={(arr) => handleDynamicChange('dynamicEn', META_ID.CLASS_CODES, (arr || []).map((v) => Number(v)))}
-                options={sectorOptions.map(o => ({ value: String(o.value), label: (o.label.split(' (')[1] ? o.label.split(' (')[1].replace(')', '') : o.label) }))}
+                options={sectorOptions.map(o => ({ value: String(o.value), label: o.label }))}
+                //options={sectorOptions.map(o => ({ value: String(o.value), label: (o.label.split(' (')[1] ? o.label.split(' (')[1].replace(')', '') : o.label) }))}
                 optionFilterProp="label"
                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
               />

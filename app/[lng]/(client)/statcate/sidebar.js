@@ -27,15 +27,18 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                 const response = await fetch(`/api/sectorname?lng=${lng}`);
                 const result = await response.json();
 
+                const data = result.data.filter(e=>e.id !== "Historical data");
+
+                // result.filter(e=>)
                 var convert = [];
                 
-                convert.push(result.data[6]);
-                convert.push(result.data[5]);
-                convert.push(result.data[2]);
-                convert.push(result.data[4]);
-                convert.push(result.data[7]);
-                convert.push(result.data[0]);
-                convert.push(result.data[1]);
+                convert.push(data[5]);
+                convert.push(data[2]);
+                convert.push(data[4]);
+                convert.push(data[3]);
+                convert.push(data[6]);
+                convert.push(data[0]);
+                convert.push(data[1]);
                 // convert.push(result.data[3]); //түүхэн статистик
 
                 if (!Array.isArray(convert)) {

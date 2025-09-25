@@ -91,6 +91,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
 
     return positionA - positionB; // Sort based on the predefined order
   });
+  
   if (!data && !loading) {
     return (
       <>
@@ -169,14 +170,10 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                   item.namemn === "Маягт" && item.attachment_name ? (
                     <>
                       <a href={`/uploads/${item.attachment_name}`} target="_blank" className="underline cursor-pointer w-1/3 text-left whitespace-pre-wrap text-blue-400 hover:text-blue-600">
-                        {item.namemn === "Маягт батлагдсан огноо" && item.valuemn && !isNaN(Date.parse(item.valuemn))
-                          ? new Date(item.valuemn).toISOString().split('T')[0]
-                          : item.valuemn ? item.valuemn : ""}
+                        {item.valuemn}
                       </a>
                       <a href={`/uploads/${item.attachment_name}`} target="_blank" className="underline cursor-pointer w-1/3 text-left whitespace-pre-wrap text-blue-400 hover:text-blue-600">
-                        {item.namemn === "Маягт батлагдсан огноо" && item.valueen && !isNaN(Date.parse(item.valueen))
-                          ? new Date(item.valueen).toISOString().split('T')[0]
-                          : item.valueen ? item.valueen : ""}
+                        {item.valueen}
                       </a>
                     </>
                   ) : item.namemn === "Мэдээ төрөл" ?
@@ -188,18 +185,21 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                         {item.valuemn === "survey" && "Судалгаа"}
                       </div>
                       <div className="w-1/3 text-left whitespace-pre-wrap">
-                        {item.valuemn}
+                        {item.valuemn === "official" && "Official statistics"}
+                        {item.valuemn === "administrative" && "Administrative"}
+                        {item.valuemn === "census" && "Census"}
+                        {item.valuemn === "survey" && "Survey"}
                       </div>
                     </>
                     : <>
                       <div className="w-1/3 text-left whitespace-pre-wrap">
-                        {item.namemn === "Маягт батлагдсан огноо" && item.valuemn && !isNaN(Date.parse(item.valuemn))
-                          ? new Date(item.valuemn).toISOString().split('T')[0]
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
+                          ? item.valuemn === "Invalid Date" ? "" : item.valuemn.substring(0, 10)
                           : item.valuemn ? item.valuemn : ""}
                       </div>
                       <div className="w-1/3 text-left whitespace-pre-wrap">
-                        {item.namemn === "Маягт батлагдсан огноо" && item.valueen && !isNaN(Date.parse(item.valueen))
-                          ? new Date(item.valueen).toISOString().split('T')[0]
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valueen
+                          ? item.valueen === "Invalid Date" ? "" : item.valueen.substring(0, 10)
                           : item.valueen ? item.valueen : ""}
                       </div>
                     </>
