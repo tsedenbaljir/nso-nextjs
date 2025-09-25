@@ -6,6 +6,7 @@ import InputItems from "@/components/admin/Edits/AddNew/InputItems"
 import SelectInput from "@/components/admin/Edits/Select/SelectInput"
 import Upload from "@/components/admin/Edits/UploadImages/Upload"
 import { Select, DatePicker } from 'antd';
+import dayjs from 'dayjs';
 
 export default function EditMethodology({ params: { lng, id } }) {
     const router = useRouter()
@@ -20,27 +21,31 @@ export default function EditMethodology({ params: { lng, id } }) {
     const [currentFileInfo, setCurrentFileInfo] = useState('')
     const [catalogue_val, setCatalogue_val] = useState([])
     const [user, setUser] = useState(null)
+    const [publishedDate, setPublishedDate] = useState();
 
     useEffect(() => {
-        fetchMethodology()
-        fetchData()
+        const loadData = async () => {
+            await fetchData()
+            await fetchMethodology()
+        }
+        loadData()
     }, [id])
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await fetch('/api/auth/user');
-                const data = await response.json();
-                if (data.status) {
-                    setUser(data.user);
-                }
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
+    // useEffect(() => {
+    //     const fetchUser = async () => {
+    //         try {
+    //             const response = await fetch('/api/auth/user');
+    //             const data = await response.json();
+    //             if (data.status) {
+    //                 setUser(data.user);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching user:', error);
+    //         }
+    //     };
 
-        fetchUser();
-    }, []);
+    //     fetchUser();
+    // }, []);
 
     const fetchData = async () => {
         // Fetch sector types
@@ -48,9 +53,8 @@ export default function EditMethodology({ params: { lng, id } }) {
             const response = await fetch('/api/subsectorlist');
             const sectors = await response.json();
             const allSubsectors = [];
-
             sectors.data.map((dt, index) => {
-                allSubsectors.push({ id: index + 1, name: dt.text, value: dt.id })
+                allSubsectors.push({ id: index + 1, name: dt.sector + " - " + dt.text, value: dt.id })
             })
             setTypes(allSubsectors)
         } catch (error) {
@@ -58,30 +62,45 @@ export default function EditMethodology({ params: { lng, id } }) {
         }
 
         // Fetch catalogue
-        try {
-            const response = await fetch('/api/data_catalogue');
-            const sectors = await response.json();
-            setCatalogue(sectors.data)
-        } catch (error) {
-            console.error('Error fetching catalogue:', error);
-        }
+        // try {
+        //     const response = await fetch('/api/data_catalogue');
+        //     const sectors = await response.json();
+        //     const catalogueData = sectors.data.map((item, index) => ({
+        //         id: index + 1,
+        //         name: item.namemn,
+        //         value: item.id
+        //     }));
+        //     setCatalogue(catalogueData)
+        // } catch (error) {
+        //     console.error('Error fetching catalogue:', error);
+        // }
     }
 
     const fetchMethodology = async () => {
         try {
             const response = await fetch(`/api/methodology/admin/${id}`)
             const data = await response.json()
+            console.log(data);
+
             if (data.status) {
                 const methodology = data.data
                 setTitle(methodology.name || '')
-                setNewsType(methodology.sector_type || 1)
+
+                // Find the sector type ID by matching the name
+                const sectorType = sector_types.find(type => type.name.includes(methodology.sector_type))
+                setNewsType(sectorType ? sectorType.id : 1)
+
                 setLanguage(methodology.language?.toLowerCase() || 'mn')
-                setPublished(methodology.published === 1)
+                setPublished(methodology.published)
                 setCurrentFileInfo(methodology.file_info || '')
-                
-                // Set catalogue value if exists
+                setPublishedDate(methodology.approved_date ? dayjs(methodology.approved_date) : null)
+
+                // Set catalogue value if exists - find by name
                 if (methodology.catalogue_id) {
-                    setCatalogue_val([methodology.catalogue_id])
+                    const catalogueItem = catalogue.find(item => item.name === methodology.catalogue_id)
+                    if (catalogueItem) {
+                        setCatalogue_val([catalogueItem.value])
+                    }
                 }
             }
             setLoading(false)
@@ -106,7 +125,7 @@ export default function EditMethodology({ params: { lng, id } }) {
             }
 
             const data = await response.json();
-            
+
             // Create file_info object with metadata
             const fileInfo = {
                 originalName: file.name,
@@ -119,7 +138,7 @@ export default function EditMethodology({ params: { lng, id } }) {
                 isPublic: true,
                 createdDate: new Date().toISOString()
             };
-            
+
             return JSON.stringify(fileInfo);
         } catch (error) {
             console.error('Error uploading file:', error);
@@ -149,7 +168,7 @@ export default function EditMethodology({ params: { lng, id } }) {
                 catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
                 sector_type: newsType,
                 file_info: fileInfo,
-                approved_date: published ? new Date().toISOString() : null
+                approved_date: publishedDate ? publishedDate.toISOString() : null
             };
 
             const response = await fetch(`/api/methodology/admin/${id}`, {
@@ -190,25 +209,31 @@ export default function EditMethodology({ params: { lng, id } }) {
                 <div className='flex flex-wrap gap-3 mb-4'>
                     <InputItems name={"Гарчиг"} data={title} setData={setTitle} />
                 </div>
-                <div className='flex flex-wrap gap-3 mb-4'>
+                {/* <div className='flex flex-wrap gap-3 mb-4'>
+                    <label>Дата каталоги</label>
                     <Select
                         style={{ width: '50%', height: 37 }}
-                        placeholder="Дата каталоги"
-                        value={catalogue_val.length > 0 ? catalogue_val[0] : undefined}
+                        placeholder="Сонгох"
+                        value={catalogue_val}
                         onChange={(value) => {
                             setCatalogue_val([value]);
                         }}
                         options={catalogue.map(item => ({
-                            label: item.namemn,
-                            value: item.id
+                            label: item.name,
+                            value: item.value
                         }))}
                     />
+                </div> */}
+                <div className='flex flex-wrap gap-3 mb-4'>
                     <SelectInput
                         label="Статистикийн ангилал"
+                        placeholder="Сонгох"
                         setFields={setNewsType}
                         value={newsType}
                         data={sector_types}
                     />
+                </div>
+                <div className='flex flex-wrap gap-3 mb-4'>
                     <SelectInput
                         label="Хэл"
                         setFields={(value) => setLanguage(value === 1 ? 'mn' : 'en')}
@@ -225,13 +250,21 @@ export default function EditMethodology({ params: { lng, id } }) {
                             setHeaderImageFile={setUploadedFile}
                         />
                     </div>
-                    <DatePicker className='mt-4' style={{ height: 50 }} />
+                    <DatePicker
+                        className='mt-4'
+                        value={publishedDate}
+                        onChange={(date) => setPublishedDate(date)}
+                        style={{ height: 50 }}
+                        placeholder="Огноо сонгох"
+                    />
                     <div className="flex items-center bg-gray-100 px-2 rounded-md mt-4" style={{ height: 50 }}>
                         <input
                             type="checkbox"
                             id="publishedCheckbox"
                             checked={published}
-                            onChange={(e) => setPublished(e.target.checked)}
+                            onChange={(e) => {
+                                setPublished(e.target.checked)
+                            }}
                             className="mr-2"
                         />
                         <label htmlFor="publishedCheckbox">Нийтлэх</label>

@@ -4,21 +4,23 @@ import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
 import Upload from "@/components/admin/Edits/UploadImages/Upload";
 import { Select, DatePicker } from 'antd';
+import dayjs from 'dayjs';
 
 const Dashboard = () => {
     const [sector_types, setTypes] = useState([]);
     const [catalogue, setCatalogue] = useState([]);
-    const [catalogue_val, setCatalogue_val] = useState([]);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [title, setTitle] = useState('');
     const [newsType, setNewsType] = useState(1);
     const [language, setLanguage] = useState('mn');
     const [published, setPublished] = useState(true);
+    const [publishedDate, setPublishedDate] = useState(dayjs());
+    const [catalogue_val, setCatalogue_val] = useState([]);
 
     useEffect(() => {
 
         async function data() {
-            const response = await fetch('/api/subsectorlist');
+            const response = await fetch('https://www.nso.mn/api/subsectorlist');
             const sectors = await response.json();
             const allSubsectors = [];
             sectors.data.map((dt, index) => {
@@ -29,7 +31,7 @@ const Dashboard = () => {
         data();
 
         async function data_catalogue() {
-            const response = await fetch('/api/data_catalogue');
+            const response = await fetch('https://www.nso.mn/api/data_catalogue');
             const sectors = await response.json();
             // Transform data to match SelectInput format
             const catalogueData = sectors.data.map((item, index) => ({
@@ -39,7 +41,7 @@ const Dashboard = () => {
             }));
             setCatalogue(catalogueData)
         }
-        data_catalogue();
+        // data_catalogue();
     }, []);
 
     const uploadFile = async (file) => {
@@ -93,12 +95,12 @@ const Dashboard = () => {
                 language: language.toUpperCase(),
                 published: published ? 1 : 0,
                 // sector_type: catalogue[catalogue_val - 1].value || null,
-                catalogue_id: sector_types[newsType - 1].value || null,
-                sector_type: sector_types[newsType - 1].value || null,
+                catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
+                sector_type: sector_types[newsType - 1]?.value || null,
                 file_info: fileInfo,
-                created_date: currentDate,
-                last_modified_date: currentDate,
-                approved_date: published ? currentDate : null,
+                created_date: publishedDate ? publishedDate.toISOString() : null,
+                last_modified_date: publishedDate ? publishedDate.toISOString() : null,
+                approved_date: published && publishedDate ? publishedDate.toISOString() : null,
                 views: 0,
                 list_order: 0
             };
@@ -118,7 +120,7 @@ const Dashboard = () => {
             }
 
             alert('Аргачлал амжилттай нэмэгдлээ');
-
+            window.href="/admin/methodology"
         } catch (error) {
             console.error('Error posting data:', error);
             alert('Алдаа гарлаа: ' + error.message);
@@ -142,16 +144,25 @@ const Dashboard = () => {
                 <div className='flex flex-wrap gap-3 mb-4'>
                     <InputItems name={"Гарчиг"} data={title} setData={setTitle} />
                 </div>
-                <div className='flex flex-wrap gap-3 mb-4'>
-                    <SelectInput
-                        label="Дата каталоги"
-                        setFields={setCatalogue_val}
-                        data={catalogue}
+                {/* <div className='flex flex-wrap gap-3 mb-4'>
+                    <label>Дата каталоги</label>
+                    <Select
+                        style={{ width: '50%', height: 37 }}
+                        placeholder="Сонгох"
+                        // value={catalogue_val.length > 0 ? catalogue_val[0] : undefined}
+                        onChange={(value) => {
+                            setCatalogue_val([value]);
+                        }}
+                        options={catalogue.map(item => ({
+                            label: item.name,
+                            value: item.value
+                        }))}
                     />
-                </div>
+                </div> */}
                 <div className='flex flex-wrap gap-3 mb-4'>
                     <SelectInput
                         label="Статистикийн ангилал"
+                        placeholder="Сонгох"
                         setFields={setNewsType}
                         data={sector_types}
                     />
@@ -170,13 +181,21 @@ const Dashboard = () => {
                             setHeaderImageFile={setUploadedFile}
                         />
                     </div>
-                    <DatePicker className='mt-4' style={{ height: 50 }} />
+                    <DatePicker 
+                        className='mt-4' 
+                        value={publishedDate} 
+                        onChange={(date) => setPublishedDate(date)} 
+                        style={{ height: 50 }} 
+                        placeholder="Огноо сонгох"
+                    />
                     <div className="flex items-center bg-gray-100 px-2 rounded-md mt-4" style={{ height: 50 }}>
                         <input
                             type="checkbox"
                             id="publishedCheckbox"
                             checked={published}
-                            onChange={(e) => setPublished(e.target.checked)}
+                            onChange={(e) => {
+                                setPublished(e.target.checked)
+                            }}
                             className="mr-2"
                         />
                         <label htmlFor="publishedCheckbox">Нийтлэх</label>

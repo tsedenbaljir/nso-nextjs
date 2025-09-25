@@ -54,8 +54,8 @@ export async function POST(req) {
         const articleData = {
             id: parseInt(nextId.nextId) + 1 || 1,
             ...body,
-            created_by: auth.user.name,
-            last_modified_by: auth.user.name
+            created_by: auth?.user?.name || "admin",
+            last_modified_by: auth?.user?.name || "admin"
         };
 
         const result = await db('web_1212_methodology').insert(articleData);
