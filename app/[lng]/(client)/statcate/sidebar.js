@@ -26,20 +26,18 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                 // Fetch main Sectors
                 const response = await fetch(`/api/sectorname?lng=${lng}`);
                 const result = await response.json();
+                // const data = result.data;
 
-                const data = result.data.filter(e=>e.id !== "Historical data");
-
-                // result.filter(e=>)
                 var convert = [];
-                
-                convert.push(data[5]);
-                convert.push(data[2]);
-                convert.push(data[4]);
-                convert.push(data[3]);
-                convert.push(data[6]);
-                convert.push(data[0]);
-                convert.push(data[1]);
-                // convert.push(result.data[3]); //түүхэн статистик
+
+                convert.push(result.data.filter(e=>e.id === "Population, household"));
+                convert.push(result.data.filter(e=>e.id === "Society, development"));
+                convert.push(result.data.filter(e=>e.id === "Labour, business"));
+                convert.push(result.data.filter(e=>e.id === "Industry, service"));
+                convert.push(result.data.filter(e=>e.id === "Economy, environment"));
+                convert.push(result.data.filter(e=>e.id === "Education, health"));
+                convert.push(result.data.filter(e=>e.id === "Regional development"));
+                convert.push(result.data.filter(e=>e.id === "Historical data")); //түүхэн статистик
 
                 if (!Array.isArray(convert)) {
                     setError("Unexpected API response format. Check console.");
