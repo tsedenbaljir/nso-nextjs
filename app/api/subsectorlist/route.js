@@ -92,7 +92,7 @@ export async function GET(req) {
     }
     const allSubsectors = [];
     console.log(categories);
-    for (const sector of categories.filter(sector => sector.text !== "Түүхэн Статистик")) {
+    for (const sector of categories) {
       const subs = await getSubsectors(sector.id);
       allSubsectors.push(...subs.map(sub => ({ ...sub, sector: sector.text })));
     }

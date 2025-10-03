@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from 'next/link';
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useRouter } from "next/navigation";
-import Image from 'next/image';
 
 export default function Main({ sector, subsector, lng }) {
 
