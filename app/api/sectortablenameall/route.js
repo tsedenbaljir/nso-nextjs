@@ -215,7 +215,7 @@ export async function GET(req) {
             return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
         }
         const allTables = [];
-        for (const sector of categories) {
+        for (const sector of categories.filter(e=>e.id !== "Historical data")) {
             const tables = await getTables(sector.id);
             allTables.push(...tables);
         }
