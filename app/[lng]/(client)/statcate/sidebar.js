@@ -30,14 +30,14 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
 
                 var convert = [];
 
-                convert.push(result.data.filter(e=>e.id === "Population, household"));
-                convert.push(result.data.filter(e=>e.id === "Society, development"));
-                convert.push(result.data.filter(e=>e.id === "Labour, business"));
-                convert.push(result.data.filter(e=>e.id === "Industry, service"));
-                convert.push(result.data.filter(e=>e.id === "Economy, environment"));
-                convert.push(result.data.filter(e=>e.id === "Education, health"));
-                convert.push(result.data.filter(e=>e.id === "Regional development"));
-                convert.push(result.data.filter(e=>e.id === "Historical data")); //түүхэн статистик
+                convert.push(result.data.filter(e=>e.id === "Population, household")[0]);
+                convert.push(result.data.filter(e=>e.id === "Society, development")[0]);
+                convert.push(result.data.filter(e=>e.id === "Labour, business")[0]);
+                convert.push(result.data.filter(e=>e.id === "Industry, service")[0]);
+                convert.push(result.data.filter(e=>e.id === "Economy, environment")[0]);
+                convert.push(result.data.filter(e=>e.id === "Education, health")[0]);
+                convert.push(result.data.filter(e=>e.id === "Regional development")[0]);
+                convert.push(result.data.filter(e=>e.id === "Historical data")[0]); //түүхэн статистик
 
                 if (!Array.isArray(convert)) {
                     setError("Unexpected API response format. Check console.");
