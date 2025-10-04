@@ -50,9 +50,7 @@ export default function MetadataEdit() {
       setLoading(true);
       try {
         const [detailRes] = await axios.get(`/api/metadata/admin/${id}`)
-        console.log("detailRes", detailRes);
         const row = detailRes.data?.data;
-        console.log("row", row);
 
         if (row) {
           form.setFieldsValue({

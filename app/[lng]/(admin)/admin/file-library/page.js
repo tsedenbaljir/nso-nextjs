@@ -804,7 +804,6 @@ export default function FileLibraryAdmin() {
                                     maxCount={1}
                                     accept="*/*"
                                     onChange={(values) => {
-                                        console.log("values========>", values);
                                         setFilesChangeValues(values);
                                     }}
                                 >

@@ -12,16 +12,16 @@ export default function Statecate({ children, params }) {
     const searchParams = useSearchParams();
     const subtables = searchParams.get('subtables');
     const [name, setName] = useState(null);
+    const [sectorName, setSectorName] = useState(null);
     const [title, setTitle] = useState('');
     const { t } = useTranslation(lng, "lng", "");
 
     useEffect(() => {
-        const fetchSubcategories = async (categoryId) => {
+        const fetchMainSector = async (sector) => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/sectorname?lng=${lng}`);
                 const result = await response.json();
-                setName(result.data.filter(e => e.id === decodeURIComponent(pathname.split('/')[5])));
-
+                setSectorName(result.data.filter(e => e.id === decodeURIComponent(sector)));
                 if (!Array.isArray(result.data)) {
                     return [];
                 }
@@ -29,11 +29,22 @@ export default function Statecate({ children, params }) {
                 return [];
             }
         };
-        const categoryId = pathname.split('/')[4];
-        if (categoryId) {
-            fetchSubcategories(categoryId);
-        }
+        const fetchSubsector = async (categoryId) => {
+            try {
+                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
+                const result = await response.json();
+                setName(result.data.filter(e => e.id === decodeURIComponent(pathname.split('/')[5])));
+                if (!Array.isArray(result.data)) {
+                    return [];
+                }
+            } catch (error) {
+                return [];
+            }
+        };
+        const subsector = pathname.split('/')[4];
 
+        fetchMainSector(subsector);
+        fetchSubsector(subsector);
     }, [pathname]);
 
 
@@ -72,6 +83,7 @@ export default function Statecate({ children, params }) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
+        { label: sectorName ? <div className='text-nowrap'>{sectorName[0]?.text}</div> : <LoadingDiv /> },
         { label: name ? <div className='text-nowrap'>{name[0]?.text.split('_')[1] ? name[0]?.text.split('_')[1] : name[0]?.text}</div> : <LoadingDiv /> }
     ] : pathname.includes('statcate/table-view/') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },

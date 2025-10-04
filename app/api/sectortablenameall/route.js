@@ -66,7 +66,7 @@ const getTables = async (sectorId) => {
                 if (tablesResponse.ok) {
                     const tablesData = await tablesResponse.text();
                     const tables = JSON.parse(tablesData);
-                    
+
                     if (Array.isArray(tables)) {
                         // For each table, fetch its subtables and add context
                         for (const table of tables) {
@@ -142,44 +142,44 @@ export async function GET(req) {
                 data: tables
             });
         }
+        //---------------------------------------------------------------
+        // Otherwise, return all sectors' tables
+        const API_URL = `${BASE_API_URL}/${lng}/NSO`;
 
-        // // Otherwise, return all sectors' tables
-        // const API_URL = `${BASE_API_URL}/${lng}/NSO`;
+        const myHeaders = new Headers();
+        myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
+        const requestOptions = {
+            method: "GET",
+            headers: myHeaders,
+            redirect: "follow"
+        };
 
-        // const myHeaders = new Headers();
-        // myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
-        // const requestOptions = {
-        //     method: "GET",
-        //     headers: myHeaders,
-        //     redirect: "follow"
-        // };
+        // Fetch categories from API
+        const response = await fetch(API_URL, {
+            ...requestOptions,
+            cache: 'no-store',
+            // Add SSL handling for development
+            dispatcher: insecure,
+        });
 
-        // // Fetch categories from API
-        // const response = await fetch(API_URL, {
-        //     ...requestOptions,
-        //     cache: 'no-store',
-        //     // Add SSL handling for development
-        //     dispatcher: insecure,
-        // });
+        const textData = await response.text();
 
-        // const textData = await response.text();
+        // Ensure JSON is valid by removing unexpected wrapping object
+        const validJson = textData;
+        const categories = JSON.parse(validJson);
 
-        // // Ensure JSON is valid by removing unexpected wrapping object
-        // const validJson = textData;
-        // const categories = JSON.parse(validJson);
+        if (!Array.isArray(categories)) {
+            return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
+        }
+        const allTables = [];
+        for (const sector of categories.filter(e => e.id !== "Historical data")) {
+            const tables = await getTables(sector.id);
+            allTables.push(...tables);
+        }
 
-        // if (!Array.isArray(categories)) {
-        //     return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
-        // }
-        // const allTables = [];
-        // for (const sector of categories.filter(e=>e.id !== "Historical data")) {
-        //     const tables = await getTables(sector.id);
-        //     allTables.push(...tables);
-        // }
-
-        // return NextResponse.json({
-        //     data: allTables
-        // }); // Send all tables with sector and subsector info
+        return NextResponse.json({
+            data: allTables
+        }); // Send all tables with sector and subsector info
     } catch (error) {
         console.error("API Fetch Error:", error);
         return NextResponse.json({ error: "Internal server error1." }, { status: 500 });

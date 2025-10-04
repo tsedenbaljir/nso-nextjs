@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { Agent } from "undici";
 
 const BASE_API_URL = process.env.BASE_API_URL; // Ensure environment variable is set
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+const insecure = new Agent({ connect: { rejectUnauthorized: false } });
 
 export async function GET(req) {
   try {
@@ -27,6 +30,7 @@ export async function GET(req) {
     const response = await fetch(API_URL, {
       ...requestOptions,
       cache: 'no-store',
+      dispatcher: insecure, // Add SSL bypass for self-signed certificates
     });
 
     const textData = await response.text();
