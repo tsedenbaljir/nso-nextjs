@@ -31,6 +31,13 @@ export default function EditMethodology({ params: { lng, id } }) {
         loadData()
     }, [id])
 
+    // Set newsType after sector_types is loaded
+    useEffect(() => {
+        if (sector_types.length > 0) {
+            fetchMethodology()
+        }
+    }, [sector_types])
+
     // useEffect(() => {
     //     const fetchUser = async () => {
     //         try {
@@ -80,15 +87,25 @@ export default function EditMethodology({ params: { lng, id } }) {
         try {
             const response = await fetch(`/api/methodology/admin/${id}`)
             const data = await response.json()
-            console.log(data);
 
             if (data.status) {
                 const methodology = data.data
                 setTitle(methodology.name || '')
 
-                // Find the sector type ID by matching the name
-                const sectorType = sector_types.find(type => type.name.includes(methodology.sector_type))
-                setNewsType(sectorType ? sectorType.id : 1)
+                // Find the sector type ID by matching the value (not name)
+                if (sector_types.length > 0) {
+                    const sectorType = sector_types.find(type => type.value === methodology.sector_type || type.id === methodology.sector_type)
+                    if (sectorType) {
+                        setNewsType(sectorType.id)
+                    } else {
+                        // If no match found, try to find by name as fallback
+                        const sectorTypeByName = sector_types.find(type => 
+                            type.name.includes(methodology.sector_type) || 
+                            methodology.sector_type?.includes(type.name.split(' - ')[0])
+                        )
+                        setNewsType(sectorTypeByName ? sectorTypeByName.id : 1)
+                    }
+                }
 
                 setLanguage(methodology.language?.toLowerCase() || 'mn')
                 setPublished(methodology.published)
@@ -161,13 +178,17 @@ export default function EditMethodology({ params: { lng, id } }) {
                 }
             }
 
+            // Find the actual sector type value to send
+            const selectedSectorType = sector_types.find(type => type.id === newsType);
+            const sectorTypeValue = selectedSectorType ? selectedSectorType.value : newsType;
+
             const methodologyData = {
                 name: title,
                 language: language.toUpperCase(),
                 published: published ? 1 : 0,
                 // catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
-                catalogue_id: newsType,
-                sector_type: newsType,
+                catalogue_id: sectorTypeValue,
+                sector_type: sectorTypeValue,
                 file_info: fileInfo,
                 approved_date: publishedDate ? publishedDate.toISOString() : null
             };
@@ -183,7 +204,7 @@ export default function EditMethodology({ params: { lng, id } }) {
             const data = await response.json();
             if (data.status) {
                 alert('Аргачлал амжилттай засварлагдлаа');
-                router.push('/admin/methodology');
+                router.push('/mn/admin/methodology');
             } else {
                 throw new Error(data.message || 'Update failed');
             }
@@ -233,8 +254,6 @@ export default function EditMethodology({ params: { lng, id } }) {
                         value={newsType}
                         data={sector_types}
                     />
-                </div>
-                <div className='flex flex-wrap gap-3 mb-4'>
                     <SelectInput
                         label="Хэл"
                         setFields={(value) => setLanguage(value === 1 ? 'mn' : 'en')}
@@ -274,7 +293,7 @@ export default function EditMethodology({ params: { lng, id } }) {
                 <div className='float-right pt-4'>
                     <button
                         type="button"
-                        onClick={() => router.push('/admin/methodology')}
+                        onClick={() => router.push('/mn/admin/methodology')}
                         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-md text-sm font-medium rounded-md text-black bg-gray hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         Буцах

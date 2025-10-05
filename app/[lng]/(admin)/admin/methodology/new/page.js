@@ -4,9 +4,11 @@ import InputItems from "@/components/admin/Edits/AddNew/InputItems";
 import SelectInput from "@/components/admin/Edits/Select/SelectInput";
 import Upload from "@/components/admin/Edits/UploadImages/Upload";
 import { Select, DatePicker } from 'antd';
+import { useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
 
 const Dashboard = () => {
+    const router = useRouter();
     const [sector_types, setTypes] = useState([]);
     // const [catalogue, setCatalogue] = useState([]);
     const [uploadedFile, setUploadedFile] = useState(null);
@@ -121,7 +123,7 @@ const Dashboard = () => {
             }
 
             alert('Аргачлал амжилттай нэмэгдлээ');
-            window.href="/admin/methodology"
+            router.push('/mn/admin/methodology');
         } catch (error) {
             console.error('Error posting data:', error);
             alert('Алдаа гарлаа: ' + error.message);
