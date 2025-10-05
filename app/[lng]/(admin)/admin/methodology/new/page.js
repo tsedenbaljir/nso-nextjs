@@ -8,14 +8,14 @@ import dayjs from 'dayjs';
 
 const Dashboard = () => {
     const [sector_types, setTypes] = useState([]);
-    const [catalogue, setCatalogue] = useState([]);
+    // const [catalogue, setCatalogue] = useState([]);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [title, setTitle] = useState('');
     const [newsType, setNewsType] = useState(1);
     const [language, setLanguage] = useState('mn');
     const [published, setPublished] = useState(true);
     const [publishedDate, setPublishedDate] = useState(dayjs());
-    const [catalogue_val, setCatalogue_val] = useState([]);
+    // const [catalogue_val, setCatalogue_val] = useState([]);
 
     useEffect(() => {
 
@@ -30,17 +30,17 @@ const Dashboard = () => {
         }
         data();
 
-        async function data_catalogue() {
-            const response = await fetch('https://www.nso.mn/api/data_catalogue');
-            const sectors = await response.json();
-            // Transform data to match SelectInput format
-            const catalogueData = sectors.data.map((item, index) => ({
-                id: index + 1,
-                name: item.namemn,
-                value: item.id
-            }));
-            setCatalogue(catalogueData)
-        }
+        // async function data_catalogue() {
+        //     const response = await fetch('https://www.nso.mn/api/data_catalogue');
+        //     const sectors = await response.json();
+        //     // Transform data to match SelectInput format
+        //     const catalogueData = sectors.data.map((item, index) => ({
+        //         id: index + 1,
+        //         name: item.namemn,
+        //         value: item.id
+        //     }));
+        //     setCatalogue(catalogueData)
+        // }
         // data_catalogue();
     }, []);
 
@@ -89,13 +89,14 @@ const Dashboard = () => {
                 fileInfo = await uploadFile(uploadedFile);
             }
 
-            const currentDate = new Date().toISOString();
+            // const currentDate = new Date().toISOString();
             const methodologyData = {
                 name: title,
                 language: language.toUpperCase(),
                 published: published ? 1 : 0,
                 // sector_type: catalogue[catalogue_val - 1].value || null,
-                catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
+                // catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
+                catalogue_id: sector_types[newsType - 1]?.value || null,
                 sector_type: sector_types[newsType - 1]?.value || null,
                 file_info: fileInfo,
                 created_date: publishedDate ? publishedDate.toISOString() : null,

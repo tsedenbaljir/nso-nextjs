@@ -165,7 +165,8 @@ export default function EditMethodology({ params: { lng, id } }) {
                 name: title,
                 language: language.toUpperCase(),
                 published: published ? 1 : 0,
-                catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
+                // catalogue_id: catalogue_val.length > 0 ? catalogue_val[0] : null,
+                catalogue_id: newsType,
                 sector_type: newsType,
                 file_info: fileInfo,
                 approved_date: publishedDate ? publishedDate.toISOString() : null
