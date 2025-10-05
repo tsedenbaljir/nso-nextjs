@@ -35,10 +35,10 @@ export default function AllNews({ params: { lng } }) {
                 cache: 'no-store'
             });
             const sectors = await response.json();
-            const allSubsectors = [];
+            const allSubsectors = {};
 
             for (const sector of sectors.data) {
-                allSubsectors[sector.id] = sector.text;
+                allSubsectors[sector.id] = sector.sector + " - " + sector.text;
             }
             setTypes(allSubsectors)
         }
@@ -104,7 +104,12 @@ export default function AllNews({ params: { lng } }) {
     }
 
     const dataNewsType = (rowData) => {
-        return sector_types[rowData.catalogue_id] || rowData.catalogue_id;
+        // Check if sector_types is loaded and has the mapping
+        if (sector_types && Object.keys(sector_types).length > 0) {
+            return sector_types[rowData.sector_type] || `ID: ${rowData.sector_type}`;
+        }
+        // Fallback while loading
+        return rowData.sector_type || 'Ачаалж байна...';
     };
 
     // Add this template for the index column
@@ -238,8 +243,9 @@ export default function AllNews({ params: { lng } }) {
                     )}
                 />
                 <Column
-                    field="catalogue_id"
-                    header="Төрөл"
+                    field="sector_type"
+                    header="Статистикийн ангилал"
+                    style={{ maxWidth: '200px', whiteSpace: 'normal' }}
                     body={dataNewsType}
                 />
                 <Column
