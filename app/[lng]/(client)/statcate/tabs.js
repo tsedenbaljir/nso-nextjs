@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import TablesData from "./table/tables";
 import MainIndicator from "./indicator/main";
@@ -12,35 +12,87 @@ import LoadingDiv from '@/components/Loading/OneField/Index';
 export default function Tabs({ lng, tabs, sector, subsector }) {
     const router = useRouter();
 
-    // Function to determine the active tab index
-    const getTabIndex = (tabs) => {
-        switch (tabs) {
-            case "table": return 0;
-            case "indicator": return 1;
-            case "report": return 2;
-            case "methodology": return 3;
-            case "qualityreport": return 4;
-            default: return 0; // Default to "table"
-        }
-    };
-
-    // Function to get the tab name from the index
-    const getIndexTab = (index) => {
-        switch (index) {
-            case 0: return "table";
-            case 1: return "indicator";
-            case 2: return "report";
-            case 3: return "methodology";
-            case 4: return "qualityreport";
-            default: return "table"; // Default to "table"
-        }
-    };
-
     // Set initial active tab
-    const [activeIndex, setActiveIndex] = useState(getTabIndex(tabs));
     const [name, setName] = useState(null);
+    
+    // Track which tabs have data
+    const [hasIndicatorData, setHasIndicatorData] = useState(false);
+    const [hasReportData, setHasReportData] = useState(false);
+    const [hasMethodologyData, setHasMethodologyData] = useState(false);
+    const [hasQualityReportData, setHasQualityReportData] = useState(false);
+    const [isCheckingData, setIsCheckingData] = useState(true);
+
+    // Build available tabs based on data
+    const availableTabs = useMemo(() => {
+        const tabs = [{ name: "table", index: 0 }];
+        let currentIndex = 1;
+        
+        if (hasIndicatorData) {
+            tabs.push({ name: "indicator", index: currentIndex++ });
+        }
+        if (hasReportData) {
+            tabs.push({ name: "report", index: currentIndex++ });
+        }
+        if (hasMethodologyData) {
+            tabs.push({ name: "methodology", index: currentIndex++ });
+        }
+        if (hasQualityReportData) {
+            tabs.push({ name: "qualityreport", index: currentIndex++ });
+        }
+        
+        return tabs;
+    }, [hasIndicatorData, hasReportData, hasMethodologyData, hasQualityReportData]);
+
+    // Get tab index based on tab name
+    const getTabIndex = (tabName) => {
+        const tab = availableTabs.find(t => t.name === tabName);
+        return tab ? tab.index : 0;
+    };
+
+    // Get tab name from index
+    const getIndexTab = (index) => {
+        const tab = availableTabs.find(t => t.index === index);
+        return tab ? tab.name : "table";
+    };
+
+    const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
+        setActiveIndex(getTabIndex(tabs));
+    }, [tabs, availableTabs]);
+
+    useEffect(() => {
+        const checkDataAvailability = async () => {
+            setIsCheckingData(true);
+            
+            try {
+                // Check Indicator data
+                const indicatorResponse = await fetch(`/api/catalogue?list_id=${subsector}`);
+                const indicatorResult = await indicatorResponse.json();
+                setHasIndicatorData(!!(indicatorResult?.data?.info || indicatorResult?.data?.info_eng || indicatorResult?.data?.tableau));
+
+                // Check Report data
+                const reportResponse = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=report`);
+                const reportResult = await reportResponse.json();
+                setHasReportData(Array.isArray(reportResult?.data) && reportResult.data.length > 0);
+
+                // Check Methodology data
+                const methodologyResponse = await fetch(`/api/methodology/list?catalogue_id=${subsector}&lng=${lng}`);
+                const methodologyResult = await methodologyResponse.json();
+                setHasMethodologyData(Array.isArray(methodologyResult?.data) && methodologyResult.data.length > 0);
+
+                // Check Quality Report data
+                const qualityReportResponse = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=reportSector`);
+                const qualityReportResult = await qualityReportResponse.json();
+                setHasQualityReportData(Array.isArray(qualityReportResult?.data) && qualityReportResult.data.length > 0);
+
+            } catch (error) {
+                console.error("Error checking data availability:", error);
+            } finally {
+                setIsCheckingData(false);
+            }
+        };
+
         // Fetch subcategories
         const fetchSubcategories = async (categoryId) => {
             try {
@@ -55,9 +107,11 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 return [];
             }
         };
+        
         fetchSubcategories(decodeURIComponent(sector));
+        checkDataAvailability();
 
-    }, [sector, subsector]);
+    }, [sector, subsector, lng]);
 
     if (decodeURIComponent(sector) === "Historical data" && tabs === "report") {
         return <div id="stat_cate" className="nso_cate_body pl-0">
@@ -104,30 +158,38 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 }}
             >
 
-                {/* ✅ Хүснэгт Tab */}
+                {/* ✅ Хүснэгт Tab - Always visible */}
                 <TabPanel header={lng === "mn" ? "Хүснэгт" : "Table"}>
                     <TablesData sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                 </TabPanel>
 
-                {/* ✅ Танилцуулга */}
-                <TabPanel header={lng === "mn" ? "Танилцуулга" : "Introduction"}>
-                    <MainIndicator sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
-                </TabPanel>
+                {/* ✅ Танилцуулга - Show only if has data */}
+                {hasIndicatorData && (
+                    <TabPanel header={lng === "mn" ? "Танилцуулга" : "Introduction"}>
+                        <MainIndicator sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    </TabPanel>
+                )}
 
-                {/* ✅ Тайлан */}
-                <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
-                    <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
-                </TabPanel>
+                {/* ✅ Тайлан - Show only if has data */}
+                {hasReportData && (
+                    <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
+                        <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    </TabPanel>
+                )}
 
-                {/* ✅ Аргачлал */}
-                <TabPanel header={lng === "mn" ? "Аргачлал" : "Methodology"}>
-                    <Methodology sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
-                </TabPanel>
+                {/* ✅ Аргачлал - Show only if has data */}
+                {hasMethodologyData && (
+                    <TabPanel header={lng === "mn" ? "Аргачлал" : "Methodology"}>
+                        <Methodology sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    </TabPanel>
+                )}
 
-                {/* ✅ Чанарын тайлан */}
-                <TabPanel header={lng === "mn" ? "Чанарын тайлан" : "Quality Report"}>
-                    <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
-                </TabPanel>
+                {/* ✅ Чанарын тайлан - Show only if has data */}
+                {hasQualityReportData && (
+                    <TabPanel header={lng === "mn" ? "Чанарын тайлан" : "Quality Report"}>
+                        <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    </TabPanel>
+                )}
 
             </TabView>
         </div>

@@ -17,4 +17,21 @@ const db = knex({
   debug: true,
 });
 
-module.exports = { db };
+const data1212 = knex({
+  client: "mssql",
+  connection: {
+    server: "nso.mn",
+    port: 1433,
+    user: "user1212",
+    password: "wZGAKCXpZUEB",
+    database: "data1212",
+    options: {
+      encrypt: true,
+      trustServerCertificate: true,
+      connectTimeout: 40000,
+    },
+  },
+  debug: true,
+});
+
+module.exports = { db, data1212 };
