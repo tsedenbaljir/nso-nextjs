@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config.js";
 
+export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const metaValues = await db("question_pool").select("id", "namemn", "nameen");
