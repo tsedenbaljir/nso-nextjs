@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '@/components/styles/bnmau.scss';
 import { useTranslation } from '@/app/i18n/client';
 
@@ -17,25 +17,25 @@ export default function Bnmau({ params: { lng } }) {
                             </div>
                         </div>
                         <div className="__fun_statistic_body">
-                            <div className="description w-full p-3 md:p-5">
+                            <div className="w-full p-3 md:p-5 text-justify">
                                 <span dangerouslySetInnerHTML={{ __html: t('bnmau') }} />
                             </div>
                         </div>
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-3 md:gap-5 w-full px-3 md:px-0">
+                        <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-5 w-full px-4 md:px-0 py-4 md:py-0">
                             <img
                                 src="/images/bnmau/image1.png"
                                 alt=""
-                                className="descI w-full md:w-auto h-auto md:h-60 object-contain"
+                                className="w-full md:w-auto h-auto max-h-52 md:h-60 object-contain"
                             />
                             <img
                                 src="/images/bnmau/image2.png"
                                 alt=""
-                                className="descI w-full md:w-auto h-auto md:h-60 object-contain"
+                                className="w-full md:w-auto h-auto max-h-52 md:h-60 object-contain"
                             />
                             <img
                                 src="/images/bnmau/image3.png"
                                 alt=""
-                                className="descI w-full md:w-auto h-auto md:h-60 object-contain"
+                                className="w-full md:w-auto h-auto max-h-52 md:h-60 object-contain"
                             />
                         </div>
                         <br />

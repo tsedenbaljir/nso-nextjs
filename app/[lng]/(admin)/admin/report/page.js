@@ -521,7 +521,6 @@ export default function ReportAdmin({ params: { lng } }) {
             if (fileInfo) {
                 fileInfo.downloads = (fileInfo.downloads || 0) + 1;
                 // You can add an API call here to update the download count in the database
-                console.log('Download count updated:', fileInfo.downloads);
             }
         } catch (error) {
             console.error('Error updating download count:', error);

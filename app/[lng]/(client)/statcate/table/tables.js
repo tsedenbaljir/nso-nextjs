@@ -69,7 +69,6 @@ export default function Table({ sector, subsector, lng }) {
                         };
                     })
                 );
-
                 // Fetch order data and sort the main items
                 try {
                     const orderRes = await fetch(`/api/tables_order?remotePath=${encodeURIComponent(remotePath)}`, {
@@ -87,29 +86,44 @@ export default function Table({ sector, subsector, lng }) {
                             }
                         });
                     }
-
                     // Sort items based on order_number
                     const sortedData = [...formattedData]
                         .sort((a, b) => {
-                            const orderNumA = orderMap.get(a.link);
-                            const orderNumB = orderMap.get(b.link);
+                            if(a.link.includes(".px")){
+                                const orderNumA = orderMap.get(a.link);
+                                const orderNumB = orderMap.get(b.link);
+    
+                                // If both have order numbers, sort by them
+                                if (orderNumA !== undefined && orderNumB !== undefined) {
+                                    return orderNumA - orderNumB;
+                                }
+                                // If only A has order, it goes first
+                                if (orderNumA !== undefined) return -1;
+                                // If only B has order, it goes first
+                                if (orderNumB !== undefined) return 1;
+                                // If neither has order, keep original order
+                                return 0;
+                            }else{
 
-                            // If both have order numbers, sort by them
-                            if (orderNumA !== undefined && orderNumB !== undefined) {
-                                return orderNumA - orderNumB;
+                                const orderNumA = orderMap.get(a.sub[0].link);
+                                const orderNumB = orderMap.get(b.sub[0].link);
+    
+                                // If both have order numbers, sort by them
+                                if (orderNumA !== undefined && orderNumB !== undefined) {
+                                    return orderNumA - orderNumB;
+                                }
+                                // If only A has order, it goes first
+                                if (orderNumA !== undefined) return -1;
+                                // If only B has order, it goes first
+                                if (orderNumB !== undefined) return 1;
+                                // If neither has order, keep original order
+                                return 0;
                             }
-                            // If only A has order, it goes first
-                            if (orderNumA !== undefined) return -1;
-                            // If only B has order, it goes first
-                            if (orderNumB !== undefined) return 1;
-                            // If neither has order, keep original order
-                            return 0;
                         })
                         .map((item, index) => ({
                             ...item,
                             id: index + 1  // Reassign IDs after sorting
                         }));
-
                     setData(sortedData);
                 } catch (error) {
                     console.error("Failed to fetch order data:", error);
