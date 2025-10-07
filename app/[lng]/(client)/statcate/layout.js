@@ -77,6 +77,7 @@ export default function Statecate({ children, params }) {
     ] : pathname.includes('/table/Historical%20data') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
+        { label: sectorName ? <div className='text-nowrap'>{sectorName[0]?.text}</div> : <LoadingDiv /> },
         { label: lng === 'mn' ? 'БНМАУ' : 'Republic of Mongolia', url: ['/statcate/table/Historical%20data/Enterprise'] },
         { label: name ? <div className='text-nowrap'>{name[0]?.text}</div> : <LoadingDiv /> }
     ] : pathname.includes('statcate/table/') ? [
@@ -89,6 +90,7 @@ export default function Statecate({ children, params }) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
+        { label: sectorName ? <div className='text-nowrap'>{sectorName[0]?.text}</div> : <LoadingDiv /> },
         { label: name ? <div className='text-nowrap'>{name[0]?.text.split('_')[1] ? name[0]?.text.split('_')[1] : name[0]?.text}</div> : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
         { label: title ? title === '0' ? '' : title : <LoadingDiv /> }
     ] : pathname.includes('statcate') ? [
@@ -98,6 +100,7 @@ export default function Statecate({ children, params }) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: t('statCate.statData'), url: ['/statcate'] },
+        { label: sectorName ? <div className='text-nowrap'>{sectorName[0]?.text}</div> : <LoadingDiv /> },
         { label: name ? <div className='text-nowrap'>{name[0]?.text.split('_')[1] ? name[0]?.text.split('_')[1] : name[0]?.text}</div> : <LoadingDiv />, url: ['/statcate/table/' + pathname.split('/')[4] + '/' + pathname.split('/')[5]] },
     ];
 
