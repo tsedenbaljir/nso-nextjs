@@ -70,66 +70,51 @@ export default function Table({ sector, subsector, lng }) {
                     })
                 );
 
-                // Sort sub-items if they exist
-                const sortedData = await Promise.all(
-                    formattedData.map(async (item) => {
-                        // If item has sub-items, fetch their order and sort them
-                        if (item.sub && Array.isArray(item.sub) && item.sub.length > 0) {
-                            try {
-                                // Fetch order data for this specific item's subtables
-                                const subRemotePath = `${remotePath}/${item.link}`;
-                                const orderRes = await fetch(`/api/tables_order?remotePath=${encodeURIComponent(subRemotePath)}`, {
-                                    cache: "no-store",
-                                });
-                                const orderResponse = await orderRes.json();
-                                const orderedData = orderResponse.data;
+                // Fetch order data and sort the main items
+                try {
+                    const orderRes = await fetch(`/api/tables_order?remotePath=${encodeURIComponent(remotePath)}`, {
+                        cache: "no-store",
+                    });
+                    const orderResponse = await orderRes.json();
+                    const orderedData = orderResponse.data;
 
-                                // Create order map for this item's subtables
-                                const orderMap = new Map();
-                                if (orderedData && Array.isArray(orderedData)) {
-                                    orderedData.forEach(orderItem => {
-                                        if (orderItem.file_name && orderItem.order_number !== undefined) {
-                                            orderMap.set(orderItem.file_name, orderItem.order_number);
-                                        }
-                                    });
-                                }
-
-                                // Sort sub-items based on order_number
-                                const sortedSub = [...item.sub]
-                                    .sort((a, b) => {
-                                        const orderNumA = orderMap.get(a.link);
-                                        const orderNumB = orderMap.get(b.link);
-
-                                        // If both have order numbers, sort by them
-                                        if (orderNumA !== undefined && orderNumB !== undefined) {
-                                            return orderNumA - orderNumB;
-                                        }
-                                        // If only A has order, it goes first
-                                        if (orderNumA !== undefined) return -1;
-                                        // If only B has order, it goes first
-                                        if (orderNumB !== undefined) return 1;
-                                        // If neither has order, keep original order
-                                        return 0;
-                                    })
-                                    .map((subItem, subIndex) => ({
-                                        ...subItem,
-                                        id: subIndex + 1  // Reassign IDs after sorting
-                                    }));
-
-                                return {
-                                    ...item,
-                                    sub: sortedSub
-                                };
-                            } catch (error) {
-                                console.error("Failed to fetch order for:", item.link, error);
-                                return item; // Return item with unsorted sub-items if order fetch fails
+                    // Create order map
+                    const orderMap = new Map();
+                    if (orderedData && Array.isArray(orderedData)) {
+                        orderedData.forEach(orderItem => {
+                            if (orderItem.file_name && orderItem.order_number !== undefined) {
+                                orderMap.set(orderItem.file_name, orderItem.order_number);
                             }
-                        }
-                        return item;
-                    })
-                );
-                
-                setData(sortedData);
+                        });
+                    }
+
+                    // Sort items based on order_number
+                    const sortedData = [...formattedData]
+                        .sort((a, b) => {
+                            const orderNumA = orderMap.get(a.link);
+                            const orderNumB = orderMap.get(b.link);
+
+                            // If both have order numbers, sort by them
+                            if (orderNumA !== undefined && orderNumB !== undefined) {
+                                return orderNumA - orderNumB;
+                            }
+                            // If only A has order, it goes first
+                            if (orderNumA !== undefined) return -1;
+                            // If only B has order, it goes first
+                            if (orderNumB !== undefined) return 1;
+                            // If neither has order, keep original order
+                            return 0;
+                        })
+                        .map((item, index) => ({
+                            ...item,
+                            id: index + 1  // Reassign IDs after sorting
+                        }));
+
+                    setData(sortedData);
+                } catch (error) {
+                    console.error("Failed to fetch order data:", error);
+                    setData(formattedData); // Use unsorted data if order fetch fails
+                }
             } catch (err) {
                 console.error("Failed to fetch data.");
             } finally {
