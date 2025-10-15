@@ -58,6 +58,7 @@ const nextConfig = {
         INFO_EMAIL_1212: process.env.INFO_EMAIL_1212,
         INFO_PASSWORD_1212: process.env.INFO_PASSWORD_1212,
     },
+    generateRobotsTxt: true,
     crossOrigin: "anonymous",
     async headers() {
         return [
