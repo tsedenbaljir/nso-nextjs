@@ -27,7 +27,7 @@ export default function Layout({ params: { lng } }) {
                     <ul className="__opendata_tree">
                       {Object.entries(sectorStructure).map(([sectorName, subsectorIds]) => (
                         <li key={sectorName} className="__opendata_tree_first">
-                          <span className="__first_name">{sectorName}</span>
+                          <span className="__first_name">{sectorName === 'СТАТИСТИК ТООН МЭДЭЭЛЭЛ' ? lng === 'mn' ? 'СТАТИСТИК ТООН МЭДЭЭЛЭЛ' : 'Statistical Data' : sectorName === 'ХҮСНЭГТ' ? lng === 'mn' ? 'ХҮСНЭГТ' : 'Table' : sectorName === 'ДЭД САЛБАР' ? lng === 'mn' ? 'ДЭД САЛБАР' : 'Subsector' : sectorName === 'ҮНДСЭН САЛБАР' ? lng === 'mn' ? 'ҮНДСЭН САЛБАР' : 'Main Sector' : sectorName}</span>
                           <ul>
                             {subsectorIds.map((subId) => (
                               <li
@@ -36,7 +36,7 @@ export default function Layout({ params: { lng } }) {
                                 onClick={() => setSelectedId(subId)}
                               >
                                 <h3 className="__opendata_sub_name">
-                                  {subsectorDataMap[subId].title}
+                                  { lng === 'mn' ? subsectorDataMap[subId].title : subsectorDataMap[subId].titleEn}
                                 </h3>
                                 {/* Дэд салбарын агуулга нээгдсэн үед */}
                                 {selectedId === subId && (

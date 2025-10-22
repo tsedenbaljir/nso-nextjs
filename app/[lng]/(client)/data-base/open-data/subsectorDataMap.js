@@ -1,6 +1,7 @@
 export const subsectorDataMap = {
     Subsector1: {
         title: "Статистик тоон мэдээллийг авах",
+        titleEn: "Statistical Data",
         input:{id:"DT_NSO_2100_013V1.px"},
         api: "https://data.1212.mn/api/v1/mn/NSO/Education,%20health/Disease/DT_NSO_2100_013V1.px",
         output: [
@@ -41,6 +42,7 @@ export const subsectorDataMap = {
   
     Subsector2: {
       title: "Дэд салбар доторх хүснэгтийн жагсаалтыг авах",
+      titleEn: "Table",
       input:{id:"Disease"},
       api: "https://data.1212.mn/api/v1/mn/NSO/Education,%20health/Disease/",
       output: [
@@ -91,6 +93,7 @@ export const subsectorDataMap = {
   
     Subsector3: {
       title: "Статистикийн дэд салбарын мэдээллийг авах",
+      titleEn: "Subsector",
       input:{id:"Education, health"},
       api: "https://data.1212.mn/api/v1/mn/NSO/Education,%20health",
       output: [
@@ -112,6 +115,7 @@ export const subsectorDataMap = {
   
     Subsector4: {
       title: "Статистикийн үндсэн салбарын жагсаалт авах",
+      titleEn: "Main Sector",
       api: "https://data.1212.mn/api/v1/mn/NSO/",
       output: [
         { Field: "id", Type: "string", Description: "Англи нэр" },
