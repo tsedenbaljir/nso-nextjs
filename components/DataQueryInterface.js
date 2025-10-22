@@ -15,7 +15,6 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
             "format": "json-stat2"
         }
     }, null, 2));
-    const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
 
     useEffect(() => {
@@ -50,28 +49,10 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
         message.success('Query downloaded');
     };
 
-    const handleDownloadResult = () => {
-        if (!result) {
-            message.error('No result to download');
-            return;
-        }
-
-        const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'result.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        message.success('Result downloaded');
-    };
-
     const handleCopyUrl = () => {
         navigator.clipboard.writeText(url).then(() => {
             message.success({
-                content: 'URL хуулагдлаа',
+                content: lng === 'mn' ? 'URL хуулагдлаа' : 'URL copied',
                 style: {
                     marginTop: '20vh',
                     marginLeft: 'auto',
@@ -80,7 +61,7 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
             });
         }).catch(() => {
             message.error({
-                content: 'URL хуулах үед алдаа гарлаа',
+                content: lng === 'mn' ? 'URL хуулах үед алдаа гарлаа' : 'Error copying URL',
                 style: {
                     marginTop: '20vh',
                     marginLeft: 'auto',
@@ -93,7 +74,7 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
     const handleCopyQuery = () => {
         navigator.clipboard.writeText(query).then(() => {
             message.success({
-                content: 'JSON query хуулагдлаа',
+                content: lng === 'mn' ? 'JSON query хуулагдлаа' : 'JSON query copied',
                 style: {
                     marginTop: '20vh',
                     marginLeft: 'auto',
@@ -102,7 +83,7 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
             });
         }).catch(() => {
             message.error({
-                content: 'JSON query хуулах үед алдаа гарлаа',
+                content: lng === 'mn' ? 'JSON query хуулах үед алдаа гарлаа' : 'Error copying JSON query',
                 style: {
                     marginTop: '20vh',
                     marginLeft: 'auto',

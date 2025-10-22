@@ -56,7 +56,7 @@ export default function Layout({ params: { lng } }) {
 
                 {/* Main content */}
                 <div className="__opendata_main __opendata_customize">
-                  <SubsectorPage data={subsectorDataMap[selectedId]} />
+                  <SubsectorPage data={subsectorDataMap[selectedId]} lng={lng} />
                 </div>
               </div>
             </div>
