@@ -137,7 +137,7 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
                                 onClick={handleCopyUrl}
                                 size="small"
                             >
-                                URL хуулах
+                                {lng === 'mn' ? 'URL хуулах' : 'Copy URL'}
                             </Button>
                         </div>
                         <Input

@@ -103,7 +103,7 @@ export default function TableView({ params }) {
                             header={
                                 <Space>
                                     <ApiOutlined />
-                                    <span className='text-lg font-normal'>Дараах хаягаас POST хүсэлт илгээх</span>
+                                    <span className='text-lg font-normal'>{lng === 'mn' ? 'Дараах хаягаас POST хүсэлт илгээх' : 'Send POST request from the following URL'}</span>
                                 </Space>
                             }
                             key="1"
