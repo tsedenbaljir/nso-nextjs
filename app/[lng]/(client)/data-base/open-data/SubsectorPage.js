@@ -15,7 +15,7 @@ export default function SubsectorPage({ data, lng }) {
       <div className="__open_section">
         {/* Subsector Title */}
         <div className="__opendata_item">
-          <h2># {data.title}</h2>
+          <h2># {lng === 'mn' ? data.title : data.titleEn}</h2>
           {data.description && <p>{data.description}</p>}
         </div>
 

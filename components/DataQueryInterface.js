@@ -145,7 +145,7 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
                                 onClick={handleCopyQuery}
                                 size="small"
                             >
-                                Query хуулах
+                                {lng === 'mn' ? 'Query хуулах' : 'Copy Query'}
                             </Button>
                         </div>
                         <TextArea
@@ -172,14 +172,14 @@ const DataQueryInterface = ({ subtables, sector, subsector, id, lng, selectedVal
                             onClick={handleDownloadQuery}
                             size="large"
                         >
-                            JSON query татах
+                            {lng === 'mn' ? 'JSON query татах' : 'Download JSON query'}
                         </Button>
                     </Space>
 
                     {/* Result Display */}
                     {result && (
                         <div style={{ marginTop: '20px' }}>
-                            <Title level={4}>Үр дүн:</Title>
+                            <Title level={4}>{lng === 'mn' ? 'Үр дүн:' : 'Result:'}</Title>
                             <Card style={{ backgroundColor: '#f5f5f5' }}>
                                 <pre style={{
                                     whiteSpace: 'pre-wrap',
