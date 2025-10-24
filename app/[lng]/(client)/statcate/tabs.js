@@ -8,6 +8,7 @@ import Methodology from "./methodology/main";
 import Qualityreport from "./qualityreport/main";
 import { TabView, TabPanel } from "primereact/tabview";
 import LoadingDiv from '@/components/Loading/OneField/Index';
+import { Skeleton } from 'antd';
 
 export default function Tabs({ lng, tabs, sector, subsector }) {
     const router = useRouter();
@@ -25,21 +26,19 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     // Build available tabs based on data
     const availableTabs = useMemo(() => {
         const tabs = [{ name: "table", index: 0 }];
-        let currentIndex = 1;
         
         if (hasIndicatorData) {
-            tabs.push({ name: "indicator", index: currentIndex++ });
+            tabs.push({ name: "indicator", index: 1 });
         }
         if (hasReportData) {
-            tabs.push({ name: "report", index: currentIndex++ });
+            tabs.push({ name: "report", index: 2 });
         }
         if (hasMethodologyData) {
-            tabs.push({ name: "methodology", index: currentIndex++ });
+            tabs.push({ name: "methodology", index: 3 });
         }
         if (hasQualityReportData) {
-            tabs.push({ name: "qualityreport", index: currentIndex++ });
+            tabs.push({ name: "qualityreport", index: 4 });
         }
-        
         return tabs;
     }, [hasIndicatorData, hasReportData, hasMethodologyData, hasQualityReportData]);
 
@@ -164,32 +163,32 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 </TabPanel>
 
                 {/* ✅ Танилцуулга - Show only if has data */}
-                {hasIndicatorData && (
+                {!isCheckingData ? hasIndicatorData && (
                     <TabPanel header={lng === "mn" ? "Танилцуулга" : "Introduction"}>
                         <MainIndicator sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                     </TabPanel>
-                )}
+                ): <TabPanel header={<Skeleton.Input size={"small"} />}></TabPanel>}
 
                 {/* ✅ Тайлан - Show only if has data */}
-                {hasReportData && (
+                {!isCheckingData ? hasReportData && (
                     <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
                         <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                     </TabPanel>
-                )}
+                ): <TabPanel header={<Skeleton.Input size={"small"} />}></TabPanel>}
 
                 {/* ✅ Аргачлал - Show only if has data */}
-                {hasMethodologyData && (
+                {!isCheckingData ? hasMethodologyData && (
                     <TabPanel header={lng === "mn" ? "Аргачлал" : "Methodology"}>
                         <Methodology sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                     </TabPanel>
-                )}
+                ): <TabPanel header={<Skeleton.Input size={"small"} />}></TabPanel>}
 
                 {/* ✅ Чанарын тайлан - Show only if has data */}
-                {hasQualityReportData && (
+                {!isCheckingData ? hasQualityReportData && (
                     <TabPanel header={lng === "mn" ? "Чанарын тайлан" : "Quality Report"}>
                         <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                     </TabPanel>
-                )}
+                ): <TabPanel header={<Skeleton.Input size={"small"} />}></TabPanel>}
 
             </TabView>
         </div>
