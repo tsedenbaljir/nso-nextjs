@@ -1,37 +1,37 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Modal, Button } from "antd";
+import { Modal } from "antd";
 
 export default function ModalImages() {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
 
-  // 🟢 Auto open only once
   useEffect(() => {
     setOpen(true);
   }, []);
 
   const images = [
-    "/images/zurag2.jpg",
-    "/images/zurag1.jpg"
+    {
+      src: "/images/zurag2.jpg",
+      link: "https://2025.mn/login",
+    },
+    {
+      src: "/images/zurag1.jpg",
+      link: "https://www.1212.mn/mn/about-us/news/102922716",
+    },
   ];
 
-  const next = () => {
-    setPage((prev) => (prev + 1) % images.length);
-  };
-
-  const prev = () => {
+  // Next / Prev
+  const next = () => setPage((prev) => (prev + 1) % images.length);
+  const prev = () =>
     setPage((prev) => (prev - 1 + images.length) % images.length);
-  };
 
-  // 🟢 5 секунд тутам автоматаар солигдох
+  // Auto change every 5 sec
   useEffect(() => {
     if (!open) return;
-
     const interval = setInterval(() => {
       setPage((prev) => (prev + 1) % images.length);
     }, 5000);
-
     return () => clearInterval(interval);
   }, [open]);
 
@@ -46,15 +46,13 @@ export default function ModalImages() {
         style={{ padding: 0, zIndex: 999999, borderRadius: 8 }}
       >
         <div style={{ textAlign: "center" }}>
-          <img
-            src={images[page]}
-            style={{ width: "100%", borderRadius: 8 }}
-            alt="modal-img"
-          />
-
-          {/* <div style={{ marginTop: 10, fontSize: 14 }}>
-            {page + 1} / {images.length}
-          </div> */}
+          <a href={images[page].link} target="_blank" rel="noopener noreferrer">
+            <img
+              src={images[page].src}
+              style={{ width: "100%", borderRadius: 8, cursor: "pointer" }}
+              alt="modal-img"
+            />
+          </a>
         </div>
       </Modal>
     </>
