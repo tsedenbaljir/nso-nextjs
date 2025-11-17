@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/i18n/client'
 import NavbarDialog from '../Dialog/NavbarDialog';
+import FooterCarousel from './FooterCarousel';
 import { notification } from 'antd';
 
 const BRANCH_SITES_NAVITEMS = [
@@ -405,6 +406,9 @@ export default function Footer({ lng }) {
                             <div className="__sub_labels">
                                 <span>{t('footer.total')}</span>
                                 <span>{!loading && Number(data?.rows[0]?.metricValues[0]?.value).toLocaleString('en-US')}</span>
+                            </div>
+                            <div style={{ marginTop: '90px' }}>
+                                <FooterCarousel />
                             </div>
                         </div>
                     </div>
