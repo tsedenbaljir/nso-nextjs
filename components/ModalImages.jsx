@@ -41,7 +41,7 @@ export default function ModalImages() {
         open={open}
         footer={null}
         onCancel={() => setOpen(false)}
-        width={700}
+        width={"auto"}
         centered
         style={{ padding: 0, zIndex: 999999, borderRadius: 8 }}
       >
