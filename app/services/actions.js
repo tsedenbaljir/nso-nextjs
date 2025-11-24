@@ -59,7 +59,7 @@ export async function fetchTableauKey() {
 export async function fetchHomoHuman(registerNo) {
     try {
         // Use absolute URL for server-side requests
-        const response = await fetch(`/api/human`, {
+        const response = await fetch(`${process.env.BASE_URL}/api/human`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
