@@ -34,4 +34,21 @@ const data1212 = knex({
   debug: true,
 });
 
-module.exports = { db, data1212 };
+const homoStatistic = knex({
+  client: "mssql",
+  connection: {
+    server: "103.85.185.42",
+    port: 1433,
+    user: "1212",
+    password: "6sW>'tXJS)31",
+    database: "XAOMCDB",
+    options: {
+      encrypt: true,
+      trustServerCertificate: true,
+      connectTimeout: 40000,
+    },
+  },
+  debug: true,
+});
+
+module.exports = { db, data1212, homoStatistic };

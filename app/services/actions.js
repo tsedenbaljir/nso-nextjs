@@ -55,3 +55,26 @@ export async function fetchTableauKey() {
         return { success: false, error: error.message };
     }
 } 
+
+export async function fetchHomoHuman(registerNo) {
+    try {
+        // Use absolute URL for server-side requests
+        const response = await fetch(`/api/human`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ registerNo: registerNo }),
+            cache: 'no-store',
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch Homo Human');
+        }
+
+        const result = await response.json();
+        return { success: true, data: result };
+    } catch (error) {
+        console.error('Homo Human fetch error:', error);
+        return { success: false, error: error.message };
+    }
+} 
