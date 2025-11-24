@@ -210,7 +210,7 @@ export async function POST(req) {
 
     // Generate images
     let image1Data = null;
-    let image2Url = null;
+    let image2Data = null;
 
     try {
       // Generate birth certificate image (setImage)
@@ -224,18 +224,14 @@ export async function POST(req) {
       );
 
       // Generate statistics image (setImage1)
-      image2Url = await setImage1(model, { headerFontSize: 60, bodyFontSize: 65 });
+      image2Data = await setImage1(model, { headerFontSize: 60, bodyFontSize: 65 });
     } catch (imgError) {
       console.error("Image generation error:", imgError);
       // Continue even if image generation fails
     }
 
-    const image1Url = image1Data
-      ? `/images/sonirkholtoi/images/${image1Data.saveurl}`
-      : null;
-    const image2UrlFinal = image2Url
-      ? `/images/sonirkholtoi/images/${image2Url}`
-      : null;
+    const image1Url = image1Data?.dataUrl || null;
+    const image2UrlFinal = image2Data?.dataUrl || null;
 
     return NextResponse.json({
       ok: true,
