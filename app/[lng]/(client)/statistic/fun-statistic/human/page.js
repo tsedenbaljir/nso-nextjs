@@ -8,6 +8,7 @@ export default function HumanPage() {
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(null);
     const [result, setResult] = useState(null);
+    const [mergedImageUrl, setMergedImageUrl] = useState(null);
 
     async function handleSubmit(e) {
         e.preventDefault();
