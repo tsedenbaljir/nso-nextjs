@@ -187,7 +187,7 @@ export async function setImage1(model, options = {}) {
     }
 
     if (model.Age > 5) {
-        text6a = "Таны насны, тантай ижил түвшний боловсролтой ";
+        text6a = "Таны насны, тантай ижил түвшний \nболовсролтой ";
         text6b = formatNumber(model.countEducaton);
         text6c = " иргэн байна.";
     }
@@ -214,9 +214,9 @@ export async function setImage1(model, options = {}) {
     const postion45b = 25 * formatNumber(model.countAgeM).length;
     const point45b = { x: 909 + postion45b, y: 1839 };
 
-    const point46a = { x: 237, y: 1919 };
+    const point46a = { x: 237, y: 2019 };
     const postion46b = 25 * formatNumber(model.countAgeF).length;
-    const point46b = { x: 909 + postion46b, y: 1918 };
+    const point46b = { x: 909 + postion46b, y: 2019 };
 
     const point5a = { x: 237, y: 2016 };
     const point5b = { x: 1260, y: 2016 };

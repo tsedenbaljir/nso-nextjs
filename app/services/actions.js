@@ -85,7 +85,6 @@ export async function fetchHomoHuman(registerNo) {
     }
 } 
 
-
 // export async function fetchHomoHuman(registerNo) {
 //     try {
 //         const myHeaders = new Headers();

@@ -92,87 +92,47 @@ export default function HumanPage() {
     const model = result?.model || null;
 
     return (
-        <main
-            style={{
-                maxWidth: 900,
-                margin: "0 auto",
-                padding: "2rem 1rem",
-                fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI'",
-            }}
-        >
-            <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16 }}>
-                Та Монгол Улсын хэд дэх иргэн бэ?
-            </h1>
+        <div className="nso_container">
+            <div className="w-full">
+                <h1 className="text-2xl font-bold mb-4">
+                    Та Монгол Улсын хэд дэх иргэн бэ?
+                </h1>
 
-            {!result && <form
-                onSubmit={handleSubmit}
-                style={{
-                    border: "1px solid #e5e7eb",
-                    borderRadius: 8,
-                    padding: 16,
-                    marginBottom: 24,
-                    background: "#fafafa",
-                }}
-            >
-                <div style={{ marginBottom: 12 }}>
-                    <label
-                        style={{
-                            display: "block",
-                            fontSize: 14,
-                            fontWeight: 600,
-                            marginBottom: 4,
-                        }}
+                {!result && <form onSubmit={handleSubmit} className="border border-gray-300 rounded-lg p-4 mb-6 bg-gray-50">
+                    <div className="mb-3">
+                        <label className="block text-sm font-medium mb-2">
+                            Регистрийн дугаар
+                        </label>
+                        <input
+                            type="text"
+                            value={registerNo}
+                            onChange={(e) => setRegisterNo(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="py-2 px-4 rounded bg-primary text-white font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Регистрийн дугаар
-                    </label>
-                    <input
-                        type="text"
-                        value={registerNo}
-                        onChange={(e) => setRegisterNo(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "8px 10px",
-                            borderRadius: 4,
-                            border: "1px solid #d1d5db",
-                        }}
-                    />
-                </div>
+                        {loading ? "Тооцож байна..." : "Хайх"}
+                    </button>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                        padding: "8px 16px",
-                        borderRadius: 4,
-                        border: "none",
-                        background: loading ? "#60a5fa" : "#2563eb",
-                        color: "white",
-                        fontWeight: 600,
-                        cursor: loading ? "default" : "pointer",
-                    }}
-                >
-                    {loading ? "Тооцож байна..." : "Хайх"}
-                </button>
+                    {status && (
+                        <p
+                            className="mt-2 text-blue-600 text-sm whitespace-pre-line"
+                        >
+                            {status}
+                        </p>
+                    )}
+                </form>}
 
-                {status && (
-                    <p
-                        style={{
-                            marginTop: 10,
-                            color: "#1877F2",
-                            fontSize: 13,
-                            whiteSpace: "pre-line",
-                        }}
-                    >
-                        {status}
-                    </p>
-                )}
-            </form>}
+                {result && (
+                    <>
 
-            {result && (
-                <>
-
-                    {/* Тайлбар (SetDescription1-тэй ижил агуулга) */}
-                    {/* <section style={{ marginBottom: 24 }}>
+                        {/* Тайлбар (SetDescription1-тэй ижил агуулга) */}
+                        {/* <section style={{ marginBottom: 24 }}>
                         <div
                             style={{
                                 background: "#f9fafb",
@@ -185,22 +145,14 @@ export default function HumanPage() {
                         />
                     </section> */}
 
-                    {/* <hr style={{ margin: "24px 0" }} /> */}
+                        {/* <hr style={{ margin: "24px 0" }} /> */}
 
-                    {/* Хоёр зураг зэрэгцээ ба татах товч */}
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "flex-end",
-                            alignItems: "center",
-                            gap: 8,
-                            marginTop: 16,
-                            marginBottom: 10,
-                        }}
-                    >
-                        {/* Facebook share товч */}
-                        {/* {result.shareUrl && (
+                        {/* Хоёр зураг зэрэгцээ ба татах товч */}
+                        <div
+                            className="flex flex-row justify-end items-center gap-2 mt-4 mb-2"
+                        >
+                            {/* Facebook share товч */}
+                            {/* {result.shareUrl && (
                             <a
                                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
                                     "https://www.1212.mn/mn/statistic/fun-statistic/human"
@@ -224,64 +176,39 @@ export default function HumanPage() {
                             </a>
                         )} */}
 
-                        {mergedImageUrl && (
-                            <a
-                                href={mergedImageUrl}
-                                download="sonirkholtoi-image.png"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 8,
-                                    padding: "8px 16px",
-                                    borderRadius: 4,
-                                    background: "#1877F2",
-                                    color: "white",
-                                    fontSize: 13,
-                                    fontWeight: 600,
-                                    textDecoration: "none",
-                                }}
-                            >
-                                Зураг татах
-                            </a>
+                            {mergedImageUrl && (
+                                <a
+                                    href={mergedImageUrl}
+                                    download="sonirkholtoi-image.png"
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded bg-blue-600 text-white font-medium text-sm no-underline"
+                                >
+                                    Зураг татах
+                                </a>
+                            )}
+                        </div>
+
+
+                        {result.image1Url && result.image2Url && (
+                            <section className="mb-6">
+                                <div
+                                    className="flex flex-row gap-1"
+                                >
+                                    <img
+                                        src={result.image1Url}
+                                        alt="Төрсний гэрчилгээ"
+                                        className="w-1/2 h-auto block object-contain"
+                                    />
+                                    <img
+                                        src={result.image2Url}
+                                        alt="Статистикийн зураг"
+                                        className="w-1/2 h-auto block object-contain"
+                                    />
+                                </div>
+                            </section>
                         )}
-                    </div>
 
-
-                    {result.image1Url && result.image2Url && (
-                        <section style={{ marginBottom: 24 }}>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    gap: 1,
-                                }}
-                            >
-                                <img
-                                    src={result.image1Url}
-                                    alt="Төрсний гэрчилгээ"
-                                    style={{
-                                        width: "50%",
-                                        height: "auto",
-                                        display: "block",
-                                        objectFit: "contain",
-                                    }}
-                                />
-                                <img
-                                    src={result.image2Url}
-                                    alt="Статистикийн зураг"
-                                    style={{
-                                        width: "50%",
-                                        height: "auto",
-                                        display: "block",
-                                        objectFit: "contain",
-                                    }}
-                                />
-                            </div>
-                        </section>
-                    )}
-
-                    {/* Статистикийн тоонууд */}
-                    {/* {model && (
+                        {/* Статистикийн тоонууд */}
+                        {/* {model && (
                         <section style={{ marginBottom: 24 }}>
                             <h2
                                 style={{
@@ -369,22 +296,9 @@ export default function HumanPage() {
                             </table>
                         </section>
                     )} */}
-                </>
-            )}
-        </main>
+                    </>
+                )}
+            </div>
+        </div>
     );
 }
-
-// жижиг inline style-ууд
-const tdLabelStyle = {
-    padding: "6px 8px",
-    borderBottom: "1px solid #e5e7eb",
-    background: "#f3f4f6",
-    width: "40%",
-    fontWeight: 600,
-};
-
-const tdValueStyle = {
-    padding: "6px 8px",
-    borderBottom: "1px solid #e5e7eb",
-};
