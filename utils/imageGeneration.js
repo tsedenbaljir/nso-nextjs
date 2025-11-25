@@ -74,7 +74,7 @@ export async function setImage(
         secondLocation = { x: 107, y: 390 };
         Location3 = { x: 107, y: 420 };
         Location4 = { x: 107, y: 450 };
-        fontsz = 24;
+        fontsz = 20;
     } else if (nameLength > 20) {
         firstText = ` ${lastName.toUpperCase()} овогтой ${firstName.toUpperCase()}`;
         secondText = ` Та ${year} оны ${month} сарын ${day}-нд мэндэлж,`;
@@ -82,7 +82,7 @@ export async function setImage(
         secondLocation = { x: 107, y: 390 };
         Location3 = { x: 107, y: 420 };
         Location4 = { x: 107, y: 450 };
-        fontsz = 22;
+        fontsz = 20;
     } else if (nameLength > 10) {
         firstText = ` ${lastName.toUpperCase()} овогтой ${firstName.toUpperCase()}`;
         secondText = ` Та ${year} оны ${month} сарын ${day}-нд мэндэлж,`;
@@ -90,7 +90,7 @@ export async function setImage(
         secondLocation = { x: 107, y: 390 };
         Location3 = { x: 107, y: 420 };
         Location4 = { x: 107, y: 450 };
-        fontsz = 24;
+        fontsz = 20;
     }
 
     const imgID = uuidv4();
