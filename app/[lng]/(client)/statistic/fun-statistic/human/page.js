@@ -168,7 +168,7 @@ export default function HumanPage() {
                 )}
             </form>}
 
-            {result && result.ok && (
+            {result && (
                 <>
 
                     {/* Тайлбар (SetDescription1-тэй ижил агуулга) */}

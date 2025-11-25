@@ -1,5 +1,4 @@
-import { createCanvas, loadImage, registerFont } from "canvas";
-import fs from "fs";
+import { createCanvas, loadImage } from "canvas";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
@@ -43,7 +42,7 @@ function returnNii(count) {
  * @param {number} count - Population count
  * @param {Object} options - Optional parameters
  * @param {number} options.fontSize - Base font size (default: calculated based on name length)
- * @returns {Promise<{saveurl: string, description: string, imgID: string}>}
+ * @returns {Promise<{description: string, imgID: string, dataUrl: string}>}
  */
 export async function setImage(
     lastName,
@@ -127,29 +126,14 @@ export async function setImage(
         ctx.fillText(Text3, Location3.x, Location3.y);
         ctx.fillText(text4, Location4.x, Location4.y);
 
-        // Save image
-        const imagesDir = path.join(
-            process.cwd(),
-            "public",
-            "images",
-            "sonirkholtoi",
-            "images"
-        );
-
-        if (!fs.existsSync(imagesDir)) {
-            fs.mkdirSync(imagesDir, { recursive: true });
-        }
-
-        const saveurl = `${imgID.replace(/-/g, "")}.png`;
-        const savePath = path.join(imagesDir, saveurl);
-
+        // Convert to base64 data URL (no file saving)
         const buffer = canvas.toBuffer("image/png");
-        fs.writeFileSync(savePath, buffer);
+        const dataUrl = `data:image/png;base64,${buffer.toString('base64')}`;
 
         return {
-            saveurl,
             description,
             imgID: imgID.toString(),
+            dataUrl,
         };
     } catch (error) {
         console.error("Error in setImage:", error);
@@ -163,7 +147,7 @@ export async function setImage(
  * @param {Object} options - Optional parameters
  * @param {number} options.headerFontSize - Font size for header text (default: 10)
  * @param {number} options.bodyFontSize - Font size for body text (default: 9)
- * @returns {Promise<string>} - Filename of saved image
+ * @returns {Promise<{dataUrl: string}>} - Image data URL
  */
 export async function setImage1(model, options = {}) {
     const headerFontSize = options.headerFontSize || 10;
@@ -357,26 +341,13 @@ export async function setImage1(model, options = {}) {
             ctx.fillText(text6c, point6c.x, point6c.y);
         }
 
-        // Save image
-        const imagesDir = path.join(
-            process.cwd(),
-            "public",
-            "images",
-            "sonirkholtoi",
-            "images"
-        );
-
-        if (!fs.existsSync(imagesDir)) {
-            fs.mkdirSync(imagesDir, { recursive: true });
-        }
-
-        const saveurl = `${uuidv4().replace(/-/g, "")}.png`;
-        const savePath = path.join(imagesDir, saveurl);
-
+        // Convert to base64 data URL (no file saving)
         const buffer = canvas.toBuffer("image/png");
-        fs.writeFileSync(savePath, buffer);
+        const dataUrl = `data:image/png;base64,${buffer.toString('base64')}`;
 
-        return saveurl;
+        return {
+            dataUrl,
+        };
     } catch (error) {
         console.error("Error in setImage1:", error);
         throw error;
