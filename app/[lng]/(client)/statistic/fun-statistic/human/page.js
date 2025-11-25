@@ -4,11 +4,66 @@ import { useState, useEffect } from "react";
 import { fetchHomoHuman } from "@/app/services/actions";
 
 export default function HumanPage() {
-    const [registerNo, setRegisterNo] = useState("");
+    const [letter1, setLetter1] = useState("");
+    const [letter2, setLetter2] = useState("");
+    const [digits, setDigits] = useState("");
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(null);
     const [result, setResult] = useState(null);
     const [mergedImageUrl, setMergedImageUrl] = useState(null);
+    const [showKeyboard, setShowKeyboard] = useState(false);
+    const [activeLetterField, setActiveLetterField] = useState(null);
+
+    const cyrillicLetters = [
+        ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё'],
+        ['Ж', 'З', 'И', 'Й', 'К', 'Л', 'М'],
+        ['Н', 'О', 'Ө', 'П', 'Р', 'С', 'Т'],
+        ['У', 'Ү', 'Ф', 'Х', 'Ц', 'Ч', 'Ш'],
+        ['Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я']
+    ];
+
+    const handleNewSearch = () => {
+        setResult(null);
+        setMergedImageUrl(null);
+        setStatus(null);
+        setLetter1("");
+        setLetter2("");
+        setDigits("");
+        setTimeout(() => {
+            document.getElementById('letter1-input')?.focus();
+        }, 100);
+    };
+
+    const openKeyboard = (field) => {
+        setActiveLetterField(field);
+        setShowKeyboard(true);
+    };
+
+    const selectLetter = (letter) => {
+        if (activeLetterField === 1) {
+            setLetter1(letter);
+            setShowKeyboard(false);
+            setActiveLetterField(null);
+            setTimeout(() => {
+                document.getElementById('letter2-input')?.focus();
+            }, 100);
+        } else if (activeLetterField === 2) {
+            setLetter2(letter);
+            setShowKeyboard(false);
+            setActiveLetterField(null);
+            setTimeout(() => {
+                document.getElementById('digits-input')?.focus();
+            }, 100);
+        }
+    };
+
+    const clearKeyboard = () => {
+        if (activeLetterField === 1) {
+            setLetter1("");
+        } else if (activeLetterField === 2) {
+            setLetter2("");
+        }
+    };
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -16,10 +71,26 @@ export default function HumanPage() {
         setResult(null);
         setMergedImageUrl(null);
 
-        if (!registerNo.trim()) {
-            setStatus("Та регистрийн дугаараа оруулна уу.");
+        // Validate each part
+        if (!letter1 || !letter2) {
+            setStatus("Регистрийн үсгүүдийг оруулна уу.");
             return;
         }
+
+        if (digits.length !== 8) {
+            setStatus("Регистрийн дугаар 8 оронтой байх ёстой.");
+            return;
+        }
+
+        // Validate Cyrillic letters
+        const cyrillicPattern = /^[А-ЯЁӨҮа-яёөү]$/;
+        if (!cyrillicPattern.test(letter1) || !cyrillicPattern.test(letter2)) {
+            setStatus("Зөвхөн Монгол кирилл үсэг ашиглана уу.");
+            return;
+        }
+
+        // Combine the parts
+        const registerNo = `${letter1}${letter2}${digits}`;
 
         setLoading(true);
         const result = await fetchHomoHuman(registerNo.trim());
@@ -30,6 +101,22 @@ export default function HumanPage() {
         }
         setLoading(false);
     }
+
+    const handleDigitsChange = (e) => {
+        const value = e.target.value;
+        if (/^\d{0,8}$/.test(value)) {
+            setDigits(value);
+        }
+    };
+
+    const handleKeyDown = (e, field) => {
+        if (e.key === 'Backspace') {
+            if (field === 'digits' && !digits) {
+                e.preventDefault();
+                document.getElementById('letter2-input')?.click();
+            }
+        }
+    };
 
     useEffect(() => {
         async function mergeImages() {
@@ -97,38 +184,107 @@ export default function HumanPage() {
                     Та Монгол Улсын хэд дэх иргэн бэ?
                 </h1>
 
-                {!result && <form onSubmit={handleSubmit} className="border border-gray-300 rounded-lg p-4 mb-6 bg-gray-50">
-                    <div className="mb-3">
-                        <label className="block text-sm font-medium mb-2">
+                {!result && <form onSubmit={handleSubmit} className="max-w-lg mx-auto mb-12">
+                    <div className="mb-5">
+                        <label className="block text-gray-800 text-sm font-medium mb-3">
                             Регистрийн дугаар
                         </label>
-                        <input
-                            type="text"
-                            value={registerNo}
-                            onChange={(e) => setRegisterNo(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded"
-                        />
+                        <div className="flex gap-2 items-center">
+                            <input
+                                id="letter1-input"
+                                type="text"
+                                value={letter1}
+                                onClick={() => openKeyboard(1)}
+                                placeholder="Т"
+                                maxLength={1}
+                                readOnly
+                                className="w-16 h-12 px-3 text-center text-lg font-medium border-2 border-blue-300 rounded-xl focus:outline-none focus:border-blue-500 transition-colors uppercase bg-white cursor-pointer"
+                            />
+                            <input
+                                id="letter2-input"
+                                type="text"
+                                value={letter2}
+                                onClick={() => openKeyboard(2)}
+                                placeholder="А"
+                                maxLength={1}
+                                readOnly
+                                className="w-16 h-12 px-3 text-center text-lg font-medium border-2 border-blue-300 rounded-xl focus:outline-none focus:border-blue-500 transition-colors uppercase bg-white cursor-pointer"
+                            />
+                            <input
+                                id="digits-input"
+                                type="text"
+                                inputMode="numeric"
+                                value={digits}
+                                onChange={handleDigitsChange}
+                                onKeyDown={(e) => handleKeyDown(e, 'digits')}
+                                placeholder="97112114"
+                                maxLength={8}
+                                className="flex-1 h-12 px-4 text-lg font-medium border-2 border-gray-300 rounded-xl focus:outline-none focus:border-gray-500 transition-colors bg-gray-50"
+                            />
+                        </div>
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="py-2 px-4 rounded bg-primary text-white font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 px-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         {loading ? "Тооцож байна..." : "Хайх"}
                     </button>
 
                     {status && (
-                        <p
-                            className="mt-2 text-blue-600 text-sm whitespace-pre-line"
-                        >
+                        <div className="mt-4 p-3 bg-gray-50 rounded text-sm text-gray-700 whitespace-pre-line">
                             {status}
-                        </p>
+                        </div>
+                    )}
+
+                    {/* Cyrillic Keyboard Modal */}
+                    {showKeyboard && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowKeyboard(false)}>
+                            <div className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                                <h3 className="text-center text-blue-600 font-semibold text-lg mb-4">
+                                    РД {activeLetterField === 1 ? 'эхний' : 'хоёр дахь'} үсгээ сонгоно уу
+                                </h3>
+                                
+                                <div className="space-y-2 mb-4">
+                                    {cyrillicLetters.map((row, rowIndex) => (
+                                        <div key={rowIndex} className="flex justify-center gap-2">
+                                            {row.map((letter) => (
+                                                <button
+                                                    key={letter}
+                                                    type="button"
+                                                    onClick={() => selectLetter(letter)}
+                                                    className="w-12 h-12 flex items-center justify-center border-2 border-gray-300 rounded-lg text-lg font-medium hover:bg-blue-50 hover:border-blue-400 transition-colors"
+                                                >
+                                                    {letter}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={clearKeyboard}
+                                    className="w-full py-3 border-2 border-red-400 text-red-500 rounded-lg font-medium hover:bg-red-50 transition-colors"
+                                >
+                                    Арилгах
+                                </button>
+                            </div>
+                        </div>
                     )}
                 </form>}
 
                 {result && (
                     <>
+                        <div className="flex justify-center mb-6">
+                            <button
+                                onClick={handleNewSearch}
+                                className="py-2 px-6 bg-white border-2 border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-900 hover:text-white transition-colors"
+                            >
+                                Дахин хайх
+                            </button>
+                        </div>
 
                         {/* Тайлбар (SetDescription1-тэй ижил агуулга) */}
                         {/* <section style={{ marginBottom: 24 }}>
@@ -175,7 +331,7 @@ export default function HumanPage() {
                             </a>
                         )} */}
 
-                            {mergedImageUrl && (
+                            {result.image1Url && (
                                 <a
                                     href={mergedImageUrl}
                                     download="sonirkholtoi-image.png"
