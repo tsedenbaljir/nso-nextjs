@@ -69,6 +69,9 @@ export async function fetchHomoHuman(registerNo) {
             },
             body: JSON.stringify({ registerNo: registerNo }),
             cache: 'no-store',
+            // Allow self-signed / untrusted certificates when calling BASE_URL
+            // to avoid UNABLE_TO_VERIFY_LEAF_SIGNATURE errors in Node.
+            dispatcher: insecure,
         });
         if (!response.ok) {
             throw new Error('Failed to fetch Homo Human');
