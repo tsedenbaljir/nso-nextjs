@@ -62,7 +62,7 @@ export async function fetchTableauKey() {
 export async function fetchHomoHuman(registerNo) {
     try {
         // Use absolute URL for server-side requests
-        const response = await fetch(`${process.env.BASE_URL}/api/human`, {
+        const response = await fetch(`http://localhost:3000/api/human`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -84,30 +84,3 @@ export async function fetchHomoHuman(registerNo) {
         return { success: false, error: error.message };
     }
 } 
-
-// export async function fetchHomoHuman(registerNo) {
-//     try {
-//         const myHeaders = new Headers();
-//         myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
-//         const requestOptions = {
-//             method: 'POST',
-//             headers: myHeaders,
-//             body: JSON.stringify({ registerNo: registerNo }),
-//         };
-
-//         const response = await fetch(`/api/human`, {
-//             ...requestOptions,
-//             cache: 'no-store',
-//             dispatcher: insecure,
-//         });
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch Homo Human');
-//         }
-
-//         const result = await response.json();
-//         return { success: true, data: result };
-//     } catch (error) {
-//         console.error('Homo Human fetch error:', error);
-//         return { success: false, error: error.message };
-//     }
-// }
