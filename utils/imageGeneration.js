@@ -63,7 +63,7 @@ export async function setImage(
     let secondLocation = { x: 140, y: 390 };
     let Location3 = { x: 140, y: 420 };
     let Location4 = { x: 140, y: 450 };
-    let fontsz = 25;
+    let fontsz = 20;
 
     const nameLength = lastName.length + firstName.length;
 
