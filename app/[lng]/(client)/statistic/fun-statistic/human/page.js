@@ -1,31 +1,19 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { fetchHomoHuman } from "@/app/services/actions";
-import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function HumanPage() {
-    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-    const recaptchaRef = useRef(null)
     const [registerNo, setRegisterNo] = useState("");
-    const [captcha, setCaptcha] = useState("");
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState(null);
     const [result, setResult] = useState(null);
-    const [mergedImageUrl, setMergedImageUrl] = useState(null);
-    const [captchaToken, setCaptchaToken] = useState('')
 
     async function handleSubmit(e) {
         e.preventDefault();
         setStatus(null);
         setResult(null);
         setMergedImageUrl(null);
-
-        // ASP.NET ExampleCaptcha.Validate аналог — одоо болхоор зүгээр хоосон биш гэж шалгаж байна
-        if (siteKey && !captchaToken) {
-            setStatus("Та зурган кодыг оруулна уу.");
-            return;
-        }
 
         if (!registerNo.trim()) {
             setStatus("Та регистрийн дугаараа оруулна уу.");
@@ -115,7 +103,7 @@ export default function HumanPage() {
                 Хүн амын сонирхолтой статистик
             </h1>
 
-            <form
+            {!result && <form
                 onSubmit={handleSubmit}
                 style={{
                     border: "1px solid #e5e7eb",
@@ -149,33 +137,6 @@ export default function HumanPage() {
                     />
                 </div>
 
-                <div style={{ marginBottom: 12 }}>
-                    <label
-                        style={{
-                            display: "block",
-                            fontSize: 14,
-                            fontWeight: 600,
-                            marginBottom: 4,
-                        }}
-                    >
-                        Зурган код (captcha)
-                    </label>
-                    {siteKey && (
-                        <div className="flex justify-left">
-                            <ReCAPTCHA
-                                ref={recaptchaRef}
-                                sitekey={siteKey}
-                                onChange={(token) => setCaptchaToken(token || '')}
-                                onExpired={() => setCaptchaToken('')}
-                            />
-                        </div>
-                    )}
-                    {/* <p style={{ fontSize: 11, color: "#6b7280", marginTop: 4 }}>
-                        (Жишээ: одоогоор зөвхөн хоосон эсэхийг шалгаж байна. Хэрэв өөрийн
-                        ExampleCaptcha эсвэл reCAPTCHA ашиглах бол энд интеграцлана.)
-                    </p> */}
-                </div>
-
                 <button
                     type="submit"
                     disabled={loading}
@@ -204,7 +165,7 @@ export default function HumanPage() {
                         {status}
                     </p>
                 )}
-            </form>
+            </form>}
 
             {result && result.ok && (
                 <>
