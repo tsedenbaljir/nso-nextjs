@@ -101,7 +101,7 @@ export default function HumanPage() {
             }}
         >
             <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16 }}>
-                Хүн амын сонирхолтой статистик
+                Та Монгол Улсын хэд дэх иргэн бэ?
             </h1>
 
             {!result && <form

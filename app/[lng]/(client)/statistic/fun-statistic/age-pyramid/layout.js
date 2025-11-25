@@ -23,7 +23,7 @@ export default function Statistic({ children, params }) {
   return (
     <>
       <div className="nso_statistic_section bg-white magazines">
-        <Path name={t("dataVis.ageGenderStupa")} breadMap={breadMap} />
+        <Path name={t("funStatistic.name")} breadMap={breadMap} />
         {children}
       </div>
     </>
