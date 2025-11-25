@@ -89,11 +89,10 @@ export default function HumanPage() {
         mergeImages();
     }, [result?.image1Url, result?.image2Url]);
 
-    const model = result?.model || null;
-
     return (
         <div className="nso_container">
             <div className="w-full">
+                <br />
                 <h1 className="text-2xl font-bold mb-4">
                     Та Монгол Улсын хэд дэх иргэн бэ?
                 </h1>
