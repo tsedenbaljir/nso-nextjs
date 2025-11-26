@@ -217,7 +217,7 @@ export default function HumanPage() {
                                 value={digits}
                                 onChange={handleDigitsChange}
                                 onKeyDown={(e) => handleKeyDown(e, 'digits')}
-                                placeholder="97112114"
+                                placeholder="12345678"
                                 maxLength={8}
                                 className="flex-1 h-12 px-4 text-lg font-medium border-2 border-gray-300 rounded-xl focus:outline-none focus:border-gray-500 transition-colors bg-gray-50"
                             />
