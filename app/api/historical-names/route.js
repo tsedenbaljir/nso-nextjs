@@ -5,6 +5,8 @@ import { homoStatistic } from "@/app/api/config/db_csweb.config.js";
  * GET /api/historical-names
  * Fetches historical given names and their population counts
  */
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
     try {
         // Call stored procedure for historical given names
