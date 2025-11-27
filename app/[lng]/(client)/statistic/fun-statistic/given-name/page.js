@@ -111,7 +111,7 @@ export default function GivenNameStatistic() {
 
     const detailRows = useMemo(
         () =>
-            detailData?.series?.map((row) => (
+            detailData?.series?.filter(row => row.year >= 2010 && row.year <= new Date().getFullYear())?.map((row) => (
                 <tr key={`${row.year}-${row.rowNo}`}>
                     <td className="text-center px-3 py-3 border-b border-gray-200 font-semibold">{row.rowNo}</td>
                     <td className="text-center px-3 py-3 border-b border-gray-200">{row.year}</td>
@@ -219,11 +219,9 @@ export default function GivenNameStatistic() {
                                     {detailData.name}
                                 </h2>
                                 <p className="text-gray-700">
-                                    Жил бүрийн бүртгэлтэй тоо (2010-{new Date().getFullYear()}):{" "}
+                                    Нийт бүртгэлтэй иргэдийн тоо:{" "}
                                     <span className="font-bold">
-                                        {detailData.series
-                                            .reduce((sum, row) => sum + (row.population || 0), 0)
-                                            .toLocaleString("mn-MN")}
+                                        {(detailData.totalPopulation || 0).toLocaleString("mn-MN")}
                                     </span>
                                 </p>
                             </div>

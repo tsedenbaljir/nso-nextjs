@@ -47,15 +47,22 @@ export async function GET(request) {
         });
       }
 
+      const series = rows.map((row) => ({
+        rowNo: row.RowNo ?? row.rowNo ?? null,
+        year: row.YearCode ?? row.yearCode ?? null,
+        population: row.Pop ?? row.pop ?? 0,
+      }));
+      const totalPopulation = series.reduce(
+        (sum, row) => sum + (row.population || 0),
+        0
+      );
+
       return NextResponse.json({
         success: true,
         mode: "detail",
         name: filter,
-        series: rows.map((row) => ({
-          rowNo: row.RowNo ?? row.rowNo ?? null,
-          year: row.YearCode ?? row.yearCode ?? null,
-          population: row.Pop ?? row.pop ?? 0,
-        })),
+        series,
+        totalPopulation,
       });
     }
 

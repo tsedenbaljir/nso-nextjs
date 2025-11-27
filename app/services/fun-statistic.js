@@ -11,8 +11,22 @@ const defaultFetchOptions = {
     cache: "no-store",
 };
 
+function appendNoCacheParam(url) {
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}_=${Date.now()}`;
+}
+
 async function fetchJson(url, options = {}) {
-    const response = await fetch(url, { ...defaultFetchOptions, ...options });
+    const finalUrl = appendNoCacheParam(url);
+    const response = await fetch(finalUrl, {
+        ...defaultFetchOptions,
+        ...options,
+        next: { revalidate: 0, ...(options.next || {}) },
+        headers: {
+            "Cache-Control": "no-cache",
+            ...(options.headers || {}),
+        },
+    });
     let payload;
 
     try {
