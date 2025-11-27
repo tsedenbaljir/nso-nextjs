@@ -129,17 +129,29 @@ export default function Statistic({ params }) {
             </span>
           </div>
           {/* <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-                        onClick={() => router.push(`/statistic/fun-statistic/household`)}
-                        style={{ width: "300px" }}>
-                        <img
-                            className="w-[250px] h-[250px] rounded-[20px]"
-                            src="https://gateway.1212.mn/services/fms/api/public/download/0/cT_QAwH_4QLSbTtYter0e_8t2ZRx_1kh_fLT6tge.jpg" />
-                        <br />
-                        <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
-                            {lng === "mn" ? "Монгол Улсын хүн амын тоо" : ""}
-                        </label>
-                        <span className="desc">{lng === "mn" ? "1933 оноос 2018 он хүртэлх жилийн эцсийн хүн амын тоо" : ""}</span>
-                    </div> */}
+                onClick={() => router.push(`/statistic/fun-statistic/household`)}
+                style={{ width: "300px" }}>
+                <img
+                    className="w-[250px] h-[250px] rounded-[20px]"
+                    src="https://gateway.1212.mn/services/fms/api/public/download/0/cT_QAwH_4QLSbTtYter0e_8t2ZRx_1kh_fLT6tge.jpg" />
+                <br />
+                <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
+                    {lng === "mn" ? "Монгол Улсын хүн амын тоо" : ""}
+                </label>
+                <span className="desc">{lng === "mn" ? "1933 оноос 2018 он хүртэлх жилийн эцсийн хүн амын тоо" : ""}</span>
+            </div> */}
+          <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
+            onClick={() => router.push(`/statistic/fun-statistic/given-name`)}
+            style={{ width: "300px" }}>
+            <img
+              className="w-[250px] h-[250px] rounded-[20px]"
+              src="/images/sonirkholtoi/givenname/Default.jpg" />
+            <br />
+            <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
+              {lng === "mn" ? "Тантай ижил нэрийн статистик" : ""}
+            </label>
+            <span className="desc">{lng === "mn" ? "Хүн ам, өрхийн мэдээллийн санд бүртгэгдсэн нэрийн урт, тухайн нэрийн тархалт болон хамгийн түгээмэл/ховор нэрүүдийн интерактив мэдээлэл." : ""}</span>
+          </div>
         </div>
       </div>
       <br />

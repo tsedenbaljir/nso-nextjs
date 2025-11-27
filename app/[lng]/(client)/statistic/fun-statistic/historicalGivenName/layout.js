@@ -17,7 +17,7 @@ export default function Statistic({ children, params }) {
       label: t("funStatistic.name"),
       url: [(lng === "mn" ? "/mn" : "/en") + "/statistic/fun-statistic/home"],
     },
-    { label: "Та Монгол Улсын хэд дэх иргэн бэ?" },
+    { label: "Түүхэн нэртэй хүмүүсийн тоо" },
   ];
 
   return (
