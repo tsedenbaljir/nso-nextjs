@@ -1,6 +1,8 @@
 const { data1212 } = require("../config/db_csweb.config");
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 // GET method - accepts remotePath as query parameter
 export async function GET(request) {
     try {
