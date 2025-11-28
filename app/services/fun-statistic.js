@@ -4,6 +4,7 @@ const FUN_STATISTIC_ENDPOINTS = {
     givenNames: "http://localhost:3000/api/given-names",
     familyNames: "http://localhost:3000/api/family-names",
     historicalNames: "http://localhost:3000/api/historical-names",
+    sameDayPeople: "http://localhost:3000/api/same-day-people",
     tableauReport: "https://gateway.1212.mn/services/dynamic/api/public/tableau-report",
 };
 
@@ -67,6 +68,26 @@ export async function getFamilyNameStatistic(query = "") {
 
 export async function getHistoricalNames() {
     return fetchJson(FUN_STATISTIC_ENDPOINTS.historicalNames);
+}
+
+export async function getSameDayPeopleCount({ year, month, day }) {
+    const payload = {
+        year: Number(year),
+        month: Number(month),
+        day: Number(day),
+    };
+
+    if (!payload.year || !payload.month || !payload.day) {
+        throw new Error("Он, сар, өдрөө оруулна уу.");
+    }
+
+    return fetchJson(FUN_STATISTIC_ENDPOINTS.sameDayPeople, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
 }
 
 export async function fetchTableauTicket(params = {}) {
