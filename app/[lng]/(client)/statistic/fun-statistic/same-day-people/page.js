@@ -101,9 +101,9 @@ export default function SameDayPeoplePage() {
             <div className="nso_statistic_section bg-white magazines px-4 py-8 w-full">
                 <div className="space-y-8 w-full">
                     <section className="text-center space-y-4">
-                        <h1 className="text-3xl md:text-4xl font-bold">Тантай ижил өдөр төрсөн хүмүүс</h1>
+                        <h1 className="text-3xl md:text-4xl font-bold">Тантай нэг өдөр төрсөн хүмүүс</h1>
                         <p className="text-gray-600 max-w-4xl mx-auto">
-                            Төрсөн он, сар, өдрөө оруулж, тантай ижил өдөр төрсөн хүмүүсийн нийт тоог шалгана уу.
+                            Төрсөн он, сар, өдрөө оруулж, тантай нэг өдөр төрсөн хүмүүсийн нийт тоог үзнэ үү.
                         </p>
                     </section>
 
@@ -157,14 +157,14 @@ export default function SameDayPeoplePage() {
 
                                 <div className="flex flex-col flex-1 min-w-[140px]">
                                     <label className="text-sm font-medium text-gray-700 mb-2 opacity-0 select-none">
-                                        Хайх
+                                        ХАЙХ
                                     </label>
                                     <button
                                         type="submit"
                                         className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                                         disabled={loading}
                                     >
-                                        {loading ? "Тооцож байна..." : "Хайх"}
+                                        {loading ? "Тооцож байна..." : "ХАЙХ"}
                                     </button>
                                 </div>
                             </div>

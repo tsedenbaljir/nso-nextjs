@@ -193,9 +193,9 @@ export async function setImage1(model, options = {}) {
     }
 
     // Calculate positions
-    const point1a = { x: 197, y: 1414 };
+    const point1a = { x: 300, y: 1414 };
     const point1b = { x: 731, y: 1414 };
-    const postion = 60 * model.name.length;
+    const postion = 50 * model.name.length;
     const point1c = { x: 731 + postion, y: 1414 };
 
     const point2 = { x: 237, y: 1522 };
@@ -269,7 +269,7 @@ export async function setImage1(model, options = {}) {
         ctx.fillText(text1c, point1c.x, point1c.y);
 
         // Draw main text (Times New Roman, italic)
-        ctx.font = `italic ${bodyFontSize}px 'Times New Roman', 'Times', serif`;
+        ctx.font = `bold italic ${bodyFontSize}px "Times New Roman", "Times", serif`;
         ctx.fillStyle = "rgb(8, 75, 138)";
 
         ctx.fillText(text2, point2.x, point2.y);

@@ -10,30 +10,6 @@ export default function Statistic({ params }) {
     <>
       <div className="nso_container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-10">
-          <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/given-name`)}
-            style={{ width: "300px" }}>
-            <img
-              className="w-[250px] h-[250px] rounded-[20px]"
-              src="/images/sonirkholtoi/givenname/Default.jpg" />
-            <br />
-            <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
-              {lng === "mn" ? "Тантай ижил нэрийн статистик" : ""}
-            </label>
-            <span className="desc">{lng === "mn" ? "Хүн ам, өрхийн мэдээллийн санд бүртгэгдсэн нэрийн урт, тухайн нэрийн тархалт болон хамгийн түгээмэл/ховор нэрүүдийн интерактив мэдээлэл." : ""}</span>
-          </div>
-          <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/same-day-people`)}
-            style={{ width: "300px" }}>
-            <img
-              className="w-[250px] h-[250px] rounded-[20px]"
-              src="/images/sonirkholtoi/SameDay.png" />
-            <br />
-            <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
-              {lng === "mn" ? "Ижил өдөр төрсөн хүмүүсийн тоо" : ""}
-            </label>
-            <span className="desc">{lng === "mn" ? "Ижил өдөр төрсөн хүмүүсийн тоогоо энэдээс хараарай" : ""}</span>
-          </div>
           <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
             onClick={() => router.push(`/statistic/fun-statistic/human`)}
@@ -49,9 +25,33 @@ export default function Statistic({ params }) {
             </label>
             <span className="desc">
               {lng === "mn"
-                ? "Эндээс та Монгол Улсын хэддэх иргэн болон танай ижил нэртэй хүмүүсийн мэдээллийг авах боломжтой."
+                ? "Эндээс та Монгол Улсын хэд дэх иргэн болон танай ижил нэртэй хүмүүсийн мэдээллийг авах боломжтой."
                 : ""}
             </span>
+          </div>
+          <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
+            onClick={() => router.push(`/statistic/fun-statistic/same-day-people`)}
+            style={{ width: "300px" }}>
+            <img
+              className="w-[250px] h-[250px] rounded-[20px]"
+              src="/images/sonirkholtoi/SameDay.png" />
+            <br />
+            <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
+              {lng === "mn" ? "Ижил өдөр төрсний сонирхолтой статистик" : ""}
+            </label>
+            <span className="desc">{lng === "mn" ? "Ижил өдөр төрсөн хүмүүсийн тоогоо эндээс хараарай." : ""}</span>
+          </div>
+          <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
+            onClick={() => router.push(`/statistic/fun-statistic/given-name`)}
+            style={{ width: "300px" }}>
+            <img
+              className="w-[250px] h-[250px] rounded-[20px]"
+              src="/images/sonirkholtoi/givenname/Default.jpg" />
+            <br />
+            <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
+              {lng === "mn" ? "Тантай ижил нэрийн статистик" : ""}
+            </label>
+            <span className="desc">{lng === "mn" ? "Хүн ам, өрхийн мэдээллийн санд бүртгэгдсэн нэрийн урт, тухайн нэрийн тархалт болон хамгийн түгээмэл/ховор нэрүүдийн интерактив мэдээлэл." : ""}</span>
           </div>
           <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
@@ -128,7 +128,7 @@ export default function Statistic({ params }) {
             </label>
             <span className="desc">
               {lng === "mn"
-                ? "1933 оноос 2018 он хүртэлх жилийн эцсийн хүн амын тоо"
+                ? "1935 оноос 2024 он хүртэлх жилийн эцсийн хүн амын тоо"
                 : ""}
             </span>
           </div>

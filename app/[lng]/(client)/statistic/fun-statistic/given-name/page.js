@@ -151,7 +151,7 @@ export default function GivenNameStatistic() {
                             className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                             disabled={loading}
                         >
-                            {loading ? "Тооцож байна..." : "Хайх"}
+                            {loading ? "Тооцож байна..." : "ХАЙХ"}
                         </button>
                         {searchQuery && (
                             <button
@@ -159,7 +159,7 @@ export default function GivenNameStatistic() {
                                 onClick={resetToSummary}
                                 className="w-full md:w-auto px-6 py-3 border border-gray-400 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
                             >
-                                Ерөнхий жагсаалт
+                                Буцах
                             </button>
                         )}
                     </form>

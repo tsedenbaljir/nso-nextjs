@@ -227,9 +227,9 @@ export default function HumanPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 px-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                        {loading ? "Тооцож байна..." : "Хайх"}
+                        {loading ? "Тооцож байна..." : "ХАЙХ"}
                     </button>
 
                     {status && (
@@ -268,7 +268,7 @@ export default function HumanPage() {
                                     onClick={clearKeyboard}
                                     className="w-full py-3 border-2 border-red-400 text-red-500 rounded-lg font-medium hover:bg-red-50 transition-colors"
                                 >
-                                    Арилгах
+                                    ЦУГЛАХ
                                 </button>
                             </div>
                         </div>
@@ -280,7 +280,7 @@ export default function HumanPage() {
                         <div className="flex justify-center mb-6">
                             <button
                                 onClick={handleNewSearch}
-                                className="py-2 px-6 bg-white border-2 border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-900 hover:text-white transition-colors"
+                                className="py-2 px-6 bg-white border-2 border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-blue-600 hover:text-white transition-colors"
                             >
                                 Дахин хайх
                             </button>
