@@ -364,7 +364,7 @@ export default function Footer({ lng }) {
                                         {t('footer.oldVersion2')}
                                     </a>
                                 </span>
-                            </div> */}
+                            </div>
                             <div className="nso_add_item">
                                 <div className="__plus">
                                     <i className="pi pi-link"></i>
@@ -374,7 +374,7 @@ export default function Footer({ lng }) {
                                         {t('footer.oldVersion1')}
                                     </a>
                                 </span>
-                            </div>
+                            </div> */}
                             <div className="nso_add_item">
                                 <div className="__plus">
                                     <i className="pi pi-check"></i>
