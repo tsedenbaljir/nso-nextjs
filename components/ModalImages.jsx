@@ -14,11 +14,7 @@ export default function ModalImages() {
     {
       src: "/images/zurag2.jpg",
       link: "https://2025.mn/login",
-    },
-    {
-      src: "/images/zurag1.jpg",
-      link: "https://www.1212.mn/mn/about-us/news/102922716",
-    },
+    }
   ];
 
   // Next / Prev
@@ -31,7 +27,7 @@ export default function ModalImages() {
     if (!open) return;
     const interval = setInterval(() => {
       setPage((prev) => (prev + 1) % images.length);
-    }, 5000);
+    }, 30000);
     return () => clearInterval(interval);
   }, [open]);
 
