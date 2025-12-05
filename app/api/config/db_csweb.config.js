@@ -61,7 +61,7 @@ const homoStatistic = knex({
     port: 1433,
     user: "1212",
     password: "6sW>'tXJS)31",
-    database: "XAOMCDB",
+    database: "XAOMCDB-NSO",
     options: {
       encrypt: true,
       trustServerCertificate: true,

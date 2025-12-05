@@ -226,7 +226,7 @@ export async function POST(req) {
       );
 
       // Generate statistics image (setImage1)
-      image2Data = await setImage1(model, { headerFontSize: 60, bodyFontSize: 60 });
+      image2Data = await setImage1(model, { headerFontSize: 60, bodyFontSize: 50 });
     } catch (imgError) {
       console.error("Image generation error:", imgError);
       // Continue even if image generation fails
