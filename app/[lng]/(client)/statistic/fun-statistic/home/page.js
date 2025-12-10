@@ -132,7 +132,7 @@ export default function Statistic({ params }) {
                 : ""}
             </span>
           </div>
-          <div
+          {/* <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
             onClick={() => router.push(`/statistic/fun-statistic/household`)}
             style={{ width: "300px" }}
@@ -150,7 +150,7 @@ export default function Statistic({ params }) {
                 ? "Таны  орлого, цалин, хөдөлмөр эрхлэлтийг улсын дундажтай харьцуулахад (2024)"
                 : ""}
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
       <br />
