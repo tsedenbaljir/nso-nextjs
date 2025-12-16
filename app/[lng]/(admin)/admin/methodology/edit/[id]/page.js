@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import LoaderText from '@/components/Loading/Text/Index'
 import InputItems from "@/components/admin/Edits/AddNew/InputItems"
 import SelectInput from "@/components/admin/Edits/Select/SelectInput"
-import Upload from "@/components/admin/Edits/UploadImages/Upload"
 import { Select, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 
@@ -269,10 +268,84 @@ export default function EditMethodology({ params: { lng, id } }) {
                     />
                 </div>
                 <div className='flex flex-wrap gap-3 mb-4' >
-                    <div className='flex flex-wrap gap-3 mb-6'>
-                        <Upload
-                            setHeaderImageFile={setUploadedFile}
-                        />
+                    <div className='w-full mb-4'>
+                        <label className="block mb-2 text-sm font-medium text-gray-7 dark:text-white">
+                            Файл
+                        </label>
+                        {currentFileInfo && (
+                            <div className="mb-3 p-3 bg-gray-100 rounded-lg">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                        {(() => {
+                                            try {
+                                                const fileInfo = typeof currentFileInfo === 'string' ? JSON.parse(currentFileInfo) : currentFileInfo;
+                                                return (
+                                                    <div>
+                                                        <p className="text-sm font-medium text-gray-7">
+                                                            Одоогийн файл: {fileInfo.originalName || 'Файл'}
+                                                        </p>
+                                                        {fileInfo.pathName && (
+                                                            <a 
+                                                                href={fileInfo.pathName.startsWith('http') ? fileInfo.pathName : `/uploads/${fileInfo.pathName}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-blue-600 hover:text-blue-800 text-sm underline"
+                                                            >
+                                                                Харах
+                                                            </a>
+                                                        )}
+                                                        {fileInfo.fileSize && (
+                                                            <p className="text-xs text-gray-500 mt-1">
+                                                                Хэмжээ: {(fileInfo.fileSize / 1024 / 1024).toFixed(2)} MB
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                );
+                                            } catch (e) {
+                                                return (
+                                                    <p className="text-sm text-gray-7">
+                                                        Одоогийн файл: {currentFileInfo}
+                                                    </p>
+                                                );
+                                            }
+                                        })()}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setCurrentFileInfo('');
+                                            setUploadedFile(null);
+                                        }}
+                                        className="ml-4 px-3 py-1 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded hover:bg-red-50"
+                                    >
+                                        Устгах
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex-1">
+                            <input
+                                className="block w-full text-sm text-gray-7 border border-gray-3 rounded-lg cursor-pointer bg-gray-1 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-gray-2 file:text-gray-7 hover:file:bg-gray-3 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                id="file_input"
+                                type="file"
+                                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        if (file.size <= 10485760) { // 10MB limit
+                                            setUploadedFile(file);
+                                        } else {
+                                            alert(`Файлын хэмжээ их байна. 10MB-аас бага хэмжээтэй файл оруулна уу! Таны оруулсан файлын хэмжээ: ${(file.size / 1024 / 1024).toFixed(2)} MB байна.`);
+                                            e.target.value = '';
+                                            setUploadedFile(null);
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
+                        <p className="mt-1 text-sm text-gray-6 dark:text-gray-4">
+                            Зөвшөөрөх файлын төрөл: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV (Хамгийн их хэмжээ: 10MB)
+                        </p>
                     </div>
                     <DatePicker
                         className='mt-4'
