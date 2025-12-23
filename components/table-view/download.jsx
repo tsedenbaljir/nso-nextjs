@@ -1,7 +1,205 @@
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { saveAs } from 'file-saver';
 
-export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_data') {
+// Helper function to convert HTML to plain text and format for Excel (2 columns: Field | Value)
+function htmlToExcelData(htmlContent) {
+    if (!htmlContent) return [];
+    
+    // Create a temporary DOM element to parse HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlContent;
+    
+    const rows = [];
+    
+    // First, try to find the specific structure used in metadata: .row with .cell2 (field) and .cell3 (value)
+    const metadataRows = tempDiv.querySelectorAll('.row, [class*="row"]');
+    if (metadataRows.length > 0) {
+        metadataRows.forEach(row => {
+            // Look for cell2 (field label) and cell3 (value)
+            const cell2 = row.querySelector('.cell2, [class*="cell2"]');
+            const cell3 = row.querySelector('.cell3, [class*="cell3"]');
+            
+            if (cell2 && cell3) {
+                const field = cell2.textContent.trim();
+                // Check for links in cell3
+                const link = cell3.querySelector('a');
+                let value = cell3.textContent.trim();
+                
+                // If there's a link, extract the href and preserve the text
+                let linkUrl = null;
+                if (link && link.href) {
+                    linkUrl = link.href;
+                    // Keep the original text value, we'll add hyperlink in Excel
+                    // The value already contains the link text from textContent
+                }
+                
+                if (field || value) {
+                    rows.push([field, value, linkUrl]); // Store link separately for Excel hyperlink
+                }
+            } else {
+                // Try to find any two cells in the row
+                const cells = row.querySelectorAll('.cell, [class*="cell"], td, div');
+                if (cells.length >= 2) {
+                    const field = cells[0].textContent.trim();
+                    const value = cells[1].textContent.trim();
+                    if (field || value) {
+                        rows.push([field, value]);
+                    }
+                } else if (cells.length === 1) {
+                    const text = cells[0].textContent.trim();
+                    if (text && !text.includes('Мета мэдээлэл')) {
+                        // Skip if it's just a title/header
+                        rows.push([text, '']);
+                    }
+                }
+            }
+        });
+    }
+    
+    // Try to find table structure (standard HTML tables)
+    if (rows.length === 0) {
+        const tables = tempDiv.querySelectorAll('table');
+        if (tables.length > 0) {
+            tables.forEach(table => {
+                const tableRows = table.querySelectorAll('tr');
+                tableRows.forEach(tr => {
+                    const cells = tr.querySelectorAll('td, th');
+                if (cells.length >= 2) {
+                    // If table has 2+ columns, use first as field, second as value
+                    const field = cells[0].textContent.trim();
+                    const cell2 = cells[1];
+                    // Check for links in the value cell
+                    const link = cell2.querySelector('a');
+                    let value = cell2.textContent.trim();
+                    
+                    // If there's a link, extract the href (keep original text)
+                    const linkUrl = link && link.href ? link.href : null;
+                    
+                    if (field || value) {
+                        rows.push([field, value, linkUrl]);
+                    }
+                    } else if (cells.length === 1) {
+                        // Single cell - might be a header
+                        const text = cells[0].textContent.trim();
+                        if (text && !text.includes('Мета мэдээлэл')) {
+                            rows.push([text, '']);
+                        }
+                    }
+                });
+            });
+        }
+    }
+    
+    // Try definition lists (dl, dt, dd)
+    if (rows.length === 0) {
+        const dlElements = tempDiv.querySelectorAll('dl');
+        if (dlElements.length > 0) {
+            dlElements.forEach(dl => {
+                const dts = dl.querySelectorAll('dt');
+                const dds = dl.querySelectorAll('dd');
+                const maxLen = Math.max(dts.length, dds.length);
+                for (let i = 0; i < maxLen; i++) {
+                    const field = dts[i] ? dts[i].textContent.trim() : '';
+                    const dd = dds[i];
+                    let value = dd ? dd.textContent.trim() : '';
+                    // Check for links in dd
+                    const link = dd ? dd.querySelector('a') : null;
+                    
+                    // If there's a link, extract the href (keep original text)
+                    const linkUrl = link && link.href ? link.href : null;
+                    
+                    if (field || value) {
+                        rows.push([field, value, linkUrl]);
+                    }
+                }
+            });
+        }
+    }
+    
+    // Try div-based structures with labels and values
+    if (rows.length === 0) {
+        const divs = tempDiv.querySelectorAll('div');
+        divs.forEach(div => {
+            // Look for divs with class or structure that suggests field-value pairs
+            const label = div.querySelector('label, strong, b, .label, .field');
+            const value = div.querySelector('span, .value, .content');
+            
+            if (label && value) {
+                rows.push([label.textContent.trim(), value.textContent.trim()]);
+            } else if (div.textContent.trim()) {
+                // If div has text but no clear structure, try to split by colon or other separators
+                const text = div.textContent.trim();
+                const colonIndex = text.indexOf(':');
+                if (colonIndex > 0 && colonIndex < text.length - 1) {
+                    const field = text.substring(0, colonIndex).trim();
+                    const value = text.substring(colonIndex + 1).trim();
+                    if (field && value) {
+                        rows.push([field, value]);
+                    }
+                }
+            }
+        });
+    }
+    
+    // Fallback: try to parse by splitting text with common separators
+    if (rows.length === 0) {
+        const text = tempDiv.textContent.trim();
+        if (text) {
+            // Split by newlines and try to identify field-value pairs
+            const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+            lines.forEach(line => {
+                // Try to split by colon, dash, or other separators
+                const separators = [':', ' - ', ' — ', ' | '];
+                let found = false;
+                for (const sep of separators) {
+                    const index = line.indexOf(sep);
+                    if (index > 0 && index < line.length - 1) {
+                        const field = line.substring(0, index).trim();
+                        const value = line.substring(index + sep.length).trim();
+                        if (field && value) {
+                            rows.push([field, value]);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found && line && !line.includes('Мета мэдээлэл')) {
+                    // If no separator found, put entire line in first column
+                    rows.push([line, '']);
+                }
+            });
+        }
+    }
+    
+    // Filter out empty rows and duplicate headers, and process links
+    const filteredRows = rows.map((row, index) => {
+        // If row has 3 elements, the third is the link URL
+        if (row.length === 3 && row[2]) {
+            return [row[0], row[1], row[2]]; // Keep link as third element
+        }
+        return [row[0], row[1], null]; // No link
+    }).filter((row, index) => {
+        // Skip if both cells are empty
+        if (!row[0] && !row[1]) return false;
+        // Skip duplicate "Мета мэдээлэл" entries
+        if (row[0] === 'Мета мэдээлэл' && index > 0) return false;
+        return true;
+    });
+    
+    // If still no rows, return a message
+    if (filteredRows.length === 0) {
+        return [['Талбар', 'Утга', null], ['Мета мэдээлэл', 'No metadata available', null]];
+    }
+    
+    // Add header row if not already present
+    if (filteredRows.length > 0 && (filteredRows[0][0] !== 'Талбар' && filteredRows[0][0] !== 'Field')) {
+        filteredRows.unshift(['Талбар', 'Утга', null]); // Field | Value in Mongolian
+    }
+    
+    return filteredRows;
+}
+
+export async function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_data', metadataUrl = null) {
     if (format === "csv") {
         const dimensions = pxData.dimension;
         const dimensionIds = pxData.id;
@@ -157,6 +355,77 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
                 .replace(/[:\\/?*[\]]/g, '')
                 .slice(0, 31);
             XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+            // Add metadata to sheet 2 if metadataUrl is provided
+            if (metadataUrl && format === 'xlsx') {
+                try {
+                    const metadataData = htmlToExcelData(metadataUrl);
+                    if (metadataData.length > 0) {
+                        // Create data array with only 2 columns (field, value) for the sheet
+                        const sheetData = metadataData.map(row => [row[0], row[1]]);
+                        const metadataWs = XLSX.utils.aoa_to_sheet(sheetData);
+                        metadataWs['!cols'] = [{ wch: 30 }, { wch: 60 }]; // Set column widths
+                        
+                        // Add borders, hyperlinks, and blue color styling
+                        const range = XLSX.utils.decode_range(metadataWs['!ref']);
+                        const borderStyle = {
+                            style: 'thin',
+                            color: { rgb: "000000" }
+                        };
+                        
+                        for (let R = range.s.r; R <= range.e.r; ++R) {
+                            for (let C = range.s.c; C <= range.e.c; ++C) {
+                                const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+                                if (!metadataWs[cellRef]) metadataWs[cellRef] = { v: '' };
+                                if (!metadataWs[cellRef].s) metadataWs[cellRef].s = {};
+                                if (!metadataWs[cellRef].s.border) {
+                                    metadataWs[cellRef].s.border = {
+                                        top: borderStyle,
+                                        bottom: borderStyle,
+                                        left: borderStyle,
+                                        right: borderStyle
+                                    };
+                                }
+                                
+                                // Add hyperlink and blue color if this is column B (value column) and there's a link
+                                if (C === 1 && metadataData[R] && metadataData[R][2]) {
+                                    const linkUrl = metadataData[R][2];
+                                    metadataWs[cellRef].l = { Target: linkUrl, Tooltip: linkUrl };
+                                    // Initialize font object if it doesn't exist
+                                    if (!metadataWs[cellRef].s.font) {
+                                        metadataWs[cellRef].s.font = {};
+                                    }
+                                    metadataWs[cellRef].s.font.color = { rgb: "0000FF" };
+                                    metadataWs[cellRef].s.font.underline = true;
+                                }
+                                
+                                // Also make "Мета мэдээллийн дэлгэрэнгүйг энд дарж үзнэ үү" text blue
+                                if (C === 1 && metadataWs[cellRef].v) {
+                                    const cellValue = String(metadataWs[cellRef].v);
+                                    if (cellValue.includes('Мета мэдээллийн дэлгэрэнгүйг энд дарж үзнэ үү') || 
+                                        cellValue.includes('Мета мэдээллийн дэлгэрэнгүйг')) {
+                                        // Initialize font object if it doesn't exist
+                                        if (!metadataWs[cellRef].s.font) {
+                                            metadataWs[cellRef].s.font = {};
+                                        }
+                                        // Set blue color - ensure proper structure
+                                        metadataWs[cellRef].s.font.color = { rgb: "0000FF" };
+                                        metadataWs[cellRef].s.font.underline = true;
+                                        // Also add hyperlink if available
+                                        if (metadataData[R] && metadataData[R][2]) {
+                                            metadataWs[cellRef].l = { Target: metadataData[R][2], Tooltip: metadataData[R][2] };
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        XLSX.utils.book_append_sheet(wb, metadataWs, 'Metadata');
+                    }
+                } catch (error) {
+                    console.error('Error adding metadata to Excel:', error);
+                }
+            }
 
             const now = new Date();
             const timestamp = now
@@ -415,6 +684,95 @@ export function exportPXWebToExcel(pxData, format = 'xlsx', filename = 'pxweb_da
             .replace(/[:\\/?*[\]]/g, '')
             .slice(0, 31);
         XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+        // Add metadata to sheet 2 if metadataUrl is provided
+        if (metadataUrl && format === 'xlsx') {
+            try {
+                const metadataData = htmlToExcelData(metadataUrl);
+                if (metadataData.length > 0) {
+                    // Create data array with only 2 columns (field, value) for the sheet
+                    const sheetData = metadataData.map(row => [row[0], row[1]]);
+                    const metadataWs = XLSX.utils.aoa_to_sheet(sheetData);
+                    // Set column widths: Field column (30) and Value column (60)
+                    metadataWs['!cols'] = [{ wch: 30 }, { wch: 60 }];
+                    
+                    // Style the header row (first row)
+                    const headerStyle = {
+                        font: { bold: true },
+                        alignment: { horizontal: 'center' },
+                        fill: { fgColor: { rgb: "E6F2FF" } } // Light blue background
+                    };
+                    
+                    // Apply header style to first row
+                    if (metadataWs['A1']) {
+                        metadataWs['A1'].s = headerStyle;
+                    }
+                    if (metadataWs['B1']) {
+                        metadataWs['B1'].s = headerStyle;
+                    }
+                    
+                    // Add borders and hyperlinks to all cells
+                    const range = XLSX.utils.decode_range(metadataWs['!ref']);
+                    const borderStyle = {
+                        style: 'thin',
+                        color: { rgb: "000000" }
+                    };
+                    
+                    for (let R = range.s.r; R <= range.e.r; ++R) {
+                        for (let C = range.s.c; C <= range.e.c; ++C) {
+                            const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+                            if (!metadataWs[cellRef]) metadataWs[cellRef] = { v: '' };
+                            if (!metadataWs[cellRef].s) metadataWs[cellRef].s = {};
+                            if (!metadataWs[cellRef].s.border) {
+                                metadataWs[cellRef].s.border = {
+                                    top: borderStyle,
+                                    bottom: borderStyle,
+                                    left: borderStyle,
+                                    right: borderStyle
+                                };
+                            }
+                            
+                            // Style cells in column B (value column)
+                            if (C === 1) {
+                                const cellValue = metadataWs[cellRef].v ? String(metadataWs[cellRef].v) : '';
+                                const hasLink = metadataData[R] && metadataData[R][2];
+                                const hasMetadataText = cellValue.includes('Мета мэдээллийн дэлгэрэнгүйг энд дарж үзнэ үү') || 
+                                                      cellValue.includes('Мета мэдээллийн дэлгэрэнгүйг');
+                                
+                                // Initialize font object
+                                if (!metadataWs[cellRef].s.font) {
+                                    metadataWs[cellRef].s.font = {};
+                                }
+                                
+                                // Add hyperlink if available
+                                if (hasLink) {
+                                    const linkUrl = metadataData[R][2];
+                                    metadataWs[cellRef].l = { Target: linkUrl, Tooltip: linkUrl };
+                                    // Set blue color and underline for links
+                                    metadataWs[cellRef].s.font.color = { rgb: "0000FF" };
+                                    metadataWs[cellRef].s.font.underline = true;
+                                }
+                                
+                                // Make metadata text blue (with or without link)
+                                if (hasMetadataText) {
+                                    // Set blue color and underline
+                                    metadataWs[cellRef].s.font.color = { rgb: "0000FF" };
+                                    metadataWs[cellRef].s.font.underline = true;
+                                    // Add hyperlink if available, otherwise add placeholder to ensure it's clickable
+                                    if (!hasLink) {
+                                        metadataWs[cellRef].l = { Target: '#', Tooltip: cellValue };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    XLSX.utils.book_append_sheet(wb, metadataWs, 'Metadata');
+                }
+            } catch (error) {
+                console.error('Error adding metadata to Excel:', error);
+            }
+        }
 
         const now = new Date();
         const timestamp = now

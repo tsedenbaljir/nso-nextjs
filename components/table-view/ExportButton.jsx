@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { handlePrint } from './print';
 import { exportPXWebToExcel } from './download';
 
-export default function ExportButton({ data, title, lng }) {
-    const [showOptions, setShowOptions] = useState(false);
+export default function ExportButton({ data, title, lng, metadataUrl }) {
+    const [showOptions, setShowOptions] = useState(false);  
 
     return (
         <div className='w-full'>
@@ -33,7 +33,7 @@ export default function ExportButton({ data, title, lng }) {
                 </div>
                 <div className={'absolute ' + (showOptions ? 'block' : 'hidden') + ' w-60 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10'}>
                     <button
-                        onClick={() => exportPXWebToExcel(data, 'xlsx', title)}
+                        onClick={() => exportPXWebToExcel(data, 'xlsx', title, metadataUrl)}
                         className='w-full text-right px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center gap-2'
                     >
                         <svg className="w-2 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,7 +42,7 @@ export default function ExportButton({ data, title, lng }) {
                         Excel (.xlsx)
                     </button>
                     <button
-                        onClick={() => exportPXWebToExcel(data, 'csv', title)}
+                        onClick={() => exportPXWebToExcel(data, 'csv', title, metadataUrl)}
                         className='w-full text-right px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center gap-2'
                     >
                         <svg className="w-2 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

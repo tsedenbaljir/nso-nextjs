@@ -12,7 +12,7 @@ import BarChart from './charts/BarChart';
 import AreaChart from './charts/AreaChart';
 import PieChart from './charts/PieChart';
 
-export default function VariablesPanel({ variables, title, url, lng, setSelectedValues, selectedValues }) {
+export default function VariablesPanel({ metadataUrl, variables, title, url, lng, setSelectedValues, selectedValues }) {
   const [selectedValuesCount, setSelectedValuesCount] = useState(0);
   const [showOptions, setShowOptions] = useState(1);
   const [resultData, setResultData] = useState(null);
@@ -108,7 +108,7 @@ export default function VariablesPanel({ variables, title, url, lng, setSelected
 
   return (
     <div className='flex flex-col'>
-      <ExportButton data={resultData} title={title} lng={lng} />
+      <ExportButton data={resultData} title={title} lng={lng} metadataUrl={metadataUrl} />
       <div className='flex flex-row flex-wrap gap-2'>
         {variables.map((variable) => (
           <VariableSelector
