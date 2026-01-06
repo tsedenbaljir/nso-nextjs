@@ -12,8 +12,8 @@ export default function ModalImages() {
 
   const images = [
     {
-      src: "/images/zurag2.jpg",
-      link: "https://2025.mn/login",
+      src: "/images/Customer_Satisfaction_Survey.jpg",
+      link: "https://forms.office.com/r/zjd39SmGTF?origin=lprLink",
     }
   ];
 
