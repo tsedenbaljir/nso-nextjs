@@ -28,17 +28,17 @@ export default function Glossary({ params }) {
       setFilterLoading(true);
       try {
         // Prepare query parameters
-        const params = new URLSearchParams({
+        const queryParams = new URLSearchParams({
           page: Math.floor(first / rows),  // ✅ Proper pagination calculation
           pageSize: rows,
           lng: lng
         });
 
         if (selectedFilter?.id) {
-          params.append("catalogue_id", selectedFilter.id);
+          queryParams.append("catalogue_id", selectedFilter.id);
         }
 
-        const response = await fetch(`/api/methodology/classification`);
+        const response = await fetch(`/api/methodology/classification?${queryParams.toString()}`);
         const result = await response.json();
 
         if (result.status) {
@@ -59,7 +59,7 @@ export default function Glossary({ params }) {
     };
 
     fetchMethodology();
-  }, [first, rows, lng]); // ✅ `first` and `rows` are now working properly!
+  }, [first, rows, lng, selectedFilter]); // ✅ `first`, `rows`, `lng`, and `selectedFilter` are now working properly!
 
   // const handleFilterChange = (filter) => {
   //   setSelectedFilter(filter);
