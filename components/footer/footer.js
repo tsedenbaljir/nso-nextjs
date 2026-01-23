@@ -451,7 +451,7 @@ export default function Footer({ lng }) {
                             <div className="__input" style={{ display: 'flex' }}>
                                 <div className="__input">
                                     <a href="https://iaac.mn/" target="_blank" rel="noopener noreferrer">
-                                        <img src="/images/110-call-atg-logo.gif" width="140px" alt="Logo" />
+                                        <img src="/images/110.jpg" width="140px" alt="Logo" />
                                     </a>
                                 </div>
                                 <div className="__input">
