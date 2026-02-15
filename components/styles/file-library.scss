@@ -15,14 +15,16 @@
   width: 100%;
   padding-top: 0px;
   padding-bottom: 50px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 
   ul {
     padding: 0;
     position: relative;
 
     li {
-      border-left: 1px solid rgba(51, 58, 63, .1);
-      border-right: 1px solid rgba(51, 58, 63, .24);
+      border-left: 1px solid rgba(51, 58, 63, 0.1);
+      border-right: 1px solid rgba(51, 58, 63, 0.24);
       list-style-type: none;
       padding: 10px 10px 10px 20px;
 
@@ -33,7 +35,7 @@
 
       &:hover {
         border-left: 2px solid;
-        border-bottom: 1px solid rgba(51, 58, 63, .24);
+        border-bottom: 1px solid rgba(51, 58, 63, 0.24);
         cursor: pointer;
 
         a {
@@ -44,27 +46,150 @@
       }
     }
   }
+
+  /* File-library sidebar: nested sub-filters and years */
+  .__cate_groups {
+    > ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .__cate_main_li {
+      padding: 0;
+      border-bottom: 1px solid rgba(51, 58, 63, 0.08);
+
+      &:hover {
+        border-bottom: 1px solid rgba(51, 58, 63, 0.24);
+      }
+    }
+
+    .__cate_main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 10px 10px 10px 20px;
+      min-height: 44px;
+
+      a {
+        flex: 1;
+      }
+    }
+
+    .__cate_toggle {
+      font-size: 0.65rem;
+      color: var(--text-main);
+      margin-left: 4px;
+    }
+
+    .__cate_sub_list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0 0 4px 0;
+      padding: 0 0 0 16px;
+      border-left: none;
+      border-right: none;
+    }
+
+    .__cate_sub_li {
+      padding: 0;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      margin-bottom: 2px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(51, 58, 63, 0.06);
+        padding-bottom: 6px;
+        margin-bottom: 6px;
+      }
+
+      &:hover {
+        border-left: none;
+        border-bottom: none;
+        background-color: transparent;
+      }
+    }
+
+    .__cate_sub_label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+      padding: 4px 0 4px 0;
+      cursor: default;
+    }
+
+    .__cate_year_list {
+      list-style: none;
+      padding-left: 12px;
+      margin: 0 0 4px 0;
+      border: none;
+    }
+
+    .__cate_year_li {
+      padding: 0;
+      border: none;
+      margin: 0;
+
+      &:hover {
+        border: none;
+        background-color: transparent;
+      }
+    }
+
+    .__cate_year_link,
+    .__cate_sub_link {
+      display: block;
+      padding: 6px 10px 6px 12px;
+      margin-left: -12px;
+      margin-right: -10px;
+      border-left: 3px solid transparent;
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+
+      &:hover {
+        color: var(--text-accent);
+        background-color: var(--surface-b);
+      }
+
+      &.active {
+        border-left: 3px solid var(--surface-dark, #333a3f);
+        color: var(--text-accent);
+        background-color: var(--surface-b);
+        font-weight: 500;
+      }
+    }
+
+    .__cate_main_li.active {
+      border-left: 2px solid var(--surface-dark, #333a3f);
+      border-bottom: 1px solid rgba(51, 58, 63, 0.24);
+      background-color: var(--surface-b);
+
+      .__cate_main a {
+        color: var(--text-accent);
+      }
+
+      .__cate_main::before {
+        display: none;
+      }
+    }
+  }
 }
 
-li.active {
-  border-left: 2px solid var(--surface-dark) !important;
-  border-bottom: 1px solid #333a3f3d !important;
+.__cate_groups_lib li.active,
+.__cate_groups_lib .__cate_groups .__cate_main_li.active {
+  border-left: 2px solid var(--surface-dark, #333a3f) !important;
+  border-bottom: 1px solid rgba(51, 58, 63, 0.24) !important;
 
-  a {
+  > .__cate_main a,
+  > a {
     color: var(--text-accent) !important;
-    display: flex;
-    align-items: center;
+  }
 
-    &::before {
-      width: 5px;
-      height: 5px;
-      content: "";
-      display: block;
-      position: absolute;
-      right: -2.5px;
-      border-radius: 50%;
-      background: var(--surface-c);
-    }
+  &::before {
+    display: none;
   }
 
   background-color: var(--surface-b);

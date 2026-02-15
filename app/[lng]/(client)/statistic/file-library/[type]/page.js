@@ -1,11 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import List from "../../list";
 import Sidebar from "../../sidebar";
 import { useTranslation } from "@/app/i18n/client";
 
 export default function StateCate({ params: { lng }, params }) {
   const { type } = params;
+  const searchParams = useSearchParams();
+  const sub = searchParams.get("sub") ?? undefined;
   const { t } = useTranslation(lng, "lng", "");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -19,8 +22,10 @@ export default function StateCate({ params: { lng }, params }) {
 
   const fetchSubcategories = async (value) => {
     try {
+
+      const subParam = sub ? `&sub=${encodeURIComponent(sub)}` : "";
       const response = await fetch(
-        `/api/file-library?lng=${lng}&type=${type}&searchTerm=${value || ""}`
+        `/api/file-library?lng=${lng}&type=${type}${subParam}&searchTerm=${value || ""}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -42,7 +47,7 @@ export default function StateCate({ params: { lng }, params }) {
 
   useEffect(() => {
     fetchSubcategories();
-  }, [lng, type]);
+  }, [lng, type, sub]);
 
   const handleSearchChange = (event) => {
     const value = event.target.value;
@@ -96,7 +101,7 @@ export default function StateCate({ params: { lng }, params }) {
         {/* Sidebar */}
         <div className="nso_cate_section left-bar">
           <div className="__cate_groups_lib">
-            <Sidebar lng={lng} type={type} />
+            <Sidebar lng={lng} type={type} sub={sub} />
           </div>
         </div>
         {/* Main Content */}

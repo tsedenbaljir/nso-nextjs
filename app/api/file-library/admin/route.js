@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from '@/app/api/config/db_csweb.config';
+import { getAllFileTypeIds } from '@/lib/file-library-ids';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// GET - Fetch all files for admin
+// GET - Fetch all files for admin (file_type stores sector id)
 export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url);
@@ -13,6 +14,8 @@ export async function GET(req) {
         const type = searchParams.get("type");
         const published = searchParams.get("published");
 
+        const typeIds = getAllFileTypeIds().map(String);
+        const placeholders = typeIds.map(() => "?").join(", ");
         let query = `
             SELECT 
                 id,
@@ -30,14 +33,9 @@ export async function GET(req) {
                 last_modified_date,
                 info as description
             FROM web_1212_download 
-            WHERE file_type IN (
-                'nso-magazine', 'magazine', 'census', 'survey', 'infographic',
-                'weekprice', 'foreigntrade', 'presentation', 'bulletin', 'annual',
-                'livingstandart', 'agricultural_census', 'enterprise_census',
-                'livestock_census', 'pahc'
-            ) `;
-
-        const params = [];
+            WHERE file_type IN (${placeholders})
+        `;
+        const params = [...typeIds];
 
         if (lng) {
             query += " AND language = ?";
