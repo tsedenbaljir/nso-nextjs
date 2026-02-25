@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 // Environment variables
 const serviceAccount = process.env.GOOGLE_SERVICE_ACCOUNT;
-const privateKey = process.env.GOOGLE_PRIVATE_KEY.replace('', '\n');
+const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 const GOOGLE_ANALYTICS_PROPERTY_ID = '315626458';
 
 // In-memory caching
@@ -16,6 +16,9 @@ let applicationScopedBean = {
 
 // Helper function to get a new Google Analytics token
 async function getGoogleAnalyticsToken() {
+    if (!serviceAccount || !privateKey) {
+        throw new Error('Missing GOOGLE_SERVICE_ACCOUNT or GOOGLE_PRIVATE_KEY env vars');
+    }
     const now = Math.floor(Date.now() / 1000); // Time in seconds
     const header = { alg: 'RS256', typ: 'JWT' };
     const payload = {
@@ -39,6 +42,9 @@ async function getGoogleAnalyticsToken() {
     { cache: "no-store" });
 
     const result = await tokenResponse.json();
+    if (result.error) {
+        throw new Error(result.error_description || result.error || 'Failed to get OAuth token');
+    }
     return result.access_token;
 }
 
@@ -74,15 +80,31 @@ async function fetchAnalyticsReport(token) {
 export async function GET() {
     const now = Date.now();
 
-    // Check if we need to refresh the token (older than 60 minutes)
-    if (!applicationScopedBean.attribute || (applicationScopedBean.creationTime + 6600000) < now) {
+    // Check if we need to refresh (older than 60 minutes)
+    const CACHE_TTL_MS = 60 * 60 * 1000; // 60 minutes
+    const cached = applicationScopedBean.attribute;
+    const isStale = (applicationScopedBean.creationTime + CACHE_TTL_MS) < now;
+    const hasValidCache = cached && !cached?.error;
+
+    if (!hasValidCache || isStale) {
         try {
             // Get new token
             const token = await getGoogleAnalyticsToken();
-
             // Fetch report
             const report = await fetchAnalyticsReport(token);
-
+            // Check if GA API returned an error (e.g. 429 quota exhausted)
+            if (report?.error) {
+                const { code, message } = report.error;
+                console.error('Google Analytics API error:', code, message);
+                // Return cached data if available, otherwise 503
+                if (hasValidCache) {
+                    return NextResponse.json(applicationScopedBean.attribute, { status: 200 });
+                }
+                return NextResponse.json(
+                    { error: 'Analytics temporarily unavailable', details: message },
+                    { status: 503 }
+                );
+            }
             // Store report in the applicationScopedBean
             applicationScopedBean.attribute = report;
             applicationScopedBean.creationTime = now;
@@ -92,6 +114,13 @@ export async function GET() {
         }
     }
 
-    // Return cached or fresh report
-    return NextResponse.json(applicationScopedBean.attribute, { status: 200 });
+    // Return cached report (only if valid)
+    const data = applicationScopedBean.attribute;
+    if (!data || data?.error) {
+        return NextResponse.json(
+            { error: 'Analytics temporarily unavailable', details: data?.error?.message },
+            { status: 503 }
+        );
+    }
+    return NextResponse.json(data, { status: 200 });
 }
