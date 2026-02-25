@@ -278,7 +278,7 @@ export default function Footer({ lng }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const analyticsResponse = await fetch('/api/analytic', { cache: "no-store" }); // No cache
+                const analyticsResponse = await fetch('/api/analytic', { cache: 'default' }); // Cached 1 hour via API Cache-Control
 
                 if (analyticsResponse.status === 200) {
                     const analyticsData = await analyticsResponse.json();

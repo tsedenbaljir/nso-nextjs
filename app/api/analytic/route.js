@@ -11,8 +11,12 @@ const GOOGLE_ANALYTICS_PROPERTY_ID = '315626458';
 // In-memory caching
 let applicationScopedBean = {
     attribute: null,
-    creationTime: 0
+    creationTime: 0,
+    quotaExhaustedUntil: 0  // Backoff: don't retry GA API until after this timestamp
 };
+
+// Prevent concurrent requests from hammering the GA API
+let fetchPromise = null;
 
 // Helper function to get a new Google Analytics token
 async function getGoogleAnalyticsToken() {
@@ -51,12 +55,13 @@ async function getGoogleAnalyticsToken() {
 // Fetch Google Analytics report
 async function fetchAnalyticsReport(token) {
     const reportRequest = {
+        returnPropertyQuota: true,  // See quota usage (helps avoid 429)
         metrics: [{ name: 'active1DayUsers' }],
         dateRanges: [
             { startDate: 'yesterday', endDate: 'today' },
             { startDate: '7daysAgo', endDate: 'today' },
             { startDate: '30daysAgo', endDate: 'today' },
-            { startDate: '2020-01-01', endDate: 'today' }
+            { startDate: '365daysAgo', endDate: 'today' }  // Last year (shorter range = fewer quota tokens)
         ]
     };
 
@@ -82,32 +87,64 @@ export async function GET() {
 
     // Check if we need to refresh (older than 60 minutes)
     const CACHE_TTL_MS = 60 * 60 * 1000; // 60 minutes
+    const QUOTA_BACKOFF_MS = 55 * 60 * 1000; // Don't retry for 55 min after 429
     const cached = applicationScopedBean.attribute;
     const isStale = (applicationScopedBean.creationTime + CACHE_TTL_MS) < now;
     const hasValidCache = cached && !cached?.error;
+    const inQuotaBackoff = now < applicationScopedBean.quotaExhaustedUntil;
+
+    // Skip refresh if we're in 429 backoff period (quota resets ~1 hour)
+    if (inQuotaBackoff) {
+        if (hasValidCache) {
+            return NextResponse.json(applicationScopedBean.attribute, {
+                status: 200,
+                headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=3600' }
+            });
+        }
+        return NextResponse.json(
+            { error: 'Analytics temporarily unavailable', details: 'Quota exhausted, retry later' },
+            { status: 503, headers: { 'Cache-Control': 'public, max-age=300' } }
+        );
+    }
 
     if (!hasValidCache || isStale) {
+        // Deduplicate: only one in-flight request to GA API at a time
+        if (!fetchPromise) {
+            fetchPromise = (async () => {
+                try {
+                    const token = await getGoogleAnalyticsToken();
+                    return await fetchAnalyticsReport(token);
+                } finally {
+                    fetchPromise = null;
+                }
+            })();
+        }
         try {
-            // Get new token
-            const token = await getGoogleAnalyticsToken();
-            // Fetch report
-            const report = await fetchAnalyticsReport(token);
+            const report = await fetchPromise;
             // Check if GA API returned an error (e.g. 429 quota exhausted)
             if (report?.error) {
                 const { code, message } = report.error;
                 console.error('Google Analytics API error:', code, message);
+                // 429 = quota exhausted; back off for 55 min before retrying
+                if (code === 429) {
+                    applicationScopedBean.quotaExhaustedUntil = Date.now() + QUOTA_BACKOFF_MS;
+                }
                 // Return cached data if available, otherwise 503
                 if (hasValidCache) {
-                    return NextResponse.json(applicationScopedBean.attribute, { status: 200 });
+                    return NextResponse.json(applicationScopedBean.attribute, {
+                        status: 200,
+                        headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=3600' }
+                    });
                 }
                 return NextResponse.json(
                     { error: 'Analytics temporarily unavailable', details: message },
-                    { status: 503 }
+                    { status: 503, headers: { 'Cache-Control': 'public, max-age=300' } }
                 );
             }
             // Store report in the applicationScopedBean
             applicationScopedBean.attribute = report;
-            applicationScopedBean.creationTime = now;
+            applicationScopedBean.creationTime = Date.now();
+            applicationScopedBean.quotaExhaustedUntil = 0;  // Clear backoff on success
         } catch (error) {
             console.error('Error fetching Google Analytics report:', error);
             return NextResponse.json({ error: 'Failed to fetch Google Analytics report' }, { status: 500 });
@@ -122,5 +159,8 @@ export async function GET() {
             { status: 503 }
         );
     }
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json(data, {
+        status: 200,
+        headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=3600' }
+    });
 }
