@@ -11,7 +11,7 @@ export const sectors_list = [
         enName: "Bulletin",
         subFilters: [
             { id: 101, value: "introduction", mnName: "Танилцуулга", enName: "Introduction" },
-            { id: 102, value: "appendix_table", mnName: "Хавсралт хүснэгт", enName: "Appendix Table" },
+            // { id: 102, value: "appendix_table", mnName: "Хавсралт хүснэгт", enName: "Appendix Table" },
             { id: 103, value: "report", mnName: "Илтгэл", enName: "Report" },
         ],
     },
@@ -22,7 +22,7 @@ export const sectors_list = [
         enName: "Annual Report",
         subFilters: [
             { id: 201, value: "summary", mnName: "Эмхэтгэл", enName: "Summary" },
-            { id: 202, value: "appendix_table", mnName: "Хавсралт хүснэгт", enName: "Appendix Table" },
+            // { id: 202, value: "appendix_table", mnName: "Хавсралт хүснэгт", enName: "Appendix Table" },
         ],
     },
     {
@@ -31,7 +31,7 @@ export const sectors_list = [
         mnName: "Тооллого",
         enName: "Census",
         subFilters: [
-            { id: 8, value: "enterprise_census", mnName: "ААНБТ", enName: "Enterprise Census", years: ["2026", "2021", "2016", "2011", "2006", "2001", "1998", "1994"] },
+            { id: 8, value: "enterprise_census", mnName: "ААНБТ", enName: "Enterprise Census", years: ["2026", "2021", "2016", "2011", "2006", "1998"] },
             { id: 7, value: "agricultural_census", mnName: "Хөдөө аж ахуй", enName: "Agricultural Census", years: ["2022", "2012"] },
             { id: 10, value: "pahc", mnName: "ХАОСТ", enName: "PAHC Survey", years: ["2020", "2010", "2000", "1918-1989"] },
             { id: 9, value: "livestock_census", mnName: "Мал тооллого", enName: "Livestock Census" },
