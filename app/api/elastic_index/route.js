@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Client } from "@elastic/elasticsearch";
 import { db } from "../config/db_csweb.config";
 
-const ELASTIC_URL = "https://10.0.1.161:9200";
+const ELASTIC_URL = "https://45.117.34.245:9200";
 const INDEX_NAME = "search-nso-1212";
 
 export async function POST() {
@@ -63,7 +63,7 @@ export async function POST() {
     ];
 
     // 🔽 Fetch data from external API using absolute URL 🔽
-    const apiResponse = await fetch(`https://nso1212.app.nso.mn/api/tablename`);
+    const apiResponse = await fetch(`https://www.nso.mn/api/tablename`);
     const { response: apiData } = await apiResponse.json();
 
     if (!Array.isArray(apiData)) {

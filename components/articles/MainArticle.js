@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Pagination from '@/components/articles/Pagination';
 import Allarticles from '@/components/articles/Allarticles';
@@ -61,7 +61,9 @@ export default function MainArticle({ name, path, mainPath, lng }) {
                             {name}
                         </div>
                     </div>
-                    <Allarticles loading={loading} Articles={Articles} mainPath={mainPath}/>
+                    <Suspense fallback={<>Уншиж байна...</>}>
+                        <Allarticles loading={loading} Articles={Articles} mainPath={mainPath} />
+                    </Suspense>
                 </div>
             </div >
             <div className="nso_container">

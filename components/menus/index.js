@@ -3,29 +3,19 @@ import Link from 'next/link';
 import { Path } from '@/utils/path';
 import OneField from '@/components/Loading/OneField/Index';
 
-// МЭДЭЭЛЛИЙН САН
-//     -Мета мэдээллийн сан
-//         -Мэдээ
-//         -Тооллого
-//         -Судалгаа
-//         -Үзүүлэлт
-//         -Аргачлал, арга зүй
-//         -Ангилал код
-//         -Нэр, томьёоны тайлбар
-
 // Dropdown component for submenu
 const Dropdown = ({ menu, lng, pth }) => {
   return (
     <li key={menu.id} className="dropdown">
       {menu.url ? (
         <Link
-          className={`${pth.includes(menu.url) && 'active-link'} __stat_cat_title`}
+          className={`${lng}/${pth.includes(menu.url) && 'active-link'} __stat_cat_title`}
           href={menu.url}
         >
           {lng === 'mn' ? menu.name_mn : menu.name_en}
         </Link>
       ) : (
-        <div className={`${pth.includes(menu.path) && 'active-link'} __stat_cat_title`}>
+        <div className={`${lng}/${pth.includes(menu.path) && 'active-link'} __stat_cat_title`}>
           {lng === 'mn' ? menu.name_mn : menu.name_en}
         </div>
       )}

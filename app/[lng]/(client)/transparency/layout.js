@@ -1,16 +1,47 @@
 "use client"
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
+import TextLoading from '@/components/Loading/OneField/Index';
 
-export default function Statecate({ children, params: { lng } }) {
+export default function TransparencyLayout({ children, params: { lng } }) {
+
+    const { id, name } = useParams();
     const { t } = useTranslation(lng, "lng", "");
     const isMn = lng === 'mn';
 
-    const breadMap = [
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const getTransparency = async () => {
+        await fetch(`/api/transparency/${id}`, {
+            cache: "no-store",
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.status) setData(res.data);
+            })
+            .finally(() => setLoading(false));
+    }
+    useEffect(() => {
+        if (id) {
+            getTransparency()
+        }
+        setLoading(false);
+    }, [id]);
+
+    var breadMap = [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-        { label: t('transparency'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] },
+        { label: t('transparency'), url: [lng === 'mn' ? '/mn/transparency' : '/en/transparency'] }
     ];
+    // if(name) breadMap.push({ label: name ? name === 'Үйл ажиллагааны ил тод байдал' ? lng === 'mn' ? decodeURIComponent(name) : 'Operational transparency' :
+    //     name === 'Авлигын эсрэг арга хэмжээ' ? lng === 'mn' ? decodeURIComponent(name) : 'Anti-corruption measures' :
+    //         name === 'Үйл ажиллагааны хөтөлбөр, тайлан' ? lng === 'mn' ? decodeURIComponent(name) : 'Action programs and reports' :
+    //             name === 'Төрийн албаны зөвлөлийн Үндэсний статистикийн хорооны дэргэдэх салбар зөвлөл' ?
+    //                 lng === 'mn' ? decodeURIComponent(name) : 'Branch Council under the Statistics Committee of the National Council of Public Service'
+    //                 : name : ""});
+    // if(!loading) breadMap.push({ label: data.title });
 
     return (
         <>
@@ -21,7 +52,7 @@ export default function Statecate({ children, params: { lng } }) {
                             <span className="__page_name">
                                 {t("transparency")}
                             </span>
-                            <BreadCrumb model={breadMap} />
+                            {loading ? <TextLoading /> : <BreadCrumb model={breadMap} />}
                         </div>
                         {isMn && (
                             <div className="__header" style={{ marginLeft: '20px' }}>

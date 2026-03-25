@@ -48,8 +48,12 @@ export default function Index({ lng }) {
         // Construct the new URL
         const newPathname = pathname.replace(`/${currentLang}`, `/${newLang}`);
 
+        // Preserve search parameters (query string)
+        const searchParams = window.location.search;
+        const newUrl = searchParams ? `${newPathname}${searchParams}` : newPathname;
+
         // Change the URL without refreshing the page
-        router.push(newPathname);
+        router.push(newUrl);
     }
 
     if (!mounted) {
@@ -61,16 +65,29 @@ export default function Index({ lng }) {
             <div className="nso_container">
                 <ul className="__sub_header_list">
                     {loading ?
-                        menus.map((menu, index) => (
-                            <li key={index} className={`${pth.includes(menu.path) && 'active-link-top'}`}>
-                                <Link
-                                    className="__stat_top_title text-xs font-medium"
-                                    href={menu.url || "#"}
-                                >
-                                    {lng === 'mn' ? menu.name_mn : menu.name_en}
-                                </Link>
-                            </li>
-                        )) :
+                        menus.map((menu, index) => {
+                            if (pth.includes("/about-us/news/")) {
+                                return <li key={index} className={`${menu.name_mn.includes("Үйл явдал") && 'active-link-top'}`}>
+                                    <Link
+                                        className="__stat_top_title text-xs font-medium"
+                                        target={menu.url.includes('http') ? '_blank' : '_self'}
+                                        href={menu.url.includes('http') ? menu.url : `/${lng}/${menu.url}` || "#"}
+                                    >
+                                        {lng === 'mn' ? menu.name_mn : menu.name_en}
+                                    </Link>
+                                </li>
+                            } else {
+                                return <li key={index} className={`${pth.includes(menu.path) && 'active-link-top'}`}>
+                                    <Link
+                                        className="__stat_top_title text-xs font-medium"
+                                        target={menu.url.includes('http') ? '_blank' : '_self'}
+                                        href={menu.url.includes('http') ? menu.url : `/${lng}/${menu.url}` || "#"}
+                                    >
+                                        {lng === 'mn' ? menu.name_mn : menu.name_en}
+                                    </Link>
+                                </li>
+                            }
+                        }) :
                         <div>
                             <OneField /><OneField /><OneField />
                         </div>

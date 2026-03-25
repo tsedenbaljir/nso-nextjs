@@ -12,7 +12,7 @@ export default function DynamicSidebar({ sectorData, subsector, lng }) {
     useEffect(() => {
         const fetchSubcategories = async (categoryId) => {
             try {
-                const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
                 if (!response.ok) throw new Error(`Failed to fetch subcategories for ${categoryId}`);
 
                 const result = await response.json();
@@ -37,11 +37,12 @@ export default function DynamicSidebar({ sectorData, subsector, lng }) {
                 // ✅ Ensure the sectors appear in the correct order
                 let orderedSectors = [];
                 try {
+                    orderedSectors.push(sectorData[6]);
                     orderedSectors.push(sectorData[5]);
                     orderedSectors.push(sectorData[4]);
                     orderedSectors.push(sectorData[1]);
-                    orderedSectors.push(sectorData[3]);
-                    orderedSectors.push(sectorData[6]);
+                    // orderedSectors.push(sectorData[3]);
+                    orderedSectors.push(sectorData[7]);
                     orderedSectors.push(sectorData[0]);
                     // Skipping `sectorData[2]` as per your comment: // түүхэн статистик
                 } catch (err) {
@@ -75,40 +76,40 @@ export default function DynamicSidebar({ sectorData, subsector, lng }) {
 
     return (
         <>
-                <div className="statcatebody">
-                    <div className="nso_container">
-                        <div className="__card_groups">
-                            {menuItems.map((category) => (
-                                <div key={category.id} className="__card">
-                                    <span className="__title">{category.label}</span>
-                                    {loading ? (
-                                        <div className="text-center py-4">
-                                            <LoadingDiv />
-                                            <br />
-                                            <LoadingDiv />
-                                            <br />
-                                            <LoadingDiv />
-                                        </div>
-                                    ) : error ? (
-                                        <p className="text-red-500">Алдаа гарсан байна. Та түр хүлээнэ үү.</p>
-                                    ) : (
-                                        <div className="__category_group">
-                                            {category.subcategories.map((sub) => (
-                                                <span
-                                                    key={sub.id}
-                                                    className={`cursor-pointer ${sub.isActive ? "active-link" : ""}`}
-                                                    onClick={sub.onClick}
-                                                >
-                                                    {sub.label}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+            <div className="statcatebody">
+                <div className="nso_container">
+                    <div className="__card_groups">
+                        {menuItems.map((category) => (
+                            <div key={category.id} className="__card">
+                                <span className="__title">{category.label}</span>
+                                {loading ? (
+                                    <div className="text-center py-4">
+                                        <LoadingDiv />
+                                        <br />
+                                        <LoadingDiv />
+                                        <br />
+                                        <LoadingDiv />
+                                    </div>
+                                ) : error ? (
+                                    <p className="text-red-500">Алдаа гарсан байна. Та түр хүлээнэ үү.</p>
+                                ) : (
+                                    <div className="__category_group">
+                                        {category.subcategories.map((sub) => (
+                                            <span
+                                                key={sub.id}
+                                                className={`cursor-pointer ${sub.isActive ? "active-link" : ""}`}
+                                                onClick={sub.onClick}
+                                            >
+                                                {sub.label.split('_')[1] ? sub.label.split('_')[1] : sub.label}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
+            </div>
         </>
     );
 }

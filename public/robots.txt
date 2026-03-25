@@ -1,0 +1,18 @@
+# *
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.nso.mn/sitemap.xml
+
+# Disallow admin routes
+User-agent: *
+Disallow: /admin
+Disallow: /api
+
+# Allow public content
+Allow: /mn
+Allow: /en
+Allow: /images
+Allow: /uploads
+

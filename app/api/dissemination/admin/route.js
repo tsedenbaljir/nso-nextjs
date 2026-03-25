@@ -41,17 +41,28 @@ export async function POST(req) {
 
         const newId = (parseInt(maxIdResult.maxId) || 0) + 1;
 
+        // Handle published_date properly
+        let publishedDate = currentDate;
+        if (data.published_date) {
+            try {
+                publishedDate = new Date(data.published_date).toISOString();
+            } catch (error) {
+                console.warn('Invalid published_date format, using current date:', data.published_date);
+                publishedDate = currentDate;
+            }
+        }
+
         const [result] = await db.raw(`
             INSERT INTO web_1212_content (
                 id, name, language, body, published, list_order,
                 created_by, created_date, last_modified_date,
                 content_type, news_type, published_date, header_image, views,
-                slug
+                slug, thumb_image
             ) VALUES (
                 ?, ?, ?, ?, ?, ?,
                 ?, ?, ?,
                 'NEWS', ?, ?, ?, 0,
-                ?
+                ?, ?
             )
         `, [
             newId,
@@ -64,9 +75,10 @@ export async function POST(req) {
             currentDate,
             currentDate,
             data.news_type,
-            data.published_date,
+            publishedDate,
             data.header_image,
-            data.slug
+            data.slug,
+            data.header_image
         ]);
 
         return NextResponse.json({
@@ -88,6 +100,17 @@ export async function PUT(req) {
         const data = await req.json();
         const currentDate = new Date().toISOString();
 
+        // Handle published_date properly
+        let publishedDate = currentDate;
+        if (data.published_date) {
+            try {
+                publishedDate = new Date(data.published_date).toISOString();
+            } catch (error) {
+                console.warn('Invalid published_date format, using current date:', data.published_date);
+                publishedDate = currentDate;
+            }
+        }
+
         await db.raw(`
             UPDATE web_1212_content 
             SET name = ?,
@@ -97,6 +120,7 @@ export async function PUT(req) {
                 news_type = ?,
                 published_date = ?,
                 header_image = ?,
+                thumb_image = ?,
                 last_modified_by = ?,
                 last_modified_date = ?
             WHERE id = ?
@@ -106,7 +130,8 @@ export async function PUT(req) {
             data.body,
             data.published,
             data.news_type,
-            data.published_date,
+            publishedDate,
+            data.header_image,
             data.header_image,
             data.last_modified_by,
             currentDate,

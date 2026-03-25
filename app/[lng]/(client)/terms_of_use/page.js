@@ -1,10 +1,5 @@
 "use client"
-import Layout from '@/components/baseLayout';
-import { useTranslation } from '@/app/i18n/client';
-
 export default function TermsOfUse({ params: { lng } }) {
-    const { t } = useTranslation(lng, "lng", "");
-
     return (
         <>
             <div className="nso_statistic_section">
@@ -22,10 +17,10 @@ export default function TermsOfUse({ params: { lng } }) {
                                         <li>{lng === "mn" ? "ҮСХ-ны www.1212.mn цахим хуудаст байгаа статистикийн болон бусад мэдээллийг чөлөөтэй хуулбарлаж, хувилах, мөн түгээх боломжтой." : "www.1212.mn website, which is a part of the Mongolian Statistical Service, provides free access to statistical and other information. You can freely use, modify, and distribute this information."}</li>
                                     </ul>
                                     <ul className='list-disc'>
-                                        <li>{lng === "mn" ? "Хэрэв Та www.1212.mn цахим хуудаснаас статистикийн мэдээллийг авч ашигласан болон цааш түгээсэн тохиолдолд (Эх сурвалж: Монгол Улсын Үндэсний статистикийн хороо) гэж заавал дурдах ёстойг анхаарна уу." : "If you use the statistical information from www.1212.mn website and distribute it further, you must cite the source as (Source: Mongolian Statistical Service) and acknowledge the Mongolian Statistical Service."}</li>
+                                        <li>{lng === "mn" ? "Хэрэв Та www.1212.mn цахим хуудаснаас статистикийн мэдээллийг авч ашигласан болон цааш түгээсэн тохиолдолд (Эх сурвалж: Монгол Улсын Үндэсний Статистикийн Хороо) гэж заавал дурдах ёстойг анхаарна уу." : "If you use the statistical information from www.1212.mn website and distribute it further, you must cite the source as (Source: Mongolian Statistical Service) and acknowledge the Mongolian Statistical Service."}</li>
                                     </ul>
                                     <ul className='list-disc'>
-                                        <li>{lng === "mn" ? "ҮСХ-ны статистикийн мэдээлэл, нээлттэй өгөгдлийг (OPEN DATA) програмчлалын интерфейс (API)-ээр дамжуулан авах боломжтой." : "The Mongolian Statistical Service provides free access to statistical and other information through its programmatic interface (API). You can freely use, modify, and distribute this information."}</li>
+                                        <li>{lng === "mn" ? "ҮСХ-ны статистикийн мэдээлэл, нээлттэй өгөгдлийг (OPEN DATA) программчлалын интерфейс (API)-ээр дамжуулан авах боломжтой." : "The Mongolian Statistical Service provides free access to statistical and other information through its programmatic interface (API). You can freely use, modify, and distribute this information."}</li>
                                     </ul>
                                     <ul className='list-disc'>
                                         <li>{lng === "mn" ? "Аж ахуйн нэгж, байгууллага нь ҮСХ-ны нээлттэй өгөгдлийг (OPEN DATA) ашиглан өөрсдийн шинэ бүтээгдэхүүн, үйлчилгээг хөгжүүлэх боломжтой." : "Business entities and organizations can use the Mongolian Statistical Service's (OPEN DATA) information to develop new products and services."}</li>

@@ -1,51 +1,143 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { sectors_list } from './sectors';
 
-export default function DynamicSidebar({ lng, type }) {
+export default function DynamicSidebar({ lng, type, sub }) {
     const router = useRouter();
+    const typeId = type === undefined || type === null ? null : String(type);
+    const idSet = useMemo(() => {
+        const set = new Set(sectors_list.map((s) => String(s.id)));
+        sectors_list.forEach((s) => (s.subFilters || []).forEach((subItem) => subItem.id != null && set.add(String(subItem.id))));
+        return set;
+    }, []);
 
-    const [list, setList] = useState([
-        { "id": 0, "type": "all", "mnName": "Бүх файл", "enName": "All files" },
-        { "id": 18, "type": "nso-magazine", "mnName": "Үндэсний статистик сэтгүүл", "enName": "NSO Magazine" },
-        { "id": 12, "type": "magazine", "mnName": "Ном, товхимол", "enName": "Magazine" },
-        { "id": 3, "type": "census", "mnName": "Тооллого", "enName": "Census" },
-        { "id": 4, "type": "survey", "mnName": "Түүвэр судалгаа", "enName": "Survey" },
-        { "id": 13, "type": "infographic", "mnName": "Инфографик", "enName": "Infographic" },
-        { "id": 14, "type": "weekprice", "mnName": "7 хоногийн үнийн мэдээ", "enName": "Weekly Price" },
-        { "id": 15, "type": "foreigntrade", "mnName": "15 хоногийн гадаад худалдааны мэдээ", "enName": "Foreign Trade" },
-        { "id": 16, "type": "presentation", "mnName": "Сарын мэдээний презентац", "enName": "Presentation" },
-        { "id": 1, "type": "bulletin", "mnName": "Сарын танилцуулга", "enName": "Bulletin" },
-        { "id": 2, "type": "annual", "mnName": "Жилийн эмхэтгэл", "enName": "Annual Report" },
-        { "id": 17, "type": "livingstandart", "mnName": "Амьжиргааны доод түвшин", "enName": "Living Standard" },
-        { "id": 7, "type": "agricultural_census", "mnName": "ХААТ", "enName": "Agricultural Census" },
-        { "id": 8, "type": "enterprise_census", "mnName": "ААНБТ", "enName": "Enterprise Census" },
-        { "id": 9, "type": "livestock_census", "mnName": "Мал тооллого", "enName": "Livestock Census" },
-        { "id": 10, "type": "pahc", "mnName": "ХАОСТ", "enName": "PAHC Survey" },
-        // { "id": 5, "type": "research", "mnName": "Судалгааны тайлан", "enName": "Research Report" },
-        // { "id": 6, "type": "STindicators", "mnName": "Статистикийн үзүүлэлтүүд", "enName": "Statistical Indicators" },
-        // { "id": 11, "type": "aombulletin", "mnName": "AOM Товхимол", "enName": "AOM Bulletin" },
-    ]
-    );
+    const [expanded, setExpanded] = useState(() => {
+        const initial = {};
+        sectors_list.forEach((s) => {
+            if (s.subFilters?.length) {
+                const isActive =
+                    typeId === String(s.id) ||
+                    s.subFilters.some(
+                        (subItem) =>
+                            typeId === String(subItem.id) ||
+                            (subItem.years && subItem.years.includes(sub))
+                    );
+                if (isActive) initial[String(s.id)] = true;
+            }
+        });
+        return initial;
+    });
+
+    useEffect(() => {
+        if (typeId == null) return;
+        setExpanded((prev) => {
+            const next = { ...prev };
+            sectors_list.forEach((s) => {
+                if (!s.subFilters?.length) return;
+                const isActive =
+                    typeId === String(s.id) ||
+                    s.subFilters.some(
+                        (subItem) =>
+                            typeId === String(subItem.id) ||
+                            (subItem.years && subItem.years.includes(sub))
+                    );
+                if (isActive) next[String(s.id)] = true;
+            });
+            return next;
+        });
+    }, [typeId, sub]);
+
+    const toggle = (sectorId) => {
+        setExpanded((prev) => ({ ...prev, [String(sectorId)]: !prev[String(sectorId)] }));
+    };
+
+    const handleMainClick = (lt) => {
+        router.push(`/${lng}/statistic/file-library/` + lt.id);
+    };
+
+    const handleSubClick = (e, parentId, subItem) => {
+        e.stopPropagation();
+        if (subItem.id != null && idSet.has(String(subItem.id))) {
+            router.push(`/${lng}/statistic/file-library/` + subItem.id);
+        } else {
+            router.push(`/${lng}/statistic/file-library/${parentId}?sub=` + encodeURIComponent(subItem.value));
+        }
+    };
 
     return (
-        <div className="nso_cate_section left-bar">
-            <div className='__cate_groups'>
-                <ul>
-                    {
-                        list.map((lt, index) => {
-                            return <li key={index} className={`${type === lt.type && 'active'}`}
-                                onClick={() => {
-                                    router.push(`/${lng}/statistic/file-library/` + lt.type);
-                                }}>
-                                <a className="nso_cate_selection min_cate border-0">
-                                    {lng === 'mn' ? lt.mnName : lt.enName}
-                                </a>
-                            </li>
-                        })
-                    }
-                </ul>
-            </div>
+        <div className='__cate_groups'>
+            <ul>
+                {sectors_list.map((lt, index) => (
+                    <li
+                        key={lt.id ?? index}
+                        className={`__cate_main_li ${typeId === String(lt.id) && !sub ? 'active' : ''}`}
+                    >
+                        <div
+                            className="__cate_main nso_cate_selection min_cate border-0"
+                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+                            onClick={() => handleMainClick(lt)}
+                        >
+                            <a className="border-0" style={{ flex: 1 }}>
+                                {lng === 'mn' ? lt.mnName : lt.enName}
+                            </a>
+                            {lt.subFilters?.length ? (
+                                <button
+                                    type="button"
+                                    className="border-0 bg-transparent p-0 ms-1"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggle(lt.id);
+                                    }}
+                                    aria-expanded={expanded[String(lt.id)]}
+                                >
+                                    <span className="__cate_toggle" aria-hidden>
+                                        {expanded[String(lt.id)] ? '▼' : '▶'}
+                                    </span>
+                                </button>
+                            ) : null}
+                        </div>
+                        {lt.subFilters?.length && expanded[String(lt.id)] ? (
+                            <ul className="__cate_sub_list">
+                                {lt.subFilters.map((subItem, subIndex) => (
+                                    <li key={subItem.id ?? subIndex} className="__cate_sub_li">
+                                        {subItem.years ? (
+                                            <>
+                                                <div className="__cate_sub_label">
+                                                    {lng === 'mn' ? subItem.mnName : subItem.enName}
+                                                </div>
+                                                <ul className="__cate_year_list">
+                                                    {subItem.years.map((year) => {
+                                                        const isYearActive = typeId === String(subItem.id) && sub === year;
+                                                        return (
+                                                            <li key={year} className="__cate_year_li">
+                                                                <a
+                                                                    className={`__cate_year_link min_cate border-0 small ${isYearActive ? 'active' : ''}`}
+                                                                    onClick={(e) => handleSubClick(e, subItem.id, { value: year })}
+                                                                >
+                                                                    – {year}
+                                                                </a>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            </>
+                                        ) : (
+                                            <a
+                                                className={`__cate_sub_link min_cate border-0 small ${typeId === String(subItem.id) ? 'active' : ''}`}
+                                                onClick={(e) => handleSubClick(e, lt.id, subItem)}
+                                            >
+                                                – {lng === 'mn' ? subItem.mnName : subItem.enName}
+                                            </a>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : null}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }

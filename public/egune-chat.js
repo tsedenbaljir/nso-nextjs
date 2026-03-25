@@ -141,7 +141,7 @@ function greetingBoxCreater() {
           bottom: 108px;
           box-sizing:border-box;
           box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.16);
-          z-index: 1;
+          z-index: 1001;
         }
         .egune-greeting-box .egune-bot-header {
           display: flex;

@@ -42,7 +42,9 @@ export default function AdminLaws() {
 
   const fetchLawsByType = async (type) => {
     try {
-      const response = await fetch(`/api/laws?type=${type}`);
+      const response = await fetch(`/api/laws?type=${type}`, {
+        cache: 'no-store'
+    });
       const result = await response.json();
       if (result.status && Array.isArray(result.data)) {
         setLaws(prev => ({
@@ -74,6 +76,7 @@ export default function AdminLaws() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(editingLaw),
+        cache: 'no-store'
       });
 
       const result = await response.json();
@@ -157,6 +160,7 @@ export default function AdminLaws() {
       const response = await fetch('/api/laws', {
         method: 'POST',
         body: formData,
+        cache: 'no-store'
       });
 
       const result = await response.json();
@@ -188,7 +192,7 @@ export default function AdminLaws() {
         <div className={styles.adminLawsContainer}>
           {isAdding ? (
             <div className={styles.addForm}>
-              <h2>Хууль эрхзүй нэмэх</h2>
+              <h2>Хууль эрх зүй нэмэх</h2>
               <form onSubmit={handleSubmitNew}>
                 <div>
                   <label>Нэр:</label>
@@ -228,7 +232,7 @@ export default function AdminLaws() {
                     mode="basic"
                     name="file"
                     accept="application/pdf"
-                    maxFileSize={10000000}
+                    maxFileSize={100000000}
                     onSelect={handleFileUpload}
                     auto
                     chooseLabel="Choose PDF"
@@ -242,7 +246,7 @@ export default function AdminLaws() {
             </div>
           ) : isEditing && editingLaw ? (
             <div className={styles.addForm}>
-              <h2>Хууль эрхзүй засварлах</h2>
+              <h2>Хууль эрх зүй засварлах</h2>
               <form onSubmit={handleUpdate}>
                 <div>
                   <label>Нэр:</label>
@@ -284,7 +288,7 @@ export default function AdminLaws() {
           ) : (
             <>
               <div className={styles.header}>
-                <h1>Хууль эрхзүй</h1>
+                <h1>Хууль эрх зүй</h1>
                 <button onClick={handleAdd} className={styles.addButton}>
                   Шинээр нэмэх
                 </button>

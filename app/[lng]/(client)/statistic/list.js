@@ -1,68 +1,30 @@
-"use client";
-import { useEffect, useState } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
+import { useState } from "react";
 import { Paginator } from "primereact/paginator";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { getSectorNameById } from "./sectors";
 
-export default function Tabs({ lng, type }) {
-    const [menuItems, setMenuItems] = useState([]); // Stores categories & subcategories
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [pagination, setPagination] = useState({ total: 0, first: 0, rows: 10 });
-    const router = useRouter();
+export default function Tabs({
+    lng,
+    type,
+    menuItems,
+    loading,
+    pagination,
+    setPagination,
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeFilter, setActiveFilter] = useState(lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first");
 
-    useEffect(() => {
-        const fetchSubcategories = async () => {
-            try {
-                const response = await fetch(`/api/file-library?lng=${lng}&type=${type}`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const result = await response.json();
+    const filters = [
+        lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first",
+        lng === "mn" ? "Үсгийн дарааллаар" : "Alphabetical order",
+        lng === "mn" ? "Хандалтын тоогоор" : "Views order",
+    ];
 
-                if (Array.isArray(result.data)) {
-                    setMenuItems(result.data);
-                    setPagination((prev) => ({ ...prev, total: result.data.length }));
-                } else {
-                    setMenuItems([]);
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setError("Failed to load data");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchSubcategories();
-    }, [lng, type]);
-
-    // Function to check if file is a PDF
-    const getCheckItemExtension = (item, extension) => {
-        return item.name.toLowerCase().endsWith(`.${extension}`);
+    const toggleDropdown = () => setIsOpen(!isOpen);
+    const handleFilterSelect = (filter) => {
+        setActiveFilter(filter);
+        setIsOpen(false);
     };
 
-    // Function to handle file download
-    const onDownloadDirect = async (fileInfo) => {
-        const url = `https://downloads.1212.mn/${JSON.parse(fileInfo).pathName}`;
-        window.open(url, "_blank"); 
-    };
-    
-
-    // Function to get file extension
-    const getExtension = (file_info) => {
-        try {
-            const fileInfo = file_info ? JSON.parse(file_info) : null;
-            return fileInfo?.extension ? fileInfo.extension.toUpperCase() : "N/A"; // Handle missing extension
-        } catch (error) {
-            console.error("Error parsing fileInfo:", error);
-            return "N/A"; // Fallback if JSON is invalid
-        }
-    };
-    
-
-    // Pagination Handler
     const onPageChange = (event) => {
         setPagination({
             ...pagination,
@@ -71,71 +33,188 @@ export default function Tabs({ lng, type }) {
         });
     };
 
+    const getSortedItems = () => {
+        const sorted = [...menuItems];
+        if (activeFilter === (lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first")) {
+            sorted.sort(
+                (a, b) =>
+                    new Date(b.published_date || 0) - new Date(a.published_date || 0)
+            );
+        } else if (activeFilter === (lng === "mn" ? "Үсгийн дарааллаар" : "Alphabetical order")) {
+            sorted.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+        } else if (activeFilter === (lng === "mn" ? "Хандалтын тоогоор" : "Views order")) {
+            sorted.sort((a, b) => (b.views || 0) - (a.views || 0));
+        }
+        return sorted;
+    };
+
+    // const getExtension = (file_info) => {
+    //     try {
+    //         const file =
+    //             typeof file_info === "string" ? JSON.parse(file_info) : file_info;
+    //         return file?.extension?.toUpperCase() || "N/A";
+    //     } catch {
+    //         return "N/A";
+    //     }
+    // };
+
+    const onDownloadDirect = async (fileInfo, id) => {
+        try {
+            const parsed =
+                typeof fileInfo === "string" ? JSON.parse(fileInfo) : fileInfo;
+            if (!parsed?.pathName) return;
+            const url = `${process.env.FRONTEND}/uploads/${parsed.pathName}`;
+            window.open(url, "_blank");
+            await fetch(`/api/file-library`, {
+                method: "POST",
+                body: JSON.stringify({ id }),
+            });
+        } catch (err) {
+            console.error("Download error:", err);
+        }
+    };
+    const safeParse = (json) => {
+        if (typeof json !== "string") return json;
+        try {
+            return JSON.parse(json);
+        } catch (e) {
+            console.warn("⚠ JSON.parse алдаа:", e.message, json);
+            return null; // алдаатай бол null буцаана
+        }
+    };
+    const pagedItems = getSortedItems().slice(
+        pagination.first,
+        pagination.first + pagination.rows
+    );
+
     return (
-        <div id="stat_cate" className="nso_cate_body">
+        <div id="stat_cate" className="w-full">
             <div className="nso_tab_content">
-                <div className="nso_tab">
-                    <div className="__table_desktop">
-                        <div className="__sector_list">
+                <div className="__table_desktop">
+                    <div className="__sector_list">
+                        {/* Header */}
+                        <div className="flex justify-between items-center">
                             <span className="__sector_header">
-                                Бүх файл
+                                {getSectorNameById(type, lng)}
                             </span>
-                            <div className="__table">
-                                {/* PrimeReact DataTable */}
-                                <DataTable
-                                    value={menuItems.slice(pagination.first, pagination.first + pagination.rows)}
-                                    loading={loading}
-                                    paginator={false} // We use external paginator
+
+                            {/* Dropdown */}
+                            <div className="relative inline-block text-left">
+                                {/* Toggle button */}
+                                <button
+                                    onClick={toggleDropdown}
+                                    className="inline-flex items-center gap-1 px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-100 text-sm"
                                 >
-                                    <Column
-                                        body={(item) => (
-                                            <div className="__file_table">
-                                                {/* Conditional Link or Clickable Div */}
-                                                {getCheckItemExtension(item, "pdf") ? (
-                                                    <Link href={`/view/${item.id}`} className="_file_name">
-                                                        {item.name}
-                                                    </Link>
-                                                ) : (
-                                                    <div className="_file_name" onClick={() => onDownloadDirect(item.file_info)}>
-                                                        {item.name}
-                                                    </div>
+                                    <svg
+                                        className="w-4 h-4 text-gray-700"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1M4 8h16M4 12h16M4 16h16M4 20h16"
+                                        />
+                                    </svg>
+                                    {lng === "mn" ? "Эрэмбэлэх" : "Sort"}
+                                </button>
+
+                                {/* Dropdown */}
+                                {isOpen && (
+                                    <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200  rounded-md shadow-md z-20">
+                                        {filters.map((filter) => (
+                                            <div
+                                                key={filter}
+                                                onClick={() => handleFilterSelect(filter)}
+                                                className={`px-4 py-2 text-sm cursor-pointer ${activeFilter === filter
+                                                    ? "bg-gray-100 flex justify-between items-center"
+                                                    : "hover:bg-gray-100"
+                                                    }`}
+                                            >
+                                                <span>{filter}</span>
+                                                {activeFilter === filter && (
+                                                    <span className="text-xs">↓</span>
                                                 )}
-
-                                                <div className="_file_info">{item.info}</div>
-
-                                                {/* Footer Section */}
-                                                <div className="__file_table_foot">
-                                                    <div className="_file_publishedDate">
-                                                        {new Date(item.published_date).toISOString().split("T")[0]}
-                                                    </div>
-                                                    <div className="_file_view">
-                                                        <i className="pi pi-eye"></i> {item.views.toLocaleString()}
-                                                    </div>
-                                                    <div className="_file_type">
-                                                        <span>{getExtension(item.file_info)}</span>
-                                                    </div>
-                                                    <div className="_file_size">
-                                                        {lng === "mn" ? "Файлын хэмжээ:" : "File Size:"} {(item.file_size / 1024 / 1024).toFixed(2)} MB
-                                                    </div>
-                                                </div>
                                             </div>
-                                        )}
-                                    />
-                                </DataTable>
-
-                                {/* Custom Pagination */}
-                                <div className="__pagination">
-                                    <span>
-                                        {lng === "mn" ? "Нийт:" : "A total of:"} <strong>{pagination.total}</strong>
-                                    </span>
-                                    <Paginator
-                                        first={pagination.first}
-                                        rows={pagination.rows}
-                                        totalRecords={pagination.total}
-                                        onPageChange={onPageChange}
-                                    />
-                                </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
+                        </div>
+                        <div className='mb-4' style={{
+                            height: 30,
+                            fontWeight: 500,
+                            fontSize: "var(--font-size14)",
+                            color: "var(--text-main)",
+                            background: "var(--table-header)",
+                            transition: "box-shadow .2s",
+                            whiteSpace: "nowrap",
+                            borderBottom: "1px solid rgba(90,90,90,.1)",
+                        }} />
+                        {/* File List */}
+                        <div className="__file_table">
+                            {pagedItems.map((item, index) => {
+                                const fileInfo = safeParse(item.file_info);
+                                const ext = fileInfo?.extension?.toLowerCase() || "file";
+                                const size =
+                                    item?.file_size >= 1024 * 1024
+                                        ? `${(item.file_size / 1024 / 1024).toFixed(2)} MB`
+                                        : `${(item.file_size / 1024).toFixed(1)} kB`;
+
+                                return (
+                                    <div key={index} className="border-dashed border-b pb-4 px-3 mb-4">
+                                        {/* Гарчиг */}
+                                        <div
+                                            className="clamp-title text-gray-800 hover:text-gray-800"
+                                            onClick={() => onDownloadDirect(item.file_info, item.id)}
+                                        >
+                                            {item.name || (lng === "mn" ? "Нэр байхгүй" : "Name is missing")}
+                                        </div>
+
+                                        {/* Тайлбар */}
+                                        <div className="clamp-description mt-1 mb-2">
+                                            {item.info || (lng === "mn" ? "Тайлбар алга" : "Info is missing")}
+                                        </div>
+
+                                        {/* Metadata */}
+                                        <div className="__file_table_foot">
+                                            <div className="_file_publishedDate">
+                                                {item.published_date
+                                                    ? new Date(item.published_date)
+                                                        .toISOString()
+                                                        .split("T")[0]
+                                                    : lng === "mn" ? "Огноо байхгүй" : "Date is missing"}
+                                            </div>
+                                            <div className="_file_view">👁 {(item.views ?? 0).toLocaleString()}</div>
+                                            <div className="_file_type">
+                                                <span className="text-blue-600 font-medium uppercase">
+                                                    {ext}
+                                                </span>
+                                            </div>
+                                            <div className="_file_size">
+                                                {lng === "mn" ? "Файлын хэмжээ:" : "File size:"}{" "}
+                                                {size}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Pagination */}
+                        <div className="__pagination mt-6 flex items-center justify-between">
+                            <span>
+                                {lng === "mn" ? "Нийт:" : "Total:"}{" "}
+                                <strong>{pagination.total}</strong>
+                            </span>
+                            <Paginator
+                                first={pagination.first}
+                                rows={pagination.rows}
+                                totalRecords={pagination.total}
+                                onPageChange={onPageChange}
+                            />
                         </div>
                     </div>
                 </div>

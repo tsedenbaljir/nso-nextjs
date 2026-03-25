@@ -12,10 +12,10 @@ export default function Articles({ article }) {
     }
 
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return '/images/default.jpg';
+        if (!imagePath) return 'https://www.1212.mn/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
-        if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `https://downloads.1212.mn/${imagePath}`;
+        if (imagePath.startsWith('/uploads/')) return `https://www.1212.mn/${imagePath}`;
+        return `https://www.1212.mn/uploads/${imagePath}`;
     };
 
     const handleImageError = () => {
@@ -35,7 +35,7 @@ export default function Articles({ article }) {
             <div className="__info_detail_page">
                 <div className="bg-gray">
                     <img
-                        src={imageError ? `/uploads/${article.header_image}` : getImageUrl(article.header_image)}
+                        src={imageError ? `https://www.1212.mn/uploads/${article.header_image}` : getImageUrl(article.header_image)}
                         alt={article.name || 'Article image'}
                         width={500}
                         height={500}

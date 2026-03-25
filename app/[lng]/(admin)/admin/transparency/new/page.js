@@ -4,7 +4,12 @@ import styles from '../styles.module.scss';
 import { useRouter } from 'next/navigation';
 import { FileUpload } from 'primereact/fileupload';
 import ClientStyles from '../ClientStyles';
+import dynamic from 'next/dynamic';
 
+const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
+    ssr: false,
+    loading: () => <p>Уншиж байна...</p>
+});
 const CATEGORIES = [
     'Үйл ажиллагааны ил тод байдал',
     'Авлигын эсрэг арга хэмжээ',
@@ -12,11 +17,14 @@ const CATEGORIES = [
     'Төрийн албаны зөвлөлийн Үндэсний статистикийн хорооны дэргэдэх салбар зөвлөл',
     'Хууль, эрх зүй',
     'Мэдээллийн аюулгүй байдлын бодлого',
-    'Мэдээллийн аюулгүй байдлын зөрчил мэдээлэх'
+    'Мэдээллийн аюулгүй байдлын зөрчил мэдээлэх',
+    'Үндэсний статистикийн хорооны жендэрийн салбар зөвлөл'
 ];
+
 
 export default function NewTransparency() {
     const router = useRouter();
+    const [body, setBody] = useState(' ');
     const [formData, setFormData] = useState({
         title: '',
         category: '',
@@ -37,7 +45,7 @@ export default function NewTransparency() {
             const data = new FormData();
             data.append('title', formData.title);
             data.append('category', formData.category);
-            data.append('description', formData.description);
+            data.append('description', body);
             if (formData.file) {
                 data.append('file', formData.file);
             }
@@ -117,12 +125,7 @@ export default function NewTransparency() {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Тайлбар:</label>
-                        <textarea
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            required
-                        />
+                    <Editor setBody={setBody} />
                     </div>
 
                     <div className={styles.formGroup}>

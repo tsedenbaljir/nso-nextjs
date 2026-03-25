@@ -1,11 +1,9 @@
 .__table_container {
-
   ._filter_side {
-    padding-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     float: right;
     display: flex;
-
+    margin-right: 40px;
     .__download_button {
       background: rgba(64, 172, 112, 0.06);
       border: 1px solid var(--surface-success);
@@ -57,8 +55,7 @@
         line-height: 30px;
         letter-spacing: -1px;
         color: var(--text-main);
-        text-transform: uppercase;
-
+        // text-transform: uppercase;
       }
 
       a:hover {
@@ -141,7 +138,7 @@
           font-size: var(--font-size14);
           line-height: 22px;
           letter-spacing: -0.3px;
-          color: #298BE0;
+          color: #298be0;
         }
 
         .__list_file {
@@ -170,7 +167,7 @@
 
 .__filter_sidebar_item {
   position: relative;
-  background-color: rgba(255 255 255 / .6);
+  background-color: rgba(255 255 255 / 0.6);
   overflow: hidden;
 
   .filter-title {
@@ -226,7 +223,7 @@
   gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  // padding: 0 1rem;
 }
 
 // Responsive styles

@@ -12,11 +12,11 @@ export async function GET(req) {
         // order by published_date desc
         const results = await db.raw(`
             SELECT *
-                FROM [NSOweb].[dbo].vw_web_1212_download
-                WHERE new = ? and language = ? and published = 1 and file_type = ?
-                order by [last_modified_date] desc
+                FROM [NSOweb].[dbo].[web_1212_download]
+                WHERE info = ? and language = ? and published = 1 and file_type = ?
+                order by published_date desc
         `, [info, lng, type]);
-            
+
         return NextResponse.json({
             status: true,
             data: results,
@@ -28,6 +28,37 @@ export async function GET(req) {
             status: false,
             data: null,
             message: "Internal server error"
+        }, { status: 500 });
+    }
+}
+
+export async function PUT(req) {
+    try {
+        const body = await req.json();
+        const { id } = body || {};
+
+        if (!id) {
+            return NextResponse.json({
+                status: false,
+                message: 'id is required'
+            }, { status: 400 });
+        }
+
+        await db.raw(`
+            UPDATE [NSOweb].[dbo].[web_1212_download]
+            SET views = COALESCE(CAST(views AS INT), 0) + 1
+            WHERE id = ?
+        `, [id]);
+
+        return NextResponse.json({
+            status: true,
+            message: 'Views incremented'
+        });
+    } catch (error) {
+        console.error('Error updating download views:', error);
+        return NextResponse.json({
+            status: false,
+            message: 'Failed to update views: ' + error.message
         }, { status: 500 });
     }
 }

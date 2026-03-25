@@ -3,7 +3,7 @@ import axios from 'axios';
 import https from 'https';
 
 const customHttpsAgent = new https.Agent({ rejectUnauthorized: false });
-const ELASTIC_URL = 'https://10.0.1.161:9200';
+const ELASTIC_URL = 'https://45.117.34.245:9200';
 
 export async function POST(req) {
   try {

@@ -41,6 +41,9 @@ const Header = ({ lng }) => {
         };
     }, []);
 
+    // useEffect(() => {
+    //     setDropDownClose()
+    // }, [lng, window.location.pathname]);
 
     useEffect(() => {
         const fetchMenusSub = async () => {
@@ -110,13 +113,22 @@ const Header = ({ lng }) => {
                                     id: subs.id,
                                     label: lng === 'mn' ? subs.name_mn : subs.name_en,
                                     command: () => {
-                                        router.push(`/${lng}/${subs.url}`);
+                                        if (subs.url.includes('http')) {
+                                            window.location.href = subs.url;
+                                        } else {
+                                            window.location.href = `/${lng}/${subs.url}`;
+                                        }
                                     }
                                 })),
                             })),
                             command: () => {
-                                if (category?.url)
-                                    router.push(`/${lng}/${category?.url}`);
+                                if (category?.url) {
+                                    if (category.url.includes('http')) {
+                                        window.location.href = category.url;
+                                    } else {
+                                        window.location.href = `/${lng}/${category?.url}`;
+                                    }
+                                }
                             }
                         };
                     })
@@ -207,7 +219,6 @@ const Header = ({ lng }) => {
                 </ul>
                 <ul className="__mobile_menu">
                     <li>
-                        {/* (click)="onShowMobileMenu($event)"  */}
                         <a className="__mobile_menu_bar icon" onClick={() => { onShowMobileMenu() }}></a>
                     </li>
                 </ul>
@@ -231,9 +242,11 @@ const Header = ({ lng }) => {
                 </div>
                 <div className={`__dropdown __mobile ${isShowMobile && 'show'}`}>
                     {loading && <PanelMenu model={menusMobile} className="w-full nso_cate_selection" />}
-                    {loadingSub && menusSub.map((its) => {
-                        return <div className='pt-4'>
-                            <Link href={'/${lng}/' + its.url} className='font-semibold text-lg'>{its.name_mn}</Link>
+                    {loadingSub && menusSub.map((its, index) => {
+                        return <div className='pt-4' key={index} onClick={() => { onShowMobileMenu() }}>
+                            <Link href={its.url.includes('http') ? its.url : `/${lng}/${its.url}`}
+                                target={its.url.includes('http') ? '_blank' : '_self'}
+                                className='font-semibold text-lg'>{its.name_mn}</Link>
                         </div>
                     })}
                 </div>
@@ -244,12 +257,12 @@ const Header = ({ lng }) => {
                                 selectedMenu && selectedMenu.sort((a, b) => a.list_order - b.list_order).map((dts, index) => {
                                     return <div className='__group' key={index}>
                                         <div className='__title'>
-                                            <a href={dts.url} className='__stat_cat_title'>{dts.name_mn}</a>
+                                            <a href={dts.url} className='__stat_cat_title'>{lng === 'mn' ? dts.name_mn : dts.name_en}</a>
                                         </div>
 
                                         <div className='__items'>
                                             {dts.subway.map((sw, idx) => {
-                                                return <span key={idx}> <a href={sw.url} className='__stat_cat_title'>{sw.name_mn}</a></span>
+                                                return <span key={idx}> <a href={sw.url} className='__stat_cat_title'>{lng === 'mn' ? sw.name_mn : sw.name_en}</a></span>
                                             })}
                                         </div>
                                     </div>

@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from 'next/link';
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useRouter } from "next/navigation";
-import Image from 'next/image';
 
 export default function Main({ sector, subsector, lng }) {
 
@@ -17,10 +15,10 @@ export default function Main({ sector, subsector, lng }) {
         // Fetch subcategories
         const fetchSubcategories = async () => {
             try {
-                const response = await fetch(`/api/methodology?catalogue_id=${subsector}&lng=${lng}`);
+                const response = await fetch(`/api/methodology/list?catalogue_id=${subsector}&lng=${lng}`);
                 const result = await response.json();
 
-                setData(result.data)
+                setData(result.data);
                 if (!Array.isArray(result.data)) {
                     return [];
                 }
@@ -39,8 +37,9 @@ export default function Main({ sector, subsector, lng }) {
                 value={data}
                 paginator
                 rows={10}
+                emptyMessage={lng === "mn" ? "Мэдээлэл олдсонгүй" : "No data found"}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
-                currentPageReportTemplate={`Нийт: {totalRecords}`}
+                currentPageReportTemplate={lng === "mn" ? "Нийт: {totalRecords}" : "Total: {totalRecords}"}
                 className="nso_table"
                 loading={loading}
             >
@@ -56,7 +55,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="name"
-                    header="Нэр"
+                    header={lng === "mn" ? "Нэр" : "Name"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -68,7 +67,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="file_size"
-                    header="Файлын хэмжээ"
+                    header={lng === "mn" ? "Файлын хэмжээ" : "File size"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -92,7 +91,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="date"
-                    header="Шинэчлэгдсэн огноо"
+                    header={lng === "mn" ? "Шинэчлэгдсэн огноо" : "Updated date"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -103,7 +102,7 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="views"
-                    header="Татсан тоо"
+                    header={lng === "mn" ? "Татсан тоо" : "Views"}
                     sortable
                     className="nso_table_col"
                     body={(rowData) => (
@@ -114,17 +113,17 @@ export default function Main({ sector, subsector, lng }) {
                 />
                 <Column
                     field="download"
-                    header="Татах"
+                    header={lng === "mn" ? "Татах" : "Download"}
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`https://downloads.1212.mn/${filePath}`, "_blank");
+                                window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">
-                            <Image src="/images/file-download.png" width={15} height={15} className='float-left mt-1' alt='file-download' /> PDF
+                            <img src="/images/file-download.png" width={15} height={15} className='float-left mt-1' alt='file-download' /> PDF
                         </div>
                     )}
                 />

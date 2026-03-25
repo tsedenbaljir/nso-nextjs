@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 
 export default function index(product) {
     const router = useRouter();
@@ -12,7 +12,7 @@ export default function index(product) {
         if (!imagePath) return '/images/default.jpg';
         if (imagePath.startsWith('http')) return imagePath;
         if (imagePath.startsWith('/uploads/')) return imagePath;
-        return `https://downloads.1212.mn/${imagePath}`;
+        return `/uploads/${imagePath}`;
     };
 
     const handleImageError = () => {

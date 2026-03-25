@@ -40,6 +40,86 @@ export async function PUT(req, { params }) {
         const { id } = params;
         const data = await req.json();
 
+        // Validate required fields
+        if (!data.name || !data.language) {
+            return NextResponse.json({
+                status: false,
+                message: "Шаардлагатай талбаруудыг бөглөнө үү"
+            }, { status: 400 });
+        }
+
+        // Validate and format date fields
+        let publishedDate = null;
+        if (data.published_date) {
+            try {
+                const date = new Date(data.published_date);
+                if (isNaN(date.getTime())) {
+                    return NextResponse.json({
+                        status: false,
+                        message: "Огноо буруу форматтай байна"
+                    }, { status: 400 });
+                }
+                publishedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+            } catch (error) {
+                return NextResponse.json({
+                    status: false,
+                    message: "Огноо форматлахад алдаа гарлаа"
+                }, { status: 400 });
+            }
+        }
+
+        let lastModifiedDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        if (data.last_modified_date) {
+            try {
+                const date = new Date(data.last_modified_date);
+                if (!isNaN(date.getTime())) {
+                    lastModifiedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+                }
+            } catch (error) {
+                console.warn('Invalid last_modified_date, using current date');
+            }
+        }
+
+        // Ensure all values are properly defined and convert to appropriate types
+        const updateData = {
+            name: data.name,
+            language: data.language,
+            body: data.body,
+            published: data.published,
+            news_type: data.news_type,
+            published_date: publishedDate,
+            header_image: data.header_image,
+            last_modified_by: data.last_modified_by,
+            last_modified_date: lastModifiedDate,
+            slug: data.slug
+        };
+
+        // Create the parameters array
+        const sqlParams = [
+            updateData.name,
+            updateData.language,
+            updateData.body,
+            updateData.published,
+            updateData.news_type,
+            updateData.published_date,
+            updateData.header_image,
+            updateData.header_image,
+            updateData.last_modified_by,
+            updateData.last_modified_date,
+            updateData.slug,
+            parseInt(id)
+        ];
+
+        // Check for any undefined values
+        const undefinedIndexes = sqlParams.map((param, index) => param === undefined ? index : -1).filter(index => index !== -1);
+        if (undefinedIndexes.length > 0) {
+            console.error('Undefined parameters at indexes:', undefinedIndexes);
+            return NextResponse.json({
+                status: false,
+                message: "Өгөгдлийн алдаа: undefined утгууд байна"
+            }, { status: 400 });
+        }
+
         await db.raw(`
             UPDATE web_1212_content 
             SET name = ?,
@@ -49,23 +129,12 @@ export async function PUT(req, { params }) {
                 news_type = ?,
                 published_date = ?,
                 header_image = ?,
+                thumb_image = ?,
                 last_modified_by = ?,
                 last_modified_date = ?,
                 slug = ?
             WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE')
-        `, [
-            data.name,
-            data.language,
-            data.body,
-            data.published,
-            data.news_type,
-            data.published_date,
-            data.header_image,
-            data.last_modified_by,
-            data.last_modified_date,
-            data.slug,
-            id
-        ]);
+        `, sqlParams);
 
         return NextResponse.json({
             status: true,
@@ -74,6 +143,10 @@ export async function PUT(req, { params }) {
 
     } catch (error) {
         console.error('Error updating dissemination:', error);
+        console.error('Error details:', {
+            message: error.message,
+            stack: error.stack
+        });
         return NextResponse.json({
             status: false,
             message: "Мэдээлэл засварлахад алдаа гарлаа"

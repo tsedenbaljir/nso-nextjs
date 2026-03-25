@@ -2,12 +2,21 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PanelMenu } from "primereact/panelmenu";
+import { useTranslation } from '@/app/i18n/client';
+import Result from '@/components/Search/subMain/Result';
+import MainSearch from '@/components/Search/subMain/MainSearch';
 import LoadingDiv from '@/components/Loading/Text/Index';
 
-export default function DynamicSidebar({ subsector, lng }) {
+export default function DynamicSidebar({ sector, subsector, lng }) {
+    const { t } = useTranslation(lng, "lng", "");
     const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [showResult, setShowResult] = useState(false);
+    const [search, setSearching] = useState({});
+    const [data, setData] = useState({});
+    const [loadingSearch, setLoadingSearch] = useState(true);
 
     const router = useRouter();
 
@@ -17,17 +26,18 @@ export default function DynamicSidebar({ subsector, lng }) {
                 // Fetch main Sectors
                 const response = await fetch(`/api/sectorname?lng=${lng}`);
                 const result = await response.json();
+                // const data = result.data;
 
                 var convert = [];
 
-                convert.push(result.data[6]);
-                convert.push(result.data[5]);
-                convert.push(result.data[2]);
-                convert.push(result.data[4]);
-                convert.push(result.data[7]);
-                convert.push(result.data[0]);
-                convert.push(result.data[1]);
-                convert.push(result.data[3]); //түүхэн статистик
+                convert.push(result.data.filter(e=>e.id === "Population, household")[0]);
+                convert.push(result.data.filter(e=>e.id === "Society, development")[0]);
+                convert.push(result.data.filter(e=>e.id === "Labour, business")[0]);
+                convert.push(result.data.filter(e=>e.id === "Industry, service")[0]);
+                convert.push(result.data.filter(e=>e.id === "Economy, environment")[0]);
+                convert.push(result.data.filter(e=>e.id === "Education, health")[0]);
+                convert.push(result.data.filter(e=>e.id === "Regional development")[0]);
+                convert.push(result.data.filter(e=>e.id === "Historical data")[0]); //түүхэн статистик
 
                 if (!Array.isArray(convert)) {
                     setError("Unexpected API response format. Check console.");
@@ -37,7 +47,7 @@ export default function DynamicSidebar({ subsector, lng }) {
                 // Fetch subSectors
                 const fetchSubcategories = async (categoryId) => {
                     try {
-                        const response = await fetch(`/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+                        const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
                         const result = await response.json();
 
                         if (!Array.isArray(result.data)) {
@@ -47,12 +57,12 @@ export default function DynamicSidebar({ subsector, lng }) {
                         // ✅ Add `command` to update URL when clicked
                         return result.data.map((item) => ({
                             id: item.id,
-                            label: item.text,
+                            label: item.text.split('_')[1] ? item.text.split('_')[1] : item.text,
                             className: item.id === decodeURIComponent(subsector) ? "active-link" : "",
                             command: () => {
-                                router.push(`/mn/statcate/table/${categoryId}/${decodeURIComponent(item.id)}`);
+                                router.push(`/${lng}/statcate/table/${categoryId}/${decodeURIComponent(item.id)}`);
                             }
-                        }));
+                        })).sort((a, b) => a.id.localeCompare(b.id));
 
                     } catch (error) {
                         // console.error(`Error fetching subcategories for ${categoryId}:`, error);
@@ -68,13 +78,12 @@ export default function DynamicSidebar({ subsector, lng }) {
                             label: category.text,
                             id: category.id,
                             items: subItems,
-                            className: category.id === decodeURIComponent(subsector) ? "active-header-link" : "",
-                            expanded: subItems.some((sub) => sub.id === decodeURIComponent(subsector)) // Auto-expand active submenu
+                            className: category.id === decodeURIComponent(sector) ? "active-header-link" : "",
+                            expanded: category.id === decodeURIComponent(sector) // Auto-expand active submenu
                         };
                     })
                 );
-                // console.log(menuWithSubcategories);
-                
+
                 setMenuItems(menuWithSubcategories);
             } catch (err) {
                 console.error("Error fetching data:", err);
@@ -88,22 +97,30 @@ export default function DynamicSidebar({ subsector, lng }) {
     }, [subsector]); // Refetch when `sectors` changes
 
     return (
-        <div className="nso_cate_section left-bar">
-            {loading ? (
-                <div className="text-center py-4">
-                    <LoadingDiv />
-                    <br />
-                    <LoadingDiv />
-                    <br />
-                    <LoadingDiv />
-                    <br />
-                    <LoadingDiv />
+        <>
+            <div className="__cate_search">
+                <div className="__main_search">
+                    <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
+                    {search.length > 2 && <Result type={1} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
                 </div>
-            ) : error ? (
-                <p className="text-red-500">{error}</p>
-            ) : (
-                <PanelMenu model={menuItems} className="w-full nso_cate_selection" />
-            )}
-        </div>
+            </div>
+            <div className="nso_cate_section left-bar">
+                {loading ? (
+                    <div className="text-center py-4">
+                        <LoadingDiv />
+                        <br />
+                        <LoadingDiv />
+                        <br />
+                        <LoadingDiv />
+                        <br />
+                        <LoadingDiv />
+                    </div>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
+                ) : (
+                    <PanelMenu model={menuItems} className="w-full nso_cate_selection" />
+                )}
+            </div>
+        </>
     );
 }

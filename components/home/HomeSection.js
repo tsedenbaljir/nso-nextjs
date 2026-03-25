@@ -28,28 +28,38 @@ const HomeSection = ({ lng }) => {
                         <div className="__metadata">
                             <a href="https://data.nso.mn" className="__dock_item leading-4" target="_blank">
                                 <img src="/images/metaIcon.png" height="30px" width="30px"
-                                    style={{ marginRight: '20px', height: 30 }} />
-                                ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН
+                                    style={{ marginRight: '5px', height: 30 }} />
+                                {lng === "mn" ? <>ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН</> : <>GOVERNMENT INTEGRATED <br />  DATABASE</>}
                             </a>
                             <a href="https://metadata.nso.mn" className="__dock_item leading-4" target="_blank">
                                 <img src="/images/dataIcon.png" height="30px" width="30px"
                                     style={{ marginRight: '5px', height: 30 }} />
-                                ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН
+                                {lng === "mn" ? <>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</> : <>GOVERNMENT METADATA<br />  DATABASE</>}
                             </a>
                         </div>
+                        {/* <div className="__metadataBanner">
+                            <a href="http://aanb3.nso.mn/" target="_blank">
+                                <img src="/images/aanb3.jpg" height="auto" width="100%" />
+                            </a>
+                        </div> */}
                     </div >
                     <div className="__metadataphone">
                         <a href="https://data.nso.mn" className="__dock_item" target="_blank">
                             <img src="/images/metaIcon.png" height="30px" width="30px"
                                 style={{ marginRight: '9px', height: 30 }} />
-                            <span>ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН</span>
+                            <span>{lng === "mn" ? <>ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН</> : <>GOVERNMENT INTEGRATED <br />  DATABASE</>}</span>
                         </a>
                         <a href="https://metadata.nso.mn" className="__dock_item" target="_blank">
                             <img src="/images/dataIcon.png" height="30px" width="30px"
                                 style={{ marginRight: '6px', height: 30 }} />
-                            <span>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</span>
+                            <span>{lng === "mn" ? <>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</> : <>GOVERNMENT METADATA<br />  DATABASE</>}</span>
                         </a>
                     </div>
+                    {/* <div className="__metadataBannerphone">
+                        <a href="http://aanb3.nso.mn/" target="_blank">
+                            <img src="/images/aanb3.jpg" height="auto" width="328px" />
+                        </a>
+                    </div> */}
                     <Sidebar t={t} lng={lng} />
                     <img className="mb" src="/images/mbBle.png" />
                 </div >

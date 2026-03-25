@@ -6,13 +6,14 @@ export async function GET(req) {
     const page = parseInt(searchParams.get('page') || '0', 10);
     const pageSize = parseInt(searchParams.get('pageSize') || '10', 10);
     const sectorType = searchParams.get('sectorType');
+    const label = decodeURIComponent(searchParams.get('label') || '');
     const search = searchParams.get('search');
     const lng = searchParams.get('lng') || 'mn';
     const role = searchParams.get('role');
 
     try {
         const { data, totalCount } = await fetchDataFromDatabase({
-            page, pageSize, sectorType, search, lng, role
+            page, pageSize, sectorType, label, search, lng, role
         });
         return NextResponse.json({
             status: true,
@@ -34,9 +35,9 @@ export async function GET(req) {
     }
 }
 
-async function fetchDataFromDatabase({ page, pageSize, sectorType, search, lng, role }) {
+async function fetchDataFromDatabase({ page, pageSize, sectorType, label, search, lng, role }) {
     const offset = page * pageSize;
-    const { whereClause, params } = buildWhereClause(sectorType, search, lng, role);
+    const { whereClause, params } = buildWhereClause(sectorType, label, search, lng, role);
 
     const countQuery = `
         SELECT COUNT(*) as total
@@ -62,13 +63,17 @@ async function fetchDataFromDatabase({ page, pageSize, sectorType, search, lng, 
     return { data: results, totalCount };
 }
 
-function buildWhereClause(sectorType, search, lng, role) {
+function buildWhereClause(sectorType, label, search, lng, role) {
     let whereConditions = [role === "admin" ? 'wg.published IN (0, 1)' : 'wg.published = 1'];
     const params = [];
 
     if (sectorType) {
         whereConditions.push('wg.sector_type = ?');
         params.push(sectorType);
+    }
+    if (label) {
+        whereConditions.push('wg.name LIKE ?');
+        params.push(`${label}%`);
     }
 
     if (search) {

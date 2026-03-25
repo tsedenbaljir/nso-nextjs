@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 import { uploadFile } from '@/utils/fileUpload';
 
+export const dynamic = 'force-dynamic';
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const type = searchParams.get('type');

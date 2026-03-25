@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    experimental: {
+        serverComponentsExternalPackages: ['oracledb'],
+        serverActions: {
+            bodySizeLimit: '100mb',
+        },
+    },
     webpack: (config, { isServer }) => {
         if (isServer) {
             config.externals.push('oracledb');
@@ -15,6 +21,7 @@ const nextConfig = {
             "os.alipayobjects.com",
             "api.ipify.org",
             "downloads.1212.mn",
+            "www.nso.mn",
         ],
         remotePatterns: [
             {
@@ -22,9 +29,20 @@ const nextConfig = {
                 hostname: 'downloads.1212.mn',
                 pathname: '/**', // Allow all paths under this domain
             },
+            {
+                protocol: 'https',
+                hostname: 'www.nso.mn', // Add this
+                pathname: '/images/**', // Restrict to images directory if needed
+            },
+            {
+                protocol: 'https',
+                hostname: 'www.nso.mn', // Add this
+                pathname: '/uploads/**', // Restrict to images directory if needed
+            },
         ],
     },
     env: {
+        BASE_URL: process.env.BASE_URL,
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
         FRONTEND: process.env.FRONTEND,
@@ -37,8 +55,10 @@ const nextConfig = {
         API_URL: process.env.API_URL,
         BASE_API_URL: process.env.BASE_API_URL,
         X_API_KEY: process.env.X_API_KEY,
+        INFO_EMAIL_1212: process.env.INFO_EMAIL_1212,
+        INFO_PASSWORD_1212: process.env.INFO_PASSWORD_1212,
     },
-    output: "standalone",
+    generateRobotsTxt: true,
     crossOrigin: "anonymous",
     async headers() {
         return [
@@ -57,7 +77,7 @@ const nextConfig = {
                             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
                     },
                 ],
-            },
+            },  
         ];
     },
 };

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import Link from 'next/link';
+import TextLoading from '@/components/Loading/Text/Index';
 
 export default function TransparencyCategory({ params: { lng, name } }) {
     const { t } = useTranslation(lng, "lng", "");
@@ -34,31 +35,39 @@ export default function TransparencyCategory({ params: { lng, name } }) {
             <div className="nso_container">
                 <div className="w-full">
                     <div className="transparency_header">
-                        <div className="font-bold text-2xl">{categoryTitle}</div>
+                        <div className="font-bold text-2xl">
+                            {categoryTitle === 'Үйл ажиллагааны ил тод байдал' ? lng === 'mn' ? categoryTitle : 'Operational transparency' :
+                                categoryTitle === 'Авлигын эсрэг арга хэмжээ' ? lng === 'mn' ? categoryTitle : 'Anti-corruption measures' :
+                                    categoryTitle === 'Үйл ажиллагааны хөтөлбөр, тайлан' ? lng === 'mn' ? categoryTitle : 'Action programs and reports' :
+                                        categoryTitle === 'Төрийн албаны зөвлөлийн Үндэсний статистикийн хорооны дэргэдэх салбар зөвлөл' ?
+                                            lng === 'mn' ? categoryTitle : 'Branch Council under the Statistics Committee of the National Council of Public Service'
+                                            : categoryTitle}
+                        </div>
                     </div>
                     <div className="__card_groups">
                         {loading ? (
-                            <div className="loading">Уншиж байна...</div>
+                            <TextLoading />
                         ) : items.length > 0 ? (
                             items.map((item, index) => (
-                                <div key={index}
-                                    onClick={() => {
-                                        window.open(item.file_path, '_blank');
-                                    }}
-                                    target="_blank"
+                                <Link
+                                    key={index}
+                                    href={item.id === 38 || item.id === 61 ? `/${lng}/contact`
+                                        : item.id === 37 ? `/${lng}/about-us/workspace`
+                                            : `/${lng}/transparency/${name}/${item.id}`}
                                     className="__card"
-                                    style={{ background: 'var(--surface-bk2)' }}>
+                                    style={{ background: 'var(--surface-bk2)' }}
+                                >
                                     <div className="__category_group">
                                         <h3>{item.title}</h3>
                                     </div>
                                     <div className="circle">
                                         <i className="pi pi-arrow-right"></i>
                                     </div>
-                                </div>
+                                </Link>
                             ))
                         ) : (
-                            <div className="no_data">
-                                Мэдээлэл олдсонгүй
+                            <div className="no_data p-5">
+                                {lng === 'mn' ? 'Мэдээлэл олдсонгүй' : 'No data found'}
                             </div>
                         )}
                     </div>

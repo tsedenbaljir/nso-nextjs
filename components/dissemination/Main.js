@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 
-export default function Main({ children, type, lng }) {
+export default function Main({ children, type, lng, filterSection }) {
     const router = useRouter();
     const { t } = useTranslation(lng, "lng", "");
 
@@ -12,7 +12,7 @@ export default function Main({ children, type, lng }) {
                 <div className="__section">
                     <div className="p-tabmenu p-component">
                         <ul className="p-tabmenu-nav p-reset flex">
-                            <li style={{fontFamily:'sans-serif'}} className={`p-tabmenuitem ${type === "future" && 'p-highlight'} cursor-pointer`}
+                            <li style={{ fontFamily: 'sans-serif' }} className={`p-tabmenuitem ${type === "future" && 'p-highlight'} cursor-pointer`}
                                 onClick={() => {
                                     router.push("/dissemination/future")
                                 }}>
@@ -30,8 +30,15 @@ export default function Main({ children, type, lng }) {
                             </li>
                         </ul>
                     </div>
+
                 </div>
+                {filterSection && (
+                    <div className="__filter_section">
+                        {filterSection}
+                    </div>
+                )}
             </div>
+
             <div className="nso_tab_content">
                 <div className="__table">
                     <div className='p-datatable-wrapper'>

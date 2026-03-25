@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
+import { Agent } from "undici";
 
-export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
+
+const insecure = new Agent({ connect: { rejectUnauthorized: false } });
 
 export async function GET(req) {
   try {
@@ -18,11 +21,27 @@ export async function GET(req) {
       );
     }
 
+    if (!lng) {
+      return NextResponse.json({ error: "Missing lng parameter" }, { status: 400 });
+    }
+
+    const myHeaders = new Headers();
+    myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
     // Construct the API URL
     const API_URL = `${process.env.BASE_API_URL}/${lng}/NSO/${encodeURIComponent(sector)}/${encodeURIComponent(subsector)}`;
     
     // Fetch data from the external API
-    const response = await fetch(API_URL);
+    const response = await fetch(API_URL, {
+      ...requestOptions,
+      cache: "no-store",
+      dispatcher: insecure,
+    });
     
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -31,7 +50,7 @@ export async function GET(req) {
     // Convert response to JSON
     const textData = await response.text();
     
-    const validJson = textData.replace(/^{.*?}\[/, "[");
+    const validJson = textData;
     const parsedData = JSON.parse(validJson);
 
     // Ensure it's an array before returning

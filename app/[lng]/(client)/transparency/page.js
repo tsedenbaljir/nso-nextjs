@@ -88,6 +88,15 @@ export default function Transparency({ params: { lng } }) {
                             </div>
                         </Link>
                     )}
+
+                    <Link href={`/${lng}/transparency/${t('tran5')}`} className="__card" style={{ background: 'var(--surface-bk2)' }}>
+                        <div className="__category_group">
+                            <span>{t('tran5')}</span>
+                        </div>
+                        <div className="circle">
+                            <i className="pi pi-arrow-right"></i>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>

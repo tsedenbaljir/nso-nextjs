@@ -26,7 +26,9 @@ export default function Dissemination() {
     const fetchArticles = async () => {
         setLoading(true)
         try {
-            const response = await fetch('/api/dissemination/admin')
+            const response = await fetch('/api/dissemination/admin', {
+                cache: 'no-store'
+            })
             if (response.status === 401) {
                 handleUnauthorized()
                 return

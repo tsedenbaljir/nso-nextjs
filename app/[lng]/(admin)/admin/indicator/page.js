@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Toast } from 'primereact/toast';
 import styles from './styles.module.scss';
 import ClientStyles from './ClientStyles';
@@ -8,6 +9,7 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import { showConfirm, showToast } from '@/utils/alerts';
 
 export default function AdminLaws() {
+  const router = useRouter();
   const [laws, setLaws] = useState({
     legal: [],
     command: [],
@@ -30,7 +32,9 @@ export default function AdminLaws() {
 
   const fetchLawsByType = async (type) => {
     try {
-      const response = await fetch(`/api/mainIndicators?type=${type}`);
+      const response = await fetch(`/api/mainIndicators?type=${type}`, {
+        cache: 'no-store'
+    });
       const result = await response.json();
       if (result.status && Array.isArray(result.data)) {
         setLaws(prev => ({
@@ -61,7 +65,8 @@ export default function AdminLaws() {
             },
             body: JSON.stringify({
               id: parseInt(id) // Ensure ID is a number
-            })
+            }),
+            cache: 'no-store'
           });
 
           const result = await response.json();
@@ -87,7 +92,7 @@ export default function AdminLaws() {
       <div className="w-full px-2 h-full">
         <div className={styles.adminLawsContainer}>
           <div className={styles.header}>
-            <h1>Хууль эрхзүй</h1>
+            <h1>Хууль эрх зүй</h1>
           </div>
           <TabView
             activeIndex={activeIndex}
@@ -105,10 +110,12 @@ export default function AdminLaws() {
                     laws[category.value].length > 0 ? (
                     laws[category.value].map((law) => (
                       <div key={law.id} className={styles.lawItem}>
+                        {/* <h3>{law.id}</h3> */}
                         <h3>{law.name}</h3>
                         {/* <p>{law.file_info}</p> */}
                         <div className={styles.actions}>
-                          <button onClick={() => {}}>Засах</button>
+                          {/* <button onClick={() => {}}>Засах</button> */}
+                          <button onClick={() => router.push(`/admin/indicator/edit/${law.id}`)}>Засах</button>
                           <button onClick={() => handleDelete(law.id, category.value)}>
                             Устгах
                           </button>

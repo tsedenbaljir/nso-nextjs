@@ -349,7 +349,62 @@ $cw: #fff;
         }
     }
 }
-
+.doc_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 14px;
+  }
+  
+  .doc_table th,
+  .doc_table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  
+  .doc_table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+  }
+  
+  .code_block {
+    background-color: #1e1e1e;
+    color: #eee;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 14px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    margin-top: 1rem;
+  }
+  .api_method_tag {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    border-radius: 6px;
+    margin-right: 10px;
+    text-transform: uppercase;
+  }
+  
+  .api_method_get {
+    background-color: #4285f4; // Цэнхэр
+  }
+  
+  .api_method_post {
+    background-color: #34a853; // Ногоон
+  }
+  
+  .api_method_put {
+    background-color: #fbbc05; // Шар
+  }
+  
+  .api_method_delete {
+    background-color: #ea4335; // Улаан
+  }
+  
 .nso_dark {
     .nso_body_wrap {
         background-color: #221f16;

@@ -2,16 +2,17 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+export const dynamic = "force-dynamic";
 export async function GET(req) {
     // Check authentication
-    const auth = await checkAdminAuth(req);
+    // const auth = await checkAdminAuth(req);
     
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    // if (!auth.isAuthenticated) {
+    //     return NextResponse.json({
+    //         status: false,
+    //         message: auth.error
+    //     }, { status: 401 });
+    // }
 
     try {
         const results = await db('web_1212_content')

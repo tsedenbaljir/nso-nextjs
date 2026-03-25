@@ -380,14 +380,14 @@ export default function TimeLine({ lng }) {
                         <div className="card">
                             {timelineEvents.reverse().map((datas) => {
                                 return (
-                                    <div className="flex m-5">
+                                    <div className="flex my-5">
                                         <span className='opposite'>
                                             {datas.date}
                                         </span>
-                                        <div className="__middlecircle">
-                                            <i className="pi pi-angle-down"></i>  {/* Custom marker */}
+                                        <div className="__middlecircle mr-2">
+                                            <i className="pi pi-angle-down"></i>
                                         </div>
-                                        <small className="p-text-primary m-2 text-justify text-black font-bold desc-timeline font-family-roboto">
+                                        <small className="p-text-primary ml-2 text-justify text-black desc-timeline font-family-roboto">
                                             {datas.desc}
                                             <br />
                                         </small>

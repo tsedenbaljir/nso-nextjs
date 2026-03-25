@@ -1,22 +1,23 @@
 "use client"
 import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
-import Image from 'next/image';
+import { useTranslation } from '@/app/i18n/client';
 
-export default function ArticleSideBar({ article }) {
+export default function ArticleSideBar({ article, lng }) {
     const router = useRouter();
     const [errorImages, setErrorImages] = useState({});
-
-
+    const { t } = useTranslation(lng, "lng", "");
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return '/images/default.jpg';
-        return `https://downloads.1212.mn/${imagePath}`;
+        if (!imagePath) return 'https://www.1212.mn/images/default.jpg';
+        if (imagePath.startsWith('http')) return imagePath;
+        if (imagePath.startsWith('/uploads/')) return `https://www.1212.mn/${imagePath}`;
+        return `https://www.1212.mn/uploads/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {
         setErrorImages(prev => ({
             ...prev,
-            [articleId]: `/uploads/${imagePath}`
+            [articleId]: `https://www.1212.mn/uploads/${imagePath}`
         }));
     };
 
@@ -24,14 +25,14 @@ export default function ArticleSideBar({ article }) {
         <div className="__sidebar">
             <div className="__header">
                 <div className="__title">
-                    ШИНЭ МЭДЭЭ
+                    {t('LASTNEWS')}
                 </div>
             </div>
             {
                 article.slice(0, 6).map((art) => {
                     return <div className="__post cursor-pointer"
                         onClick={() => {
-                            router.push("/about-us/news/" + art.id);
+                            router.push(`/${lng}/about-us/news/${art.id}`);
                         }}>
                         <a className="__posts">
                             <div className="relative w-full h-[200px] overflow-hidden">

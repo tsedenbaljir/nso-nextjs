@@ -1,0 +1,123 @@
+
+.__post_title {
+    font-size: var(--font-size40);
+    font-weight: 600;
+    font-style: 'justify';
+    color: var(--text-main);
+}
+
+.__post {
+    width: 100%;
+}
+
+.BNLogo {
+    margin: 10px;
+    margin-top: 0;
+    float: left;
+    width: 120px;
+    height: 120px;
+    margin-top: -30px;
+    margin-left: 150px;
+    margin-right: 100px;
+}
+
+.descI{
+    width: 30%;
+}
+
+/* CSS */
+.button-29 {
+    margin-left: 20px;
+    align-items: center;
+    appearance: none;
+    background-image: radial-gradient(100% 100% at 100% 0, #0188ff 0, #005BAA 100%);
+    border: 0;
+    border-radius: 6px;
+    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono", monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    // white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 18px;
+}
+
+.button-29:focus {
+    box-shadow: #253ade 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+}
+
+.button-29:hover {
+    box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
+}
+
+.button-29:active {
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.nso_statistic_news {
+    width: 100%;
+    background: var(--surface-a);
+
+    .__statistic_groups {
+        padding: 20px 0;
+    }
+
+}
+
+.__fun_statistic_body {
+    background: linear-gradient(180deg, #EBF6FF80 0%, #FCFEFF80 100%);
+    border: 1px dashed var(--surface-c);
+    box-sizing: border-box;
+    margin: 30px 0 50px 0;
+
+    .description {
+        padding: 30px 50px;
+        color: var(--text-main);
+        font-size: var(--font-size16);
+        line-height: 24px;
+        letter-spacing: -1px;
+        text-align: justify;
+    }
+}
+
+
+@media screen and (max-width: 769px) {
+    .__post_title {
+        font-size: 32px;
+        font-weight: 600;
+        font-style: 'justify';
+        color: var(--text-main);
+    }
+    .BNLogo {
+        margin: 10px;
+        margin-top: 0;
+        float: left;
+        margin-top: -30px;
+    }
+
+    .descI{
+        width: 98%;
+    }
+    .button-29{
+        width: 92%;
+        margin-top: 10px;
+    }
+}

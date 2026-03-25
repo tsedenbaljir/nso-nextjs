@@ -194,14 +194,14 @@ export default function ViolationPage({ params: { lng } }) {
                                     placeholder={t('contact.apartmentV')}
                                 />
                                 <textarea
-                                    className="__input _message"
+                                    className="__input _message w-full"
                                     name="letter"
                                     value={formData.letter}
                                     onChange={handleInputChange}
                                     placeholder={t('contact.messageV')}
                                 />
                             </div>
-                            <div className="__submit">
+                            <div className="__submit" style={{marginTop: 0}}>
                                 <input
                                     type="button"
                                     onClick={handleSubmit}

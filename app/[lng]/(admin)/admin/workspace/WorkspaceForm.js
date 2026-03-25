@@ -62,7 +62,9 @@ export default function WorkspaceForm({ id, lng }) {
 
     const fetchWorkspace = async () => {
         try {
-            const response = await fetch(`/api/workspace/admin/${id}?language=${language}`);
+            const response = await fetch(`/api/workspace/admin/${id}?language=${language}`, {
+                cache: 'no-store'
+            });
             if (!response.ok) throw new Error('Failed to fetch');
             const result = await response.json();
             if (result.status) {
@@ -106,6 +108,7 @@ export default function WorkspaceForm({ id, lng }) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
+                cache: 'no-store'
             });
 
             const result = await response.json();

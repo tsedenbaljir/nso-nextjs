@@ -14,38 +14,38 @@ $cd: #252525;
 }
 
 @font-face {
-  font-family: 'sf-pro-text, roboto';
-  // src: url('~src/assets/fonts/SF-Pro-Text-Thin.otf');
+  font-family: 'sf-pro-text';
+  src: url('/fonts/SF-Pro-Text-Thin.otf');
   font-weight: 200;
 }
 
 @font-face {
-  font-family: 'sf-pro-text, roboto';
-  // src: url('~src/assets/fonts/SF-Pro-Text-Light.otf');
+  font-family: 'sf-pro-text';
+  src: url('/fonts/SF-Pro-Text-Light.otf');
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'sf-pro-text, roboto';
-  // src: url('~src/assets/fonts/SF-Pro-Text-Regular.otf');
+  font-family: 'sf-pro-text';
+  src: url('/fonts/SF-Pro-Text-Regular.otf');
   font-weight: 400;
 }
 
 @font-face {
-  font-family: 'sf-pro-text, roboto';
-  // src: url('~src/assets/fonts/SF-Pro-Text-Semibold.otf');
+  font-family: 'sf-pro-text';
+  src: url('/fonts/SF-Pro-Text-Semibold.otf');
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'sf-pro-text, roboto';
-  // src: url('~src/assets/fonts/SF-Pro-Text-Bold.otf');
+  font-family: 'sf-pro-text';
+  src: url('/fonts/SF-Pro-Text-Bold.otf');
   font-weight: 600;
 }
 
 @font-face {
-  font-family: 'sf-pro-text, roboto';
-  // src: url('~src/assets/fonts/SF-Pro-Text-Black.otf');
+  font-family: 'sf-pro-text';
+  src: url('/fonts/SF-Pro-Text-Black.otf');
   font-weight: 700;
 }
 
@@ -116,7 +116,7 @@ body {
 
     .__page_name {
       color: var(--text-main);
-      font-family: sf-pro-text, roboto;
+      font-family: sf-pro-text;
       font-weight: 800;
       font-size: var(--font-size24);
       text-transform: uppercase;
@@ -139,9 +139,9 @@ body {
 .nso_cate_section {
   width: 100%;
 
-  .__cate_groups {
-    padding-top: 40px;
-  }
+  // .__cate_groups {
+  //   padding-top: 40px;
+  // }
 }
 
 .nso_cate_body {
@@ -244,19 +244,19 @@ body {
 
       span {
         &.dock1 {
-          // background-image: url('~src/assets/images/dock1-1.png') !important;
+          background-image: url('/images/dock1-1.png') !important;
         }
 
         &.dock2 {
-          // background-image: url('~src/assets/images/dock2-1.png') !important;
+          background-image: url('/images/dock2-1.png') !important;
         }
 
         &.dock3 {
-          // background-image: url('~src/assets/images/dock3-1.png') !important;
+          background-image: url('/images/dock3-1.png') !important;
         }
 
         &.dock4 {
-          // background-image: url('~src/assets/images/dock4-1.png') !important;
+          background-image: url('/images/dock4-1.png') !important;
         }
       }
     }
@@ -275,19 +275,19 @@ body {
 
       &.dock1 {
         background-size: 60%;
-        // background-image: url('~src/assets/images/dock1.png');
+        background-image: url('/images/dock1.png');
       }
 
       &.dock2 {
-        // background-image: url('~src/assets/images/dock2.png');
+        background-image: url('/images/dock2.png');
       }
 
       &.dock3 {
-        // background-image: url('~src/assets/images/dock3.png');
+        background-image: url('/images/dock3.png');
       }
 
       &.dock4 {
-        // background-image: url('~src/assets/images/dock4.png');
+        background-image: url('/images/dock4.png');
       }
     }
   }
@@ -305,31 +305,31 @@ body {
   cursor: pointer;
 
   &.__pdf {
-    // background-image: url('~src/assets/images/icons/nso_file_pdf.svg');
+    background-image: url('/images/icons/nso_file_pdf.svg');
   }
 
   &.__xls,
   &.__xlsx {
-    // background-image: url('~src/assets/images/icons/nso_file_excel.svg');
+    background-image: url('/images/icons/nso_file_excel.svg');
   }
 
   &.__doc,
   &.__docx {
-    // background-image: url('~src/assets/images/icons/nso_file_word.svg');
+    background-image: url('/images/icons/nso_file_word.svg');
   }
 
   &.__ppt,
   &.__pptx {
-    // background-image: url('~src/assets/images/icons/nso_file_ppt.svg');
+    background-image: url('/images/icons/nso_file_ppt.svg');
   }
 
   &.__jpg,
   &.__jpeg {
-    // background-image: url('~src/assets/images/icons/nso_file_jpg.svg');
+    background-image: url('/images/icons/nso_file_jpg.svg');
   }
 
   &.png {
-    // background-image: url('~src/assets/images/icons/nso_file_png.svg');
+    background-image: url('/images/icons/nso_file_png.svg');
   }
 }
 
@@ -489,7 +489,7 @@ body {
         display: flex;
         height: 14px;
         width: 14px;
-        // background-image: url('~src/assets/images/icons/nso_filter_arrow.svg');
+        background-image: url('/images/icons/nso_filter_arrow.svg');
         transition: all .15s ease-in-out;
       }
 
@@ -824,7 +824,7 @@ body {
       height: 20px;
       display: flex;
       background-position: center;
-      // background-image: url('~src/assets/images/expand-blue.svg');
+      background-image: url('/images/expand-blue.svg');
       background-repeat: no-repeat;
       background-size: 100%;
     }

@@ -10,7 +10,9 @@ export default function Index({ Articles, loading, mainPath }) {
 
     const getImageUrl = (imagePath) => {
         if (!imagePath) return '/images/default.jpg';
-        return `https://downloads.1212.mn/${imagePath}`;
+        if (imagePath.startsWith('http')) return imagePath;
+        if (imagePath.startsWith('/uploads/')) return imagePath;
+        return `/uploads/${imagePath}`;
     };
 
     const handleImageError = (articleId, imagePath) => {
@@ -47,7 +49,7 @@ export default function Index({ Articles, loading, mainPath }) {
                                     >
                                         <div className="relative w-full h-[200px] overflow-hidden">
                                             <img
-                                                src={errorImages[art.id] || getImageUrl(art.header_image)}
+                                                src={errorImages[art.id] ? `/uploads/${art.header_image}` : getImageUrl(art.header_image)}
                                                 alt={art.name || 'Article image'}
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                 className="absolute inset-0 w-full h-full object-cover rounded-lg hover:scale-105 transition-transform duration-300"

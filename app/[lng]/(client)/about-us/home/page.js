@@ -3,19 +3,21 @@ import React, { useState } from 'react';
 import TimeLine from '@/components/about-us/time-line';
 import Orgs from '@/components/about-us/orgs';
 import "@/components/styles/about-us.scss";
+import { useTranslation } from '@/app/i18n/client';
 
 export default function AboutUs({ params: { lng } }) {
     const [activeItem, setActiveItem] = useState(0);
 
+    const { t } = useTranslation(lng, "lng", "");
     const tabMenus = [
-        { label: "Эрхэм зорилго" },
-        { label: "Алсын хараа" }
+        { label: t('goal.title') },
+        { label: t('vision.title') }
     ];
 
     const activateMenu = (index) => {
         setActiveItem(index);
     };
-    
+
     return (
         <>
             <div className="nso_about_us_body">
@@ -23,7 +25,7 @@ export default function AboutUs({ params: { lng } }) {
                     <div className="__nso_desc">
                         <div className="__about h-[300px]">
                             <div className="__top_text">
-                                Үндэсний Статистикийн Хороо
+                                {t('nsoTitle')}
                             </div>
                             <div className="__sub_body">
                                 <div className="card">
@@ -36,7 +38,7 @@ export default function AboutUs({ params: { lng } }) {
                                                         key={i}
                                                         className={`tab_item text-base cursor-pointer ${activeItem === i ? 'active' : ''}`}
                                                         onClick={() => activateMenu(i)}
-                                                        style={{fontWeight: `${activeItem === i ? '600' : ''}`}}
+                                                        style={{ fontWeight: `${activeItem === i ? '600' : ''}` }}
                                                     >
                                                         {item.label}
                                                     </span>
@@ -46,13 +48,15 @@ export default function AboutUs({ params: { lng } }) {
                                             <div className="nso_tab_content">
                                                 {activeItem === 0 && (
                                                     <div className="__desc_text text-lg">
-                                                        <span>Бид Монгол Улсын статистик мэдээллийг шинжлэх ухааны үндэслэлтэйгээр эрхлэн гаргаж, хэрэглэгчдэд адил тэгш үйлчилнэ.
+                                                        <span>
+                                                            {t('goal.desc')}
                                                         </span>
                                                     </div>
                                                 )}
                                                 {activeItem === 1 && (
                                                     <div className="__desc_text text-lg">
-                                                        <span>Статистик хэрэглэгчдийг чанартай тоон мэдээллээр хангаж, нотолгоонд суурилсан бодлого, шийдвэрийн залгамжийг тасралтгүй хадгалан, статистикийн чадавхаараа дэлхийд тэргүүлнэ.
+                                                        <span>
+                                                            {t('vision.desc')}
                                                         </span>
                                                     </div>
                                                 )}

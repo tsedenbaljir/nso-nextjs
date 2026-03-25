@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useTranslation } from '@/app/i18n/client'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
@@ -10,7 +10,6 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputText } from 'primereact/inputtext';
 import { FilterMatchMode } from 'primereact/api';
-import { Dropdown } from 'primereact/dropdown';
 
 import "primereact/resources/themes/lara-light-indigo/theme.css"
 import "primereact/resources/primereact.min.css"
@@ -39,7 +38,9 @@ export default function AllNews({ params: { lng } }) {
     const fetchArticles = async () => {
         setLoading(true)
         try {
-            const response = await fetch('/api/articles/admin')
+            const response = await fetch('/api/articles/admin', {
+                cache: 'no-store'
+            })
             if (response.status === 401) {
                 handleUnauthorized()
                 return
@@ -156,7 +157,7 @@ export default function AllNews({ params: { lng } }) {
     const onGlobalFilterChange = (e) => {
         const value = e.target.value;
         let _filters = { ...filters };
-        
+
         _filters['global'].value = value;
 
         setFilters(_filters);
@@ -179,33 +180,10 @@ export default function AllNews({ params: { lng } }) {
         );
     };
 
-    // Add news type options
-    const newsTypeOptions = [
-        { label: 'Бүгд', value: null },
-        { label: 'Шинэ мэдээ', value: 'LATEST' },
-        { label: 'Медиа мэдээ', value: 'MEDIA' },
-        { label: 'Тендер', value: 'TENDER' }
-    ];
-
-    // Add news type filter template
-    const newsTypeFilterTemplate = (options) => {
-        return (
-            <Dropdown
-                value={options.value}
-                options={newsTypeOptions}
-                onChange={(e) => {
-                    options.filterCallback(e.value);
-                }}
-                placeholder="Сонгох"
-                className="p-column-filter"
-                showClear
-            />
-        );
-    };
-
     return (
-            <div className="w-full card">
-                <ConfirmDialog />
+        <div className="w-full card">
+            <ConfirmDialog />
+            <Suspense fallback={<>Уншиж байна...</>}>
                 <DataTable
                     value={articles}
                     dataKey="id"
@@ -289,6 +267,7 @@ export default function AllNews({ params: { lng } }) {
                         style={{ width: '6rem' }}
                     />
                 </DataTable>
-            </div>
+            </Suspense>
+        </div>
     )
 }
