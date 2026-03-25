@@ -2,9 +2,14 @@
 .__header {
     span {
         color: var(--text-main);
+<<<<<<< HEAD
         font-family: sf-pro-text;
         font-weight: var(--font-bold);
         font-weight: 900;
+=======
+        font-family: sf-pro-text, roboto;
+        font-weight: 700;
+>>>>>>> 12aa66a (20250412 nemelt)
         font-size: var(--font-size24);
         text-transform: uppercase;
         letter-spacing: -1px;

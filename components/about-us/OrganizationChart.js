@@ -40,7 +40,7 @@ const Text = styled.div`
   text-align: center;
   color: #005BAA;
   font-size: ${props => props.fontSize || '7px'};
-  font-family: Inter, sans-serif;
+ 
   font-weight: ${props => props.bold ? '700' : '400'};
   word-wrap: break-word;
   line-height: ${props => props.lineHeight || 'normal'};
