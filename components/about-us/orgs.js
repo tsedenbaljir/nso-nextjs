@@ -224,12 +224,7 @@ export default function Orgs({ lng }) {
                                                 <li>
                                                     <h5 className="level-4 rectangle" onClick={() => { showDialoggazar(5) }}>{t('aboutUsJson.G1x2')}</h5>
                                                 </li>
-                                            </ol>
-                                            <ol className="level-4-wrapper">
-                                                <li>
-                                                    <h5 className="level-4 rectangle" onClick={() => { showDialoggazar(4) }}>{t('aboutUsJson.G1x3')}</h5>
-                                                </li>
-                                            </ol>
+                                            </ol>                                            
                                         </li>
                                         <li className="lvltamga">
                                             <h5 className="level-32 rectangle" onClick={() => { showDialoggazar(24) }} dangerouslySetInnerHTML={{ __html: t('aboutUsJson.G2') }}>
@@ -280,14 +275,9 @@ export default function Orgs({ lng }) {
                                                     </h5>
                                                 </li>
                                             </ol>
-                                            <ol className="level-4-wrapper">
-                                                <li>
-                                                    <h5 className="level-4 rectangle" onClick={() => { showDialoggazar(15) }}>{t('aboutUsJson.G4x3')}</h5>
-                                                </li>
-                                            </ol>
                                         </li>
                                         <li className="lvltamga">
-                                            <h5 className="level-32 rectangle" onClick={() => { showDialoggazar(21) }} dangerouslySetInnerHTML={{ __html: t('aboutUsJson.G5') }}>
+                                            <h5 className="level-32 rectangle" onClick={() => { showDialoggazar(22) }} dangerouslySetInnerHTML={{ __html: t('aboutUsJson.G5') }}>
                                             </h5>
                                             <ol className="level-4-wrapper">
                                                 <li>
