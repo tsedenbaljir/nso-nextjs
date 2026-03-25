@@ -277,7 +277,7 @@ export default function Orgs({ lng }) {
                                             </ol>
                                         </li>
                                         <li className="lvltamga">
-                                            <h5 className="level-32 rectangle" onClick={() => { showDialoggazar(22) }} dangerouslySetInnerHTML={{ __html: t('aboutUsJson.G5') }}>
+                                            <h5 className="level-32 rectangle" onClick={() => { showDialoggazar(21) }} dangerouslySetInnerHTML={{ __html: t('aboutUsJson.G5') }}>
                                             </h5>
                                             <ol className="level-4-wrapper">
                                                 <li>
