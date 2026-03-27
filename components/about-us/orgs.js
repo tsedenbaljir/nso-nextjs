@@ -131,7 +131,7 @@ export default function Orgs({ lng }) {
                                             <>
                                                 <div className="title">
                                                     {datas[where]?.id === 24 ? "Даргын зөвлөлийн хурлын хуралдааны дэг:" :
-                                                        datas[where]?.id !== 16 ? "Чиг үүрэг" : ""}
+                                                        datas[where]?.id !== 15 ? "Чиг үүрэг" : ""}
                                                 </div>
                                                 <div className="bfr">
                                                     <div>
