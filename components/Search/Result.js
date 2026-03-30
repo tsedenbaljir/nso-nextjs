@@ -43,7 +43,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                             ))}
                         </div>
                     )}
-                    {data.content && data.content.length > 0 && (
+                    {/* {data.content && data.content.length > 0 && (
                         <div className="result_col">
                             <span className="group_title">{t('menuAboutUs.news')}</span>
                             {data.content.map((dt, i) => (
@@ -137,7 +137,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 </Link>
                             ))}
                         </div>
-                    )}
+                    )} */}
                 </>
             )}
         </div>
