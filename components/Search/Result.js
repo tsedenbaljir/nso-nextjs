@@ -6,7 +6,17 @@ export default function Result({ showResult, t, loading, data, lng }) {
     if (!showResult) return null;
 
     const hasResults = data && Object.keys(data).length > 0;
-    
+    const bottomSectors = new Set(['Regional development', 'Historical data']);
+    const sortedTablename = data?.tablename
+        ? [...data.tablename].sort((a, b) => {
+            const aIsBottom = bottomSectors.has(a?._source?.sector);
+            const bIsBottom = bottomSectors.has(b?._source?.sector);
+
+            if (aIsBottom === bIsBottom) return 0;
+            return aIsBottom ? 1 : -1;
+        })
+        : [];
+
     return (
         <div className="search_result">
             {loading ? (
@@ -27,7 +37,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                     {data.tablename && data.tablename.length > 0 && (
                         <div className="result_col">
                             <span className="group_title">{t('elastic.table')}</span>
-                            {data.tablename.map((dt, i) => (
+                            {sortedTablename.map((dt, i) => (
                                 <Link
                                     href={`${process.env.FRONTEND}/${lng}/statcate/table-view/${encodeURIComponent(dt._source.sector)}/${encodeURIComponent(dt._source.category)}/${encodeURIComponent(dt._source.link)}`}
                                     key={`tablename-${dt._source.id}-${i}`}
