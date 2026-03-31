@@ -144,6 +144,23 @@ export default function Orgs({ lng }) {
                                                 </div>
                                             </>
                                         )}
+                                        {lng === "en" && (
+                                            <>
+                                                <div className="title">
+                                                    {datas[where]?.id === 24 ? "Даргын зөвлөлийн хурлын хуралдааны дэг:" :
+                                                        datas[where]?.id !== 15 ? "Functions" : ""}
+                                                </div>
+                                                <div className="bfr">
+                                                    <div>
+                                                        {datas[where]?.duties.map((data, index) => (
+                                                            <p key={index}>
+                                                                {index + 1}. {data?.title}
+                                                            </p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
                                         {datas[where]?.id === 24 && (
                                             <>
                                                 <br />
