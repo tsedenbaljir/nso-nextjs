@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 import { getAllFileTypeIds } from '@/lib/file-library-ids';
+import { getFileTypeIdsForLibraryFilter } from '@/lib/sectors';
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
@@ -23,8 +24,16 @@ export async function GET(req) {
             baseQuery += ` AND file_type IN (${placeholders})`;
             queryParams.push(...ids);
         } else {
-            baseQuery += ` AND file_type = ?`;
-            queryParams.push(String(type));
+            const resolved = getFileTypeIdsForLibraryFilter(type);
+            const ids = resolved ?? [];
+            if (ids.length <= 1) {
+                baseQuery += ` AND file_type = ?`;
+                queryParams.push(ids[0] ?? String(type));
+            } else {
+                const placeholders = ids.map(() => "?").join(", ");
+                baseQuery += ` AND file_type IN (${placeholders})`;
+                queryParams.push(...ids);
+            }
         }
 
         if (sub?.trim()) {
