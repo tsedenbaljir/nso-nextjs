@@ -3,6 +3,16 @@ import { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 
+function formatDateYMD(value) {
+    if (value == null || value === "") return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
 export default function Main({ sector, subsector, lng }) {
 
     // Set initial active tab
@@ -111,7 +121,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <span className="text-black font-normal">
-                            {rowData.published_date.substr(0, 10)}
+                            {formatDateYMD(rowData.published_date)}
                         </span>
                     )}
                 />
