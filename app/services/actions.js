@@ -36,6 +36,81 @@ export async function submitContactForm(formData) {
     }
 }
 
+function escapeHtml(s) {
+    if (s == null) return "";
+    return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+function buildViolationEmailHtml(data) {
+    const rows = [
+        ["Газар, нэгж", data.lastName],
+        ["Албан тушаал", data.firstName],
+        ["Овог нэр", data.country],
+        ["Зөрчлийн давтамж", data.phoneNumber],
+        ["Зөрчлийг мэдсэн суваг", data.city],
+        ["Зөрчлийг мэдээлсэн суваг", data.district],
+        ["Шууд удирдах ажилтандаа мэдэгдсэн эсэх", data.khoroo],
+        ["Нэмэлт мэдээлэл", data.apartment],
+        ["Зөрчил", data.letter],
+    ];
+    const body = rows
+        .map(
+            ([th, td]) =>
+                `<tr><th>${escapeHtml(th)}</th><td>${escapeHtml(td)}</td></tr>`
+        )
+        .join("");
+    return `<table>${body}</table>`;
+}
+
+/** Sends violation report email via SMTP API (server-side only). */
+export async function submitViolationReport(formData) {
+    try {
+        const cleanedData = {
+            lastName: formData.lastName?.trim() ?? "",
+            firstName: formData.firstName?.trim() ?? "",
+            country: formData.country?.trim() ?? "",
+            phoneNumber: formData.phoneNumber?.trim() ?? "",
+            city: formData.city?.trim() ?? "",
+            district: formData.district?.trim() ?? "",
+            khoroo: formData.khoroo?.trim() ?? "",
+            apartment: formData.apartment?.trim() ?? "",
+            letter: formData.letter?.trim() ?? "",
+        };
+
+        if (Object.values(cleanedData).some((v) => v === "")) {
+            return { success: false, error: "validation" };
+        }
+
+        const smtpUrl =
+            process.env.SMTP_API_URL || "https://smtp.app.nso.mn/api";
+        const to = process.env.VIOLATION_EMAIL_TO || "webmaster@nso.mn";
+
+        const response = await fetch(smtpUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                to,
+                subject: "Violation Report",
+                text: "Violation Report Submission",
+                html: buildViolationEmailHtml(cleanedData),
+            }),
+        });
+
+        if (!response.ok) {
+            return { success: false, error: "send_failed" };
+        }
+
+        return { success: true };
+    } catch (error) {
+        console.error("Violation report submission error:", error);
+        return { success: false, error: error.message };
+    }
+}
+
 export async function fetchTableauKey() {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
