@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { Agent } from "undici";
 
 const BASE_API_URL = process.env.BASE_API_URL;
 // export const dynamicParams = true;
 export const dynamic = 'force-dynamic';
+
+const insecure = new Agent({ connect: { rejectUnauthorized: false } });
 
 export async function GET(req) {
   try {
@@ -31,6 +34,7 @@ export async function GET(req) {
     const response = await fetch(API_URL, {
       ...requestOptions,
       cache: "no-store",
+      dispatcher: insecure,
     });
 
     if (!response.ok) {

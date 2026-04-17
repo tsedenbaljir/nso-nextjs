@@ -131,7 +131,7 @@ export default function Orgs({ lng }) {
                                             <>
                                                 <div className="title">
                                                     {datas[where]?.id === 24 ? "Даргын зөвлөлийн хурлын хуралдааны дэг:" :
-                                                        datas[where]?.id !== 16 ? "Чиг үүрэг" : ""}
+                                                        datas[where]?.id !== 15 ? "Чиг үүрэг" : ""}
                                                 </div>
                                                 <div className="bfr">
                                                     <div>
@@ -224,12 +224,7 @@ export default function Orgs({ lng }) {
                                                 <li>
                                                     <h5 className="level-4 rectangle" onClick={() => { showDialoggazar(5) }}>{t('aboutUsJson.G1x2')}</h5>
                                                 </li>
-                                            </ol>
-                                            <ol className="level-4-wrapper">
-                                                <li>
-                                                    <h5 className="level-4 rectangle" onClick={() => { showDialoggazar(4) }}>{t('aboutUsJson.G1x3')}</h5>
-                                                </li>
-                                            </ol>
+                                            </ol>                                            
                                         </li>
                                         <li className="lvltamga">
                                             <h5 className="level-32 rectangle" onClick={() => { showDialoggazar(24) }} dangerouslySetInnerHTML={{ __html: t('aboutUsJson.G2') }}>
@@ -278,11 +273,6 @@ export default function Orgs({ lng }) {
                                                 <li>
                                                     <h5 className="level-4 rectangle" onClick={() => { showDialoggazar(14) }}>{t('aboutUsJson.G4x2')}
                                                     </h5>
-                                                </li>
-                                            </ol>
-                                            <ol className="level-4-wrapper">
-                                                <li>
-                                                    <h5 className="level-4 rectangle" onClick={() => { showDialoggazar(15) }}>{t('aboutUsJson.G4x3')}</h5>
                                                 </li>
                                             </ol>
                                         </li>

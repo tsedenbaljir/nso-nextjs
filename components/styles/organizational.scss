@@ -133,7 +133,7 @@
             position: absolute;
             top: 3px;
             left: 190px;
-            height: 187px;
+            height: 210px;
             width: 2px;
             background: var(--green-600);
         }
@@ -326,7 +326,7 @@
     .level-32-wrapper>li::before {
         content: "";
         position: absolute;
-        top: 0;
+        top: -20;
         left: 50%;
         transform: translate(-50%, -100%);
         width: 2px;
@@ -341,7 +341,7 @@
 
     .level-32 {
         width: 200px;
-        height: 125px;
+        height: 142px;
         margin-bottom: 20px;
         // background: var(--level-3);
     }

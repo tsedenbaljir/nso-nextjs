@@ -17,6 +17,7 @@ export async function GET(req, { params }) {
                 'nameen',
                 'valuemn',
                 'valueen',
+                'attachment_name',
                 'last_modified_date',
                 'is_secret',
                 'active'

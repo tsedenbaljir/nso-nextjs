@@ -2,33 +2,32 @@
 import React, { useEffect, useState } from "react";
 import LoadingDiv from "@/components/Loading/Text/Index";
 import "@/components/styles/statistic.scss";
+import { fetchTableauTicket } from "@/app/services/fun-statistic";
 
-export default function Statcate({ params }) {
-  const [data, setData] = useState([]);
+export default function Statcate() {
   const [dashboard, setDashboard] = useState("");
-  const [loading, setLoading] = useState(true);
   const [loadingDash, setLoadingDash] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoadingDash(true);
-      const params = new URLSearchParams();
-      params.append("key", "value");
-      // Fetch Tableau Key
-      const tableauResponse = await fetch(
-        `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${params.toString()}`,
-        { cache: "no-store" }
-      );
-      if (!tableauResponse.ok) throw new Error("Failed to fetch Tableau key");
+      try {
+        const tableauResult = await fetchTableauTicket({ key: "value" });
+        const tkt = tableauResult?.value;
 
-      const tableauResult = await tableauResponse.json();
-      const tkt = tableauResult?.value;
-      // Ensure `data.tableau` exists before setting `iframeSrc`
-      if (tkt) {
+        if (!tkt) {
+          throw new Error("Tableau оноосон түлхүүр олдсонгүй.");
+        }
+
         setDashboard(
           `https://tableau.1212.mn/trusted/${tkt}/views/PopulationMongolia2022/Dashboard1?:iid=1`
         );
+        setError(null);
+      } catch (err) {
+        console.error("Census 2020 tableau error:", err);
+        setError(err.message || "Алдаа гарлаа. Түр хүлээгээд дахин оролдоно уу.");
+      } finally {
         setLoadingDash(false);
       }
     };

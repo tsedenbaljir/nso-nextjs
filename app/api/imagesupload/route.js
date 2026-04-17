@@ -201,6 +201,8 @@ export async function GET(req) {
 // AND content_type = N'NEWS'
 //     and body like N'%/images/%'
 
+// SELECT [attachment_name] as pathName, 1 as size
+// FROM [NSOweb].[dbo].[metadata_value_attachment]
     try {
         const results = await db.raw(`
     `);

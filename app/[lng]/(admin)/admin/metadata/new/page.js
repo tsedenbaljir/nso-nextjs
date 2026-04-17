@@ -12,7 +12,6 @@ import {
 } from "antd";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -37,16 +36,17 @@ export default function MetadataNew() {
   const [form] = Form.useForm();
   const router = useRouter();
 
-  const [catalogues, setCatalogues] = useState([]);
+  // const [catalogues, setCatalogues] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [frequencies, setFrequencies] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
 
   // 📌 сонголтын жагсаалтуудыг серверээс ачаалах
   useEffect(() => {
     const loadOptions = async () => {
       try {
         const res = await axios.get("/api/metadata/admin/options"); // өөрийн options API
-        setCatalogues(res.data.catalogues || []);
+        // setCatalogues(res.data.catalogues || []);
         setSectors(res.data.subClassifications || []);
         setFrequencies(res.data.frequencies || []);
       } catch (e) {
@@ -58,6 +58,7 @@ export default function MetadataNew() {
 
   const onFinish = async (values) => {
     try {
+      setSubmitting(true);
       const metaValues = [
         {
           meta_data_id: FIELD_META_MAP.description,
@@ -141,9 +142,11 @@ export default function MetadataNew() {
       });
 
       message.success("Амжилттай бүртгэлээ");
-      router.push("/admin/metadata");
+      // router.push("/admin/metadata");
     } catch (e) {
       message.error("Алдаа гарлаа");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -154,21 +157,6 @@ export default function MetadataNew() {
       </div>
 
       <Form layout="vertical" form={form} onFinish={onFinish}>
-        <Form.Item name="dataCatalogues" label="Дата каталог">
-          <Select
-            mode="multiple"
-            placeholder="Сонгоно уу"
-            allowClear
-            optionFilterProp="children"
-          >
-            {catalogues.map((cat) => (
-              <Select.Option key={cat.id} value={cat.id}>
-                {cat.namemn} ({cat.nameen})
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-
         <Form.Item name="type" label="Төрөл" rules={[{ required: true }]}>
           <Select placeholder="Сонгоно уу">
             <Select.Option value="indicator">Үзүүлэлт</Select.Option>
@@ -176,7 +164,6 @@ export default function MetadataNew() {
             <Select.Option value="question">Асуулт</Select.Option>
           </Select>
         </Form.Item>
-
         <Form.Item name="namemn" label="Нэр (MN)" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
@@ -193,10 +180,10 @@ export default function MetadataNew() {
         <Form.Item name="active" valuePropName="checked">
           <Checkbox>Идэвхтэй эсэх</Checkbox>
         </Form.Item>
-        <Form.Item name="isCurrent" valuePropName="checked">
+        <Form.Item name="is_current" valuePropName="checked">
           <Checkbox>Сүүлийн хувилбар</Checkbox>
         </Form.Item>
-        <Form.Item name="isSecure" valuePropName="checked">
+        <Form.Item name="is_secure" valuePropName="checked">
           <Checkbox>Нууцлалтай эсэх</Checkbox>
         </Form.Item>
 
@@ -269,7 +256,7 @@ export default function MetadataNew() {
               <Select mode="multiple" placeholder="Select sector" allowClear>
                 {sectors.map((s) => (
                   <Select.Option key={s.id} value={s.nameen || s.namemn}>
-                    {s.nameen || s.namemn}
+                    {s.namemn} ({s.nameen})
                   </Select.Option>
                 ))}
               </Select>
@@ -327,7 +314,7 @@ export default function MetadataNew() {
 
         <div className="flex justify-end gap-2 mt-4">
           <Button onClick={() => window.history.back()}>Буцах</Button>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={submitting}>
             Хадгалах
           </Button>
         </div>

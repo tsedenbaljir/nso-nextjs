@@ -91,7 +91,6 @@ export async function GET(req) {
       return NextResponse.json({ error: "Unexpected API response format." }, { status: 500 });
     }
     const allSubsectors = [];
-    console.log(categories);
     for (const sector of categories.filter(sector => sector.text !== "Түүхэн Статистик")) {
       const subs = await getSubsectors(sector.id);
       allSubsectors.push(...subs.map(sub => ({ ...sub, sector: sector.text })));

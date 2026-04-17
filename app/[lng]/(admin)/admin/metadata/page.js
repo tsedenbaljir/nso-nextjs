@@ -37,10 +37,6 @@ export default function MetadataAdmin() {
     fetchData();
   }, []);
 
-  const handleAdd = () => {
-    window.location.href = "/admin/metadata/new";
-  };
-
   const handleSearch = (value) => {
     setSearchText(value);
     setPage(1); // эхнээс нь хайна

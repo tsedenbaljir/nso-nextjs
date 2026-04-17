@@ -7,9 +7,9 @@ export async function GET(req, { params }) {
   try {
     const query = `
         SELECT [id], [version], [type], [active], [namemn], [nameen], [is_current], 
-               [previous_version], [is_secure], [status], [created_by], [created_date], 
-               [last_modified_by], [last_modified_date], [deleted], [descriptionen], 
-               [descriptionmn], [views]
+                [previous_version], [is_secure], [status], [created_by], [created_date], 
+                [last_modified_by], [last_modified_date], [deleted], [descriptionen], 
+                [descriptionmn], [views]
         FROM [NSOweb].[dbo].[question_pool]
         WHERE [id] = ?`;
     const rows = await db.raw(query, [id]);
@@ -138,7 +138,7 @@ export async function PUT(req, { params }) {
         last_modified_date: db.fn.now(),
         questionnaire_code: null,
         questionnaire_id: null,
-        type,
+        type: type || null,
         valuemn: newMn,
         valueen: newEn,
         classification_code_id: m.classification_code_id || null,

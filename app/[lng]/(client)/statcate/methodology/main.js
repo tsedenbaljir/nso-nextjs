@@ -1,10 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from 'next/link';
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useRouter } from "next/navigation";
-import Image from 'next/image';
 
 export default function Main({ sector, subsector, lng }) {
 
@@ -39,8 +37,9 @@ export default function Main({ sector, subsector, lng }) {
                 value={data}
                 paginator
                 rows={10}
+                emptyMessage={lng === "mn" ? "Мэдээлэл олдсонгүй" : "No data found"}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
-                currentPageReportTemplate={`Нийт: {totalRecords}`}
+                currentPageReportTemplate={lng === "mn" ? "Нийт: {totalRecords}" : "Total: {totalRecords}"}
                 className="nso_table"
                 loading={loading}
             >

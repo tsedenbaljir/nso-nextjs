@@ -35,14 +35,14 @@ export async function GET(req) {
 
 export async function POST(req) {
     // Check authentication
-    // const auth = await checkAdminAuth(req);
+    const auth = await checkAdminAuth(req);
     
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({
+            status: false,
+            message: auth.error
+        }, { status: 401 });
+    }
 
     try {
         const body = await req.json();
@@ -54,8 +54,8 @@ export async function POST(req) {
         const articleData = {
             id: parseInt(nextId.nextId) + 1 || 1,
             ...body,
-            created_by: auth.user.name,
-            last_modified_by: auth.user.name
+            created_by: auth?.user?.name || "admin",
+            last_modified_by: auth?.user?.name || "admin"
         };
 
         const result = await db('web_1212_methodology').insert(articleData);

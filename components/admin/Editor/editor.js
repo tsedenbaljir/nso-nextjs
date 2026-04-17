@@ -47,7 +47,7 @@ export default function WYSIWYGEditor({ setBody, defaultValue = '' }) {
 
                 const data = await response.json();
                 const fileUrl = `/uploads/${data.filename}`;
-                callback(fileUrl, { title: file.name });
+                callback(fileUrl, { title: data.filename });
 
             } catch (error) {
                 console.error('Error uploading file:', error);

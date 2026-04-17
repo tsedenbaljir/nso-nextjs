@@ -34,11 +34,56 @@ export default function TermsOfUse({ params: { lng } }) {
                                     <ul className='list-disc'>
                                         <li>{lng === "mn" ? "API хэрэглэгч нэг IP хаягаас 1 секунд тутамд 1-ээс дээш хүсэлт илгээхгүй байх нь зүйтэй. Нэг хүсэлтэд хамгийн ихдээ 100,000 утгын хариу илгээнэ. Хэрэв HTTP 403- гэсэн алдаа зааж байвал уг утга нь дээд хязгаараас хэтэрсэн байна гэсэн утгатай юм.":"API users should not send more than 1 request per second from a single IP address. A maximum of 100,000 values ​​are returned per request. If an HTTP 403 error is returned, this means that the value has exceeded the maximum limit."}</li>
                                     </ul>
-                                    <ul class>
+                                    <ul className='list-disc'>
                                         <li>{lng === "mn"? "Таны ашиглаж буй API системд аюул хор учруулах бол таны хэрэглээг түдгэлзүүлэх болно.":"If the API you are using poses a threat to the system, your use will be suspended."}</li>
                                     </ul>
                                     <ul className='list-disc'>
                                         <li>{lng === "mn" ? "Та манай ашиглах нөхцөлийг зөрчсөн тохиолдолд таны хандах эрхийг түдгэлзүүлж Монгол Улсын холбогдох хуулийн дагуу шийдвэрлэнэ.":"If you violate our terms of use, your access rights will be suspended and action will be taken in accordance with applicable Mongolian law."}</li>
+                                        <li>
+                                            <p className="mb-3">
+                                                {lng === "mn"
+                                                    ? "Нээлттэй өгөгдөл нь Creative Commons Attribution 4.0 Олон улсын (CC BY 4.0) лицензийн дагуу түгээгдэнэ."
+                                                    : "Open data is made available under the Creative Commons Attribution 4.0 International (CC BY 4.0) license."}
+                                            </p>
+                                            <a
+                                                href={lng === "mn" ? "https://creativecommons.org/licenses/by/4.0/deed.mn" : "https://creativecommons.org/licenses/by/4.0/"}
+                                                target="_blank"
+                                                rel="license noopener noreferrer"
+                                                className="inline-flex items-center gap-2 text-gray-900"
+                                                aria-label="Creative Commons Attribution 4.0 International"
+                                            >
+                                                <span className="inline-flex shrink-0 items-center" aria-hidden="true">
+                                                    <svg
+                                                        width={62}
+                                                        height={31}
+                                                        viewBox="0 0 128 64"
+                                                        className="text-gray-900"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <g fill="currentColor" stroke="currentColor">
+                                                            <circle cx={32} cy={32} r={28.5} fill="none" strokeWidth={2.5} />
+                                                            <text
+                                                                x={32}
+                                                                y={40}
+                                                                textAnchor="middle"
+                                                                fontFamily="system-ui, -apple-system, 'Segoe UI', Arial, sans-serif"
+                                                                fontSize={22}
+                                                                fontWeight={700}
+                                                                stroke="none"
+                                                            >
+                                                                cc
+                                                            </text>
+                                                            <circle cx={96} cy={32} r={28.5} fill="none" strokeWidth={2.5} />
+                                                            <g stroke="none">
+                                                                <circle cx={96} cy={22} r={7} />
+                                                                <rect x={87.5} y={32} width={17} height={20} rx={4} />
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                                <span className="font-semibold">CC BY 4.0</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

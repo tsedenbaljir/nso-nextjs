@@ -87,7 +87,7 @@ export default function TableView({ params }) {
                         <Loading />
                     </div>
                 ) : variables.length > 0 ? (
-                    <VariablesPanel variables={variables} title={title} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`} lng={lng} setSelectedValues={setSelectedValues} selectedValues={selectedValues} />
+                    <VariablesPanel metadataUrl={metadataUrl} variables={variables} title={title} url={`/api/table-view?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`} lng={lng} setSelectedValues={setSelectedValues} selectedValues={selectedValues} />
                 ) : (
                     <div className='flex items-center justify-center h-64'>
                         <p className='text-gray-500 text-lg'>{lng === 'mn' ? 'Хүснэгтийн мэдээлэл олдсонгүй' : 'No data found'}</p>
@@ -103,7 +103,7 @@ export default function TableView({ params }) {
                             header={
                                 <Space>
                                     <ApiOutlined />
-                                    <span className='text-lg font-normal'>Дараах хаягаас POST хүсэлт илгээх</span>
+                                    <span className='text-lg font-normal'>{lng === 'mn' ? 'Дараах хаягаас POST хүсэлт илгээх' : 'Send POST request from the following URL'}</span>
                                 </Space>
                             }
                             key="1"

@@ -197,7 +197,6 @@ export default function EditDissemination({ params: { id } }) {
                             type="time"
                             value={publishedTime}
                             onChange={(e) => {
-                                console.log(e.target.value)
                                 setPublishedTime(e.target.value)
                             }}
                             className="border rounded px-2 py-1"

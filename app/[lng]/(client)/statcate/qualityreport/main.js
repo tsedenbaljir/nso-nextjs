@@ -29,14 +29,25 @@ export default function Main({ sector, subsector, lng }) {
         fetchSubcategories();
     }, [sector, subsector, lng]);
 
+    const incrementViews = async (id) => {
+        try {
+            await fetch('/api/download', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+        } catch (_) { /* ignore */ }
+    };
+
     return (
         <div className="bg-white">
             <DataTable
                 value={data}
                 paginator
                 rows={10}
+                emptyMessage={lng === "mn" ? "Мэдээлэл олдсонгүй" : "No data found"}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
-                currentPageReportTemplate={`Нийт: {totalRecords}`}
+                currentPageReportTemplate={lng === "mn" ? "Нийт: {totalRecords}" : "Total: {totalRecords}"}
                 className="nso_table"
                 loading={loading}
             >
@@ -57,6 +68,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {
+                            incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
                                 window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
@@ -119,6 +131,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {
+                            incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
                                 window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");

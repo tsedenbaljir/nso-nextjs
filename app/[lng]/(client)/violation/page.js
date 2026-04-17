@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import { useTranslation } from '@/app/i18n/client';
+import { submitViolationReport } from '@/app/services/actions';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import { Toast } from 'primereact/toast';
 import './styles.scss';
@@ -34,53 +35,27 @@ export default function ViolationPage({ params: { lng } }) {
         }));
     };
 
-    const getEmailHtml = () => {
-        return `
-            <table>
-                <tr><th>Газар, нэгж</th><td>${formData.lastName}</td></tr>
-                <tr><th>Албан тушаал</th><td>${formData.firstName}</td></tr>
-                <tr><th>Овог нэр</th><td>${formData.country}</td></tr>
-                <tr><th>Зөрчлийн давтамж</th><td>${formData.phoneNumber}</td></tr>
-                <tr><th>Зөрчлийг мэдсэн суваг</th><td>${formData.city}</td></tr>
-                <tr><th>Зөрчлийг мэдээлсэн суваг</th><td>${formData.district}</td></tr>
-                <tr><th>Шууд удирдах ажилтандаа мэдэгдсэн эсэх</th><td>${formData.khoroo}</td></tr>
-                <tr><th>Нэмэлт мэдээлэл</th><td>${formData.apartment}</td></tr>
-                <tr><th>Зөрчил</th><td>${formData.letter}</td></tr>
-            </table>
-        `;
-    };
+    const [submitting, setSubmitting] = useState(false);
 
     const validateForm = () => {
         return Object.values(formData).every(value => value.trim() !== '');
     };
 
     const handleSubmit = async () => {
-        try {
-            if (!validateForm()) {
-                toast.current.show({
-                    severity: 'warn',
-                    summary: t('warning'),
-                    detail: lng === 'mn' ? 'Талбарыг бүрэн бөглөнө үү' : 'Please fill in all fields',
-                });
-                return;
-            }
-
-            const emailData = {
-                to: 'webmaster@nso.mn',
-                subject: 'Violation Report',
-                text: 'Violation Report Submission',
-                html: getEmailHtml()
-            };
-
-            const response = await fetch('https://smtp.app.nso.mn/api', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(emailData),
+        if (!validateForm()) {
+            toast.current.show({
+                severity: 'warn',
+                summary: t('warning'),
+                detail: lng === 'mn' ? 'Талбарыг бүрэн бөглөнө үү' : 'Please fill in all fields',
             });
+            return;
+        }
 
-            if (response.ok) {
+        setSubmitting(true);
+        try {
+            const result = await submitViolationReport(formData);
+
+            if (result.success) {
                 toast.current.show({
                     severity: 'success',
                     summary: t('success'),
@@ -98,7 +73,14 @@ export default function ViolationPage({ params: { lng } }) {
                     letter: ''
                 });
             } else {
-                throw new Error('Failed to send');
+                toast.current.show({
+                    severity: 'error',
+                    summary: t('error'),
+                    detail:
+                        result.error === 'validation'
+                            ? (lng === 'mn' ? 'Талбарыг бүрэн бөглөнө үү' : 'Please fill in all fields')
+                            : (lng === 'mn' ? 'Алдаа гарлаа' : 'Error occurred'),
+                });
             }
         } catch (error) {
             toast.current.show({
@@ -106,6 +88,8 @@ export default function ViolationPage({ params: { lng } }) {
                 summary: t('error'),
                 detail: lng === 'mn' ? 'Алдаа гарлаа' : 'Error occurred',
             });
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -205,7 +189,8 @@ export default function ViolationPage({ params: { lng } }) {
                                 <input
                                     type="button"
                                     onClick={handleSubmit}
-                                    value={t('send')}
+                                    disabled={submitting}
+                                    value={submitting ? (lng === 'mn' ? 'Илгээж байна…' : 'Sending…') : t('send')}
                                     className="__submit_button"
                                 />
                             </div>

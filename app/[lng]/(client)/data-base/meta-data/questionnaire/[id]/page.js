@@ -1,10 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Text from "@/components/Loading/Text/Index";
-import { useTranslation } from "@/app/i18n/client";
 
 export default function GlossaryDetail({ params: { id, lng } }) {
-  const { t } = useTranslation(lng, "lng", "");
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -55,6 +53,33 @@ export default function GlossaryDetail({ params: { id, lng } }) {
     "Хэл",
     "Боловсруулсан мэргэжилтэн",
   ];
+  const categoryOrderEn = [
+    "Form",
+    "Cipher",
+    "Respondent organization",
+    "Partner organization",
+    "Questionnaire type",
+    "Date of questionnaire cancellation",
+    "Order number",
+    "Content",
+    "Initial informant",
+    "Observation period",
+    "Statistical observation type",
+    "Data collection frequency",
+    "Data collection form",
+    "Data collection worker",
+    "Data flow",
+    "Data transmission time",
+    "Level of dissemination of results and indicator classification",
+    "Used classification, codes",
+    "Data dissemination time",
+    "Derived indicators",
+    "Funding organization",
+    "Additional information",
+    "Keyword",
+    "Language",
+    "Processed by",
+  ];
   // Assuming `data` contains an array of items with `namemn`, `valuemn`, and `valueen`
   const sortedData = data?.sort((a, b) => {
     const indexA = categoryOrder.indexOf(a.namemn);
@@ -66,7 +91,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
 
     return positionA - positionB; // Sort based on the predefined order
   });
-
+  
   if (!data && !loading) {
     return (
       <>
@@ -86,7 +111,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
           <div className="overflow-x-auto">
             <div className="mb-4 text-sm text-gray-800 w-[95%]">
               <h2 className="text-2xl font-bold text-main">
-                {data[0]?.label}
+                {lng === "mn" ? data[0]?.label : data[0]?.label_en || data[0]?.label}
               </h2>
 
               <div className="flex justify-between items-center gap-4 flex-wrap mt-2">
@@ -100,7 +125,7 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                 </div>
 
                 <div className="flex items-center">
-                  <span className="mr-2 font-medium text-gray-400">Идэвхтэй эсэх:</span>
+                  <span className="mr-2 font-medium text-gray-400">{lng === "mn" ? "Идэвхтэй эсэх:" : "Active:"}</span>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-300
                     ${data[0]?.active == 1
@@ -109,14 +134,14 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                       }
                   `}
                   >
-                    {data[0]?.active ? "Идэвхтэй" : "Идэвхгүй"}
+                    {data[0]?.active ? lng === "mn" ? "Идэвхтэй" : "Active" : lng === "mn" ? "Идэвхгүй" : "Inactive"}
                   </span>
                 </div>
 
                 <div className="flex items-center">
-                  <span className="mr-2 font-medium text-gray-400">Нээлттэй эсэх:</span>
+                  <span className="mr-2 font-medium text-gray-400">{lng === "mn" ? "Нээлттэй эсэх:" : "Open:"}</span>
                   <span className="text-gray-700 font-medium">
-                    {data[0]?.is_secret ? "Хаалттай" : "Нээлттэй"}
+                    {data[0]?.is_secret ? lng === "mn" ? "Нууцлалттай" : "Secret" : lng === "mn" ? "Нээлттэй" : "Open"}
                   </span>
                 </div>
               </div>
@@ -125,9 +150,9 @@ export default function GlossaryDetail({ params: { id, lng } }) {
             {/* Table Header */}
             <div className="flex bg-blue-50 font-semibold text-gray-700 border-gray-100 border-b py-2 text-sm">
               <div className="w-1/8 text-right px-5">No.</div>
-              <div className="w-1/3 text-left px-5">Нэр</div>
-              <div className="w-1/3 text-left px-5">Монгол</div>
-              <div className="w-1/3 text-left px-5">Англи</div>
+              <div className="w-1/3 text-left px-5">{lng === "mn" ? "Нэр" : "Name"}</div>
+              <div className="w-1/3 text-left px-5">{lng === "mn" ? "Монгол" : "Mongolian"}</div>
+              <div className="w-1/3 text-left px-5">{lng === "mn" ? "Англи" : "English"}</div>
             </div>
 
             {/* Table Rows */}
@@ -140,17 +165,45 @@ export default function GlossaryDetail({ params: { id, lng } }) {
                 <div className="w-1/8 text-right text-blue-600">
                   {sortedData.length > 2 ? index + 1 : index + 1}
                 </div>
-                <div className="w-1/3 text-left">{item.namemn ? item.namemn : item.name}</div>
-                <div className="w-1/3 text-left whitespace-pre-wrap">
-                  {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
-                    ? new Date(item.valuemn).toISOString().split('T')[0]
-                    : item.valuemn ? item.valuemn : ""}
-                </div>
-                <div className="w-1/3 text-left whitespace-pre-wrap">
-                  {item.namemn === "Маягт батлагдсан огноо" && item.valueen
-                    ? new Date(item.valueen).toISOString().split('T')[0]
-                    : item.valueen ? item.valueen : ""}
-                </div>
+                <div className="w-1/3 text-left">{lng === "mn" ? item.namemn : categoryOrderEn[index]}</div>
+                {
+                  item.namemn === "Маягт" && item.attachment_name ? (
+                    <>
+                      <a href={`/uploads/${item.attachment_name}`} target="_blank" className="underline cursor-pointer w-1/3 text-left whitespace-pre-wrap text-blue-400 hover:text-blue-600">
+                        {item.valuemn}
+                      </a>
+                      <a href={`/uploads/${item.attachment_name}`} target="_blank" className="underline cursor-pointer w-1/3 text-left whitespace-pre-wrap text-blue-400 hover:text-blue-600">
+                        {item.valueen}
+                      </a>
+                    </>
+                  ) : item.namemn === "Мэдээ төрөл" ?
+                    <>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.valuemn === "official" && "Албан ёсны статистикийн мэдээ"}
+                        {item.valuemn === "administrative" && "Захиргааны мэдээ"}
+                        {item.valuemn === "census" && "Тооллого"}
+                        {item.valuemn === "survey" && "Судалгаа"}
+                      </div>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.valuemn === "official" && "Official statistics"}
+                        {item.valuemn === "administrative" && "Administrative"}
+                        {item.valuemn === "census" && "Census"}
+                        {item.valuemn === "survey" && "Survey"}
+                      </div>
+                    </>
+                    : <>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valuemn
+                          ? item.valuemn === "Invalid Date" ? "" : item.valuemn.substring(0, 10)
+                          : item.valuemn ? item.valuemn : ""}
+                      </div>
+                      <div className="w-1/3 text-left whitespace-pre-wrap">
+                        {item.namemn === "Маягт батлагдсан огноо" && item.valueen
+                          ? item.valueen === "Invalid Date" ? "" : item.valueen.substring(0, 10)
+                          : item.valueen ? item.valueen : ""}
+                      </div>
+                    </>
+                }
               </div>
             )) : categoryOrder.map((item, index) => (
               <div

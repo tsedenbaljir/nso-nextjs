@@ -3,6 +3,16 @@ import { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 
+function formatDateYMD(value) {
+    if (value == null || value === "") return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
 export default function Main({ sector, subsector, lng }) {
 
     // Set initial active tab
@@ -30,14 +40,25 @@ export default function Main({ sector, subsector, lng }) {
         fetchSubcategories();
     }, [sector, subsector, lng]);
 
+    const incrementViews = async (id) => {
+        try {
+            await fetch('/api/download', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+        } catch (_) { /* ignore */ }
+    };
+
     return (
         <div className="bg-white">
             <DataTable
                 value={data}
                 paginator
                 rows={10}
+                emptyMessage={lng === "mn" ? "Мэдээлэл олдсонгүй" : "No data found"}
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport PageLinks NextPageLink LastPageLink "
-                currentPageReportTemplate={`Нийт: {totalRecords}`}
+                currentPageReportTemplate={lng === "mn" ? "Нийт: {totalRecords}" : "Total: {totalRecords}"}
                 className="nso_table"
                 loading={loading}
             >
@@ -58,6 +79,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {
+                            incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
                                 window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
@@ -99,7 +121,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <span className="text-black font-normal">
-                            {rowData.published_date.substr(0, 10)}
+                            {formatDateYMD(rowData.published_date)}
                         </span>
                     )}
                 />
@@ -120,6 +142,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <div onClick={() => {
+                            incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
                                 window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");

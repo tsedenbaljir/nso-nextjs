@@ -1,7 +1,8 @@
+import AdminLayout from '@/components/admin/layouts/AdminLayout';
+
 import "../globals.scss";
 import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
-import AdminLayout from '@/components/admin/layouts/AdminLayout';
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -12,15 +13,10 @@ export const metadata = {
   description: 'Мэдээллийг удирдах самбар',
 }
 
-export default function RootLayout({
-  children }) {
+export default function AdminLayoutWrapper({ children, params }) {
   return (
-    <html lang="en">
-      <body>
-        <AdminLayout>
-          {children}
-        </AdminLayout>
-      </body>
-    </html>
+    <AdminLayout>
+      {children}
+    </AdminLayout>
   )
 }

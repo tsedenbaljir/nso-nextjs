@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Paginator } from "primereact/paginator";
-import { sectors_list } from "./sectors";
+import { getSectorNameById } from "./sectors";
 
 export default function Tabs({
     lng,
@@ -95,7 +95,7 @@ export default function Tabs({
                         {/* Header */}
                         <div className="flex justify-between items-center">
                             <span className="__sector_header">
-                                {lng === "mn" ? sectors_list.find((e) => e.type === type)?.mnName : sectors_list.find((e) => e.type === type)?.enName || "All files"}
+                                {getSectorNameById(type, lng)}
                             </span>
 
                             {/* Dropdown */}

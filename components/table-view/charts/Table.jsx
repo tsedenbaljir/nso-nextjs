@@ -94,10 +94,10 @@ export default function ResultTable({ data, lng }) {
   // List of labels that should not be grouped
   const noGroupLabels = [
     'Бүс', 'Region',
-    'Аймаг', 'Aimag',
-    'Аймаг, сум', 'Aimag, soum',
-    'Баг, хороо', 'Bag, khoroo',
-    'Аймгийн код', 'Aimag code',
+    // 'Аймаг', 'Aimag',
+    // 'Аймаг, сум', 'Aimag, soum',
+    // 'Баг, хороо', 'Bag, khoroo',
+    // 'Аймгийн код', 'Aimag code',
     'Засаг захиргааны нэгж', 'Administrator unit', 'Administrative unit'
   ];
 

@@ -4,11 +4,11 @@ import { db } from "@/app/api/config/db_csweb.config.js";
 export async function GET() {
   try {
     // Дата каталог
-    const catalogues = await db("data_catalogue")
-      .withSchema("dbo")
-      .select("id", "namemn", "nameen")
-      .whereNull("deleted")
-      .andWhere("active", 1);
+    // const catalogues = await db("data_catalogue")
+    //   .withSchema("dbo")
+    //   .select("id", "namemn", "nameen")
+    //   .whereNull("deleted")
+    //   .andWhere("active", 1);
 
     // Салбар (classification_code_id = 8427702)
     const sectors = await db("sub_classification_code")
@@ -26,7 +26,7 @@ export async function GET() {
 
     return NextResponse.json({
       status: true,
-      catalogues,
+      // catalogues,
       subClassifications: sectors,
       frequencies,
     });
@@ -57,70 +57,64 @@ export async function POST(req) {
       metaValues = [],
     } = body;
 
-    // 1. question_pool-д INSERT
-    const insertPoolQuery = `
-      INSERT INTO [NSOweb].[dbo].[question_pool]
-      ([namemn], [nameen], [type], [version], [previous_version],
-       [active], [is_current], [is_secure],
-       [descriptionmn], [descriptionen],
-       [status], [created_by], [created_date],
-       [last_modified_by], [last_modified_date], [deleted], [views])
-      VALUES (?, ?, ?, ?, ?,
-              ?, ?, ?,
-              ?, ?,
-              1, ?, GETDATE(),
-              ?, GETDATE(), 0, 0);
-      SELECT SCOPE_IDENTITY() AS id;
-    `;
+    // Use transaction and explicit IDs because question_pool.id is non-IDENTITY
+    const createdId = await db.transaction(async (trx) => {
+      const [{ maxId }] = await trx('question_pool').withSchema('dbo').max('id as maxId');
+      const newId = (BigInt(maxId ?? 0) + 1n).toString();
 
-    const poolRes = await db.raw(insertPoolQuery, [
-      namemn,
-      nameen,
-      type,
-      version,
-      previousVersion,
-      active,
-      isCurrent,
-      isSecure,
-      descriptionmn,
-      descriptionen,
-      user,
-      user,
-    ]);
+      await trx('question_pool').withSchema('dbo').insert({
+        id: newId,
+        namemn,
+        nameen,
+        type,
+        version,
+        previous_version: previousVersion,
+        active,
+        is_current: isCurrent,
+        is_secure: isSecure,
+        descriptionmn,
+        descriptionen,
+        status: 1,
+        created_by: user,
+        created_date: trx.fn.now(),
+        last_modified_by: user,
+        last_modified_date: trx.fn.now(),
+        deleted: 0,
+        views: 0,
+      });
 
-    // шинэ question_pool id
-    const newId = Array.isArray(poolRes)
-      ? poolRes[0]?.id || poolRes[0]
-      : poolRes?.id;
+      if (Array.isArray(metaValues) && metaValues.length > 0) {
+        for (const mv of metaValues) {
+          const [{ maxId: maxMetaId }] = await trx('meta_data_value').withSchema('dbo').max('id as maxId');
+          const newMetaId = (BigInt(maxMetaId ?? 0) + 1n).toString();
 
-    // 2. meta_data_value-д INSERT
-    if (Array.isArray(metaValues) && metaValues.length > 0) {
-      for (const mv of metaValues) {
-        // хамгийн сүүлийн id олоод +1 хийж шинээр id өгнө
-        const [{ maxId }] = await db("meta_data_value").max("id as maxId");
-        const newMetaId = BigInt(maxId ?? 0) + 1n;
+          const valueMn = (mv.valuemn ?? '').toString().trim();
+          const valueEn = (mv.valueen ?? valueMn).toString().trim();
 
-        await db("meta_data_value").withSchema("dbo").insert({
-          id: newMetaId.toString(),
-          active: 1,
-          type: mv.type || null,
-          valuemn: mv.valuemn ?? null,
-          valueen: mv.valueen ?? null,
-          classification_code_id: mv.classification_code_id ?? null,
-          meta_data_id: mv.meta_data_id,
-          questionpool_id: newId,
-          created_by: user,
-          created_date: db.fn.now(),
-          deleted: null,
-          last_modified_by: user,
-          last_modified_date: db.fn.now(),
-        });
+          await trx('meta_data_value').withSchema('dbo').insert({
+            id: newMetaId,
+            active: 1,
+            type: mv.type || null,
+            valuemn: valueMn,
+            valueen: valueEn,
+            classification_code_id: mv.classification_code_id ?? null,
+            meta_data_id: mv.meta_data_id,
+            questionpool_id: newId,
+            created_by: user,
+            created_date: trx.fn.now(),
+            deleted: null,
+            last_modified_by: user,
+            last_modified_date: trx.fn.now(),
+          });
+        }
       }
-    }
+
+      return newId;
+    });
 
     return NextResponse.json({
       status: true,
-      data: { id: newId },
+      data: { id: createdId },
       message: "Амжилттай бүртгэлээ",
     });
   } catch (error) {

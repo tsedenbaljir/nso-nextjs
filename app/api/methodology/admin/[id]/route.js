@@ -61,7 +61,7 @@ export async function PUT(req, { params }) {
             file_info: body.file_info,
             approved_date: body.approved_date,
             last_modified_date: new Date().toISOString(),
-            last_modified_by: auth.user.name
+            last_modified_by: auth.user.name || 'admin'
         };
 
         // Remove undefined values
