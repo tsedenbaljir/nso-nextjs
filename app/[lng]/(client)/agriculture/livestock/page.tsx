@@ -639,30 +639,30 @@ export default function AgricultureLivestockPage() {
             ) : null}
           </section>
 
-          <section className="mt-4 max-w-[90rem]">
-            <div className="flex min-h-9 flex-nowrap items-center gap-2 sm:gap-3">
+          <section className="mt-4 max-w-[90rem] border-t border-slate-200/90 pt-6 dark:border-slate-700">
+            <div className="flex min-h-9 flex-nowrap items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => setSlicerPlaying((p) => !p)}
-                title={slicerPlaying ? "Зогсоох" : "Тоглуулах"}
+                title={slicerPlaying ? "Зогсоох" : "Автоматаар тоглуулах"}
                 aria-label={slicerPlaying ? "Зогсоох" : "Тоглуулах"}
-                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-[#0050C3] shadow-none transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-blue-300 dark:hover:bg-slate-800"
+                className="range-slider-play-btn"
               >
                 {slicerPlaying ? (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                     <rect x="6" y="4" width="4" height="16" rx="1" />
                     <rect x="14" y="4" width="4" height="16" rx="1" />
                   </svg>
                 ) : (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 )}
               </button>
-              <span className="shrink-0 whitespace-nowrap text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+              <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-left text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
                 {yearLoLabel}
               </span>
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 w-full flex-1">
                 <RangeSlider
                   min={0}
                   max={Math.max(0, yearOptions.length - 1)}
@@ -673,9 +673,10 @@ export default function AgricultureLivestockPage() {
                   }}
                   labels={yearOptions.map((o) => o.label)}
                   showLabels={false}
+                  className="w-full"
                 />
               </div>
-              <span className="shrink-0 whitespace-nowrap text-right text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+              <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-right text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
                 {yearHiLabel}
               </span>
             </div>

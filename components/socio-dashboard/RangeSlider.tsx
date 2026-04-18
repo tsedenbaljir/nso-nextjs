@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useCallback } from "react";
 import "./range-slider.scss";
@@ -75,25 +75,24 @@ export function RangeSlider({
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {showLabels && (
-        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+        <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
           <span>{labelLow}</span>
           <span>{labelHigh}</span>
         </div>
       )}
       <div
         ref={trackRef}
-        className="range-slider-track-wrap relative h-7 w-full px-1"
+        className="range-slider-track-wrap relative h-8 w-full px-0"
         onMouseMove={onTrackMouseMove}
         onMouseLeave={() => setHoveredThumb(null)}
       >
         {/* Нимгэн бүтэн суурь (идэвхгүй) */}
         <div
-          className="range-slider-rail-inactive absolute left-0 top-1/2 z-0 h-[3px] w-full -translate-y-1/2 rounded-full"
+          className="range-slider-rail-inactive absolute left-0 top-1/2 z-0 h-[2px] w-full -translate-y-1/2 rounded-full"
           aria-hidden
         />
-        {/* Сонгосон хүрээ: идэвхтэй хэсэг сууринаас илүү зузаан (mockup) */}
         <div
-          className="range-slider-rail-active absolute top-1/2 z-[1] h-2 -translate-y-1/2 rounded-full"
+          className="range-slider-rail-active absolute top-1/2 z-[1] h-[6px] -translate-y-1/2 rounded-full"
           style={{
             left: `${lowPct}%`,
             width: `${highPct - lowPct}%`,

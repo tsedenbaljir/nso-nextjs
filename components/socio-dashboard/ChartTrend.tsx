@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { type ReactNode, useState, useMemo, useEffect, useRef } from "react";
 import ReactECharts from "echarts-for-react";
@@ -722,7 +722,7 @@ export function ChartTrend({
       </div>
       {enableSlicers && showRangeSlider && isTimeLikeX && nDisplay > 1 && (
         <div className="mt-4">
-          <div className="flex flex-nowrap items-center gap-2 sm:gap-3">
+          <div className="flex flex-nowrap items-center gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => {
@@ -770,8 +770,7 @@ export function ChartTrend({
                 }
                 setIsPlaying((p) => !p);
               }}
-              className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#d9d9d9] bg-white p-0 text-[#4a4a4a] shadow-none transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-              style={{ width: 36, height: 36, minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36 }}
+              className="range-slider-play-btn"
               title={isPlaying ? "Зогсоох" : "Автоматаар тоглуулах"}
               aria-label={isPlaying ? "Зогсоох" : "Тоглуулах"}
             >
@@ -786,8 +785,8 @@ export function ChartTrend({
                 </svg>
               )}
             </button>
-            <div className="flex min-w-0 min-h-9 flex-1 items-center gap-2">
-              <span className="min-w-[4.5rem] shrink-0 text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+            <div className="flex min-h-9 min-w-0 flex-1 items-center gap-3 sm:gap-4">
+              <span className="min-w-[4.5rem] shrink-0 text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
                 {String(dataForDisplay[rangeClamped[0]]?.[xKey] ?? "")}
               </span>
               <div className="min-w-0 flex-1 self-center">
@@ -809,7 +808,7 @@ export function ChartTrend({
                   showLabels={false}
                 />
               </div>
-              <span className="min-w-[4.5rem] shrink-0 text-right text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+              <span className="min-w-[4.5rem] shrink-0 text-right text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
                 {String(dataForDisplay[rangeClamped[1]]?.[xKey] ?? "")}
               </span>
             </div>

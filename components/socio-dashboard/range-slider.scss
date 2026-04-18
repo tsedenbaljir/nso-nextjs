@@ -1,15 +1,50 @@
-/* RangeSlider: цайвар цэнхэр (blue-500 / dark дээр blue-300) */
+/* RangeSlider: нимгэн идэвхгүй суурь, зузаан цэнхэр сонголт, дугуй толгой */
+
+.range-slider-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  flex-shrink: 0;
+  padding: 0;
+  border-radius: 9999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.range-slider-play-btn:hover {
+  background: #f8fafc;
+}
+
+.dark .range-slider-play-btn {
+  border-color: #64748b;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.dark .range-slider-play-btn:hover {
+  background: #1e293b;
+}
+
 .range-slider-track-wrap {
-  --rs-inactive: #e2e8f0;
+  --rs-inactive: #e4e7f3;
   --rs-active: #3b82f6;
   --rs-thumb: #3b82f6;
-  --rs-thumb-size: 14px;
+  --rs-thumb-size: 16px;
+  --rs-input-track-h: 8px;
 }
 
 .dark .range-slider-track-wrap {
-  --rs-inactive: #475569;
-  --rs-active: #93c5fd;
-  --rs-thumb: #93c5fd;
+  --rs-inactive: #64748b;
+  --rs-active: #60a5fa;
+  --rs-thumb: #60a5fa;
 }
 
 .range-slider-track-wrap input.range-slider-thumb-input {
@@ -28,7 +63,7 @@
 }
 
 .range-slider-track-wrap input.range-slider-thumb-input::-webkit-slider-runnable-track {
-  height: 8px;
+  height: var(--rs-input-track-h);
   background: transparent;
   border: none;
 }
@@ -43,11 +78,11 @@
   border: none;
   box-shadow: none;
   cursor: pointer;
-  margin-top: -3px;
+  margin-top: calc((var(--rs-input-track-h) - var(--rs-thumb-size)) / 2);
 }
 
 .range-slider-track-wrap input.range-slider-thumb-input::-moz-range-track {
-  height: 8px;
+  height: var(--rs-input-track-h);
   background: transparent;
   border: none;
 }
@@ -60,6 +95,7 @@
   background: var(--rs-thumb);
   box-shadow: none;
   cursor: pointer;
+  margin-top: calc((var(--rs-input-track-h) - var(--rs-thumb-size)) / 2);
 }
 
 .range-slider-rail-inactive {

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState, useEffect, useRef } from "react";
 import ReactECharts from "echarts-for-react";
@@ -374,7 +374,7 @@ export function BirthsAndCBRChart({
       </div>
       {showRangeSlider && isTimeLikeX && n > 1 && (
         <div className="mt-3 pt-2">
-          <div className="flex min-h-9 flex-nowrap items-center gap-2">
+          <div className="flex min-h-9 flex-nowrap items-center gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => {
@@ -405,22 +405,22 @@ export function BirthsAndCBRChart({
                 }
                 setIsPlaying((p) => !p);
               }}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d9d9d9] bg-white text-[#4a4a4a] shadow-none transition-colors hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+              className="range-slider-play-btn"
               title={isPlaying ? "Зогсоох" : "Тоглуулах"}
               aria-label={isPlaying ? "Зогсоох" : "Тоглуулах"}
             >
               {isPlaying ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <rect x="6" y="4" width="4" height="16" rx="1" />
                   <rect x="14" y="4" width="4" height="16" rx="1" />
                 </svg>
               ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M8 5v14l11-7z" />
                 </svg>
               )}
             </button>
-            <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-left text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+            <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-left text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
               {String(fullData[rangeClamped[0]]?.[xKey] ?? "")}
             </span>
             <div className="min-w-0 flex-1 shrink">
@@ -442,7 +442,7 @@ export function BirthsAndCBRChart({
                 showLabels={false}
               />
             </div>
-            <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-right text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+            <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-right text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
               {String(fullData[rangeClamped[1]]?.[xKey] ?? "")}
             </span>
           </div>

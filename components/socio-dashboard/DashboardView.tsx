@@ -9664,7 +9664,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                 "min-w-0 [&_h3.chart-section-title]:uppercase [&_h3.chart-section-title]:font-semibold [&_h3.chart-section-title]:tracking-wide [&_h3.chart-section-title]:text-[#001C44] dark:[&_h3.chart-section-title]:text-slate-100 [&_.chart-section-value]:text-2xl [&_.chart-section-value]:font-normal [&_.chart-section-value]:tabular-nums [&_.chart-section-value]:text-slate-900 dark:[&_.chart-section-value]:text-slate-50 [&_.chart-section-label]:font-normal [&_.chart-section-label]:text-[var(--muted-foreground)]";
               return (
                 <div key="education-three-col" className="space-y-8">
-                  <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-6">
+                  <div className="!grid w-full min-w-0 grid-cols-1 gap-8 md:!grid-cols-3 md:gap-x-6 md:gap-y-6">
                   {threeCharts.map((c) => {
                     const meta = metadataByChartId[c.id];
                     const data = (c as { chartFixedQuery?: unknown }).chartFixedQuery
@@ -9694,13 +9694,24 @@ export function DashboardView({ config }: DashboardViewProps) {
                   })}
                   </div>
                   {(() => {
-                    if (!slicerDataChart) return null;
-                    const slicerData = (slicerDataChart as { chartFixedQuery?: unknown }).chartFixedQuery
-                      ? (processedChartData[slicerDataChart.id] ?? [])
-                      : (chartDataByChartId[slicerDataChart.id] ?? []);
+                    if (!slicerDataChart || threeCharts.length === 0) return null;
                     const xKey = slicerDataChart.xDimension ?? "Он";
-                    const rawYears = slicerData.map((r: DataRow) => String(r[xKey] ?? (r[`${xKey}_code`] ?? "")));
-                    const years = [...new Set(rawYears.filter(Boolean))].sort((a, b) => (/^\d+$/.test(a) && /^\d+$/.test(b) ? Number(a) - Number(b) : String(a).localeCompare(b)));
+                    const rowYear = (r: DataRow) => String(r[xKey] ?? r[`${xKey}_code`] ?? "").trim();
+                    const yearSet = new Set<string>();
+                    const addYearsFromChart = (chart: (typeof charts)[0]) => {
+                      const rows = (chart as { chartFixedQuery?: unknown }).chartFixedQuery
+                        ? (processedChartData[chart.id] ?? [])
+                        : (chartDataByChartId[chart.id] ?? []);
+                      for (const r of rows) {
+                        const y = rowYear(r);
+                        if (y) yearSet.add(y);
+                      }
+                    };
+                    for (const c of threeCharts) addYearsFromChart(c);
+                    if (graduatesChart) addYearsFromChart(graduatesChart);
+                    const years = [...yearSet].sort((a, b) =>
+                      /^\d+$/.test(a) && /^\d+$/.test(b) ? Number(a) - Number(b) : String(a).localeCompare(b)
+                    );
                     educationYearsRef.current = years;
                     if (years.length < 2) return null;
                     const n = years.length;
@@ -9713,29 +9724,29 @@ export function DashboardView({ config }: DashboardViewProps) {
                     educationRangeRef.current = { n, range: [i0, i1] };
                     return (
                       <div key="education-slicer" className="mt-2 border-t border-slate-200/90 pt-6 dark:border-slate-700">
-                        <div className="flex min-h-9 flex-nowrap items-center gap-2 sm:gap-3">
+                        <div className="flex min-h-9 flex-nowrap items-center gap-3 sm:gap-4">
                           <button
                             type="button"
                             onClick={() => setEducationPlaying((p) => !p)}
-                            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d9d9d9] bg-white text-[#4a4a4a] shadow-none transition-colors hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                            className="range-slider-play-btn"
                             title={educationPlaying ? "Зогсоох" : "Автоматаар тоглуулах"}
                             aria-label={educationPlaying ? "Зогсоох" : "Тоглуулах"}
                           >
                             {educationPlaying ? (
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                                 <rect x="6" y="4" width="4" height="16" rx="1" />
                                 <rect x="14" y="4" width="4" height="16" rx="1" />
                               </svg>
                             ) : (
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                                 <path d="M8 5v14l11-7z" />
                               </svg>
                             )}
                           </button>
-                          <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-left text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+                          <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-left text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
                             {years[i0]}
                           </span>
-                          <div className="min-w-0 flex-1 w-full">
+                          <div className="min-w-0 w-full flex-1">
                             <RangeSlider
                               min={0}
                               max={n - 1}
@@ -9749,7 +9760,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                               className="w-full"
                             />
                           </div>
-                          <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-right text-xs font-normal tabular-nums text-[#4a4a4a] dark:text-slate-300">
+                          <span className="min-w-[4.5rem] shrink-0 whitespace-nowrap text-right text-xs font-normal tabular-nums text-slate-700 dark:text-slate-200">
                             {years[i1]}
                           </span>
                         </div>
