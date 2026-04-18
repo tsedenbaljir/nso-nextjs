@@ -1,0 +1,71 @@
+/* RangeSlider: цайвар цэнхэр (blue-500 / dark дээр blue-300) */
+.range-slider-track-wrap {
+  --rs-inactive: #e2e8f0;
+  --rs-active: #3b82f6;
+  --rs-thumb: #3b82f6;
+  --rs-thumb-size: 14px;
+}
+
+.dark .range-slider-track-wrap {
+  --rs-inactive: #475569;
+  --rs-active: #93c5fd;
+  --rs-thumb: #93c5fd;
+}
+
+.range-slider-track-wrap input.range-slider-thumb-input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+.range-slider-track-wrap input.range-slider-thumb-input:focus {
+  outline: none;
+}
+
+.range-slider-track-wrap input.range-slider-thumb-input:focus-visible {
+  outline: 2px solid var(--rs-active);
+  outline-offset: 2px;
+}
+
+.range-slider-track-wrap input.range-slider-thumb-input::-webkit-slider-runnable-track {
+  height: 8px;
+  background: transparent;
+  border: none;
+}
+
+.range-slider-track-wrap input.range-slider-thumb-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--rs-thumb-size);
+  height: var(--rs-thumb-size);
+  border-radius: 50%;
+  background: var(--rs-thumb);
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  margin-top: -3px;
+}
+
+.range-slider-track-wrap input.range-slider-thumb-input::-moz-range-track {
+  height: 8px;
+  background: transparent;
+  border: none;
+}
+
+.range-slider-track-wrap input.range-slider-thumb-input::-moz-range-thumb {
+  width: var(--rs-thumb-size);
+  height: var(--rs-thumb-size);
+  border: none;
+  border-radius: 50%;
+  background: var(--rs-thumb);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.range-slider-rail-inactive {
+  background: var(--rs-inactive);
+}
+
+.range-slider-rail-active {
+  background: var(--rs-active);
+}

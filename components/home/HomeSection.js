@@ -1,5 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { BarChartOutlined } from '@ant-design/icons';
 import MainSearch from '@/components/Search/MainSearch';
 import Result from '@/components/Search/Result';
 import Sidebar from '@/components/home/Sidebar';
@@ -26,16 +28,24 @@ const HomeSection = ({ lng }) => {
                             {/* <i className="p-autocomplete-loader pi pi-spinner pi-spin "></i> */}
                         </div>
                         <div className="__metadata">
-                            <a href="https://data.nso.mn" className="__dock_item leading-4" target="_blank">
-                                <img src="/images/metaIcon.png" height="30px" width="30px"
-                                    style={{ marginRight: '5px', height: 30 }} />
+                            <a href="https://data.nso.mn" className="__dock_item __metadata_tile leading-4" target="_blank" rel="noreferrer">
+                                <img src="/images/metaIcon.png" height="30" width="30"
+                                    style={{ marginRight: 6, height: 30, flexShrink: 0 }} alt="" />
                                 {lng === "mn" ? <>ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН</> : <>GOVERNMENT INTEGRATED <br />  DATABASE</>}
                             </a>
-                            <a href="https://metadata.nso.mn" className="__dock_item leading-4" target="_blank">
-                                <img src="/images/dataIcon.png" height="30px" width="30px"
-                                    style={{ marginRight: '5px', height: 30 }} />
+                            <a href="https://metadata.nso.mn" className="__dock_item __metadata_tile leading-4" target="_blank" rel="noreferrer">
+                                <img src="/images/dataIcon.png" height="30" width="30"
+                                    style={{ marginRight: 6, height: 30, flexShrink: 0 }} alt="" />
                                 {lng === "mn" ? <>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</> : <>GOVERNMENT METADATA<br />  DATABASE</>}
                             </a>
+                            <Link href={`/${lng}/s-e-dashboard`} className="__dock_item __metadata_tile __metadata_tile_internal leading-4">
+                                <BarChartOutlined style={{ fontSize: 28, color: '#0076de', marginRight: 6, flexShrink: 0 }} />
+                                {lng === "mn" ? (
+                                    <>НИЙГЭМ, ЭДИЙН ЗАСГИЙН <br /> ҮНДСЭН ҮЗҮҮЛЭЛТҮҮД</>
+                                ) : (
+                                    <>SOCIO-ECONOMIC <br /> KEY INDICATORS</>
+                                )}
+                            </Link>
                         </div>
                         {/* <div className="__metadataBanner">
                             <a href="http://aanb3.nso.mn/" target="_blank">
@@ -44,16 +54,26 @@ const HomeSection = ({ lng }) => {
                         </div> */}
                     </div >
                     <div className="__metadataphone">
-                        <a href="https://data.nso.mn" className="__dock_item" target="_blank">
+                        <a href="https://data.nso.mn" className="__dock_item" target="_blank" rel="noreferrer">
                             <img src="/images/metaIcon.png" height="30px" width="30px"
-                                style={{ marginRight: '9px', height: 30 }} />
+                                style={{ marginRight: '9px', height: 30 }} alt="" />
                             <span>{lng === "mn" ? <>ТӨРИЙН НЭГДСЭН <br /> ӨГӨГДЛИЙН САН</> : <>GOVERNMENT INTEGRATED <br />  DATABASE</>}</span>
                         </a>
-                        <a href="https://metadata.nso.mn" className="__dock_item" target="_blank">
+                        <a href="https://metadata.nso.mn" className="__dock_item" target="_blank" rel="noreferrer">
                             <img src="/images/dataIcon.png" height="30px" width="30px"
-                                style={{ marginRight: '6px', height: 30 }} />
+                                style={{ marginRight: '6px', height: 30 }} alt="" />
                             <span>{lng === "mn" ? <>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</> : <>GOVERNMENT METADATA<br />  DATABASE</>}</span>
                         </a>
+                        <Link href={`/${lng}/s-e-dashboard`} className="__dock_item __metadata_phone_dashboard">
+                            <BarChartOutlined style={{ fontSize: 28, color: '#0076de', marginRight: 9 }} />
+                            <span>
+                                {lng === "mn" ? (
+                                    <>НИЙГЭМ, ЭДИЙН ЗАСГИЙН <br /> ҮНДСЭН ҮЗҮҮЛЭЛТҮҮД</>
+                                ) : (
+                                    <>SOCIO-ECONOMIC <br /> KEY INDICATORS</>
+                                )}
+                            </span>
+                        </Link>
                     </div>
                     {/* <div className="__metadataBannerphone">
                         <a href="http://aanb3.nso.mn/" target="_blank">

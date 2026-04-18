@@ -60,6 +60,25 @@ const nextConfig = {
     },
     generateRobotsTxt: true,
     crossOrigin: "anonymous",
+    async redirects() {
+        return [
+            {
+                source: "/:lng/statistic/socio-economic-dashboard/:id",
+                destination: "/:lng/s-e-dashboard/:id",
+                permanent: true,
+            },
+            {
+                source: "/:lng/statistic/socio-economic-dashboard",
+                destination: "/:lng/s-e-dashboard",
+                permanent: true,
+            },
+            {
+                source: "/:lng/s-e-dashboard/business-register",
+                destination: "/:lng/s-e-dashboard/business",
+                permanent: true,
+            },
+        ];
+    },
     async headers() {
         return [
             {
