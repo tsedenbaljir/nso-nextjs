@@ -110,7 +110,8 @@ const WAGES_069_V1_URL = `${BASE_URL}Labour,%20business/Wages/EMPLOYEES,%20by%20
 const WAGES_038_V2_URL = `${BASE_URL}Labour,%20business/Wages/MONTHLY%20AVERAGE%20NOMINAL%20WAGES%20OF%20EMPLOYEE,%20by%20employees%20size%20class%20and%20gender/DT_NSO_0400_038V2.px`;
 const WAGES_022_V2_URL = `${BASE_URL}Labour,%20business/Wages/MONTHLY%20AVERAGE%20NOMINAL%20WAGES,%20by%20division%20of%20economic%20activities/DT_NSO_0400_022V2.px`;
 const WAGES_024_V2_URL = `${BASE_URL}Labour,%20business/Wages/MONTHLY%20AVERAGE%20NOMINAL%20WAGES%20,%20by%20legal%20status%20and%20gender/DT_NSO_0400_024V2.px`;
-const WAGES_036_V2_URL = `${BASE_URL}Labour,%20business/Wages/REAL%20WAGE%20INDEX%20(2015=100),%20by%20divisions%20of%20economic%20activities/DT_NSO_0400_036V2.px`;
+/** Бодит цалингийн индекс (NSO 036V3 — сараар; гарчигт 2023=100) */
+const WAGES_036_V3_URL = `${BASE_URL}Labour,%20business/Wages/REAL%20WAGE%20INDEX%20(2015=100),%20by%20divisions%20of%20economic%20activities/DT_NSO_0400_036V3.px`;
 
 /** Улсын төсвийн орлого */
 const BUDGET_INCOME_URL = "https://data.1212.mn:443/api/v1/mn/NSO/Economy,%20environment/Government%20budget/DT_NSO_0800_002V1.px";
@@ -1401,14 +1402,14 @@ export const dashboards: DashboardConfig[] = [
       },
       {
         id: "wages-real-index-area",
-        title: "БОДИТ ЦАЛИНГИЙН ИНДЕКС (2015=100)",
+        title: "БОДИТ ЦАЛИНГИЙН ИНДЕКС (2023=100)",
         type: "area",
-        xDimension: "Улирал",
-        chartApiUrl: WAGES_036_V2_URL,
+        xDimension: "Сар",
+        chartApiUrl: WAGES_036_V3_URL,
         chartFixedQuery: {
           query: [
             { code: "Салбар", selection: { filter: "item", values: ["0"] } },
-            { code: "Улирал", selection: { filter: "item", values: range(39) } },
+            { code: "Сар", selection: { filter: "item", values: ["0"] } },
           ],
           response: { format: "json-stat2" },
         },

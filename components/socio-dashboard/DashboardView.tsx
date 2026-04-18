@@ -9066,10 +9066,14 @@ export function DashboardView({ config }: DashboardViewProps) {
                   return p >= start && p <= end;
                 });
               };
+              const realIndexIsMonthly = realIndexMeta?.variables?.some((v) => v.code === "Сар") ?? false;
               const sectorDataBySalbar = sectorData.filter((r) => String(r["Салбар_code"] ?? r["Салбар"] ?? "") === effectiveSalbarCode);
               const realIndexDataBySalbar = realIndexData.filter((r) => String(r["Салбар_code"] ?? r["Салбар"] ?? "") === effectiveSalbarCode);
               const filteredSectorData = filterByRange(sectorDataBySalbar, salaryRangeYears);
-              const filteredRealIndexData = filterByRange(realIndexDataBySalbar, salaryRangeYears);
+              // Улиралын range slider нь зөвхөн улиралын цуваатай таарна; 036V3 сарын индексэд бүх сарыг харуулна
+              const filteredRealIndexData = realIndexIsMonthly
+                ? realIndexDataBySalbar
+                : filterByRange(realIndexDataBySalbar, salaryRangeYears);
               // Жилийн өсөлтийн цуваа тооцох helper (жишээ: 2025-4 vs 2024-4)
               const calcYoYGrowthSeries = (data: DataRow[], valueKey: string = "value"): DataRow[] => {
                 const sorted = [...data].sort((a, b) => String(a["Улирал"] ?? "").localeCompare(String(b["Улирал"] ?? "")));
@@ -9099,11 +9103,45 @@ export function DashboardView({ config }: DashboardViewProps) {
                 }
                 return result;
               };
+              const calcYoYGrowthMonthSeries = (data: DataRow[], valueKey: string = "value"): DataRow[] => {
+                const sorted = [...data].sort((a, b) => String(a["Сар"] ?? "").localeCompare(String(b["Сар"] ?? "")));
+                const periodMap = new Map<string, DataRow>();
+                for (const row of sorted) {
+                  const p = String(row["Сар"] ?? "");
+                  if (/^\d{4}-\d{2}$/.test(p)) periodMap.set(p, row);
+                }
+                const result: DataRow[] = [];
+                for (const row of sorted) {
+                  const period = String(row["Сар"] ?? "");
+                  const match = period.match(/^(\d{4})-(\d{2})$/);
+                  if (!match) continue;
+                  const year = parseInt(match[1], 10);
+                  const mo = match[2];
+                  const prevPeriod = `${year - 1}-${mo}`;
+                  const prevRow = periodMap.get(prevPeriod);
+                  if (!prevRow) continue;
+                  const currVal = row[valueKey] ?? row["value"];
+                  const prevVal = prevRow[valueKey] ?? prevRow["value"];
+                  const curr = Number(currVal);
+                  const prev = Number(prevVal);
+                  if (prev && !isNaN(curr) && !isNaN(prev)) {
+                    result.push({ ...row, value: ((curr - prev) / prev) * 100 });
+                  }
+                }
+                return result;
+              };
               // Өсөлт тооцохдоо сонгосон салбарын data ашиглана, дараа нь range шүүнэ
               const sectorGrowthDataFull = calcYoYGrowthSeries(sectorDataBySalbar, "value");
-              const realIndexGrowthDataFull = calcYoYGrowthSeries(realIndexDataBySalbar, "value");
+              const realIndexGrowthDataFull = realIndexIsMonthly
+                ? calcYoYGrowthMonthSeries(realIndexDataBySalbar, "value")
+                : calcYoYGrowthSeries(realIndexDataBySalbar, "value");
               const sectorGrowthData = salaryMetricMode === "growth" ? filterByRange(sectorGrowthDataFull, salaryRangeYears) : filteredSectorData;
-              const realIndexGrowthData = salaryMetricMode === "growth" ? filterByRange(realIndexGrowthDataFull, salaryRangeYears) : filteredRealIndexData;
+              const realIndexGrowthData =
+                salaryMetricMode === "growth"
+                  ? realIndexIsMonthly
+                    ? realIndexGrowthDataFull
+                    : filterByRange(realIndexGrowthDataFull, salaryRangeYears)
+                  : filteredRealIndexData;
               const growthFormatter = (v: number) => `${v >= 0 ? "+" : ""}${v.toFixed(1)}%`;
               const growthAxisFormatter = (v: number) => `${v.toFixed(0)}%`;
               const salaryMetricToggle = (
@@ -9322,7 +9360,6 @@ export function DashboardView({ config }: DashboardViewProps) {
             if (config.id === "average-salary" && chart.id === "wages-by-occupation") {
               return null;
             }
-
             // Household-survey: Орлого section
             if (config.id === "household-survey" && chart.id === "household-income-main" && metaForChart) {
               const incomeSmallCharts = charts.filter((c) =>
