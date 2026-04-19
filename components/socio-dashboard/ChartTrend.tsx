@@ -721,8 +721,8 @@ export function ChartTrend({
         )}
       </div>
       {enableSlicers && showRangeSlider && isTimeLikeX && nDisplay > 1 && (
-        <div className="mt-4">
-          <div className="flex flex-nowrap items-center gap-3 sm:gap-4">
+        <div className="socio-dash-scroll-touch mt-4 min-w-0 overflow-x-auto pb-0.5 sm:overflow-visible">
+          <div className="flex min-w-[min(100%,18rem)] flex-nowrap items-center gap-2 sm:min-w-0 sm:gap-3 md:gap-4">
             <button
               type="button"
               onClick={() => {

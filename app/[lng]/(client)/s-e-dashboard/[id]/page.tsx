@@ -20,7 +20,7 @@ export default function SocioDashboardDetailPage({
   return (
     <div className="socio-dash-root min-h-screen bg-[var(--background)]">
       <SocioDashboardBackNav lng={params.lng} />
-      <main className="mx-auto w-full min-w-0 max-w-[90rem] overflow-x-hidden px-3 py-4 sm:px-5 sm:py-5 lg:px-8">
+      <main className="socio-dash-safe-x mx-auto w-full min-w-0 max-w-[90rem] overflow-x-hidden px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-5 sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] md:px-8 lg:px-10">
         <DashboardView config={config} />
       </main>
     </div>

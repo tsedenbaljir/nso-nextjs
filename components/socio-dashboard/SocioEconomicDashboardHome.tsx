@@ -734,22 +734,22 @@ export default function SocioEconomicDashboardHome({ lng }: { lng: string }) {
 
   return (
     <div className="socio-dash-root min-h-auto min-w-0 overflow-x-hidden bg-[var(--background)]">
-      <main className="mx-auto w-full min-w-0 max-w-[90rem] px-3 pt-4 pb-10 sm:px-6 sm:pt-6">
+      <main className="socio-dash-safe-x mx-auto w-full min-w-0 max-w-[90rem] px-3 pt-4 pb-[max(2.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:pt-6 md:px-8 lg:px-10">
           <>
           {/* <h1 className="text-head-title mb-4 text-lg font-medium text-[var(--foreground)] sm:mb-6 sm:text-xl">
             Монгол Улсын нийгэм, эдийн засгийн үндсэн үзүүлэлтүүд
           </h1> */}
-          <p className="mb-4 hidden text-sm leading-relaxed text-[var(--muted-foreground)] sm:mb-6 sm:block w-full">
+          <p className="mb-4 w-full text-xs leading-relaxed text-[var(--muted-foreground)] sm:mb-6 sm:text-sm">
           Энэ хэсгээс Үндэсний статистикийн хорооноос боловсруулдаг Монгол Улсын хүн ам, нийгэм, эдийн засгийн үндсэн статистик мэдээлэлтэй танилцах боломжтой.
           </p>
 
           {/* Category filter - үндсэн салбарууд */}
-          <div className="mb-3 overflow-x-auto scrollbar-hide">
-            <div className="flex gap-1.5 pb-2">
+          <div className="socio-dash-scroll-touch mb-3 -mx-1 overflow-x-auto px-1 scrollbar-hide sm:mx-0 sm:px-0">
+            <div className="flex min-w-min touch-pan-x gap-2 pb-2 sm:gap-1.5">
               <button
                 type="button"
                 onClick={() => setSelectedCategory(null)}
-                className={`shrink-0 rounded-md px-3 py-1.5 text-xs font-medium transition-all ${selectedCategory === null
+                className={`shrink-0 rounded-md px-3 py-2.5 text-xs font-medium transition-all sm:py-1.5 ${selectedCategory === null
                   ? "bg-slate-800 text-white shadow-sm"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300"
                   }`}
@@ -764,7 +764,7 @@ export default function SocioEconomicDashboardHome({ lng }: { lng: string }) {
                     key={cat}
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
-                    className="shrink-0 rounded-md px-3 py-1.5 text-xs font-medium transition-all hover:shadow-sm"
+                    className="shrink-0 rounded-md px-3 py-2.5 text-xs font-medium transition-all hover:shadow-sm sm:py-1.5"
                     style={{
                       backgroundColor: isSelected ? color : `${color}10`,
                       color: isSelected ? "#fff" : color,
@@ -792,7 +792,7 @@ export default function SocioEconomicDashboardHome({ lng }: { lng: string }) {
                   <li key={d.id} className="socio-dash-kpi-grid__cell">
                     <Link
                       href={dashboardCardHref(d)}
-                      className="group flex h-full w-full min-w-0 flex-col overflow-hidden rounded-lg border border-[var(--card-border)] border-l-4 bg-[var(--card-bg)] p-3 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg dark:shadow-none dark:hover:shadow-md sm:p-4"
+                      className="group flex h-full w-full min-w-0 flex-col overflow-hidden rounded-lg border border-[var(--card-border)] border-l-4 bg-[var(--card-bg)] p-3 shadow-sm transition-all duration-200 active:scale-[0.99] hover:-translate-y-1 hover:shadow-lg sm:p-4 dark:shadow-none dark:hover:shadow-md"
                       style={{ borderLeftColor: catColor }}
                     >
                       {/* Ангилал + icon нэг мөр; гарчиг доор бүтэн өргөнөөр */}
