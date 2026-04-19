@@ -29,6 +29,7 @@ import {
   ReloadOutlined,
 } from "@ant-design/icons";
 import { sectors_list, getAllFileTypeIds, getSectorNameById } from "../../../(client)/statistic/sectors";
+import { CENSUS_SUB_FILTER_YEARS_BY_ID } from "@/lib/census-file-library-years";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -90,7 +91,10 @@ export default function FileLibraryAdmin() {
   const selectedSubItem = subOptions.find(
     (s) => s.id === selectedSubNum || s.value === selectedSub || s.id === selectedSub
   );
-  const yearOptions = selectedSubItem?.years ?? [];
+  const yearOptions =
+    selectedSubItem?.id != null
+      ? (CENSUS_SUB_FILTER_YEARS_BY_ID[selectedSubItem.id] ?? [])
+      : [];
   const getExtension = (name) => {
     if (typeof name !== "string") return "";
     const trimmed = name.trim();

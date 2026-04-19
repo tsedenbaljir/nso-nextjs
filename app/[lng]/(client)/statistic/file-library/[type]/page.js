@@ -49,6 +49,10 @@ export default function StateCate({ params: { lng }, params }) {
     fetchSubcategories();
   }, [lng, type, sub]);
 
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, first: 0 }));
+  }, [lng, type, sub]);
+
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
