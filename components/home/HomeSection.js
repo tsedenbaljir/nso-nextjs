@@ -38,14 +38,14 @@ const HomeSection = ({ lng }) => {
                                     style={{ marginRight: 6, height: 30, flexShrink: 0 }} alt="" />
                                 {lng === "mn" ? <>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</> : <>GOVERNMENT METADATA<br />  DATABASE</>}
                             </a>
-                            <Link href={`/${lng}/s-e-dashboard`} className="__dock_item __metadata_tile __metadata_tile_internal leading-4">
+                            {/* <Link href={`/${lng}/s-e-dashboard`} className="__dock_item __metadata_tile __metadata_tile_internal leading-4">
                                 <BarChartOutlined style={{ fontSize: 28, color: '#0076de', marginRight: 6, flexShrink: 0 }} />
                                 {lng === "mn" ? (
-                                    <>НИЙГЭМ, ЭДИЙН ЗАСГИЙН <br /> ҮНДСЭН ҮЗҮҮЛЭЛТҮҮД</>
+                                    <>СТАТИСТИКИЙН ӨГӨГДЛИЙН ДҮРСЛЭЛ</>
                                 ) : (
                                     <>SOCIO-ECONOMIC <br /> KEY INDICATORS</>
                                 )}
-                            </Link>
+                            </Link> */}
                         </div>
                         {/* <div className="__metadataBanner">
                             <a href="http://aanb3.nso.mn/" target="_blank">
