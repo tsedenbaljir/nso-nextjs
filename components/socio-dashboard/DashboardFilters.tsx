@@ -36,7 +36,7 @@ function BusTreeSelect({
       treeCheckable
       showCheckedStrategy={TreeSelect.SHOW_CHILD}
       placeholder="Бүс/аймаг сонгох"
-      style={{ width: 260, minWidth: 260 }}
+      style={{ width: "min(100%, 260px)", minWidth: 0, maxWidth: "100%" }}
       dropdownStyle={{ maxHeight: 360 }}
       popupMatchSelectWidth={false}
       allowClear
@@ -127,7 +127,7 @@ export function DashboardFilters({
                     }}
                     treeCheckable={false}
                     placeholder="Аймаг сонгох"
-                    style={{ width: 260, minWidth: 260 }}
+                    style={{ width: "min(100%, 260px)", minWidth: 0, maxWidth: "100%" }}
                     dropdownStyle={{ maxHeight: 360 }}
                     allowClear={false}
                     treeDefaultExpandAll={false}
@@ -176,7 +176,13 @@ export function DashboardFilters({
                   )}
                   dropdownStyle={{ minWidth: 280 }}
                   disabled={loading}
-                  style={slicerOnly ? (slicerWider ? { width: 280, minWidth: 240 } : { width: 180, minWidth: 140 }) : { width: 260, minWidth: 260 }}
+                  style={
+                    slicerOnly
+                      ? slicerWider
+                        ? { width: "min(100%, 280px)", minWidth: 0, maxWidth: "100%" }
+                        : { width: "min(100%, 180px)", minWidth: 0, maxWidth: "100%" }
+                      : { width: "min(100%, 260px)", minWidth: 0, maxWidth: "100%" }
+                  }
                 />
               ) : isMulti ? (
                 <Select
@@ -193,7 +199,13 @@ export function DashboardFilters({
                     }
                   }}
                   disabled={loading}
-                  style={slicerOnly ? (slicerWider ? { width: 280, minWidth: 240 } : { width: 180, minWidth: 140 }) : { width: 260, minWidth: 260 }}
+                  style={
+                    slicerOnly
+                      ? slicerWider
+                        ? { width: "min(100%, 280px)", minWidth: 0, maxWidth: "100%" }
+                        : { width: "min(100%, 180px)", minWidth: 0, maxWidth: "100%" }
+                      : { width: "min(100%, 260px)", minWidth: 0, maxWidth: "100%" }
+                  }
                   virtual={false}
                   options={
                     v.code === "Он"

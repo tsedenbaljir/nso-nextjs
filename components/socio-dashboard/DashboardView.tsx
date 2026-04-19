@@ -2370,7 +2370,7 @@ export function DashboardView({ config }: DashboardViewProps) {
           )}
 
           {metadata && config.id !== "gdp" && config.id !== "household-survey" && config.id !== "population" && config.id !== "unemployment" && config.id !== "average-salary" && config.id !== "foreign-trade" && config.id !== "balance-of-payments" && config.id !== "money-finance" && config.id !== "test" && config.id !== "society-education" && config.id !== "business-register" && !(config.id === "state-budget" && budgetPeriodTab === "Жил") && !(config.id === "cpi" && hasLevels && levelKeys.length > 0) && (
-            <div className="flex flex-wrap items-center gap-3 justify-end pb-3 border-b border-slate-200 overflow-x-auto scrollbar-hide">
+            <div className="socio-dash-scroll-touch flex flex-wrap items-center gap-3 justify-end overflow-x-auto border-b border-slate-200 pb-3 scrollbar-hide">
               {hasLevels && levelKeys.length > 0 && (
                 <Segmented
                   size="small"

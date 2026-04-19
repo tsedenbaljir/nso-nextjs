@@ -461,3 +461,92 @@
 .socio-dash-root.dark .filter-btn-group {
   background: #334155;
 }
+
+/* ========== Responsive: утас, жижиг дэлгэц, iPad ========== */
+
+.socio-dash-scroll-touch {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+@media (max-width: 639px) {
+  .socio-dash-root .text-head-title {
+    font-size: 1.0625rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .socio-dash-root .chart-section-value {
+    font-size: 1.0625rem !important;
+  }
+
+  .socio-dash-root .chart-section-title {
+    font-size: 0.9375rem !important;
+    line-height: 1.35 !important;
+  }
+
+  /* Гар дээрх товшилт */
+  .socio-dash-root .filter-btn-group {
+    height: auto !important;
+    min-height: 36px;
+    align-items: stretch;
+  }
+
+  .socio-dash-root .filter-btn-group button {
+    min-height: 36px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .socio-dash-root .segmented-pill.ant-segmented,
+  .socio-dash-root .segmented-inline.ant-segmented,
+  .socio-dash-root .gdp-indicator-segmented.ant-segmented {
+    height: auto !important;
+    min-height: 36px !important;
+  }
+
+  .socio-dash-root .segmented-pill .ant-segmented-item,
+  .socio-dash-root .segmented-inline .ant-segmented-item,
+  .socio-dash-root .gdp-indicator-segmented .ant-segmented-item {
+    min-height: 32px !important;
+    height: auto !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .socio-dash-root .ant-select .ant-select-selector,
+  .socio-dash-root .ant-tree-select .ant-select-selector {
+    min-height: 40px !important;
+    height: auto !important;
+  }
+
+  .socio-dash-root .ant-select-single .ant-select-selector .ant-select-selection-item,
+  .socio-dash-root .ant-tree-select .ant-select-selection-item {
+    line-height: 1.35 !important;
+    white-space: normal !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .socio-dash-root .chart-primary {
+    min-height: 220px;
+  }
+}
+
+/* iPad / жижиг таблет: гарчиг бага зэрэг */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .socio-dash-root .text-head-title {
+    font-size: 1.0625rem !important;
+  }
+
+  .socio-dash-root .chart-primary {
+    min-height: 240px;
+  }
+}
+
+/* iOS: хажуугийн safe inset (доод pb-г Tailwind-ээр үлдээнэ) */
+@supports (padding: max(0px)) {
+  .socio-dash-safe-x {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
