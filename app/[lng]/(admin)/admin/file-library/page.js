@@ -28,7 +28,11 @@ import {
   FilterOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import { sectors_list, getAllFileTypeIds, getSectorNameById } from "../../../(client)/statistic/sectors";
+import {
+  sectors_list,
+  getAllFileTypeIds,
+  getSectorNameById,
+} from "@/lib/sectors";
 import { CENSUS_SUB_FILTER_YEARS_BY_ID } from "@/lib/census-file-library-years";
 
 const { Title, Text } = Typography;
@@ -37,6 +41,9 @@ const { TextArea } = Input;
 
 const FILE_TYPE_IDS = getAllFileTypeIds();
 const typeSet = new Set(FILE_TYPE_IDS.map(String));
+
+/** Тооллогын дэд file_type id — шууд «Төрөл»-оос сонгогдох тохиолдолд жилийг эндээс авна. */
+const CENSUS_SUB_TYPE_IDS = [7, 8, 9, 10];
 
 const fileTypeOptions = [
   ...sectors_list.filter((s) => s.id !== 0).map((s) => ({ value: s.id, label: s.mnName })),
@@ -91,9 +98,13 @@ export default function FileLibraryAdmin() {
   const selectedSubItem = subOptions.find(
     (s) => s.id === selectedSubNum || s.value === selectedSub || s.id === selectedSub
   );
+  const censusLeafForYears =
+    selectedTypeNum != null && CENSUS_SUB_TYPE_IDS.includes(selectedTypeNum)
+      ? selectedTypeNum
+      : selectedSubItem?.id ?? null;
   const yearOptions =
-    selectedSubItem?.id != null
-      ? (CENSUS_SUB_FILTER_YEARS_BY_ID[selectedSubItem.id] ?? [])
+    censusLeafForYears != null
+      ? (CENSUS_SUB_FILTER_YEARS_BY_ID[censusLeafForYears] ?? [])
       : [];
   const getExtension = (name) => {
     if (typeof name !== "string") return "";
@@ -861,7 +872,11 @@ export default function FileLibraryAdmin() {
               <Select
                 placeholder="Дэд төрөл сонгоно уу"
                 allowClear
-                disabled={subOptions.length === 0}
+                disabled={
+                  subOptions.length === 0 ||
+                  (selectedTypeNum != null &&
+                    CENSUS_SUB_TYPE_IDS.includes(selectedTypeNum))
+                }
                 onChange={() => form.setFieldsValue({ subYear: undefined })}
               >
                 {subOptions.map((sub) => (
