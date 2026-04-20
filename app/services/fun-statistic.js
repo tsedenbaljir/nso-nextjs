@@ -22,7 +22,6 @@ async function fetchJson(url, options = {}) {
     const response = await fetch(finalUrl, {
         ...defaultFetchOptions,
         ...options,
-        next: { revalidate: 0, ...(options.next || {}) },
         headers: {
             "Cache-Control": "no-cache",
             ...(options.headers || {}),
