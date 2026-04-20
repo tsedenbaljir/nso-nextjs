@@ -38,7 +38,7 @@ const HomeSection = ({ lng }) => {
                                     style={{ marginRight: 6, height: 30, flexShrink: 0 }} alt="" />
                                 {lng === "mn" ? <>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</> : <>GOVERNMENT METADATA<br />  DATABASE</>}
                             </a>
-                            <Link href={`/${lng}/s-e-dashboard`} className="__dock_item __metadata_tile __metadata_tile_internal leading-4">
+                            <Link href={`/${lng}/statistics-dashboard`} className="__dock_item __metadata_tile __metadata_tile_internal leading-4">
                                 <BarChartOutlined style={{ fontSize: 28, color: '#0076de', marginRight: 6, flexShrink: 0 }} />
                                 {lng === "mn" ? (
                                     <>СТАТИСТИКИЙН ДАШБОАРД</>
@@ -64,7 +64,7 @@ const HomeSection = ({ lng }) => {
                                 style={{ marginRight: '6px', height: 30 }} alt="" />
                             <span>{lng === "mn" ? <>ТӨРИЙН МЕТА ӨГӨГДЛИЙН <br /> НЭГДСЭН САН</> : <>GOVERNMENT METADATA<br />  DATABASE</>}</span>
                         </a>
-                        <Link href={`/${lng}/s-e-dashboard`} className="__dock_item __metadata_phone_dashboard">
+                        <Link href={`/${lng}/statistics-dashboard`} className="__dock_item __metadata_phone_dashboard">
                             <BarChartOutlined style={{ fontSize: 28, color: '#0076de', marginRight: 9 }} />
                             <span>
                                 {lng === "mn" ? (

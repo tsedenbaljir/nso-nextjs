@@ -694,7 +694,7 @@ export default function SocioEconomicDashboardHome({ lng }: { lng: string }) {
     if (d.cardHref?.startsWith("http")) return d.cardHref;
     if (d.cardHref) return `/${lng}${d.cardHref}`;
     const slug = d.id === "business-register" ? "business" : d.id;
-    return `/${lng}/s-e-dashboard/${slug}`;
+    return `/${lng}/statistics-dashboard/${slug}`;
   };
 
   useEffect(() => {

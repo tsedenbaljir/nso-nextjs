@@ -2250,10 +2250,10 @@ export const dashboards: DashboardConfig[] = [
   },
 ];
 
-/** Тусдаа App Router хуудас (cardHref) — /s-e-dashboard/[id] дээр хоосон dashboard биш */
+/** Тусдаа App Router хуудас (cardHref) — /statistics-dashboard/[id] дээр хоосон dashboard биш */
 const STANDALONE_CARD_ONLY_IDS = new Set<string>(["livestock", "population-by-region"]);
 
-/** Албан ёсны зам: /s-e-dashboard/business — тохиргооны id нь business-register хэвээр */
+/** Албан ёсны зам: /statistics-dashboard/business — тохиргооны id нь business-register хэвээр */
 export function getDashboard(id: string): DashboardConfig | undefined {
   const canonical = id === "business" ? "business-register" : id;
   if (STANDALONE_CARD_ONLY_IDS.has(canonical)) return undefined;

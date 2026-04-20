@@ -64,18 +64,30 @@ const nextConfig = {
         return [
             {
                 source: "/:lng/statistic/socio-economic-dashboard/:id",
-                destination: "/:lng/s-e-dashboard/:id",
+                destination: "/:lng/statistics-dashboard/:id",
                 permanent: true,
             },
             {
                 source: "/:lng/statistic/socio-economic-dashboard",
-                destination: "/:lng/s-e-dashboard",
+                destination: "/:lng/statistics-dashboard",
                 permanent: true,
             },
             {
-                source: "/:lng/s-e-dashboard/business-register",
-                destination: "/:lng/s-e-dashboard/business",
+                source: "/:lng/statistics-dashboard/business-register",
+                destination: "/:lng/statistics-dashboard/business",
                 permanent: true,
+            },
+        ];
+    },
+    async rewrites() {
+        return [
+            {
+                source: "/:lng/statistics-dashboard",
+                destination: "/:lng/s-e-dashboard",
+            },
+            {
+                source: "/:lng/statistics-dashboard/:id",
+                destination: "/:lng/s-e-dashboard/:id",
             },
         ];
     },
