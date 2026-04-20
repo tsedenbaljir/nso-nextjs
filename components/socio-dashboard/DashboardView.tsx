@@ -2182,10 +2182,11 @@ export function DashboardView({ config }: DashboardViewProps) {
           <div className="pb-3 border-b border-slate-200 dark:border-slate-700">
             <div
               className={
-                (config.id === "cpi" && hasLevels && levelKeys.length > 0) ||
-                (config.id === "business-register" && metadata)
-                  ? "flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
-                  : ""
+                config.id === "cpi" && hasLevels && levelKeys.length > 0
+                  ? "socio-dash-scroll-touch flex min-w-0 items-start justify-between gap-3 overflow-x-auto sm:overflow-visible"
+                  : config.id === "business-register" && metadata
+                    ? "flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
+                    : ""
               }
             >
               <div className="min-w-0 flex-1">
@@ -2193,7 +2194,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                   {config.shortTitle ?? config.name}
                 </h1>
                 {(config.introText ?? config.description) && (
-                  <p className="text-sm font-normal leading-snug text-[var(--muted-foreground)] line-clamp-2 mt-1">
+                  <p className="mt-1 text-sm font-normal leading-snug text-[var(--muted-foreground)]">
                     {config.introText ?? config.description}
                   </p>
                 )}
@@ -2218,8 +2219,8 @@ export function DashboardView({ config }: DashboardViewProps) {
                   />
                 </div>
               )}
-              {config.id === "cpi" && hasLevels && levelKeys.length > 0 && (
-                <div className="flex shrink-0 justify-end sm:pt-0.5">
+              {config.id === "cpi" && metadata && hasLevels && levelKeys.length > 0 && (
+                <div className="flex min-w-max shrink-0 flex-nowrap items-center justify-end gap-2 sm:pt-0.5">
                   <Segmented
                     size="small"
                     className="segmented-pill"
@@ -2227,6 +2228,29 @@ export function DashboardView({ config }: DashboardViewProps) {
                     onChange={(key) => setSelectedLevel(key as string)}
                     options={levelKeys.map((key) => ({ label: CPI_LEVEL_LABELS[key] ?? key, value: key }))}
                   />
+                  <div className="-mt-0.5 sm:-mt-1">
+                    <DashboardFilters
+                      variables={metadata?.variables ?? []}
+                      selections={selections}
+                      onSelectionChange={handleSelectionChange}
+                      loading={loading}
+                      busSingleSelect
+                      busSingleSelectLeafOnly={selectedLevel === "аймаг"}
+                      hiddenVariables={
+                        selectedLevel === "аймаг"
+                          ? ["Он", "ОН", "Сар", "Бүлэг", "Суурь он", "Үзүүлэлт"]
+                          : ["Он", "ОН", "Сар", "Бүс", "Бүлэг", "Суурь он", "Үзүүлэлт"]
+                      }
+                      labelOverrides={(() => {
+                        const hideAll: Record<string, string> = {};
+                        (metadata?.variables ?? []).forEach((v) => {
+                          hideAll[v.code] = "";
+                        });
+                        return hideAll;
+                      })()}
+                      slicerOnly
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -4537,15 +4561,17 @@ export function DashboardView({ config }: DashboardViewProps) {
               ) ?? [];
               const filterNode = inlineVars.length > 0 ? (
                 <div className="flex items-center gap-3">
-                  <DashboardFilters
-                    variables={inlineVars}
-                    selections={selections}
-                    onSelectionChange={handleSelectionChange}
-                    loading={loading}
-                    labelOverrides={{ "Хүм амын тоо": "", "Бүс": "" }}
-                    slicerOnly={true}
-                    busSingleSelect={true}
-                  />
+                  <div className="-mt-1 sm:-mt-1.5">
+                    <DashboardFilters
+                      variables={inlineVars}
+                      selections={selections}
+                      onSelectionChange={handleSelectionChange}
+                      loading={loading}
+                      labelOverrides={{ "Хүм амын тоо": "", "Бүс": "" }}
+                      slicerOnly={true}
+                      busSingleSelect={true}
+                    />
+                  </div>
                 </div>
               ) : undefined;
               return renderTrendChart(chart, trendData, metaForChart, { headerExtra: filterNode, growthFromYear: 1990 });

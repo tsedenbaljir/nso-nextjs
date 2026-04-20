@@ -11,7 +11,7 @@ export function SocioDashboardBackNav({ lng }: { lng: string }) {
           href={`/${lng}/statistics-dashboard`}
           className="inline-flex min-h-11 max-w-full items-center gap-1 break-words text-sm font-medium text-[var(--primary,#0050c3)] underline-offset-2 hover:underline sm:min-h-0 dark:text-blue-400"
         >
-          ← Үндсэн үзүүлэлтүүд рүү буцах
+          ← Үндсэн үзүүлэлт рүү буцах
         </Link>
       </div>
     </div>

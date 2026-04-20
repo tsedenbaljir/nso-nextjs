@@ -56,6 +56,8 @@ interface DashboardFiltersProps {
   /** Override display label per variable code (e.g. { "Хүм амын тоо": "" } to hide label) */
   labelOverrides?: Record<string, string>;
   busSingleSelect?: boolean;
+  /** For bus single select: show only leaf aimag options (no region tree) */
+  busSingleSelectLeafOnly?: boolean;
   slicerOnly?: boolean;
   /** Use wider select width (e.g. for Эдийн засгийн салбар with long labels) */
   slicerWider?: boolean;
@@ -73,6 +75,7 @@ export function DashboardFilters({
   hiddenVariables,
   labelOverrides,
   busSingleSelect = false,
+  busSingleSelectLeafOnly = false,
   slicerOnly = false,
   slicerWider = false,
   excludeOptionLabelContaining,
@@ -112,27 +115,48 @@ export function DashboardFilters({
               ) : null}
               {useTree && busTree ? (
                 busSingleSelect ? (
-                  <TreeSelect
-                    size="small"
-                    treeData={busTree.treeData}
-                    value={selected[0] ?? undefined}
-                    onChange={(key) => {
-                      if (key == null) {
-                        const firstAimag = busTree.expandToLeafCodes([busTree.treeData[0]?.value].filter(Boolean))[0];
-                        onSelectionChange(v.code, firstAimag ? [firstAimag] : v.values);
-                        return;
-                      }
-                      const expanded = busTree.expandToLeafCodes([key as string]);
-                      onSelectionChange(v.code, expanded.length ? [expanded[0]] : v.values);
-                    }}
-                    treeCheckable={false}
-                    placeholder="Аймаг сонгох"
-                    style={{ width: "min(100%, 260px)", minWidth: 0, maxWidth: "100%" }}
-                    dropdownStyle={{ maxHeight: 360 }}
-                    allowClear={false}
-                    treeDefaultExpandAll={false}
-                    disabled={loading}
-                  />
+                  busSingleSelectLeafOnly ? (
+                    <Select
+                      size="small"
+                      value={selected[0] ?? undefined}
+                      onChange={(val) => onSelectionChange(v.code, val ? [String(val)] : v.values)}
+                      placeholder="Аймаг сонгох"
+                      style={{ width: "min(100%, 260px)", minWidth: 0, maxWidth: "100%" }}
+                      disabled={loading}
+                      virtual={false}
+                      options={busTree.treeData.flatMap((node) => {
+                        if (node.children?.length) {
+                          return node.children.map((child) => ({
+                            value: child.value,
+                            label: child.title,
+                          }));
+                        }
+                        return [{ value: node.value, label: node.title }];
+                      })}
+                    />
+                  ) : (
+                    <TreeSelect
+                      size="small"
+                      treeData={busTree.treeData}
+                      value={selected[0] ?? undefined}
+                      onChange={(key) => {
+                        if (key == null) {
+                          const firstAimag = busTree.expandToLeafCodes([busTree.treeData[0]?.value].filter(Boolean))[0];
+                          onSelectionChange(v.code, firstAimag ? [firstAimag] : v.values);
+                          return;
+                        }
+                        const expanded = busTree.expandToLeafCodes([key as string]);
+                        onSelectionChange(v.code, expanded.length ? [expanded[0]] : v.values);
+                      }}
+                      treeCheckable={false}
+                      placeholder="Аймаг сонгох"
+                      style={{ width: "min(100%, 260px)", minWidth: 0, maxWidth: "100%" }}
+                      dropdownStyle={{ maxHeight: 360 }}
+                      allowClear={false}
+                      treeDefaultExpandAll={false}
+                      disabled={loading}
+                    />
+                  )
                 ) : (
                   <BusTreeSelect
                     treeData={busTree.treeData}

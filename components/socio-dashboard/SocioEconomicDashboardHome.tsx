@@ -302,6 +302,21 @@ const cardIcons: Record<string, ReactNode> = {
     </svg>
   ),
   livestock: <Wheat className="size-3 shrink-0" />,
+  "population-by-region": (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="size-3 shrink-0"
+    >
+      <path d="M3 6l4-2 4 1 3-2 3 2 4-1v12l-4 2-3-1-3 2-4-2-4 1z" />
+      <path d="M11 5v14" />
+      <path d="M17 5v14" />
+    </svg>
+  ),
 };
 
 /** dashboard.gov.mn-ийн гадаад статистик холбоосууд — карт бүр нэг холбоос */
