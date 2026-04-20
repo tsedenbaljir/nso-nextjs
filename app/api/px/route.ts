@@ -29,7 +29,7 @@ function normalizeUpstreamUrl(raw: string | null): string | null {
 
 async function fetchWithRetry(
   url: string,
-  options: RequestInit,
+  options: RequestInit & { next?: { revalidate?: number } },
   retries = 3,
   retryOn429 = true
 ): Promise<Response> {
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     const res = await fetchWithRetry(url, {
       method: "GET",
       headers: { Accept: "application/json" },
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     const data = await readJsonOrText(res);
     if (!res.ok) {
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(body),
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     const data = await readJsonOrText(res);
     if (!res.ok) {
