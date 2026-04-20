@@ -891,6 +891,14 @@ export default function FileLibraryAdmin() {
               <Select
                 placeholder="Он сонгоно уу"
                 allowClear
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  String(option?.value ?? "")
+                    .toLowerCase()
+                    .includes(input.trim().toLowerCase())
+                }
+                listHeight={280}
                 disabled={yearOptions.length === 0}
               >
                 {yearOptions.map((year) => (

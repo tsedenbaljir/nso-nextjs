@@ -7,6 +7,9 @@ export const dynamic = "force-dynamic";
 const serviceAccount = process.env.GOOGLE_SERVICE_ACCOUNT;
 const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 const GOOGLE_ANALYTICS_PROPERTY_ID = '315626458';
+// GA4 has no "all time" keyword — use an early date on/after this property's minimum (API returns 400 if too early).
+// If you see: "start_date must be greater than YYYY-MM-DD", set GOOGLE_ANALYTICS_ALL_TIME_START to the next calendar day.
+const ALL_TIME_START = '2015-08-14';
 
 // In-memory caching
 let applicationScopedBean = {
@@ -41,9 +44,9 @@ async function getGoogleAnalyticsToken() {
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: data
-    },
-    { cache: "no-store" });
+        body: data,
+        cache: 'no-store',
+    });
 
     const result = await tokenResponse.json();
     if (result.error) {
@@ -56,12 +59,13 @@ async function getGoogleAnalyticsToken() {
 async function fetchAnalyticsReport(token) {
     const reportRequest = {
         returnPropertyQuota: true,  // See quota usage (helps avoid 429)
-        metrics: [{ name: 'active1DayUsers' }],
+        // Distinct users in each date range (not 1-day-only window; see GA activeUsers vs active1DayUsers)
+        metrics: [{ name: 'activeUsers' }],
         dateRanges: [
             { startDate: 'yesterday', endDate: 'today' },
             { startDate: '7daysAgo', endDate: 'today' },
             { startDate: '30daysAgo', endDate: 'today' },
-            { startDate: '365daysAgo', endDate: 'today' }  // Last year (shorter range = fewer quota tokens)
+            { startDate: ALL_TIME_START, endDate: 'today' } // "All time" = from fixed start through today
         ]
     };
 
@@ -74,9 +78,9 @@ async function fetchAnalyticsReport(token) {
             "Expires": "0",
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(reportRequest)
-    },
-    { cache: "no-store" });
+        body: JSON.stringify(reportRequest),
+        cache: 'no-store',
+    });
 
     const result = await response.json();
     return result;

@@ -415,9 +415,9 @@ export default function Footer({ lng }) {
                                 <span>{t('footer.total')}</span>
                                 <span>{!loading && Number(data?.rows[0]?.metricValues[0]?.value).toLocaleString('en-US')}</span>
                             </div>
-                            <div style={{ marginTop: '90px' }}>
+                            {/* <div style={{ marginTop: '90px' }}>
                                 <FooterCarousel />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="col-12 md:col-4 lg:col-4">
