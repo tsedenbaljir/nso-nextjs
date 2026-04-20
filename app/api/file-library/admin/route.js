@@ -5,6 +5,11 @@ import { getAllFileTypeIds } from '@/lib/file-library-ids';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+function isAllowedFileType(type) {
+    const ids = new Set(getAllFileTypeIds().map(String));
+    return type != null && type !== "" && ids.has(String(type));
+}
+
 // GET - Fetch all files for admin (file_type stores sector id)
 export async function GET(req) {
     try {
@@ -109,6 +114,13 @@ export async function POST(req) {
             );
         }
 
+        if (!isAllowedFileType(type)) {
+            return NextResponse.json(
+                { success: false, error: "Invalid file type" },
+                { status: 400 }
+            );
+        }
+
         // First, get the next available ID
         const [nextId] = await db.raw("SELECT max(id) as nextId FROM web_1212_download");
         
@@ -162,6 +174,13 @@ export async function PUT(req) {
         if (!id) {
             return NextResponse.json(
                 { success: false, error: "File ID is required" },
+                { status: 400 }
+            );
+        }
+
+        if (type !== undefined && type !== null && !isAllowedFileType(type)) {
+            return NextResponse.json(
+                { success: false, error: "Invalid file type" },
                 { status: 400 }
             );
         }

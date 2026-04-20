@@ -173,35 +173,39 @@ export default function Tabs({
                             </div>
                         </div>
                         {censusYearOptions && (
-                            <div className="flex flex-wrap gap-2 mb-3 mt-2 items-center">
-                                <span className="text-sm text-gray-600 mr-1 shrink-0">
+                            <div className="flex gap-2 mb-3 mt-2 items-start">
+                                <span className="text-sm text-gray-600 mr-1 shrink-0 pt-1.5">
                                     {lng === "mn" ? "Он:" : "Year:"}
                                 </span>
-                                <button
-                                    type="button"
-                                    onClick={() => setSubYearFilter(null)}
-                                    className={`px-3 py-1 rounded-full border text-sm transition-colors ${
-                                        activeSub == null || activeSub === ""
-                                            ? "border-[#005baa] bg-blue-50 text-[#005baa]"
-                                            : "border-gray-300 bg-white hover:bg-gray-50"
-                                    }`}
-                                >
-                                    {lng === "mn" ? "Бүгд" : "All"}
-                                </button>
-                                {censusYearOptions.map((year) => (
-                                    <button
-                                        key={year}
-                                        type="button"
-                                        onClick={() => setSubYearFilter(year)}
-                                        className={`px-3 py-1 rounded-full border text-sm transition-colors ${
-                                            activeSub === String(year)
-                                                ? "border-[#005baa] bg-blue-50 text-[#005baa]"
-                                                : "border-gray-300 bg-white hover:bg-gray-50"
-                                        }`}
-                                    >
-                                        {year}
-                                    </button>
-                                ))}
+                                <div className="min-w-0 flex-1 max-h-32 sm:max-h-36 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-gutter:stable]">
+                                    <div className="flex flex-wrap gap-2 items-center">
+                                        <button
+                                            type="button"
+                                            onClick={() => setSubYearFilter(null)}
+                                            className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                activeSub == null || activeSub === ""
+                                                    ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                    : "border-gray-300 bg-white hover:bg-gray-50"
+                                            }`}
+                                        >
+                                            {lng === "mn" ? "Бүгд" : "All"}
+                                        </button>
+                                        {censusYearOptions.map((year) => (
+                                            <button
+                                                key={year}
+                                                type="button"
+                                                onClick={() => setSubYearFilter(year)}
+                                                className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                    activeSub === String(year)
+                                                        ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                        : "border-gray-300 bg-white hover:bg-gray-50"
+                                                }`}
+                                            >
+                                                {year}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         )}
                         <div className='mb-4' style={{
