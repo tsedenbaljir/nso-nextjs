@@ -4253,6 +4253,8 @@ export function DashboardView({ config }: DashboardViewProps) {
             const getAllowedForDim = (v: (typeof metaForChart.variables)[0]): { labels: string[]; codes: string[] } => {
               const sel = selections[v.code];
               const allCodes = (sel?.length ? sel : v.values) ?? [];
+              const nDimVals = v.values?.length ?? 0;
+              const isFullDimensionSelection = nDimVals > 0 && allCodes.length === nDimVals;
               const labels = (allCodes
                 .map((val) => v.valueTexts?.[v.values.indexOf(val)] ?? v.valueTexts?.[0])
                 .filter(Boolean) ?? []) as string[];
@@ -4264,12 +4266,22 @@ export function DashboardView({ config }: DashboardViewProps) {
                 v.valueTexts?.[0];
               const totalIdx = totalLabel ? v.valueTexts?.indexOf(totalLabel) ?? -1 : -1;
               const totalCode = totalIdx >= 0 ? v.values?.[totalIdx] : v.values?.[0];
-              if (totalLabel && labels.includes(totalLabel) && totalCode) {
+              if (
+                !isFullDimensionSelection &&
+                totalLabel &&
+                labels.includes(totalLabel) &&
+                totalCode
+              ) {
                 return { labels: [totalLabel], codes: [String(totalCode)] };
               }
 
               // Хэрэв эхний ангилал (ихэвчлэн нийт) сонгогдсон бол мөн зөвхөн тэрийг авна
-              if (v.valueTexts?.[0] && labels.includes(v.valueTexts[0]) && v.values?.[0]) {
+              if (
+                !isFullDimensionSelection &&
+                v.valueTexts?.[0] &&
+                labels.includes(v.valueTexts[0]) &&
+                v.values?.[0]
+              ) {
                 return { labels: [v.valueTexts[0]], codes: [String(v.values[0])] };
               }
 
@@ -4382,6 +4394,8 @@ export function DashboardView({ config }: DashboardViewProps) {
                 }
                 const sel = selections[v.code];
                 const allCodes = (sel?.length ? sel : v.values) ?? [];
+                const nDimValsInner = v.values?.length ?? 0;
+                const isFullDimensionSelectionInner = nDimValsInner > 0 && allCodes.length === nDimValsInner;
                 const labels = (allCodes
                   .map((val) => v.valueTexts?.[v.values.indexOf(val)] ?? v.valueTexts?.[0])
                   .filter(Boolean) ?? []) as string[];
@@ -4389,9 +4403,14 @@ export function DashboardView({ config }: DashboardViewProps) {
                   v.valueTexts?.find((t) => t === "Нийт дүн") ?? v.valueTexts?.find((t) => t === "Нийт") ?? v.valueTexts?.[0];
                 const totalIdx = totalLabel ? v.valueTexts?.indexOf(totalLabel) ?? -1 : -1;
                 const totalCode = totalIdx >= 0 ? v.values?.[totalIdx] : v.values?.[0];
-                if (totalLabel && labels.includes(totalLabel) && totalCode)
+                if (!isFullDimensionSelectionInner && totalLabel && labels.includes(totalLabel) && totalCode)
                   return { labels: [totalLabel], codes: [String(totalCode)] };
-                if (v.valueTexts?.[0] && labels.includes(v.valueTexts[0]) && v.values?.[0])
+                if (
+                  !isFullDimensionSelectionInner &&
+                  v.valueTexts?.[0] &&
+                  labels.includes(v.valueTexts[0]) &&
+                  v.values?.[0]
+                )
                   return { labels: [v.valueTexts[0]], codes: [String(v.values[0])] };
                 return { labels, codes: allCodes.map(String) };
               };

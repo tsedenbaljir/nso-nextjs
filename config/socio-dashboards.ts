@@ -61,8 +61,8 @@ const BASE_URL = "https://data.1212.mn/api/v1/mn/NSO/";
 const PPI_INDUSTRIAL_URL = `${BASE_URL}Economy, environment/Producer price index/CHANGES OF INDUSTRIAL PRODUCER PRICE INDEX/DT_NSO_1100_016V4_1.px`;
 const PPI_TRANSPORT_URL = `${BASE_URL}Economy, environment/Producer price index/CHANGES OF PRODUCER PRICE INDEX OF TRANSPORTATION SECTOR/DT_NSO_1100_015V7_1.px`;
 const PPI_INFO_COMM_URL = `${BASE_URL}Economy, environment/Producer price index/CHANGES OF PRODUCER PRICE INDEX OF INFORMATION AND COMMUNICATION SECTOR/DT_NSO_1100_015V5_1.px`;
-const PPI_ACCOMMODATION_URL = `${BASE_URL}Economy, environment/Producer price index/CHANGES OF PRODUCER PRICE INDEX OF ACCOMMODATION SECTOR/DT_NSO_1100_015V4_1.px`;
-const PPI_FOOD_SERVICE_URL = `${BASE_URL}Economy, environment/Producer price index/CHANGES OF PRODUCER PRICE INDEX OF FOOD AND BEVERAGE SERVICE SECTOR/DT_NSO_1100_015V6_1.px`;
+const PPI_ACCOMMODATION_URL = `${BASE_URL}Economy, environment/Producer price index/CHANGES OF PRODUCER PRICE INDEX OF ACCOMMODATION SECTOR/DT_NSO_1100_015V4_2.px`;
+const PPI_FOOD_SERVICE_URL = `${BASE_URL}Economy, environment/Producer price index/CHANGES OF PRODUCER PRICE INDEX OF FOOD AND BEVERAGE SERVICE SECTOR/DT_NSO_1100_015V6_2.px`;
 
 const HOUSING_PRICE_INDEX_URL = `${BASE_URL}Economy,%20environment/Housing%20price%20index/DT_NSO_0300_071V0.px`;
 const HOUSING_PRICE_CHANGE_URL = `${BASE_URL}Economy,%20environment/Housing%20price%20index/DT_NSO_0300_00V1.px`;
@@ -1180,9 +1180,9 @@ export const dashboards: DashboardConfig[] = [
   },
   {
     id: "housing-prices",
-    name: "Орон сууцны үнийн үнэ",
+    name: "Орон сууцны үнэ",
     category: "ЭДИЙН ЗАСАГ",
-    shortTitle: "Орон сууцны үнийн үнэ",
+    shortTitle: "Орон сууцны үнэ",
     apiUrl: HOUSING_PRICE_INDEX_URL,
     housingChangeUrl: HOUSING_PRICE_CHANGE_URL,
     primaryDimension: "Сар",
@@ -1325,7 +1325,7 @@ export const dashboards: DashboardConfig[] = [
           query: [
             { code: "Үзүүлэлт", selection: { filter: "item", values: ["3", "2"] } },
             { code: "Ангилал", selection: { filter: "item", values: ["0"] } },
-            { code: "Сар", selection: { filter: "item", values: range(62) } },
+            { code: "Сар", selection: { filter: "item", values: range(63) } },
           ],
           response: { format: "json-stat2" },
         },
@@ -1341,7 +1341,7 @@ export const dashboards: DashboardConfig[] = [
           query: [
             { code: "Үзүүлэлт", selection: { filter: "item", values: ["3", "1"] } },
             { code: "Ангилал", selection: { filter: "item", values: ["0"] } },
-            { code: "Сар", selection: { filter: "item", values: range(62) } },
+            { code: "Сар", selection: { filter: "item", values: range(63) } },
           ],
           response: { format: "json-stat2" },
         },
