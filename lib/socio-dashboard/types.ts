@@ -142,7 +142,7 @@ export interface ChartConfig {
   computedSourceCharts?: [string, string];
   chartHeight?: number;
   showOnlyForLevels?: string[];
-  /** GDP sector code for filtering (Эдийн засгийн үйл ажиллагааны салбарын ангилал) */
+  /** GDP sector code for filtering («Салбар» хэмжээсийн код) */
   gdpSectorCode?: string;
   /** Stacked bar chart */
   stacked?: boolean;

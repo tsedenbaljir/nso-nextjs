@@ -296,8 +296,27 @@ export function ChartTrend({
     let cmpStart: (x: string) => boolean;
     let cmpEnd: (x: string) => boolean;
     if (isYearQuarterX) {
-      cmpStart = (x: string) => x >= startY;
-      cmpEnd = (x: string) => x <= endY;
+      // Жилийн интервал [startY,endY] нь "2015","2025" гэх мэт 4 оронтой байхад улирлын түлхүүр
+      // "2025-4" нь тэмдэгт мөрөөр "2025"-аас их тул string харьцуулахад сүүлийн жилийн улирал орж ирэхгүй.
+      const sy = parseInt(startY, 10);
+      const ey = parseInt(endY, 10);
+      const yearOf = (x: string) => {
+        const m = /^(\d{4})/.exec(String(x).trim());
+        return m ? parseInt(m[1]!, 10) : NaN;
+      };
+      if (!Number.isNaN(sy) && !Number.isNaN(ey)) {
+        cmpStart = (x: string) => {
+          const y = yearOf(x);
+          return !Number.isNaN(y) && y >= sy;
+        };
+        cmpEnd = (x: string) => {
+          const y = yearOf(x);
+          return !Number.isNaN(y) && y <= ey;
+        };
+      } else {
+        cmpStart = (x: string) => x >= startY;
+        cmpEnd = (x: string) => x <= endY;
+      }
     } else if (isYearMonthX) {
       const startCmp = startY.slice(0, 4) || startY;
       const endCmp = endY.slice(0, 4) || endY;
@@ -643,34 +662,52 @@ export function ChartTrend({
             )}
             {(showLatestValue && (latestEntry || (headerExtra && headerExtraInValueRow))) && (
               <div className={noHeaderMargin ? "" : latestValueMarginClass}>
-                <div className="flex flex-wrap items-baseline gap-2">
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 sm:flex-nowrap">
                   {headerExtraInValueRow && headerExtra && <span className="shrink-0">{headerExtra}</span>}
                   {latestEntry && showLatestValueBySeries && latestSeriesValues.length > 0 ? (
-                    <div className={latestValueVertical ? "flex flex-col gap-1" : "flex flex-wrap items-baseline gap-4"}>
+                    <div
+                      className={
+                        latestValueVertical
+                          ? "flex flex-col gap-1"
+                          : "flex flex-col gap-2 min-[420px]:flex-row min-[420px]:flex-nowrap min-[420px]:items-baseline min-[420px]:gap-x-4 min-[420px]:gap-y-0 min-[420px]:overflow-x-auto"
+                      }
+                    >
                       {latestSeriesValues.map((sv) => (
-                        <div key={sv.label} className="flex items-baseline gap-1.5">
-                          <span className="chart-section-label text-[var(--muted-foreground)]">{seriesLabelMap?.[sv.label] ?? sv.label}:</span>
-                          <span className="chart-section-value tabular-nums">
+                        <div key={sv.label} className="flex min-w-0 flex-nowrap items-baseline gap-1.5">
+                          <span className="chart-section-label shrink-0 whitespace-nowrap break-normal text-[var(--muted-foreground)]">
+                            {seriesLabelMap?.[sv.label] ?? sv.label}:
+                          </span>
+                          <span className="chart-section-value shrink-0 tabular-nums">
                             {latestValueFormatter ? latestValueFormatter(sv.value, latestPeriod) : sv.value.toLocaleString()}
                           </span>
                           {showGrowth && sv.changePct != null && (
-                            <span className={`chart-section-label font-medium ${sv.changePct >= 0 ? "text-green-600" : "text-red-600"}`}>
+                            <span
+                              className={`chart-section-label shrink-0 whitespace-nowrap font-medium ${sv.changePct >= 0 ? "text-green-600" : "text-red-600"}`}
+                            >
                               {sv.changePct >= 0 ? "+" : ""}{sv.changePct.toFixed(1)}%
                             </span>
                           )}
                         </div>
                       ))}
-                      {!latestValueVertical && <span className="chart-section-label text-[var(--muted-foreground)]">({latestPeriod})</span>}
+                      {!latestValueVertical && (
+                        <span className="chart-section-label shrink-0 whitespace-nowrap break-normal text-[var(--muted-foreground)]">
+                          ({latestPeriod})
+                        </span>
+                      )}
                     </div>
                   ) : latestEntry ? (
-                    <div className="flex flex-wrap items-baseline gap-2">
-                      <span className="chart-section-value tabular-nums leading-none">{latestValueStr}</span>
+                    <div className="flex flex-nowrap items-baseline gap-2">
+                      <span className="chart-section-value shrink-0 tabular-nums leading-none">{latestValueStr}</span>
                       {showGrowth && latestChangePct != null && (
-                        <span className={`chart-section-label font-medium ${latestChangePct >= 0 ? "text-green-600" : "text-red-600"}`}>
+                        <span
+                          className={`chart-section-label shrink-0 whitespace-nowrap font-medium ${latestChangePct >= 0 ? "text-green-600" : "text-red-600"}`}
+                        >
                           {latestChangePct >= 0 ? "+" : ""}{latestChangePct.toFixed(1)}%
                         </span>
                       )}
-                      <span className="chart-section-label text-[var(--muted-foreground)]">({latestPeriod})</span>
+                      <span className="chart-section-label shrink-0 whitespace-nowrap break-normal text-[var(--muted-foreground)]">
+                        ({latestPeriod})
+                      </span>
                     </div>
                   ) : (
                     <span className="chart-section-label text-[var(--muted-foreground)]">—</span>

@@ -117,6 +117,48 @@ function sortGdpQuarterPeriods(periods: string[]): string[] {
   });
 }
 
+/** ДНБ PX мөрнөөс жил / улиралын түлхүүр (API-д ОН эсвэл Он гэж ирж болно) */
+function gdpTimePeriodFromRow(r: DataRow): string {
+  return String(r["ОН"] ?? r["ОН_code"] ?? r["Он"] ?? r["Он_code"] ?? "").trim();
+}
+
+/** Улирлын PX-д хугацааны түлхүүр ОН/Он аль ч байж болно — графикийн xKey-тэй тааруулна */
+function normalizeGdpQuarterRowsForXKey(rows: DataRow[], xKey: string): DataRow[] {
+  if (!rows.length) return rows;
+  return rows.map((r) => {
+    const t = gdpTimePeriodFromRow(r);
+    if (!t) return r;
+    const cur = r[xKey];
+    if (cur != null && String(cur).trim() !== "") return r;
+    return { ...r, [xKey]: t };
+  });
+}
+
+function pxCodesLooselyEqual(a: string, b: string): boolean {
+  if (a === b) return true;
+  const na = Number(a);
+  const nb = Number(b);
+  if (Number.isFinite(na) && Number.isFinite(nb) && na === nb) return true;
+  return false;
+}
+
+function rowMatchesGdpStatisticIndicator(
+  r: DataRow,
+  indicatorCode: string,
+  options: readonly { code: string; label: string }[],
+): boolean {
+  const want = String(indicatorCode).trim();
+  const codeVal = r["Статистик үзүүлэлт_code"];
+  if (codeVal !== undefined && codeVal !== null && pxCodesLooselyEqual(String(codeVal).trim(), want)) return true;
+  const labelVal = r["Статистик үзүүлэлт"];
+  const opt = options.find((o) => o.code === want);
+  if (opt != null && labelVal !== undefined && labelVal !== null) {
+    const lab = String(labelVal);
+    if (lab === opt.label || lab.includes(opt.label)) return true;
+  }
+  return false;
+}
+
 /** NSO PX сарын код (0,1,…) — түүхэн хугацааны индекс */
 function moneyFinanceIdxToCalendarYear(idx: number): number {
   if (idx === 0) return 2026;
@@ -674,7 +716,7 @@ export function DashboardView({ config }: DashboardViewProps) {
     const firstQId = charts.find((c) => c.id.startsWith("gdp-quarter-"))?.id;
     if (!firstQId) return [];
     const rows = chartDataByChartId[firstQId] ?? [];
-    const raw = [...new Set(rows.map((r) => String(r["ОН"] ?? "")))].filter(Boolean);
+    const raw = [...new Set(rows.map((r) => gdpTimePeriodFromRow(r)))].filter(Boolean);
     return sortGdpQuarterPeriods(raw);
   }, [config.id, charts, chartDataByChartId]);
 
@@ -825,12 +867,11 @@ export function DashboardView({ config }: DashboardViewProps) {
         querySelections["Хүйс"] = ["0"];
       }
       if (config.id === "gdp" && metadata) {
-        const onVar = metadata.variables.find((v) => v.code === "ОН");
-        if (onVar?.values?.length) querySelections["ОН"] = onVar.values;
+        const onVar = metadata.variables.find((v) => v.code === "ОН" || v.code === "Он");
+        if (onVar?.values?.length) querySelections[onVar.code] = onVar.values;
         if (!querySelections["Статистик үзүүлэлт"]?.length) querySelections["Статистик үзүүлэлт"] = ["4"];
-        const sectorVar = metadata.variables.find((v) => v.code === "Эдийн засгийн үйл ажиллагааны салбарын ангилал");
-        if (sectorVar?.values?.length && !querySelections["Эдийн засгийн үйл ажиллагааны салбарын ангилал"]?.length)
-          querySelections["Эдийн засгийн үйл ажиллагааны салбарын ангилал"] = sectorVar.values;
+        const sectorVar = metadata.variables.find((v) => v.code === "Салбар");
+        if (sectorVar?.values?.length && !querySelections["Салбар"]?.length) querySelections["Салбар"] = sectorVar.values;
       }
       const body = buildQuery(metadata, querySelections);
       if (process.env.NODE_ENV === "development" && config.id === "cpi") {
@@ -1206,7 +1247,7 @@ export function DashboardView({ config }: DashboardViewProps) {
             if (config.id === "gdp" && v.code === "Статистик үзүүлэлт" && v.values?.includes("4")) {
               initial[v.code] = ["4"];
             }
-            if (config.id === "gdp" && (v.code === "Эдийн засгийн салбар" || v.code === "Эдийн засгийн үйл ажиллагааны салбарын ангилал") && v.values?.length) {
+            if (config.id === "gdp" && v.code === "Салбар" && v.values?.length) {
               const idxMining = v.values.indexOf("2");
               initial[v.code] = idxMining >= 0 ? ["2"] : [String(v.values[0])];
             }
@@ -4745,8 +4786,9 @@ export function DashboardView({ config }: DashboardViewProps) {
               const gdpRange = gdpRangeYears ?? defaultGdpRange;
               const indicatorLabel = indicatorFilter.options.find((o) => o.code === gdpIndicatorCode)?.label ?? "Утга";
               const filterByIndicator = (data: DataRow[]) =>
-                data.filter((r) => String(r["Статистик үзүүлэлт_code"] ?? r["Статистик үзүүлэлт"] ?? "") === gdpIndicatorCode);
+                data.filter((r) => rowMatchesGdpStatisticIndicator(r, gdpIndicatorCode, indicatorFilter.options));
               const mainChartRows = filterByIndicator(chartDataByChartId["gdp-total"] ?? []);
+              const mainChartRowsForChart = normalizeGdpQuarterRowsForXKey(mainChartRows, "Он");
               const stackedBarChart = charts.find((c) => c.id === "gdp-sector-structure");
               const stackedBarMeta = metadataByChartId["gdp-sector-structure"];
               const stackedBarRows = chartDataByChartId["gdp-sector-structure"] ?? [];
@@ -4777,8 +4819,8 @@ export function DashboardView({ config }: DashboardViewProps) {
                   </div>
                   <div className="w-full">
                     {(() => {
-                      const latestRow = mainChartRows.length > 0 
-                        ? mainChartRows.reduce((a, b) => {
+                      const latestRow = mainChartRowsForChart.length > 0 
+                        ? mainChartRowsForChart.reduce((a, b) => {
                             const yearA = String(a["ОН"] ?? a["Он"] ?? "");
                             const yearB = String(b["ОН"] ?? b["Он"] ?? "");
                             return yearB > yearA ? b : a;
@@ -4803,8 +4845,8 @@ export function DashboardView({ config }: DashboardViewProps) {
                             </div>
                           )}
                           <ChartTrend
-                            data={mainChartRows}
-                            xKey="ОН"
+                            data={mainChartRowsForChart}
+                            xKey="Он"
                             title=""
                             hideHeader
                             showLatestValue={false}
@@ -4825,7 +4867,10 @@ export function DashboardView({ config }: DashboardViewProps) {
                   <div className="!grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {sectorCharts.map((sc) => {
                       const scMeta = metadataByChartId[sc.id];
-                      const scRows = filterByIndicator(chartDataByChartId[sc.id] ?? []);
+                      const scRows = normalizeGdpQuarterRowsForXKey(
+                        filterByIndicator(chartDataByChartId[sc.id] ?? []),
+                        sc.xDimension ?? "Он",
+                      );
                       if (!scMeta) return null;
                       const isPercentage = indicatorLabel.includes("%") || indicatorLabel.includes("Өөрчлөлт");
                       const sectorValueFormatter = (val: number, period: string) => {
@@ -4962,7 +5007,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                   })()}
                   {/* Stacked bar + Нэг ажиллагчид ногдох ДНБ - нэгтгэсэн filter-тэй */}
                   {stackedBarChart && stackedBarMeta && stackedBarRows.length > 0 && (() => {
-                    const sectorDim = "Эдийн засгийн үйл ажиллагааны салбарын ангилал";
+                    const sectorDim = "Салбар";
                     const sectorVar = stackedBarMeta?.variables.find((v) => v.code === sectorDim);
                     const stackedBarSectorOptions = sectorVar?.values
                       .map((val, i) => ({
@@ -4974,7 +5019,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                     const perWorkerChart = charts.find((c) => c.id === "gdp-per-worker");
                     const perWorkerRows = chartDataByChartId["gdp-per-worker"] ?? [];
                     const perWorkerMeta = metadataByChartId["gdp-per-worker"];
-                    const perWorkerSectorVar = perWorkerMeta?.variables.find((v) => v.code === "Эдийн засгийн салбар");
+                    const perWorkerSectorVar = perWorkerMeta?.variables.find((v) => v.code === "Салбар");
                     const perWorkerSectorOptions = perWorkerSectorVar?.values.map((val, i) => ({
                       value: String(val),
                       label: perWorkerSectorVar.valueTexts?.[i] ?? String(val),
@@ -4995,7 +5040,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                     )?.label ?? null;
                     
                     const filteredData = stackedBarRows.filter((r) => {
-                      const year = String(r["ОН"] ?? r["ОН_code"] ?? "");
+                      const year = String(r["Он"] ?? r["Он_code"] ?? r["ОН"] ?? r["ОН_code"] ?? "");
                       const [start, end] = gdpRange;
                       if (year < start || year > end) return false;
                       const sectorLabel = String(r[sectorDim] ?? "");
@@ -5005,7 +5050,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                       }
                       return true;
                     });
-                    const years = [...new Set(filteredData.map((r) => String(r["ОН"] ?? "")))].sort((a, b) => Number(a) - Number(b));
+                    const years = [...new Set(filteredData.map((r) => String(r["Он"] ?? r["ОН"] ?? "")))].sort((a, b) => Number(a) - Number(b));
                     const sectors = [...new Set(filteredData.map((r) => String(r[sectorDim] ?? "")))];
                     const sectorColors = [
                       "#6b7280", "#6b7280", "#6b7280", "#6b7280", "#6b7280", "#6b7280", 
@@ -5018,7 +5063,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                           type: "bar" as const,
                           stack: "total",
                           data: years.map((year) => {
-                            const row = filteredData.find((r) => String(r["ОН"] ?? "") === year && String(r[sectorDim] ?? "") === sector);
+                            const row = filteredData.find((r) => String(r["Он"] ?? r["ОН"] ?? "") === year && String(r[sectorDim] ?? "") === sector);
                             return row ? Number(row["value"] ?? 0) : 0;
                           }),
                           itemStyle: { color: sectorColors[idx % sectorColors.length] },
@@ -5027,7 +5072,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                           name: sectors[0] ?? "Салбар",
                           type: "bar" as const,
                           data: years.map((year) => {
-                            const row = filteredData.find((r) => String(r["ОН"] ?? "") === year);
+                            const row = filteredData.find((r) => String(r["Он"] ?? r["ОН"] ?? "") === year);
                             return row ? Number(row["value"] ?? 0) : 0;
                           }),
                           itemStyle: { color: "#2563eb" },
@@ -5043,7 +5088,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                     const defaultPerWorkerCode = perWorkerSectorOptions.find(o => o.label === defaultPerWorkerLabel)?.value ?? perWorkerSectorOptions[0]?.value ?? "0";
                     const actualPerWorkerCode = gdpPerWorkerSectorCode === "all" ? defaultPerWorkerCode : gdpPerWorkerSectorCode;
                     const perWorkerFiltered = perWorkerYearFiltered.filter((r) => 
-                      String(r["Эдийн засгийн салбар_code"] ?? "") === actualPerWorkerCode
+                      String(r["Салбар_code"] ?? r["Эдийн засгийн салбар_code"] ?? "") === actualPerWorkerCode
                     );
                     const perWorkerDisplayData = perWorkerFiltered.length > 0 ? perWorkerFiltered : perWorkerYearFiltered;
                     const perWorkerYears = [...new Set(perWorkerDisplayData.map(r => String(r[perWorkerXDim] ?? "")))].sort();
@@ -5160,7 +5205,7 @@ export function DashboardView({ config }: DashboardViewProps) {
                     const quarterRange = gdpQuarterRangeYears ?? defaultQuarterRange;
                     const filterByQuarterRange = (data: DataRow[]) =>
                       data.filter((r) => {
-                        const p = String(r["ОН"] ?? "");
+                        const p = gdpTimePeriodFromRow(r);
                         return p >= quarterRange[0] && p <= quarterRange[1];
                       });
                     const nQ = periodsSorted.length;
@@ -5179,13 +5224,16 @@ export function DashboardView({ config }: DashboardViewProps) {
                         <div className="!grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                           {quarterCharts.map((qc) => {
                             const qcMeta = metadataByChartId[qc.id];
-                            const qcData = filterByQuarterRange(chartDataByChartId[qc.id] ?? []);
-                            if (!qcMeta || qcData.length === 0) return null;
+                            const xDim = qc.xDimension ?? "ОН";
+                            const qcDataRaw = filterByQuarterRange(
+                              normalizeGdpQuarterRowsForXKey(chartDataByChartId[qc.id] ?? [], xDim),
+                            );
+                            if (!qcMeta || qcDataRaw.length === 0) return null;
                             return (
                               <div key={qc.id} className="min-w-0 [&_h3.chart-section-title]:uppercase">
                                 {renderTrendChart(
                                   { ...qc, chartHeight: 240 },
-                                  qcData,
+                                  qcDataRaw,
                                   qcMeta,
                                   {
                                     showRangeSlider: false,

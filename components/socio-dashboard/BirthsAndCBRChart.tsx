@@ -336,29 +336,33 @@ export function BirthsAndCBRChart({
           </p>
         </div>
       )}
-      {/* Legend + KPI нэгтгэсэн */}
+      {/* Legend + KPI нэгтгэсэн — canvas давхардахгүй (z-index), шугамыг цэгээр (хэвтээ зураас тоон дээр гэж харагдахгүй) */}
       {showLatestValue && latestEntry && (
-        <div className="mb-3">
-          <div className="flex flex-wrap items-center gap-5">
-            <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-4 rounded-sm" style={{ backgroundColor: "rgba(148, 163, 184, 0.3)", border: `1.5px solid ${barColor}` }} />
-              <span className="chart-section-label text-[var(--muted-foreground)]">{barSeriesName}</span>
-              <span className="chart-section-value tabular-nums">
+        <div className="relative z-10 mb-3 bg-[var(--background)]">
+          <div className="flex flex-col gap-2 min-[480px]:flex-row min-[480px]:flex-nowrap min-[480px]:items-center min-[480px]:gap-5 min-[480px]:overflow-x-auto">
+            <div className="flex min-w-0 flex-nowrap items-center gap-2">
+              <span className="inline-block h-3 w-4 shrink-0 rounded-sm" style={{ backgroundColor: "rgba(148, 163, 184, 0.3)", border: `1.5px solid ${barColor}` }} />
+              <span className="chart-section-label shrink-0 whitespace-nowrap break-normal text-[var(--muted-foreground)]">{barSeriesName}</span>
+              <span className="chart-section-value relative z-10 shrink-0 tabular-nums">
                 {latestBirthValue != null ? Number(latestBirthValue).toLocaleString() : "—"}
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block h-0.5 w-4 rounded" style={{ backgroundColor: lineColor }} />
-              <span className="chart-section-label text-[var(--muted-foreground)]">{lineSeriesName}</span>
-              <span className="chart-section-value tabular-nums">
+            <div className="flex min-w-0 flex-nowrap items-center gap-2 pl-6 min-[480px]:pl-3">
+              <span
+                className="inline-block size-2 shrink-0 rounded-full ring-1 ring-inset ring-black/10"
+                style={{ backgroundColor: lineColor }}
+                aria-hidden
+              />
+              <span className="chart-section-label shrink-0 whitespace-nowrap break-normal text-[var(--muted-foreground)]">{lineSeriesName}</span>
+              <span className="chart-section-value relative z-10 shrink-0 tabular-nums">
                 {latestCbrValue != null ? Number(latestCbrValue).toFixed(1) : "—"}
               </span>
-              <span className="ml-1 chart-section-label text-[var(--muted-foreground)]">({latestYear})</span>
+              <span className="chart-section-label ml-1 shrink-0 whitespace-nowrap break-normal text-[var(--muted-foreground)]">({latestYear})</span>
             </div>
           </div>
         </div>
       )}
-      <div className="w-full" style={{ height: chartHeight }}>
+      <div className="relative z-0 w-full overflow-hidden" style={{ height: chartHeight }}>
         {filteredData.length === 0 ? (
           <div className="flex h-full items-center justify-center rounded-md bg-[var(--card-bg-muted)]">
             <p className="text-sm text-[var(--muted-foreground)]">Өгөгдөл байхгүй</p>

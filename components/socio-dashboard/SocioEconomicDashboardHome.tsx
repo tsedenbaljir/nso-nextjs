@@ -677,8 +677,8 @@ function AnimatedKpiValue({
   const showPercent =
     percent && (kpiFormat === "percent" || kpiFormat === "index-to-percent");
   return (
-    <p className="mt-0.5 flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-sm font-bold text-[var(--foreground)] sm:text-base">
-      <span className="min-w-0 break-words">
+    <p className="mt-0.5 flex min-w-0 flex-nowrap items-baseline gap-x-1.5 text-sm font-bold text-[var(--foreground)] sm:text-base">
+      <span className="shrink-0 whitespace-nowrap">
         {animated.includes("%")
           ? animated
           : animated.replace(".", ",").replace(".", ",")}{valueSuffix ? ` ${valueSuffix}` : ""}
