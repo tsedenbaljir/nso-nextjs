@@ -86,39 +86,29 @@ export default function Table({ sector, subsector, lng }) {
                             }
                         });
                     }
+                    // Resolve a stable key for looking up order_number.
+                    // Some rows may not have sub tables loaded (null/empty), so we fall back to link.
+                    const getOrderKey = (item) => {
+                        if (item?.link?.includes(".px")) return item.link;
+                        return item?.sub?.[0]?.link || item?.link;
+                    };
+
                     // Sort items based on order_number
                     const sortedData = [...formattedData]
                         .sort((a, b) => {
-                            if(a.link.includes(".px")){
-                                const orderNumA = orderMap.get(a.link);
-                                const orderNumB = orderMap.get(b.link);
-    
-                                // If both have order numbers, sort by them
-                                if (orderNumA !== undefined && orderNumB !== undefined) {
-                                    return orderNumA - orderNumB;
-                                }
-                                // If only A has order, it goes first
-                                if (orderNumA !== undefined) return -1;
-                                // If only B has order, it goes first
-                                if (orderNumB !== undefined) return 1;
-                                // If neither has order, keep original order
-                                return 0;
-                            }else{
+                            const orderNumA = orderMap.get(getOrderKey(a));
+                            const orderNumB = orderMap.get(getOrderKey(b));
 
-                                const orderNumA = orderMap.get(a.sub[0].link);
-                                const orderNumB = orderMap.get(b.sub[0].link);
-    
-                                // If both have order numbers, sort by them
-                                if (orderNumA !== undefined && orderNumB !== undefined) {
-                                    return orderNumA - orderNumB;
-                                }
-                                // If only A has order, it goes first
-                                if (orderNumA !== undefined) return -1;
-                                // If only B has order, it goes first
-                                if (orderNumB !== undefined) return 1;
-                                // If neither has order, keep original order
-                                return 0;
+                            // If both have order numbers, sort by them
+                            if (orderNumA !== undefined && orderNumB !== undefined) {
+                                return orderNumA - orderNumB;
                             }
+                            // If only A has order, it goes first
+                            if (orderNumA !== undefined) return -1;
+                            // If only B has order, it goes first
+                            if (orderNumB !== undefined) return 1;
+                            // If neither has order, keep original order
+                            return 0;
                         })
                         .map((item, index) => ({
                             ...item,
