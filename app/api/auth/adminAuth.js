@@ -15,6 +15,13 @@ export async function checkAdminAuth(req) {
             }
         }
 
+        if (token.exp && Date.now() / 1000 >= token.exp) {
+            return {
+                isAuthenticated: false,
+                error: "Session expired"
+            }
+        }
+
         return {
             isAuthenticated: true,
             user: {

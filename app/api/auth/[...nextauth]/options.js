@@ -1,5 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/app/api/config/db_csweb.config.js";
+import { ADMIN_SESSION_MAX_AGE } from "@/app/api/auth/sessionConfig";
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error(
@@ -71,7 +72,10 @@ export const options = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: ADMIN_SESSION_MAX_AGE,
+  },
+  jwt: {
+    maxAge: ADMIN_SESSION_MAX_AGE,
   },
   secret: process.env.NEXTAUTH_SECRET
 };
