@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config";
+import { checkAdminAuth } from "@/app/api/auth/adminAuth";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 // GET - List users (TOP 1000)
-export async function GET() {
+export async function GET(req) {
+    const auth = await checkAdminAuth(req);
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({ success: false, error: auth.error || "Not authenticated" }, { status: 401 });
+    }
+
     try {
         const users = await db("user")
             .select(["id", "username", "password", "Roles"]) // mssql: reserved keyword table ok via knex
@@ -20,6 +26,11 @@ export async function GET() {
 
 // POST - Add user
 export async function POST(req) {
+    const auth = await checkAdminAuth(req);
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({ success: false, error: auth.error || "Not authenticated" }, { status: 401 });
+    }
+
     try {
         const body = await req.json();
         let { username, password, role } = body || {};
@@ -97,6 +108,11 @@ export async function POST(req) {
 
 // DELETE - Delete user by id
 export async function DELETE(req) {
+    const auth = await checkAdminAuth(req);
+    if (!auth.isAuthenticated) {
+        return NextResponse.json({ success: false, error: auth.error || "Not authenticated" }, { status: 401 });
+    }
+
     try {
         const { searchParams } = new URL(req.url);
         const id = searchParams.get("id");
