@@ -2,7 +2,8 @@
 import React, { useEffect } from 'react';
 import { Spin } from 'antd';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
+import { message } from 'antd';
 import Sidebar from '@/components/admin/sidebar/page';
 import Header from '@/components/admin/header/index';
 
@@ -16,6 +17,25 @@ const AdminLayout = ({ children }) => {
             router.push('/login');
         }
     }, [session, status, router]);
+
+    useEffect(() => {
+        if (status === 'loading' || !session?.expires) return;
+
+        const logoutExpired = () => {
+            // (6 цаг) 
+            message.warning('Нэвтрэх хугацаа дууссан. Дахин нэвтэрнэ үү.');
+            signOut({ redirect: false }).then(() => router.push('/login'));
+        };
+
+        const remaining = new Date(session.expires).getTime() - Date.now();
+        if (remaining <= 0) {
+            logoutExpired();
+            return;
+        }
+
+        const timer = setTimeout(logoutExpired, remaining);
+        return () => clearTimeout(timer);
+    }, [session?.expires, status, router]);
 
     // Show loading state while checking authentication
     if (status === 'loading') {
