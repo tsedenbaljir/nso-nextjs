@@ -105,6 +105,27 @@ function sortBusinessRegisterSectors(sectors: { code: string; label: string }[])
   });
 }
 
+/** Сар (2022-01), улирал гэх мэт түлхүүрүүдийг хугацааны дарааллаар эрэмбэлнэ */
+function compareStatTimeKeys(a: string, b: string): number {
+  const sa = String(a).trim();
+  const sb = String(b).trim();
+  if (sa === sb) return 0;
+  const m1 = /^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$/.exec(sa);
+  const m2 = /^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$/.exec(sb);
+  if (m1 && m2) {
+    const y1 = parseInt(m1[1]!, 10);
+    const y2 = parseInt(m2[1]!, 10);
+    const p1 = parseInt(m1[2]!, 10);
+    const p2 = parseInt(m2[2]!, 10);
+    const d1 = m1[3] ? parseInt(m1[3]!, 10) : 0;
+    const d2 = m2[3] ? parseInt(m2[3]!, 10) : 0;
+    if (y1 !== y2) return y1 - y2;
+    if (p1 !== p2) return p1 - p2;
+    return d1 - d2;
+  }
+  return sa.localeCompare(sb, undefined, { numeric: true });
+}
+
 /** ДНБ улирал (2015-1, 2025-4) — жил, улирал дарааллаар эрэмбэлэх */
 function sortGdpQuarterPeriods(periods: string[]): string[] {
   return [...periods].filter(Boolean).sort((a, b) => {
@@ -857,7 +878,11 @@ export function DashboardView({ config }: DashboardViewProps) {
         if (housingIndexMode === "index") {
           querySelections["Суурь хугацаа"] = ["1"];
         } else {
-          querySelections["Үзүүлэлт"] = ["0"];
+          // DT_NSO_0300_00V1: код "2" = жилийн өөрчлөлт (код "1" нь null өгөгдөл)
+          querySelections["Үзүүлэлт"] = ["2"];
+          const bulagSel = selections["Бүлэг"]?.filter(Boolean);
+          querySelections["Бүлэг"] =
+            bulagSel?.length ? bulagSel : ["0"];
         }
       }
       if (config.id === "unemployment" && metadata) {
@@ -1322,6 +1347,16 @@ export function DashboardView({ config }: DashboardViewProps) {
             if (config.id === "business-register" && v.code === "Үйл ажиллагаа эрхлэлтийн байдал") {
               initial[v.code] = ["1"];
             }
+            // Орон сууцны үнэ: Бүлэг default = Нийт орон сууцны үнийн өөрчлөлт (код "0")
+            if (config.id === "housing-prices" && v.code === "Бүлэг" && v.values?.length) {
+              const idxNiiit =
+                v.valueTexts?.findIndex((t) => String(t).includes("Нийт орон сууц")) ?? -1;
+              const code =
+                idxNiiit >= 0 && v.values[idxNiiit] != null
+                  ? String(v.values[idxNiiit])
+                  : String(v.values[0] ?? "0");
+              initial[v.code] = [code];
+            }
             // Бизнес регистр: Улирал default = 2022-1 (2022 Q1). API-д values=индекс код, valueTexts=харуулах утга
             if (config.id === "business-register" && v.code === "Улирал" && v.values?.length && v.valueTexts?.length) {
               const idx2022q1 = v.valueTexts.findIndex((t) => String(t) === "2022-1" || String(t) === "2022-01");
@@ -1444,8 +1479,22 @@ export function DashboardView({ config }: DashboardViewProps) {
 
   const availableHousingIndexMonths = useMemo(() => {
     if (config.id !== "housing-prices" || housingIndexMode !== "change") return [] as string[];
-    return [...new Set(rows.map((r: DataRow) => String(r["Сар"] ?? r["Сар_code"] ?? "")))].filter(Boolean).sort();
-  }, [config.id, housingIndexMode, rows]);
+    const months = [
+      ...new Set(
+        rows
+          .filter(
+            (r: DataRow) =>
+              String(r["Үзүүлэлт_code"] ?? r["Үзүүлэлт"] ?? "") === "2" &&
+              (selections["Бүлэг"]?.length
+                ? selections["Бүлэг"]!
+                : ["0"]
+              ).includes(String(r["Бүлэг_code"] ?? r["Бүлэг"] ?? ""))
+          )
+          .map((r: DataRow) => String(r["Сар"] ?? r["Сар_code"] ?? ""))
+      ),
+    ].filter(Boolean);
+    return months.sort((a, b) => compareStatTimeKeys(a, b));
+  }, [config.id, housingIndexMode, rows, selections]);
 
   useEffect(() => {
     if (housingIndexMode === "change") return;
@@ -2434,7 +2483,39 @@ export function DashboardView({ config }: DashboardViewProps) {
             </div>
           )}
 
-          {metadata && config.id !== "gdp" && config.id !== "household-survey" && config.id !== "population" && config.id !== "unemployment" && config.id !== "average-salary" && config.id !== "foreign-trade" && config.id !== "balance-of-payments" && config.id !== "money-finance" && config.id !== "test" && config.id !== "society-education" && config.id !== "business-register" && !(config.id === "state-budget" && budgetPeriodTab === "Жил") && !(config.id === "cpi" && hasLevels && levelKeys.length > 0) && (
+          {metadata &&
+            config.id === "housing-prices" &&
+            housingIndexMode === "change" &&
+            (() => {
+              const bulagVar = metadata.variables.find((v) => v.code === "Бүлэг");
+              if (!bulagVar?.values?.length) return null;
+              const defaultBulagCode =
+                bulagVar.valueTexts?.findIndex((t) =>
+                  String(t).includes("Нийт орон сууц")
+                ) ?? -1;
+              const defaultCode =
+                defaultBulagCode >= 0 && bulagVar.values[defaultBulagCode] != null
+                  ? String(bulagVar.values[defaultBulagCode])
+                  : String(bulagVar.values[0] ?? "0");
+              const selectedBulag = selections["Бүлэг"]?.[0] ?? defaultCode;
+              return (
+                <div className="socio-dash-scroll-touch flex flex-wrap items-center gap-3 justify-end overflow-x-auto border-b border-slate-200 pb-3 scrollbar-hide">
+                  <Segmented
+                    size="small"
+                    className="segmented-pill"
+                    value={selectedBulag}
+                    disabled={loading}
+                    onChange={(key) => handleSelectionChange("Бүлэг", [String(key)])}
+                    options={bulagVar.values.map((val, i) => ({
+                      value: String(val),
+                      label: bulagVar.valueTexts?.[i] ?? String(val),
+                    }))}
+                  />
+                </div>
+              );
+            })()}
+
+          {metadata && config.id !== "gdp" && config.id !== "household-survey" && config.id !== "population" && config.id !== "unemployment" && config.id !== "average-salary" && config.id !== "foreign-trade" && config.id !== "balance-of-payments" && config.id !== "money-finance" && config.id !== "test" && config.id !== "society-education" && config.id !== "business-register" && config.id !== "housing-prices" && !(config.id === "state-budget" && budgetPeriodTab === "Жил") && !(config.id === "cpi" && hasLevels && levelKeys.length > 0) && (
             <div className="socio-dash-scroll-touch flex flex-wrap items-center gap-3 justify-end overflow-x-auto border-b border-slate-200 pb-3 scrollbar-hide">
               {hasLevels && levelKeys.length > 0 && (
                 <Segmented
@@ -8768,6 +8849,16 @@ export function DashboardView({ config }: DashboardViewProps) {
             }
 
             if (config.id === "housing-prices" && chart.id === "housing-index" && metaForChart && housingIndexMode === "change") {
+              const selectedBulagCodes = selections["Бүлэг"]?.length
+                ? selections["Бүлэг"]!
+                : ["0"];
+              const housingTrendRows = trendData.filter(
+                (r) =>
+                  String(r["Үзүүлэлт_code"] ?? r["Үзүүлэлт"] ?? "") === "2" &&
+                  selectedBulagCodes.includes(
+                    String(r["Бүлэг_code"] ?? r["Бүлэг"] ?? "")
+                  )
+              );
               const defaultHousingRange: [string, string] | undefined =
                 availableHousingIndexMonths.length >= 1
                   ? (() => {
@@ -8798,15 +8889,15 @@ export function DashboardView({ config }: DashboardViewProps) {
                         title: (chart.title ?? "").toUpperCase(),
                         description: undefined,
                         chartHeight: 400,
+                        seriesDimensions: ["Бүлэг"],
                       },
-                      trendData,
+                      housingTrendRows,
                       metaForChart,
                       {
                         showRangeSlider: false,
                         rangeYears: rangePair ?? defaultHousingRange,
                         forceGradientArea: true,
                         yAxisMin: 0,
-                        yAxisMax: 25,
                         valueAxisTitle: null,
                       }
                     )}

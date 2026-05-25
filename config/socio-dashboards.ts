@@ -1189,11 +1189,13 @@ export const dashboards: DashboardConfig[] = [
     kpiFromApi: true,
     kpiApiUrl: HOUSING_PRICE_CHANGE_URL,
     kpiFormat: "percent",
-    kpiSelections: { Үзүүлэлт: ["0"], Сар: ["0"] },
+    // DT_NSO_0300_00V1: код "2" = жилийн өөрчлөлт*; Бүлэг "0" = Нийт орон сууцны үнийн өөрчлөлт
+    kpiSelections: { Үзүүлэлт: ["2"], Бүлэг: ["0"], Сар: ["0"] },
     trendApiUrl: HOUSING_PRICE_CHANGE_URL,
     trendTimeDimension: "Сар",
     trendSelections: {
-      Үзүүлэлт: ["0"],
+      Үзүүлэлт: ["2"],
+      Бүлэг: ["0"],
       Сар: range(49),
     },
     charts: [
@@ -1204,6 +1206,7 @@ export const dashboards: DashboardConfig[] = [
           // "Суурь хугацаатай харьцуулахад сарын үнийн индексийн өөрчлөлт.",
         type: "area",
         xDimension: "Сар",
+        seriesDimensions: ["Бүлэг"],
       },
       {
         id: "housing-by-district",
