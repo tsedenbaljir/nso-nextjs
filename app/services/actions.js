@@ -56,7 +56,7 @@ export async function fetchAdminUsers() {
 
     try {
         const users = await db("user")
-            .select(["id", "username", "password", "Roles"])
+            .select(["id", "username", "Roles"])
             .limit(1000);
 
         return { success: true, data: users };

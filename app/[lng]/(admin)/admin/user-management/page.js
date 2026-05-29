@@ -13,7 +13,6 @@ export default function UserManagementPage() {
     const columns = useMemo(() => [
         { title: "ID", dataIndex: "id", key: "id", width: 80 },
         { title: "Username", dataIndex: "username", key: "username" },
-        { title: "Password", dataIndex: "password", key: "password" },
         { title: "Roles", dataIndex: "Roles", key: "Roles" },
         {
             title: "Actions",
@@ -122,9 +121,6 @@ export default function UserManagementPage() {
                 <Form form={form} layout="vertical">
                     <Form.Item name="username" label="Username" rules={[{ required: true, message: "Required" }]}>
                         <Input placeholder="username" />
-                    </Form.Item>
-                    <Form.Item name="password" label="Password" rules={[{ required: true, message: "Required" }]}>
-                        <Input.Password placeholder="password" maxLength={10} />
                     </Form.Item>
                     <Form.Item name="role" label="Roles">
                         <Input placeholder="e.g. admin or csv of slugs" />
