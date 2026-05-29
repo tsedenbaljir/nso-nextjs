@@ -1,5 +1,340 @@
 'use server'
 import { Agent } from "undici";
+import { getServerSession } from "next-auth/next";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+import { db } from "@/app/api/config/db_csweb.config";
+import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
+import nodemailer from "nodemailer";
+
+async function requireAdminAuth() {
+    const session = await getServerSession(options);
+    if (!session?.user) {
+        return { isAuthenticated: false, error: "Not authenticated" };
+    }
+    return { isAuthenticated: true, user: session.user };
+}
+
+async function validateUserFieldLengths(username, password, role) {
+    try {
+        const schema = await db.raw(`
+            SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'user' AND COLUMN_NAME IN ('username','password','Roles')
+        `);
+        const rows = Array.isArray(schema)
+            ? schema
+            : (Array.isArray(schema?.[0]) ? schema[0] : (schema?.recordset || []));
+        const limits = {};
+        for (const r of rows) {
+            const col = r.COLUMN_NAME || r.column_name;
+            const max = r.CHARACTER_MAXIMUM_LENGTH ?? r.character_maximum_length;
+            if (col == null) continue;
+            limits[col] = max == null || max === -1 ? null : max;
+        }
+        if (limits.username && typeof username === "string" && username.length > limits.username) {
+            return { ok: false, error: `Username too long (max ${limits.username})` };
+        }
+        if (limits.password && typeof password === "string" && password.length > limits.password) {
+            return { ok: false, error: `Password too long (max ${limits.password})` };
+        }
+        if (limits.Roles && typeof role === "string" && role.length > limits.Roles) {
+            return { ok: false, error: `Roles too long (max ${limits.Roles})` };
+        }
+    } catch {
+        // continue; DB will enforce
+    }
+    return { ok: true };
+}
+
+export async function fetchAdminUsers() {
+    const auth = await requireAdminAuth();
+    if (!auth.isAuthenticated) {
+        return { success: false, error: auth.error || "Not authenticated" };
+    }
+
+    try {
+        const users = await db("user")
+            .select(["id", "username", "password", "Roles"])
+            .limit(1000);
+
+        return { success: true, data: users };
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return { success: false, error: "Failed to fetch users" };
+    }
+}
+
+export async function createAdminUser({ username, password, role }) {
+    const auth = await requireAdminAuth();
+    if (!auth.isAuthenticated) {
+        return { success: false, error: auth.error || "Not authenticated" };
+    }
+
+    try {
+        if (typeof username === "string") username = username.trim();
+        if (typeof password === "string") password = password.trim();
+        if (typeof role === "string") role = role.trim();
+
+        if (!username || !password) {
+            return { success: false, error: "Username and password are required" };
+        }
+
+        const existing = await db("user").where({ username }).first();
+        if (existing) {
+            return { success: false, error: "Username already exists" };
+        }
+
+        const lengthCheck = await validateUserFieldLengths(username, password, role);
+        if (!lengthCheck.ok) {
+            return { success: false, error: lengthCheck.error };
+        }
+
+        const [nextIdRow] = await db.raw("SELECT max(id) as nextId FROM [user]");
+        const nextId = (parseInt(nextIdRow?.nextId, 10) || 0) + 1;
+        const insertData = {
+            id: nextId,
+            username,
+            password,
+            Roles: role || null,
+        };
+
+        const result = await db("user").insert(insertData);
+        const newId = Array.isArray(result) ? result[0] : result;
+
+        return { success: true, id: newId };
+    } catch (error) {
+        if (error?.number === 8152) {
+            return { success: false, error: "One or more fields exceed allowed length" };
+        }
+        console.error("Error creating user:", error);
+        return { success: false, error: "Failed to create user" };
+    }
+}
+
+export async function deleteAdminUser(id) {
+    const auth = await requireAdminAuth();
+    if (!auth.isAuthenticated) {
+        return { success: false, error: auth.error || "Not authenticated" };
+    }
+
+    if (!id) {
+        return { success: false, error: "User id is required" };
+    }
+
+    try {
+        await db("user").where({ id }).del();
+        return { success: true };
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        return { success: false, error: "Failed to delete user" };
+    }
+}
+
+function buildOpenServiceEmailHtml({ firstname, lastname, token_text }) {
+    return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background-color: #f5f5f5;
+                }
+                .email-container {
+                    background-color: #ffffff;
+                    border-radius: 8px;
+                    padding: 30px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                .header {
+                    border-bottom: 2px solid #f0f0f0;
+                    padding-bottom: 20px;
+                    margin-bottom: 20px;
+                }
+                .greeting {
+                    font-size: 24px;
+                    color: #2c3e50;
+                    margin-bottom: 20px;
+                }
+                .content {
+                    margin: 20px 0;
+                }
+                .token-container {
+                    background-color: #f8f9fa;
+                    border: 1px solid #e9ecef;
+                    border-radius: 6px;
+                    padding: 15px;
+                    margin: 20px 0;
+                }
+                .token-label {
+                    color: #495057;
+                    font-weight: bold;
+                    margin-bottom: 8px;
+                }
+                .token-value {
+                    font-family: monospace;
+                    background-color: #ffffff;
+                    padding: 10px;
+                    border-radius: 4px;
+                    border: 1px solid #dee2e6;
+                    word-break: break-all;
+                }
+                .guide-link {
+                    color: #007bff;
+                    text-decoration: none;
+                }
+                .guide-link:hover {
+                    text-decoration: underline;
+                }
+                .footer {
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 2px solid #f0f0f0;
+                    text-align: center;
+                    color: #6c757d;
+                }
+                .post-text {
+                    color: #28a745;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>
+            <div className="email-container">
+                <div className="header">
+                    <div className="greeting">Сайн байна уу ${firstname} ${lastname},</div>
+                </div>
+                <div className="content"></div>
+                    <p>Статистикийн мэдээллийн нэгдсэн сангийн нээлттэй сервисийг ашиглах token тэмдэгтиийг хүргүүлж байна.</p>
+
+                    <div className="token-container">
+                        <div className="token-label">Нээлттэй сервисийг ашиглахын тулд <span className="post-text">POST</span> request-ийн Headers:</div>
+                        <div className="token-value">access-token: ${token_text}</div>
+                    </div>
+
+                    <p>Ашиглах заавар: <a href="https://1212.mn" className="guide-link">https://1212.mn</a></p>
+                </div>
+
+                <div className="footer">
+                    <p>Баярлалаа</p>
+                </div>
+            </div>
+        </body>
+        </html>`;
+}
+
+export async function createUserService(data) {
+    const {
+        user_level,
+        organisation_name,
+        firstname,
+        lastname,
+        email,
+        position,
+        mobile,
+        specification,
+    } = data || {};
+
+    try {
+        if (!email) {
+            return { status: false, message: "Email is required" };
+        }
+
+        const now = new Date();
+        const created_date = moment(now).format("YYYY-MM-DDTHH:mm:ssZ");
+        const updated_date = moment(now).format("YYYY-MM-DDTHH:mm:ssZ");
+
+        const userCheck = await db.raw(`
+            SELECT id FROM md_users WHERE email = ?
+        `, [email]);
+
+        if (userCheck[0]?.id) {
+            return {
+                status: false,
+                message: `${email} Имэйл хаягтай хэрэглэгч бүртгэлтэй байна.`,
+            };
+        }
+
+        const password = "123";
+        const token_text = uuidv4();
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const result = await db.raw(`
+            INSERT INTO md_users (
+                organisation_name,
+                user_level,
+                firstname,
+                lastname,
+                email,
+                position,
+                mobile,
+                token_text,
+                password,
+                specification,
+                created_user,
+                updated_user,
+                created_date,
+                updated_date
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+            organisation_name,
+            user_level || 0,
+            firstname,
+            lastname,
+            email,
+            position,
+            mobile,
+            token_text,
+            hashedPassword,
+            specification,
+            1,
+            1,
+            created_date,
+            updated_date,
+        ]);
+
+        const user = result[0];
+
+        try {
+            const transporter = nodemailer.createTransport({
+                host: "smtp.office365.com",
+                port: 587,
+                secure: false,
+                auth: {
+                    user: "developer1212@nso.mn",
+                    pass: "25veDloper$#",
+                },
+            });
+
+            await transporter.sendMail({
+                from: `<developer1212@nso.mn>`,
+                to: email,
+                subject: "Нээлттэй сервисийг ашиглах тухай",
+                html: buildOpenServiceEmailHtml({ firstname, lastname, token_text }),
+            });
+        } catch (error) {
+            console.error("Error in sendMail:", error);
+        }
+
+        return {
+            status: true,
+            message: "Таны мэдээлэл амжилттай нэмэгдлээ! Та и-мэйл хаягаа шалгана уу",
+            user,
+        };
+    } catch (error) {
+        console.error("Error in createUserService:", error);
+        return { status: false, message: "Failed to create user" };
+    }
+}
 
 const insecure = new Agent({ connect: { rejectUnauthorized: false } });
 

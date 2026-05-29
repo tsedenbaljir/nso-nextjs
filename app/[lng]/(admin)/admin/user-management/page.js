@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Table, Button, Modal, Form, Input, Space, Popconfirm, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { fetchAdminUsers, createAdminUser, deleteAdminUser } from "@/app/services/actions";
 
 export default function UserManagementPage() {
     const [loading, setLoading] = useState(false);
@@ -37,8 +38,7 @@ export default function UserManagementPage() {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`/api/user/admin`, { cache: "no-store" });
-            const json = await res.json();
+            const json = await fetchAdminUsers();
             if (!json?.success) throw new Error(json?.error || "Failed to load users");
             setUsers(Array.isArray(json.data) ? json.data : []);
         } catch (err) {
@@ -52,8 +52,7 @@ export default function UserManagementPage() {
     const handleDelete = async (id) => {
         try {
             setLoading(true);
-            const res = await fetch(`/api/user/admin?id=${encodeURIComponent(id)}`, { method: "DELETE" });
-            const json = await res.json();
+            const json = await deleteAdminUser(id);
             if (!json?.success) throw new Error(json?.error || "Failed to delete user");
             message.success("User deleted");
             await fetchUsers();
@@ -74,16 +73,11 @@ export default function UserManagementPage() {
         try {
             const values = await form.validateFields();
             setLoading(true);
-            const res = await fetch(`/api/user/admin`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: values.username,
-                    password: values.password,
-                    role: values.role,
-                })
+            const json = await createAdminUser({
+                username: values.username,
+                password: values.password,
+                role: values.role,
             });
-            const json = await res.json();
             if (!json?.success) throw new Error(json?.error || "Failed to create user");
             message.success("User created");
             setIsModalOpen(false);
