@@ -9,10 +9,15 @@ export const config = {
   matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
 };
 // Only skip app routes for real static assets (not .px data ids in dynamic paths)
-const STATIC_FILE = /\.(ico|png|jpe?g|gif|svg|webp|css|js|mjs|woff2?|ttf|eot|map|txt|xml|json|otf)$/i;
+const STATIC_FILE = /\.(ico|png|jpe?g|gif|svg|webp|css|js|mjs|woff2?|ttf|eot|map|txt|xml|json|otf|pdf|docx?|xlsx?|pptx?)$/i;
 
 export function proxy(req) {
   if (req.nextUrl.pathname.startsWith("/_next")) {
+    return NextResponse.next();
+  }
+
+  // Uploaded files live in public/uploads — must not get /mn prefix
+  if (req.nextUrl.pathname.startsWith("/uploads")) {
     return NextResponse.next();
   }
 
