@@ -84,6 +84,9 @@ export default function Glossary(props) {
     );
   }
 
+  const selectedFromUrl = searchParams?.get('catalogue_id');
+  const catalogueId = selectedFilter?.id || selectedFromUrl || null;
+
   return (
     <div className="nso_container">
       <GlossaryList
@@ -95,6 +98,7 @@ export default function Glossary(props) {
         rows={rows}
         onPageChange={onPageChange}
         lng={lng}
+        catalogueId={catalogueId}
       />
     </div>
   );
