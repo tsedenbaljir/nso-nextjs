@@ -71,7 +71,7 @@ export default function TableView(props) {
             }
         }
         getMetadata()
-    }, [params, subtables]);
+    }, [lng, sector, subsector, id, subtables]);
 
     return (
         <div className="nso_container">
