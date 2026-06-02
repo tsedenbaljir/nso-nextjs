@@ -6,11 +6,9 @@ import "@/components/styles/about-us.scss";
 import { useTranslation } from '@/app/i18n/client';
 
 export default function AboutUs(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const [activeItem, setActiveItem] = useState(0);
 

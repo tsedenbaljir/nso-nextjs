@@ -13,11 +13,9 @@ const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
 const { Option } = Select;
 
 export default function WebpageAdmin(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);

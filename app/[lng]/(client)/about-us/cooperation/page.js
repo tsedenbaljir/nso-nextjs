@@ -3,11 +3,9 @@ import React, { useState, use } from 'react';
 import "@/components/styles/about-us.scss";
 
 export default function AboutUs(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const [activeItem, setActiveItem] = useState(0);
 

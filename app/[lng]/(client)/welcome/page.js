@@ -15,11 +15,9 @@ import {
 } from '@ant-design/icons';
 
 export default function Home(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng, "lng", "");
 

@@ -1,11 +1,9 @@
 "use client";
 import { use } from "react";
 export default function TermsOfUse(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     return (
         <>

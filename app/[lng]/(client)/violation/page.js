@@ -7,11 +7,9 @@ import { Toast } from 'primereact/toast';
 import './styles.scss';
 
 export default function ViolationPage(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng, "lng", "");
     const toast = useRef(null);

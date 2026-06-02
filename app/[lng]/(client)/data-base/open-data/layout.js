@@ -4,11 +4,9 @@ import { subsectorDataMap } from "./subsectorDataMap";
 import SubsectorPage from "./SubsectorPage";
 
 export default function Layout(props) {
-  const params = use(props.params);
-
   const {
     lng
-  } = params;
+  } = use(props.params);
 
   const [selectedId, setSelectedId] = useState("Subsector1");
 

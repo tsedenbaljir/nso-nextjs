@@ -6,11 +6,9 @@ import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/statistic.scss';
 
 export default function Statcate(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -8,11 +8,9 @@ import { InputText } from 'primereact/inputtext';
 import { CopyOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 export default function ContactAdmin(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng);
     const [form] = Form.useForm();

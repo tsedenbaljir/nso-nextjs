@@ -19,11 +19,9 @@ import {
 const { Option } = Select;
 
 export default function ReportAdmin(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const [form] = Form.useForm();
     const [editForm] = Form.useForm();

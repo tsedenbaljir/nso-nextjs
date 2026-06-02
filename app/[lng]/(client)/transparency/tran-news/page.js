@@ -3,11 +3,9 @@ import React, { use } from 'react';
 import MainArticle from '@/components/articles/MainArticle';
 
 export default function Home(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     return (
         <div className="nso_about_us">

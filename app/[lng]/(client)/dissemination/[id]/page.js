@@ -10,12 +10,10 @@ import "@/components/styles/news.scss";
 import "@/components/styles/dissemination-view.scss";
 
 export default function Home(props) {
-    const params = use(props.params);
-
     const {
         lng,
         id
-    } = params;
+    } = use(props.params);
 
     const [article, setArticle] = useState(null);
     const [pdfUrl, setPdfUrl] = useState('');

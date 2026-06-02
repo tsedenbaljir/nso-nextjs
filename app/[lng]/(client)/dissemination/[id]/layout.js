@@ -4,13 +4,13 @@ import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 
 export default function Statistic(props) {
-    const params = use(props.params);
+    const { lng, id } = use(props.params);
 
     const {
         children
     } = props;
 
-    const isMn = params.lng;
+    const isMn = lng;
     const { t } = useTranslation(isMn, "lng", "");
 
     const [article, setArticle] = useState(null);
@@ -19,7 +19,7 @@ export default function Statistic(props) {
     useEffect(() => {
         const fetchArticle = async () => {
             try {
-                const response = await fetch(`/api/dissemination/${params.id}`, {
+                const response = await fetch(`/api/dissemination/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ export default function Statistic(props) {
         };
 
         fetchArticle();
-    }, [params.id, params.lng]);
+    }, [id, lng]);
 
     const breadMap = [
         { label: t('home'), url: [isMn === 'mn' ? '/mn' : '/en'] },

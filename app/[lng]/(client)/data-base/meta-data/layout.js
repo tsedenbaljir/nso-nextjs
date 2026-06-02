@@ -11,11 +11,9 @@ import QuestionnaireFilterOrgs from '@/components/Questionnaire/QuestionnaireFil
 import QuestionnaireFilterLetter from '@/components/Questionnaire/QuestionnaireFilterLetter';
 
 export default function QuestionnaireLayout(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const {
         children

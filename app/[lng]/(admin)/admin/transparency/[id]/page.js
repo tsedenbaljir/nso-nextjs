@@ -23,10 +23,9 @@ const CATEGORIES = [
 ];
 
 export default function EditTransparency(props) {
-    const params = use(props.params);
+    const { id } = use(props.params);
     const [body, setBody] = useState('');
-    const router = useRouter();
-    const { id } = params;
+    const router = useRouter();
     const [formData, setFormData] = useState({
         title: '',
         category: '',

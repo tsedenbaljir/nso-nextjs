@@ -4,11 +4,9 @@ import Link from 'next/link';
 import { useTranslation } from '@/app/i18n/client';
 
 export default function Transparency(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng, "lng", "");
     const isMn = lng === 'mn';

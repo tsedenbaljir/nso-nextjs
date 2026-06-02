@@ -7,11 +7,9 @@ import CarouselNews from '@/components/home/CarouselNews';
 import DisseminationHome from '@/components/home/disshome/home';
 
 export default function Home(props) {
-  const params = use(props.params);
-
   const {
     lng
-  } = params;
+  } = use(props.params);
 
   return (
     <Layout lng={lng}>

@@ -4,12 +4,10 @@ import LoadingDiv from '@/components/Loading/Text/Index';
 import DynamicSidebar from "@/components/statcate/DynamicSidebar";
 
 export default function Statcate(props) {
-    const params = use(props.params);
-
     const {
         lng,
         subsector
-    } = params;
+    } = use(props.params);
 
     const [sectorData, setSectorData] = useState([]);
     const [loading, setLoading] = useState(true);

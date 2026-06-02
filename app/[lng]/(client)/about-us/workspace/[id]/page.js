@@ -9,12 +9,10 @@ import { useTranslation } from '@/app/i18n/client';
 import './works.scss';
 
 export default function WorkspaceDetail(props) {
-    const params = use(props.params);
-
     const {
         id,
         lng
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng, "lng", "");
     const [data, setData] = useState(null);

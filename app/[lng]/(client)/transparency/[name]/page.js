@@ -5,12 +5,10 @@ import Link from 'next/link';
 import TextLoading from '@/components/Loading/Text/Index';
 
 export default function TransparencyCategory(props) {
-    const params = use(props.params);
-
     const {
         lng,
         name
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng, "lng", "");
     const [items, setItems] = useState([]);

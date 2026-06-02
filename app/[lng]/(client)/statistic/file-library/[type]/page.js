@@ -6,8 +6,7 @@ import Sidebar from "../../sidebar";
 import { useTranslation } from "@/app/i18n/client";
 
 export default function StateCate(props) {
-  const params = use(props.params);
-  const { type } = params;
+  const { type, lng } = use(props.params);
   const searchParams = useSearchParams();
   const sub = searchParams.get("sub") ?? undefined;
   const { t } = useTranslation(lng, "lng", "");

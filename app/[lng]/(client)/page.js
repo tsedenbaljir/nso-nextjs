@@ -7,11 +7,9 @@ import DisseminationHome from '@/components/home/disshome/home';
 // import ModalImages from "@/components/ModalImages";
 
 export default function Home(props) {
-  const params = use(props.params);
-
   const {
     lng
-  } = params;
+  } = use(props.params);
 
   return (
     <>

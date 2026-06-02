@@ -4,13 +4,11 @@ import Layout from '@/components/baseLayout';
 import Link from 'next/link';
 
 export default function Download(props) {
-    const params = use(props.params);
-
     const {
         id,
         file,
         lng
-    } = params;
+    } = use(props.params);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

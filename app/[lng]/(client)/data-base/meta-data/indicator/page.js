@@ -7,11 +7,9 @@ import GlossaryList from '@/components/Glossary/GlossaryList';
 
 export default function Glossary(props) {
     const searchParams = use(props.searchParams);
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng, "lng", "");
     const { metadata } = useMetadata();

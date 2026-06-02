@@ -7,11 +7,9 @@ import { useTranslation } from '@/app/i18n/client';
 import GlossaryFilter from './Glossary/GlossaryFilter';
 
 export default function Layout(props) {
-  const params = use(props.params);
-
   const {
     lng
-  } = params;
+  } = use(props.params);
 
   const {
     children

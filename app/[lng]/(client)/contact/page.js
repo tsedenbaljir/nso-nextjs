@@ -9,11 +9,9 @@ import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
 
 export default function Contact(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const [loading, setLoading] = useState(true);
     const [webpageData, setWebpageData] = useState(null);

@@ -16,11 +16,9 @@ import "primereact/resources/primereact.min.css"
 import "primeicons/primeicons.css"
 
 export default function AllNews(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const router = useRouter()
     const { t } = useTranslation(lng)

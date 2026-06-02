@@ -9,8 +9,7 @@ import Result from '@/components/Search/subMain/Result';
 import MainSearch from '@/components/Search/subMain/MainSearch';
 
 export default function Glossary(props) {
-  const params = use(props.params);
-  const { lng } = params;
+  const { lng } = use(props.params);
   const { t } = useTranslation(lng, "lng", "");
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);

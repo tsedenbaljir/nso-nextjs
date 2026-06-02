@@ -8,11 +8,7 @@ import { Collapse, Space } from 'antd';
 import { ApiOutlined } from '@ant-design/icons';
 
 export default function TableView(props) {
-    const params = use(props.params);
-    const lng = params.lng;
-    const sector = params.sector;
-    const subsector = params.subsector;
-    const id = params.id;
+    const { lng, sector, subsector, id } = use(props.params);
     const searchParams = useSearchParams();
     const subtables = searchParams.get('subtables');
 

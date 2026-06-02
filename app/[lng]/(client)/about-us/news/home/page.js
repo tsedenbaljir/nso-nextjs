@@ -5,11 +5,9 @@ import CarouselTender from '@/components/home/CarouselTender';
 import CarouselMedia from '@/components/home/CarouselMedia';
 
 export default function Home(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     return (
         <>

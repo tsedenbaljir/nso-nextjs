@@ -6,7 +6,7 @@ import DynamicSidebar from "@/components/statcate/DynamicSidebar";
 import '@/components/styles/statistic.scss';
 
 export default function Statcate(props) {
-    const params = use(props.params);
+    const { id } = use(props.params);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -16,7 +16,7 @@ export default function Statcate(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/data-visualisation?id=${params.id}`);
+                const response = await fetch(`/api/data-visualisation?id=${id}`);
                 if (!response.ok) throw new Error("Failed to fetch data");
 
                 const result = await response.json();

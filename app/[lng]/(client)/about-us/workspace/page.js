@@ -8,11 +8,9 @@ import OneField from '@/components/Loading/OneField/Index';
 import './workspace.scss';
 
 export default function Home(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const router = useRouter();
 

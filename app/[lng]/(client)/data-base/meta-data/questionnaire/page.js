@@ -7,11 +7,9 @@ import QuestionnaireList from '@/components/Questionnaire/QuestionnaireList';
 
 export default function Questionnaire(props) {
     const searchParams = use(props.searchParams);
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const { t } = useTranslation(lng, "lng", "");
     const { metadata } = useMetadata();

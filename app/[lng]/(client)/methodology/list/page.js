@@ -5,8 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import GlossaryList from "../Glossary/GlossaryList";
 
 export default function Glossary(props) {
-  const params = use(props.params);
-  const { lng } = params;
+  const { lng } = use(props.params);
   const searchParams = useSearchParams();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);

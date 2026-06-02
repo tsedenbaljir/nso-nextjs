@@ -12,11 +12,9 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 
 export default function AboutUs(props) {
-  const params = use(props.params);
-
   const {
     lng
-  } = params;
+  } = use(props.params);
 
   const { t } = useTranslation(lng, "lng", "");
   const searchParams = useSearchParams();

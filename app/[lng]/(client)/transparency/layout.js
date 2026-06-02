@@ -6,11 +6,9 @@ import { BreadCrumb } from 'primereact/breadcrumb';
 import TextLoading from '@/components/Loading/OneField/Index';
 
 export default function TransparencyLayout(props) {
-    const params = use(props.params);
-
     const {
         lng
-    } = params;
+    } = use(props.params);
 
     const {
         children

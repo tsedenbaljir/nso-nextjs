@@ -7,13 +7,11 @@ import LoadingDiv from '@/components/Loading/OneField/Index';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function Statecate(props) {
-    const params = use(props.params);
+    const { lng } = use(props.params);
 
     const {
         children
-    } = props;
-
-    const { lng } = params;
+    } = props;
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const subtables = searchParams.get('subtables');

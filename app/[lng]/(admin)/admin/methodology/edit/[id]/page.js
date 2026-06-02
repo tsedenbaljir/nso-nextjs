@@ -9,12 +9,10 @@ import { Select, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 
 export default function EditMethodology(props) {
-    const params = use(props.params);
-
     const {
         lng,
         id
-    } = params;
+    } = use(props.params);
 
     const router = useRouter()
     const [loading, setLoading] = useState(true)

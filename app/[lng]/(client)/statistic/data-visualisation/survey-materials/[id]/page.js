@@ -7,7 +7,7 @@ import { Column } from 'primereact/column';
 import styles from './styles.module.scss';
 
 export default function SurveyMaterials(props) {
-    const params = use(props.params);
+    const { id } = use(props.params);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [lazyState, setLazyState] = useState({
@@ -22,7 +22,7 @@ export default function SurveyMaterials(props) {
     const loadData = async (page = 1, pageSize = 10) => {
         try {
             setLoading(true);
-            const response = await fetch(`/api/data-visualisation/downloads?data_viz_id=${params.id}&page=${page}&pageSize=${pageSize}`);
+            const response = await fetch(`/api/data-visualisation/downloads?data_viz_id=${id}&page=${page}&pageSize=${pageSize}`);
             if (!response.ok) throw new Error("Failed to fetch data");
 
             const results = await response.json();
@@ -47,7 +47,7 @@ export default function SurveyMaterials(props) {
 
     useEffect(() => {
         loadData(lazyState.page, lazyState.rows);
-    }, [params.id]);
+    }, [id]);
 
     const transformDownloadData = (downloads) => {
         const groupedData = downloads.reduce((acc, item) => {

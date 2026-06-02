@@ -8,11 +8,9 @@ import SelectInput from "@/components/admin/Edits/Select/SelectInput"
 import Upload from "@/components/admin/Edits/UploadImages/Upload"
 
 export default function EditDissemination(props) {
-    const params = use(props.params);
-
     const {
         id
-    } = params;
+    } = use(props.params);
 
     const router = useRouter()
     const [loading, setLoading] = useState(true)

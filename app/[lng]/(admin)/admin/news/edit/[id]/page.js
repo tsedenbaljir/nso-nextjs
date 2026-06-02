@@ -12,12 +12,10 @@ const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
     loading: () => <p>Уншиж байна...</p>
 });
 export default function EditNews(props) {
-    const params = use(props.params);
-
     const {
         lng,
         id
-    } = params;
+    } = use(props.params);
 
     const router = useRouter()
     const [loading, setLoading] = useState(true)

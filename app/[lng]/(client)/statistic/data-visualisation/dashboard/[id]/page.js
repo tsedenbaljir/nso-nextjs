@@ -4,7 +4,7 @@ import LoadingDiv from "@/components/Loading/Text/Index";
 import "@/components/styles/statistic.scss";
 
 export default function Statcate(props) {
-  const params = use(props.params);
+  const { id } = use(props.params);
   const [data, setData] = useState([]);
   const [dashboard, setDashboard] = useState("");
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ export default function Statcate(props) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `/api/data-visualisation/dashboard?data_viz_id=${params.id}`
+          `/api/data-visualisation/dashboard?data_viz_id=${id}`
         );
         if (!response.ok) throw new Error("Failed to fetch data");
 
@@ -34,10 +34,10 @@ export default function Statcate(props) {
   const onSelectItem = async (dash) => {
     setLoadingDash(true);
     const params = new URLSearchParams();
-    params.append("key", "value");
+    append("key", "value");
     // Fetch Tableau Key
     const tableauResponse = await fetch(
-      `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${params.toString()}`,
+      `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${toString()}`,
       { cache: "no-store" }
     );
     if (!tableauResponse.ok) throw new Error("Failed to fetch Tableau key");
