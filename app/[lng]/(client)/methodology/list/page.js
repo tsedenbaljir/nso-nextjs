@@ -1,10 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { Spin } from "antd";
 import { useSearchParams } from 'next/navigation';
 import GlossaryList from "../Glossary/GlossaryList";
 
-export default function Glossary({ params }) {
+export default function Glossary(props) {
+  const params = use(props.params);
   const { lng } = params;
   const searchParams = useSearchParams();
   const [list, setList] = useState([]);

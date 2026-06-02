@@ -1,11 +1,20 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, use } from 'react';
 import { useParams } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import TextLoading from '@/components/Loading/OneField/Index';
 
-export default function TransparencyLayout({ children, params: { lng } }) {
+export default function TransparencyLayout(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
+    const {
+        children
+    } = props;
 
     const { id, name } = useParams();
     const { t } = useTranslation(lng, "lng", "");

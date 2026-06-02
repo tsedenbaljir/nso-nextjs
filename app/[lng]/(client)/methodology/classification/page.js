@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Spin } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
 import ClassificationList from '../ClassificationCode/ClassificationList';
@@ -8,7 +8,8 @@ import GlossaryFilter from '../Glossary/GlossaryFilter';
 import Result from '@/components/Search/subMain/Result';
 import MainSearch from '@/components/Search/subMain/MainSearch';
 
-export default function Glossary({ params }) {
+export default function Glossary(props) {
+  const params = use(props.params);
   const { lng } = params;
   const { t } = useTranslation(lng, "lng", "");
   const [list, setList] = useState([]);

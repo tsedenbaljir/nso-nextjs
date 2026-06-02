@@ -18,7 +18,17 @@ export const metadata = {
   }
 };
 
-export default function ClientLayout({ children, params: { lng } }) {
+export default async function ClientLayout(props) {
+  const params = await props.params;
+
+  const {
+    lng
+  } = params;
+
+  const {
+    children
+  } = props;
+
   return (
     <Layout lng={lng}>
       <Script async src="/egune-chat.js"></Script>

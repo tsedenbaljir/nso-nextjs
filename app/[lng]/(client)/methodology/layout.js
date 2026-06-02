@@ -1,12 +1,22 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import Sidebar from './sidebar';
 import Path from '@/components/path/Index';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryFilter from './Glossary/GlossaryFilter';
 
-export default function Layout({ children, params: { lng } }) {
+export default function Layout(props) {
+  const params = use(props.params);
+
+  const {
+    lng
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const { t } = useTranslation(lng, "lng", "");
   const [loading, setLoading] = useState(true);
   const [first, setFirst] = useState(0);

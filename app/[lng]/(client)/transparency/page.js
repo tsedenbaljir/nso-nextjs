@@ -1,9 +1,15 @@
 "use client"
-import React from 'react';
+import React, { use } from 'react';
 import Link from 'next/link';
 import { useTranslation } from '@/app/i18n/client';
 
-export default function Transparency({ params: { lng } }) {
+export default function Transparency(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
     const { t } = useTranslation(lng, "lng", "");
     const isMn = lng === 'mn';
 

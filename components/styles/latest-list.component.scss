@@ -41,7 +41,7 @@
         }
     }
 
-    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
         color: var(--accent);
         border-top: 2px solid;
         background-color: var(--surface-water);
@@ -109,11 +109,11 @@
     }
 
     //media news tab ----------
-    ::ng-deep .p-tabmenu .p-tabmenu-nav {
+    .p-tabmenu .p-tabmenu-nav {
         background: none;
     }
 
-    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
         padding: 0;
         background: none;
 

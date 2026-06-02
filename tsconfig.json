@@ -18,10 +18,10 @@
     "incremental": true,
     "module": "esnext",
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "plugins": [
       {
         "name": "next"
@@ -35,8 +35,19 @@
     "**/*.ts",
     "**/*.tsx",
     "components/Loader.js",
-    "app/[lng]/(admin)/layout.js"
-, "app/[lng]/(client)/user/page.js", "app/[lng]/(client)/user/layout.js", "components/UserCreateForm.js", "app/services/UserService.js", "app/api/user/route.js", "app/api/user/[slug]/route.js", "app/services/MailService.js", "app/api/send-mail/route.js", "app/services/model/MainIndicatorModel.js", "app/services/model/UserModel.js"  ],
+    "app/[lng]/(admin)/layout.js",
+    "app/[lng]/(client)/user/page.js",
+    "app/[lng]/(client)/user/layout.js",
+    "components/UserCreateForm.js",
+    "app/services/UserService.js",
+    "app/api/user/route.js",
+    "app/api/user/[slug]/route.js",
+    "app/services/MailService.js",
+    "app/api/send-mail/route.js",
+    "app/services/model/MainIndicatorModel.js",
+    "app/services/model/UserModel.js",
+    ".next/dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,8 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import Text from "@/components/Loading/Text/Index";
 
-export default function GlossaryDetail({ params: { id, lng } }) {
+export default function GlossaryDetail(props) {
+  const params = use(props.params);
+
+  const {
+    id,
+    lng
+  } = params;
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 

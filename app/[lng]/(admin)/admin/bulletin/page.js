@@ -1,14 +1,19 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useTranslation } from '@/app/i18n/client';
-import { Form, message, Button, Modal, Input, DatePicker } from 'antd';
+import { Form, message, Button, Modal, Input } from 'antd';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { FilterMatchMode } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { CopyOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-export default function ContactAdmin({ params: { lng } }) {
+export default function ContactAdmin(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
     const { t } = useTranslation(lng);
     const [form] = Form.useForm();
     const [editForm] = Form.useForm();

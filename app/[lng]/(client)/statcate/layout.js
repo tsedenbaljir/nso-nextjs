@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/OneField/Index';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function Statecate({ children, params }) {
+export default function Statecate(props) {
+    const params = use(props.params);
+
+    const {
+        children
+    } = props;
+
     const { lng } = params;
     const pathname = usePathname();
     const searchParams = useSearchParams();

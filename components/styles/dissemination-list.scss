@@ -2,42 +2,39 @@
   // padding-top: 161px;
 }
 
-:host {
-  ::ng-deep .__select_year {
+.__select_year {
 
-    padding-left: 10px;
-    margin-right: 10px;
+  padding-left: 10px;
+  margin-right: 10px;
 
-    background: rgba(206, 208, 209, 0.2);
-    border: 0;
-    border-radius: 20px;
-    min-width: fit-content;
-    height: 37px;
-    text-align: center;
-  }
+  background: rgba(206, 208, 209, 0.2);
+  border: 0;
+  border-radius: 20px;
+  min-width: fit-content;
+  height: 37px;
+  text-align: center;
+}
 
-  ::ng-deep .text-left {
-    text-align: left;
-  }
+.text-left {
+  text-align: left;
+}
 
-  ::ng-deep .__filter_button {
-    border: 1px solid var(--devide);
-    box-sizing: border-box;
-    border-radius: 20px;
-    min-width: fit-content;
-  }
+.__filter_button {
+  border: 1px solid var(--devide);
+  box-sizing: border-box;
+  border-radius: 20px;
+  min-width: fit-content;
+}
 
-  ::ng-deep .__select_filter {
-    border: 0;
-    padding-left: 5px;
-    padding-right: 0px;
-    background: rgba(206, 208, 209, 0.2);
-    border-radius: 20px;
-    min-width: fit-content;
-    height: 37px;
-    text-align: center;
-  }
-
+.__select_filter {
+  border: 0;
+  padding-left: 5px;
+  padding-right: 0px;
+  background: rgba(206, 208, 209, 0.2);
+  border-radius: 20px;
+  min-width: fit-content;
+  height: 37px;
+  text-align: center;
 }
 
 .__header {

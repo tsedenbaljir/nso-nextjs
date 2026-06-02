@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import styles from './styles.module.scss';
 
-export default function SurveyMaterials({ params }) {
+export default function SurveyMaterials(props) {
+    const params = use(props.params);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [lazyState, setLazyState] = useState({

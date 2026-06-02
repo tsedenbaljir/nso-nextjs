@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { Tabs, notification } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
@@ -8,7 +8,13 @@ import ContactForm from '@/components/contactForm';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
 
-export default function Contact({ params: { lng } }) {
+export default function Contact(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
     const [loading, setLoading] = useState(true);
     const [webpageData, setWebpageData] = useState(null);
     const [contactUsData, setContactUsData] = useState({});

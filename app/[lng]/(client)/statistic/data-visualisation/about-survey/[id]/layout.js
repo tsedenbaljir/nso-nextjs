@@ -1,10 +1,17 @@
-"use client";
+"use client";;
+import { use } from "react";
 
 import Sidebar from '../../sidebar';
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 
-export default function Statecate({ children, params }) {
+export default function Statecate(props) {
+    const params = use(props.params);
+
+    const {
+        children
+    } = props;
+
     const { lng } = params;
     const { t } = useTranslation(lng, "lng", "");
 

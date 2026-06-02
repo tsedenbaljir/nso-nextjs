@@ -75,7 +75,6 @@ export async function POST(request) {
                 body: JSON.stringify(postBody),
             }
         );
-
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }

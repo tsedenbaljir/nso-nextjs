@@ -1,10 +1,17 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, use } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import Link from 'next/link';
 import TextLoading from '@/components/Loading/Text/Index';
 
-export default function TransparencyCategory({ params: { lng, name } }) {
+export default function TransparencyCategory(props) {
+    const params = use(props.params);
+
+    const {
+        lng,
+        name
+    } = params;
+
     const { t } = useTranslation(lng, "lng", "");
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);

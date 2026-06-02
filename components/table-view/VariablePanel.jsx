@@ -1,16 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { notification } from 'antd';
 import ResultTable from './charts/Table';
 import ExportButton from './ExportButton';
 import VariableSelector from './VariableSelector';
 import { LoadingOutlined } from '@ant-design/icons';
-import LineChart from './charts/LineChart';
-import ColumnChart from './charts/ColumnChart';
-import BarChart from './charts/BarChart';
-import AreaChart from './charts/AreaChart';
-import PieChart from './charts/PieChart';
+
+const LineChart = dynamic(() => import('./charts/LineChart'), { ssr: false });
+const ColumnChart = dynamic(() => import('./charts/ColumnChart'), { ssr: false });
+const BarChart = dynamic(() => import('./charts/BarChart'), { ssr: false });
+const AreaChart = dynamic(() => import('./charts/AreaChart'), { ssr: false });
+const PieChart = dynamic(() => import('./charts/PieChart'), { ssr: false });
 
 export default function VariablesPanel({ metadataUrl, variables, title, url, lng, setSelectedValues, selectedValues }) {
   const [selectedValuesCount, setSelectedValuesCount] = useState(0);
@@ -124,71 +126,71 @@ export default function VariablesPanel({ metadataUrl, variables, title, url, lng
               <span>{lng === 'mn' ? 'Харагдах төрөл' : 'View type'}</span>
             </h2>
             <div className='!min-h-64 min-w-[24%] max-w-[270px] overflow-y-auto h-full px-2 py-1 mb-2 bg-white'>
-              <div className='flex flex-row flex-wrap gap-2 mt-1'
-                onClick={() => setShowOptions(1)}>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'>
                 <input
                   type='radio'
+                  name='showOptions'
                   className='mr-2'
                   value={1}
                   checked={showOptions === 1}
-                  onClick={() => setShowOptions(1)}
+                  onChange={() => setShowOptions(1)}
                 />
-                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
+                <label className='cursor-pointer font-normal text-sm' onClick={() => setShowOptions(1)}>{lng === 'mn' ? 'Хүснэгт' : 'Table'}</label>
               </div>
-              <div className='flex flex-row flex-wrap gap-2 mt-1'
-                onClick={() => setShowOptions(2)}>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'>
                 <input
                   type='radio'
+                  name='showOptions'
                   className='mr-2'
                   value={2}
                   checked={showOptions === 2}
-                  onClick={() => setShowOptions(2)}
+                  onChange={() => setShowOptions(2)}
                 />
-                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Шугаман график' : 'Line charts'}</label>
+                <label className='cursor-pointer font-normal text-sm' onClick={() => setShowOptions(2)}>{lng === 'mn' ? 'Шугаман график' : 'Line charts'}</label>
               </div>
-              <div className='flex flex-row flex-wrap gap-2 mt-1'
-                onClick={() => setShowOptions(3)}>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'>
                 <input
                   type='radio'
+                  name='showOptions'
                   className='mr-2'
                   value={3}
                   checked={showOptions === 3}
-                  onClick={() => setShowOptions(3)}
+                  onChange={() => setShowOptions(3)}
                 />
-                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Баганан график' : 'Column charts'}</label>
+                <label className='cursor-pointer font-normal text-sm' onClick={() => setShowOptions(3)}>{lng === 'mn' ? 'Баганан график' : 'Column charts'}</label>
               </div>
-              <div className='flex flex-row flex-wrap gap-2 mt-1'
-                onClick={() => setShowOptions(4)}>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'>
                 <input
                   type='radio'
+                  name='showOptions'
                   className='mr-2'
                   value={4}
                   checked={showOptions === 4}
-                  onClick={() => setShowOptions(4)}
+                  onChange={() => setShowOptions(4)}
                 />
-                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Туузан график' : 'Bar charts'}</label>
+                <label className='cursor-pointer font-normal text-sm' onClick={() => setShowOptions(4)}>{lng === 'mn' ? 'Туузан график' : 'Bar charts'}</label>
               </div>
-              <div className='flex flex-row flex-wrap gap-2 mt-1'
-                onClick={() => setShowOptions(5)}>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'>
                 <input
                   type='radio'
+                  name='showOptions'
                   className='mr-2'
                   value={5}
                   checked={showOptions === 5}
-                  onClick={() => setShowOptions(5)}
+                  onChange={() => setShowOptions(5)}
                 />
-                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Талбайн график' : 'Area charts'}</label>
+                <label className='cursor-pointer font-normal text-sm' onClick={() => setShowOptions(5)}>{lng === 'mn' ? 'Талбайн график' : 'Area charts'}</label>
               </div>
-              <div className='flex flex-row flex-wrap gap-2 mt-1'
-                onClick={() => setShowOptions(6)}>
+              <div className='flex flex-row flex-wrap gap-2 mt-1'>
                 <input
                   type='radio'
+                  name='showOptions'
                   className='mr-2'
                   value={6}
                   checked={showOptions === 6}
-                  onClick={() => setShowOptions(6)}
+                  onChange={() => setShowOptions(6)}
                 />
-                <label className='cursor-pointer font-normal text-sm'>{lng === 'mn' ? 'Дугуй график' : 'Pie charts'}</label>
+                <label className='cursor-pointer font-normal text-sm' onClick={() => setShowOptions(6)}>{lng === 'mn' ? 'Дугуй график' : 'Pie charts'}</label>
               </div>
             </div>
             <button

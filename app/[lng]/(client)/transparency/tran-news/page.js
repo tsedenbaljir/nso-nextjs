@@ -1,8 +1,13 @@
 "use client"
-import React from 'react';
+import React, { use } from 'react';
 import MainArticle from '@/components/articles/MainArticle';
 
-export default function Home({ params: { lng } }) {
+export default function Home(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
 
     return (
         <div className="nso_about_us">

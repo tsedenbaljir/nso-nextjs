@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 
 // ==================== GET ====================
-export async function GET(req, { params }) {
+export async function GET(req, props) {
+  const params = await props.params;
   const { id } = params;
   try {
     const query = `
@@ -60,7 +61,8 @@ export async function GET(req, { params }) {
 }
 
 // ==================== PUT ====================
-export async function PUT(req, { params }) {
+export async function PUT(req, props) {
+  const params = await props.params;
   const { id } = params;
   try {
     const body = await req.json();

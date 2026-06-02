@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, props) {
+    const params = await props.params;
     // Check authentication
     const auth = await checkAdminAuth(req);
     if (!auth.isAuthenticated) {
@@ -38,7 +39,8 @@ export async function DELETE(req, { params }) {
     }
 }
 
-export async function PUT(req, { params }) {
+export async function PUT(req, props) {
+    const params = await props.params;
     // Check authentication
     const auth = await checkAdminAuth(req);
     if (!auth.isAuthenticated) {
@@ -101,7 +103,8 @@ export async function PUT(req, { params }) {
     }
 }
 
-export async function GET(req, { params }) {
+export async function GET(req, props) {
+    const params = await props.params;
     // Check authentication
     // const auth = await checkAdminAuth(req);
     // if (!auth.isAuthenticated) {

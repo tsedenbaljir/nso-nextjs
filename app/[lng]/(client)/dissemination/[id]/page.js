@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import ReactMarkdown from 'react-markdown';
@@ -9,7 +9,13 @@ import PdfViewer from '@/components/PdfViewer/index';
 import "@/components/styles/news.scss";
 import "@/components/styles/dissemination-view.scss";
 
-export default function Home({ params: { lng, id } }) {
+export default function Home(props) {
+    const params = use(props.params);
+
+    const {
+        lng,
+        id
+    } = params;
 
     const [article, setArticle] = useState(null);
     const [pdfUrl, setPdfUrl] = useState('');

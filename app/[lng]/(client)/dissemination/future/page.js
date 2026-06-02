@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, use } from 'react';
 import Tr from '@/components/dissemination/Tr';
 import { useTranslation } from '@/app/i18n/client';
 import Main from '@/components/dissemination/Main';
@@ -11,7 +11,13 @@ import Pagination from '@/components/dissemination/Pagination';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 
-export default function AboutUs({ params: { lng } }) {
+export default function AboutUs(props) {
+  const params = use(props.params);
+
+  const {
+    lng
+  } = params;
+
   const { t } = useTranslation(lng, "lng", "");
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get('page') || 1, 10);

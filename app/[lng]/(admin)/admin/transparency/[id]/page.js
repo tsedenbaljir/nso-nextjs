@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import styles from '../styles.module.scss';
 import { useRouter } from 'next/navigation';
 import { FileUpload } from 'primereact/fileupload';
@@ -22,7 +22,8 @@ const CATEGORIES = [
     'Үндэсний статистикийн хорооны жендэрийн салбар зөвлөл'
 ];
 
-export default function EditTransparency({ params }) {
+export default function EditTransparency(props) {
+    const params = use(props.params);
     const [body, setBody] = useState('');
     const router = useRouter();
     const { id } = params;

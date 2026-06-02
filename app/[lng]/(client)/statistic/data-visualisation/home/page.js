@@ -1,11 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
 // import DynamicSidebar from "@/components/statcate/DynamicSidebar";
 import '@/components/styles/statistic.scss';
 
-export default function Statcate({ params: { lng } }) {
+export default function Statcate(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

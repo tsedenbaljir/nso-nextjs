@@ -1,11 +1,17 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, use } from 'react';
 import TimeLine from '@/components/about-us/time-line';
 import Orgs from '@/components/about-us/orgs';
 import "@/components/styles/about-us.scss";
 import { useTranslation } from '@/app/i18n/client';
 
-export default function AboutUs({ params: { lng } }) {
+export default function AboutUs(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
     const [activeItem, setActiveItem] = useState(0);
 
     const { t } = useTranslation(lng, "lng", "");

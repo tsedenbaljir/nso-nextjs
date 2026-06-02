@@ -152,7 +152,8 @@ export async function PUT(req) {
     }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, props) {
+    const params = await props.params;
     try {
         const id = params.id;
 

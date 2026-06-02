@@ -1,10 +1,16 @@
 "use client"
-import React from 'react';
+import React, { use } from 'react';
 import CarouselNews from '@/components/home/CarouselNews';
 import CarouselTender from '@/components/home/CarouselTender';
 import CarouselMedia from '@/components/home/CarouselMedia';
 
-export default function Home({ params: { lng } }) {
+export default function Home(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
     return (
         <>
             <CarouselNews lng={lng} />

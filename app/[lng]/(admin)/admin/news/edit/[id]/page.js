@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import LoaderText from '@/components/Loading/Text/Index';
@@ -11,7 +11,14 @@ const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
     ssr: false,
     loading: () => <p>Уншиж байна...</p>
 });
-export default function EditNews({ params: { lng, id } }) {
+export default function EditNews(props) {
+    const params = use(props.params);
+
+    const {
+        lng,
+        id
+    } = params;
+
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [title, setTitle] = useState('')

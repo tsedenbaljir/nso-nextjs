@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, use } from 'react';
 import { Toast } from 'primereact/toast';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -7,7 +7,13 @@ import { useRouter } from 'next/navigation';
 import { DataTable } from 'primereact/datatable';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
-export default function AdminWorkspace({ params: { lng } }) {
+export default function AdminWorkspace(props0) {
+    const params = use(props0.params);
+
+    const {
+        lng
+    } = params;
+
     const router = useRouter();
     const toast = useRef(null);
     const [workspaces, setWorkspaces] = useState([]);

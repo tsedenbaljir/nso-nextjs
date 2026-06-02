@@ -1,12 +1,13 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import Text from '@/components/Loading/Text/Index';
 import MainBody from '@/components/laws/MainBody';
 import { useRouter, usePathname } from 'next/navigation'
 import '@/components/styles/laws.scss';
 
-export default function Home({ params: { lng }, params }) {
+export default function Home(props) {
+    const params = use(props.params);
     const { t } = useTranslation(lng, "lng", "");
     const router = useRouter();
     const path = usePathname();

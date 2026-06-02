@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation'
 import LoaderText from '@/components/Loading/Text/Index'
 import Editor from '@/components/admin/Editor/editor'
@@ -7,7 +7,13 @@ import InputItems from "@/components/admin/Edits/AddNew/InputItems"
 import SelectInput from "@/components/admin/Edits/Select/SelectInput"
 import Upload from "@/components/admin/Edits/UploadImages/Upload"
 
-export default function EditDissemination({ params: { id } }) {
+export default function EditDissemination(props) {
+    const params = use(props.params);
+
+    const {
+        id
+    } = params;
+
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [title, setTitle] = useState('')

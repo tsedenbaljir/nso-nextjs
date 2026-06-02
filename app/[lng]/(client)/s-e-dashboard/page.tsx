@@ -1,9 +1,10 @@
 import SocioEconomicDashboardHome from "@/components/socio-dashboard/SocioEconomicDashboardHome";
 
-export default function SocioEconomicDashboardPage({
-  params,
-}: {
-  params: { lng: string };
-}) {
+export default async function SocioEconomicDashboardPage(
+  props: {
+    params: Promise<{ lng: string }>;
+  }
+) {
+  const params = await props.params;
   return <SocioEconomicDashboardHome lng={params.lng} />;
 }

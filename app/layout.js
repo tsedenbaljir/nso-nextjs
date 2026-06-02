@@ -80,7 +80,6 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-9DGLNDV1MB');
           `}
         </Script>
-        <Script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=loadCaptcha" async defer></Script>
       </head>
       <body className={inter.className}>
         <Providers>

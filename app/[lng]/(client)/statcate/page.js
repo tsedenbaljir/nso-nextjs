@@ -1,9 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import LoadingDiv from '@/components/Loading/Text/Index';
 import DynamicSidebar from "@/components/statcate/DynamicSidebar";
 
-export default function Statcate({ params: { lng, subsector } }) {
+export default function Statcate(props) {
+    const params = use(props.params);
+
+    const {
+        lng,
+        subsector
+    } = params;
+
     const [sectorData, setSectorData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

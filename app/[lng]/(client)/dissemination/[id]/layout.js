@@ -1,9 +1,15 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 
-export default function Statistic({ children, params }) {
+export default function Statistic(props) {
+    const params = use(props.params);
+
+    const {
+        children
+    } = props;
+
     const isMn = params.lng;
     const { t } = useTranslation(isMn, "lng", "");
 

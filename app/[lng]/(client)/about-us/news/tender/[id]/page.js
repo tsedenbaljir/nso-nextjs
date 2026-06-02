@@ -1,12 +1,13 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import "@/components/styles/news.scss";
 import { useRouter } from "next/navigation";
 import Articles from '@/components/articles/Articles';
 import TextLoading from '@/components/Loading/Text/Index';
 import ArticleSideBar from '@/components/articles/ArticleSideBar';
 
-export default function Home({ params: { lng }, params }) {
+export default function Home(props) {
+    const params = use(props.params);
     const router = useRouter();
     const [article, setAritcles] = useState([]);
     const [sidebar, setSidebar] = useState([]);

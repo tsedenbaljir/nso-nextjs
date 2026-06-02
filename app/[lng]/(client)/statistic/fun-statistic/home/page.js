@@ -1,8 +1,10 @@
-"use client";
+"use client";;
+import { use } from "react";
 
 import { useRouter } from "next/navigation";
 
-export default function Statistic({ params }) {
+export default function Statistic(props) {
+  const params = use(props.params);
   const { lng } = params;
   const router = useRouter();
 

@@ -8,13 +8,16 @@ export const config = {
   // matcher: '/:lng*'
   matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
 };
-const PUBLIC_FILE = /\.(.*)$/;
-export function middleware(req) {
-  if (
-    req.nextUrl.pathname.startsWith("/_next") ||
-    PUBLIC_FILE.test(req.nextUrl.pathname)
-  ) {
-    return;
+// Only skip app routes for real static assets (not .px data ids in dynamic paths)
+const STATIC_FILE = /\.(ico|png|jpe?g|gif|svg|webp|css|js|mjs|woff2?|ttf|eot|map|txt|xml|json|otf)$/i;
+
+export function proxy(req) {
+  if (req.nextUrl.pathname.startsWith("/_next")) {
+    return NextResponse.next();
+  }
+
+  if (STATIC_FILE.test(req.nextUrl.pathname)) {
+    return NextResponse.next();
   }
   if (
     req.nextUrl.pathname.indexOf("icon") > -1 ||

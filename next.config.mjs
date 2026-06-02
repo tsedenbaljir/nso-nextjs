@@ -1,43 +1,58 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    serverExternalPackages: ["knex", "mssql", "tedious", "oracledb", "canvas"],
     experimental: {
-        serverComponentsExternalPackages: ['oracledb'],
         serverActions: {
-            bodySizeLimit: '100mb',
+            bodySizeLimit: "100mb",
         },
     },
+    turbopack: {},
+    sassOptions: {
+        silenceDeprecations: ["import", "mixed-decls"],
+    },
     webpack: (config, { isServer }) => {
+        config.resolve.alias = {
+            ...config.resolve.alias,
+            "better-sqlite3": false,
+            sqlite3: false,
+            "pg-native": false,
+            ...(isServer ? {} : { canvas: false, knex: false }),
+        };
+
         if (isServer) {
-            config.externals.push('oracledb');
-            config.externals.push('canvas');
+            config.externals.push("oracledb", "canvas", "knex", "mssql", "tedious");
         }
+
         return config;
     },
     images: {
         minimumCacheTTL: 60,
-        domains: [
-            "images.unsplash.com",
-            "os.alipayobjects.com",
-            "api.ipify.org",
-            "downloads.1212.mn",
-            "www.nso.mn",
-        ],
         remotePatterns: [
             {
-                protocol: 'https',
-                hostname: 'downloads.1212.mn',
-                pathname: '/**', // Allow all paths under this domain
+                protocol: "https",
+                hostname: "images.unsplash.com",
+                pathname: "/**",
             },
             {
-                protocol: 'https',
-                hostname: 'www.nso.mn', // Add this
-                pathname: '/images/**', // Restrict to images directory if needed
+                protocol: "https",
+                hostname: "os.alipayobjects.com",
+                pathname: "/**",
             },
             {
-                protocol: 'https',
-                hostname: 'www.nso.mn', // Add this
-                pathname: '/uploads/**', // Restrict to images directory if needed
+                protocol: "https",
+                hostname: "api.ipify.org",
+                pathname: "/**",
+            },
+            {
+                protocol: "https",
+                hostname: "downloads.1212.mn",
+                pathname: "/**",
+            },
+            {
+                protocol: "https",
+                hostname: "www.nso.mn",
+                pathname: "/**",
             },
         ],
     },
@@ -58,7 +73,6 @@ const nextConfig = {
         INFO_EMAIL_1212: process.env.INFO_EMAIL_1212,
         INFO_PASSWORD_1212: process.env.INFO_PASSWORD_1212,
     },
-    generateRobotsTxt: true,
     crossOrigin: "anonymous",
     async redirects() {
         return [

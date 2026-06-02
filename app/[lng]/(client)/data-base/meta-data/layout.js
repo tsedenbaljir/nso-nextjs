@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Spin } from 'antd';
 import Sidebar from './sidebar';
 import Path from '@/components/path/Index';
@@ -10,7 +10,17 @@ import QuestionnaireFilterObs from '@/components/Questionnaire/QuestionnaireFilt
 import QuestionnaireFilterOrgs from '@/components/Questionnaire/QuestionnaireFilterOrgs';
 import QuestionnaireFilterLetter from '@/components/Questionnaire/QuestionnaireFilterLetter';
 
-export default function QuestionnaireLayout({ children, params: { lng } }) {
+export default function QuestionnaireLayout(props) {
+    const params = use(props.params);
+
+    const {
+        lng
+    } = params;
+
+    const {
+        children
+    } = props;
+
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { metadata, setMetadata } = useMetadata();
@@ -54,7 +64,7 @@ export default function QuestionnaireLayout({ children, params: { lng } }) {
         };
         fetchFilters();
     }, [lng]);
-    
+
     useEffect(() => {
         const fetchObs = async () => {
             try {

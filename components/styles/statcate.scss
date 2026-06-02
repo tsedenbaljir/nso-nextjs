@@ -1,60 +1,58 @@
-:host {
-  ::ng-deep .p-autocomplete .p-autocomplete-panel {
-    top: 38px !important;
+.p-autocomplete .p-autocomplete-panel {
+  top: 38px !important;
 
-    ul {
-      li {
+  ul {
+    li {
+      a {
+        text-decoration: none;
+        color: var(--text-main);
+      }
+
+      &:hover {
         a {
-          text-decoration: none;
-          color: var(--text-main);
-        }
-
-        &:hover {
-          a {
-            color: var(--accent) !important;
-          }
+          color: var(--accent) !important;
         }
       }
     }
   }
+}
 
-  ::ng-deep .p-inputtext:enabled {
+.p-inputtext:enabled {
+  border-color: var(--surface-c);
+
+  &:hover {
     border-color: var(--surface-c);
-
-    &:hover {
-      border-color: var(--surface-c);
-    }
   }
+}
 
-  ::ng-deep .p-menuitem {
-    .p-disabled {
-      color: var(--surface-c) !important;
-      opacity: 1 !important;
-
-      &::before {
-        width: 5px;
-        height: 5px;
-        content: "";
-        display: block;
-        position: absolute;
-        right: -2.5px;
-        border-radius: 50%;
-        background: var(--surface-c);
-      }
-    }
-  }
-
-  ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
-    padding: 14px 32px;
-  }
-
-  ::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon {
+.p-menuitem {
+  .p-disabled {
     color: var(--surface-c) !important;
-  }
+    opacity: 1 !important;
 
-  ::ng-deep .p-datatable .p-datatable-tbody>tr>td {
-    border-bottom: 1px dashed rgba(90, 90, 90, 0.1);
+    &::before {
+      width: 5px;
+      height: 5px;
+      content: "";
+      display: block;
+      position: absolute;
+      right: -2.5px;
+      border-radius: 50%;
+      background: var(--surface-c);
+    }
   }
+}
+
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+  padding: 14px 32px;
+}
+
+.p-datatable .p-sortable-column .p-sortable-column-icon {
+  color: var(--surface-c) !important;
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+  border-bottom: 1px dashed rgba(90, 90, 90, 0.1);
 }
 
 .__cate_search {

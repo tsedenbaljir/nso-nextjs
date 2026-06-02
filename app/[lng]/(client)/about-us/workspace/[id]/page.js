@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import Text from '@/components/Loading/Text/Index';
@@ -8,7 +8,14 @@ import Layout from '@/components/baseLayout';
 import { useTranslation } from '@/app/i18n/client';
 import './works.scss';
 
-export default function WorkspaceDetail({ params: { id, lng } }) {
+export default function WorkspaceDetail(props) {
+    const params = use(props.params);
+
+    const {
+        id,
+        lng
+    } = params;
+
     const { t } = useTranslation(lng, "lng", "");
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
