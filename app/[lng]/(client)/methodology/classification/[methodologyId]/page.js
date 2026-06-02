@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Spin } from "antd";
 import { useParams } from "next/navigation";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 export default function Methodology() {
   const { methodologyId } = useParams();
@@ -10,8 +12,49 @@ export default function Methodology() {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("general");
+
   const handleExcelDownload = () => {
-    // console.log("Excel татах товч дарлаа");
+    if (!methodology) return;
+
+    const wb = XLSX.utils.book_new();
+    const title = methodology.sub_Title?.[0]?.namemn || "classification";
+
+    // Sheet 1: Ерөнхий мэдээлэл
+    const generalRows = methodology.meta_data_values.map((item, i) => ({
+      "№": i + 1,
+      "Нэр": item.namemn,
+      "Монгол": item.valuemn,
+      "Англи": item.valueen,
+    }));
+    const ws1 = XLSX.utils.json_to_sheet(generalRows);
+    ws1["!cols"] = [{ wch: 5 }, { wch: 30 }, { wch: 40 }, { wch: 40 }];
+    XLSX.utils.book_append_sheet(wb, ws1, "Ерөнхий мэдээлэл");
+
+    // Sheet 2: Үзүүлэлтийн мэдээлэл
+    const indicatorRows = methodology.sub_Title.map((item, i) => ({
+      "№": i + 1,
+      "Нэр": item.namemn,
+      "Код": item.code,
+      "Тодорхойлолт": item.descriptionmn?.trim(),
+      "Англи нэр": item.nameen,
+    }));
+    const ws2 = XLSX.utils.json_to_sheet(indicatorRows);
+    ws2["!cols"] = [{ wch: 5 }, { wch: 30 }, { wch: 15 }, { wch: 45 }, { wch: 30 }];
+    XLSX.utils.book_append_sheet(wb, ws2, "Үзүүлэлтийн мэдээлэл");
+
+    // Sheet 3: Ангилал, кодын мэдээлэл
+    const classRows = methodology.sub_classifications.map((item, i) => ({
+      "№": i + 1,
+      "Нэр": item.namemn,
+      "Код": item.code,
+      "Англи нэр": item.nameen,
+    }));
+    const ws3 = XLSX.utils.json_to_sheet(classRows);
+    ws3["!cols"] = [{ wch: 5 }, { wch: 35 }, { wch: 15 }, { wch: 35 }];
+    XLSX.utils.book_append_sheet(wb, ws3, "Ангилал");
+
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    saveAs(new Blob([wbout], { type: "application/octet-stream" }), `${title}.xlsx`);
   };
 
   useEffect(() => {
