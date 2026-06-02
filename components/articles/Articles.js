@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { normalizeArticleHtml, isHtmlContent } from '@/utils/normalizeArticleHtml';
 
 export default function Articles({ article }) {
     const [imageError, setImageError] = useState(false);
@@ -29,6 +30,9 @@ export default function Articles({ article }) {
             return 'Date not available';
         }
     };
+
+    const body = article.body || '';
+    const bodyHtml = normalizeArticleHtml(body);
 
     return (
         <article className="__about_post">
@@ -59,13 +63,20 @@ export default function Articles({ article }) {
 
                 <div className="__info">
                     <div className="__social">
-                        <div className="one">
-                            <ReactMarkdown
-                                remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeRaw]}
-                            >
-                                {article.body || 'No content available'}
-                            </ReactMarkdown>
+                        <div className="one article-body">
+                            {isHtmlContent(body) ? (
+                                <div
+                                    className="article-body-html"
+                                    dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                                />
+                            ) : (
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkGfm]}
+                                    rehypePlugins={[rehypeRaw]}
+                                >
+                                    {body || 'No content available'}
+                                </ReactMarkdown>
+                            )}
                         </div>
                     </div>
                 </div>
