@@ -26,9 +26,9 @@ export default function Statecate(props) {
 
     return (
         <div className="nso_page_wrap">
-            <Path params={params} name={t('statistic')} breadMap={breadMap} />
+            <Path name={t('statistic')} breadMap={breadMap} />
             <div className='nso_container statisctic_body mt-5'>
-                <Sidebar params={params} lng={lng} />
+                <Sidebar lng={lng} />
                 {children}
             </div>
         </div>

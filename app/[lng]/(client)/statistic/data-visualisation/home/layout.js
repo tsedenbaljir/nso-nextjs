@@ -21,7 +21,7 @@ export default function Statecate(props) {
     return (
         <>
             <div className="nso_page_wrap">
-                <Path params={params} name={t('statistic')} breadMap={breadMap} />
+                <Path name={t('statistic')} breadMap={breadMap} />
                 {children}
             </div>
         </>

@@ -9,7 +9,7 @@ export default function Statecate(props) {
 
   const {
     children
-  } = props;
+  } = props;
   const { t } = useTranslation(lng, "lng", "");
 
   const breadMap = [
@@ -19,7 +19,7 @@ export default function Statecate(props) {
 
   return (
     <div className='nso_page_wrap'>
-      <Path params={params} name={'Хэрэглэгч үүсгэх'} breadMap={breadMap} />
+      <Path name={'Хэрэглэгч үүсгэх'} breadMap={breadMap} />
       <Suspense>
         {children}
       </Suspense>
