@@ -109,6 +109,9 @@ export default function Questionnaire(props) {
             first={first}
             rows={rows}
             onPageChange={onPageChange}
+            lng={lng}
+            metadata={metadata}
+            searchQuery={searchParams?.search}
         />
     );
 }

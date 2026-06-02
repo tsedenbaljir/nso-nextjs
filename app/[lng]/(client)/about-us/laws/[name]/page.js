@@ -7,7 +7,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import '@/components/styles/laws.scss';
 
 export default function Home(props) {
-    const params = use(props.params);
+    const { lng, name } = use(props.params);
     const { t } = useTranslation(lng, "lng", "");
     const router = useRouter();
     const path = usePathname();
@@ -25,7 +25,7 @@ export default function Home(props) {
 
     const fetchArticles = async () => {
         try {
-            const response = await fetch(`/api/laws?type=${params.name === "main" ? "legal" : params.name}`, {
+            const response = await fetch(`/api/laws?type=${name === "main" ? "legal" : name}`, {
                 ...requestOptions,
                 cache: 'no-store',
             });
@@ -44,11 +44,12 @@ export default function Home(props) {
     };
 
     useEffect(() => {
+        setLoading(false);
         fetchArticles();
-    }, []);
+    }, [name]);
 
-    function direct(parameter) {
-        router.push(parameter);
+    function direct(segment) {
+        router.push(`/${lng}/about-us/laws/${segment}`);
     }
 
     return (
@@ -91,7 +92,7 @@ export default function Home(props) {
                             <div className="__info_detail_page">
                                 {
                                     loading ? Articles.length > 0 ? Articles.map((dt) => {
-                                        return <MainBody dt={dt} />
+                                        return <MainBody key={dt.id} dt={dt} />
                                     }) : <>
                                         Хоосон байна.
                                     </> : <div className='w-full'>

@@ -20,7 +20,7 @@ export default function Body({ dt }) {
                     {dt.name}
                 </div>
                 <div className="__view_comments">
-                    <span className="__date text-gray-5 text-sm ml-2">{dt.created_date.substr(0, 10)}</span>
+                    <span className="__date text-gray-5 text-sm ml-2">{dt.created_date?.substr(0, 10) || ''}</span>
                 </div>
             </div>
             <img
