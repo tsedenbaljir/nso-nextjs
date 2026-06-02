@@ -4,15 +4,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 
-const MEDIA_BASE = 'https://www.1212.mn';
-
-function resolveUrl(src) {
-    if (!src) return '';
-    if (src.startsWith('http')) return src;
-    if (src.startsWith('/uploads/')) return `${MEDIA_BASE}${src}`;
-    return `${MEDIA_BASE}/uploads/${src}`;
-}
-
 export default function Articles({ article }) {
     const [imageError, setImageError] = useState(false);
 
@@ -21,8 +12,10 @@ export default function Articles({ article }) {
     }
 
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return `${MEDIA_BASE}/images/default.jpg`;
-        return resolveUrl(imagePath);
+        if (!imagePath) return 'https://www.1212.mn/images/default.jpg';
+        if (imagePath.startsWith('http')) return imagePath;
+        if (imagePath.startsWith('/uploads/')) return `https://www.1212.mn/${imagePath}`;
+        return `https://www.1212.mn/uploads/${imagePath}`;
     };
 
     const handleImageError = () => {
@@ -70,18 +63,6 @@ export default function Articles({ article }) {
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}
-                                components={{
-                                    img({ src, alt, ...props }) {
-                                        return (
-                                            <img
-                                                src={resolveUrl(src)}
-                                                alt={alt || ''}
-                                                style={{ maxWidth: '100%', height: 'auto' }}
-                                                {...props}
-                                            />
-                                        );
-                                    }
-                                }}
                             >
                                 {article.body || 'No content available'}
                             </ReactMarkdown>
