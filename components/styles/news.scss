@@ -152,21 +152,11 @@
 
         img {
             width: 100%;
-            max-width: 100%;
             height: auto;
-            display: block;
-            margin: 1rem 0;
         }
 
-        .one,
-        .article-body-html {
+        .one {
             width: 100%;
-
-            div[dir="auto"] img {
-                width: 100%;
-                max-width: 100%;
-                height: auto;
-            }
         }
     }
 

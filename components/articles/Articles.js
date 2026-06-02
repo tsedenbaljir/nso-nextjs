@@ -3,7 +3,15 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { normalizeArticleHtml, isHtmlContent } from '@/utils/normalizeArticleHtml';
+
+const MEDIA_BASE = 'https://www.1212.mn';
+
+function resolveUrl(src) {
+    if (!src) return '';
+    if (src.startsWith('http')) return src;
+    if (src.startsWith('/uploads/')) return `${MEDIA_BASE}${src}`;
+    return `${MEDIA_BASE}/uploads/${src}`;
+}
 
 export default function Articles({ article }) {
     const [imageError, setImageError] = useState(false);
@@ -13,10 +21,8 @@ export default function Articles({ article }) {
     }
 
     const getImageUrl = (imagePath) => {
-        if (!imagePath) return 'https://www.1212.mn/images/default.jpg';
-        if (imagePath.startsWith('http')) return imagePath;
-        if (imagePath.startsWith('/uploads/')) return `https://www.1212.mn/${imagePath}`;
-        return `https://www.1212.mn/uploads/${imagePath}`;
+        if (!imagePath) return `${MEDIA_BASE}/images/default.jpg`;
+        return resolveUrl(imagePath);
     };
 
     const handleImageError = () => {
@@ -30,9 +36,6 @@ export default function Articles({ article }) {
             return 'Date not available';
         }
     };
-
-    const body = article.body || '';
-    const bodyHtml = normalizeArticleHtml(body);
 
     return (
         <article className="__about_post">
@@ -63,20 +66,25 @@ export default function Articles({ article }) {
 
                 <div className="__info">
                     <div className="__social">
-                        <div className="one article-body">
-                            {isHtmlContent(body) ? (
-                                <div
-                                    className="article-body-html"
-                                    dangerouslySetInnerHTML={{ __html: bodyHtml }}
-                                />
-                            ) : (
-                                <ReactMarkdown
-                                    remarkPlugins={[remarkGfm]}
-                                    rehypePlugins={[rehypeRaw]}
-                                >
-                                    {body || 'No content available'}
-                                </ReactMarkdown>
-                            )}
+                        <div className="one">
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                rehypePlugins={[rehypeRaw]}
+                                components={{
+                                    img({ src, alt, ...props }) {
+                                        return (
+                                            <img
+                                                src={resolveUrl(src)}
+                                                alt={alt || ''}
+                                                style={{ maxWidth: '100%', height: 'auto' }}
+                                                {...props}
+                                            />
+                                        );
+                                    }
+                                }}
+                            >
+                                {article.body || 'No content available'}
+                            </ReactMarkdown>
                         </div>
                     </div>
                 </div>
