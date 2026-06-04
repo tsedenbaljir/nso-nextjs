@@ -122,8 +122,18 @@ export default function UserManagementPage() {
                     <Form.Item name="username" label="Username" rules={[{ required: true, message: "Required" }]}>
                         <Input placeholder="username" />
                     </Form.Item>
-                    <Form.Item name="role" label="Roles">
-                        <Input placeholder="e.g. admin or csv of slugs" />
+                    <Form.Item
+                        name="password"
+                        label="Нууц үг"
+                        rules={[
+                            { required: true, message: "Нууц үг оруулна уу" },
+                            { min: 6, message: "6-аас дээш тэмдэгтээр оруулна уу" },
+                        ]}
+                    >
+                        <Input.Password placeholder="Нууц үг" />
+                    </Form.Item>
+                    <Form.Item name="role" label="Хэрэглэгчийн түвшин">
+                        <Input placeholder="admin, laws, transparency, metadata-questionnaire." />
                     </Form.Item>
                 </Form>
             </Modal>
