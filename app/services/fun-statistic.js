@@ -103,6 +103,13 @@ export async function fetchTableauTicket(params = {}) {
             ? `${FUN_STATISTIC_ENDPOINTS.tableauReport}?${query.toString()}`
             : FUN_STATISTIC_ENDPOINTS.tableauReport;
 
-    return fetchJson(url);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    try {
+        return await fetchJson(url, { signal: controller.signal });
+    } finally {
+        clearTimeout(timeoutId);
+    }
 }
 
