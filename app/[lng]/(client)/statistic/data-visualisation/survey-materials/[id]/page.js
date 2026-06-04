@@ -26,7 +26,8 @@ export default function SurveyMaterials(props) {
             if (!response.ok) throw new Error("Failed to fetch data");
 
             const results = await response.json();
-            const transformedData = transformDownloadData(results.data);
+            const items = Array.isArray(results) ? results : (results.data || []);
+            const transformedData = transformDownloadData(items);
             
             setData(transformedData);
             setLazyState(prev => ({
@@ -126,8 +127,8 @@ export default function SurveyMaterials(props) {
                 loading={loading}
                 className="p-datatable-sm"
                 emptyMessage="Одоогоор мэдээлэл байхгүй байна."
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Нийт: {totalRecords}"
-                showCurrentPageReport
             >
                 <Column field="name" header="Нэр" style={{ width: '50%' }} />
                 <Column header="1-р үе" body={downloadButtonTemplate(1)} style={{ width: '100px' }} />
