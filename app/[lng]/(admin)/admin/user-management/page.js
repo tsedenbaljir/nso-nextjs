@@ -119,7 +119,7 @@ export default function UserManagementPage() {
                 okText="Create"
             >
                 <Form form={form} layout="vertical">
-                    <Form.Item name="username" label="Username" rules={[{ required: true, message: "Required" }]}>
+                    <Form.Item name="username" label="Хэрэглэгчийн нэр" rules={[{ required: true, message: "Хэрэглэгчийн нэр оруулна уу" }]}>
                         <Input placeholder="username" />
                     </Form.Item>
                     <Form.Item
