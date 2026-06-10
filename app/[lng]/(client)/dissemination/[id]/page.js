@@ -5,6 +5,7 @@ import rehypeRaw from 'rehype-raw';
 import ReactMarkdown from 'react-markdown';
 import Text from '@/components/Loading/Text/Index';
 import PdfViewer from '@/components/PdfViewer/index';
+import { resolveMediaUrl } from '@/utils/resolveMediaUrl';
 
 import "@/components/styles/news.scss";
 import "@/components/styles/dissemination-view.scss";
@@ -41,7 +42,7 @@ export default function Home(props) {
                     // Extract PDF URL and text from body
                     const urlMatch = result.data.body.match(/src="([^"]+)"/);
                     const textMatch = result.data.body.match(/<p>(.*?)<\/p>/);
-                    if (urlMatch) setPdfUrl(urlMatch[1]);
+                    if (urlMatch) setPdfUrl(resolveMediaUrl(urlMatch[1]));
                     if (textMatch) setText(textMatch[0]);
                 }
             } catch (error) {
