@@ -14,6 +14,8 @@ function encodePathname(pathname) {
         .join("/");
 }
 
+export { encodePathname };
+
 /** Encode upload/file URLs so commas, spaces, etc. work with nginx static serving */
 export function resolveMediaUrl(src) {
     if (!src) return "";

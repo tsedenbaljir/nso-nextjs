@@ -4,6 +4,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Paginator } from "primereact/paginator";
 import { getSectorNameById } from "./sectors";
 import { CENSUS_SUB_FILTER_YEARS_BY_ID } from "@/lib/census-file-library-years";
+import { resolveMediaUrl } from "@/utils/resolveMediaUrl";
 
 export default function Tabs({
     lng,
@@ -92,7 +93,7 @@ export default function Tabs({
             const parsed =
                 typeof fileInfo === "string" ? JSON.parse(fileInfo) : fileInfo;
             if (!parsed?.pathName) return;
-            const url = `${process.env.FRONTEND}/uploads/${parsed.pathName}`;
+            const url = resolveMediaUrl(`/uploads/${parsed.pathName}`);
             window.open(url, "_blank");
             await fetch(`/api/file-library`, {
                 method: "POST",

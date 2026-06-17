@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import acceptLanguage from "accept-language";
 import { fallbackLng, languages, cookieName } from "@/app/i18n/settings";
-
+import { encodePathname } from "@/utils/resolveMediaUrl";
 acceptLanguage.languages(languages);
 
 export const config = {
@@ -18,9 +18,14 @@ export function proxy(req) {
 
   // Uploaded files live in public/uploads — must not get /mn prefix
   if (req.nextUrl.pathname.startsWith("/uploads")) {
+    const encoded = encodePathname(req.nextUrl.pathname);
+    if (encoded !== req.nextUrl.pathname) {
+      const url = req.nextUrl.clone();
+      url.pathname = encoded;
+      return NextResponse.redirect(url);
+    }
     return NextResponse.next();
   }
-
   if (STATIC_FILE.test(req.nextUrl.pathname)) {
     return NextResponse.next();
   }
