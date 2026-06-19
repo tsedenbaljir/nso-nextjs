@@ -378,9 +378,8 @@ export default function TimeLine({ lng }) {
                             {lng === "mn" ? "Он цагийн түүхэн товчоо" : "History of Mongolian Statistics"}
                         </div>
                         <div className="card">
-                            {timelineEvents.reverse().map((datas) => {
-                                return (
-                                    <div className="flex my-5">
+                            {[...timelineEvents].reverse().map((datas, index) => (
+                                    <div key={`${datas.date}-${index}`} className="flex my-5">
                                         <span className='opposite'>
                                             {datas.date}
                                         </span>
@@ -392,8 +391,7 @@ export default function TimeLine({ lng }) {
                                             <br />
                                         </small>
                                     </div>
-                                )
-                            })}
+                            ))}
                         </div>
                     </div>
                 </div>

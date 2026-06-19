@@ -5,6 +5,7 @@ import { Tabs, notification } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import ContactForm from '@/components/contactForm';
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
 
@@ -185,6 +186,7 @@ export default function Contact(props) {
                                 <div dangerouslySetInnerHTML={{ __html: webpageData.body }} />
                             )}
                             <ContactForm isMn={lng === "mn"} />
+                            <ContactSourceCard lng={lng} />
                         </>
                     )}
                 </div>

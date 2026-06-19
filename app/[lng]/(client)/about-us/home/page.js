@@ -2,6 +2,7 @@
 import React, { useState, use } from 'react';
 import TimeLine from '@/components/about-us/time-line';
 import Orgs from '@/components/about-us/orgs';
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import "@/components/styles/about-us.scss";
 import { useTranslation } from '@/app/i18n/client';
 
@@ -27,7 +28,7 @@ export default function AboutUs(props) {
             <div className="nso_about_us_body">
                 <div className="nso_container">
                     <div className="__nso_desc">
-                        <div className="__about h-[300px]">
+                        <div className="__about">
                             <div className="__top_text">
                                 {t('nsoTitle')}
                             </div>
@@ -69,17 +70,17 @@ export default function AboutUs(props) {
                                     </div>
                                 </div>
                             </div>
+                            <ContactSourceCard lng={lng} sourceKey="aboutUsSource" />
                         </div>
                         <img
-                            width="500px"
-                            height="300px"
                             className="__about_img"
-                            src="/about.png"
+                            src="https://www.1212.mn/about.png"
                             alt="About Us"
                         />
                     </div>
                 </div>
             </div>
+
             <Orgs lng={lng} />
             <TimeLine lng={lng} />
         </>

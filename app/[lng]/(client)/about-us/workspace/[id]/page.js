@@ -5,7 +5,9 @@ import rehypeRaw from 'rehype-raw';
 import Text from '@/components/Loading/Text/Index';
 import ReactMarkdown from 'react-markdown';
 import Layout from '@/components/baseLayout';
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import { useTranslation } from '@/app/i18n/client';
+import '@/components/styles/contact-us.scss';
 import './works.scss';
 
 export default function WorkspaceDetail(props) {
@@ -52,39 +54,42 @@ export default function WorkspaceDetail(props) {
 
     return (
         <>
-            <div className="nso_container">
+            <div className="nso_container workspace_detail_layout">
                 <div className="__info_detail_page">
-                    {!loading ? <div className="w-full my-16 mb-8 items-center justify-between text-main">
-                        <div className="text-2xl font-bold __header">
-                            {data.name}
+                    {!loading ? (
+                        <div className="w-full my-16 mb-8 text-main">
+                            <div className="text-2xl font-bold workspace_detail_title">
+                                {data.name}
+                            </div>
+                            <div className="ws_desc">
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkGfm]}
+                                    rehypePlugins={[rehypeRaw]}
+                                >
+                                    {data.body}
+                                </ReactMarkdown>
+                            </div>
                         </div>
-                        <div
-                            className="ws_desc"
-                        >
-                            <ReactMarkdown
-                                remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeRaw]}
-                            >
-                                {data.body}
-                            </ReactMarkdown>
-                        </div>
-                    </div> : <>
-                        <Text />
-                        <Text />
-                    </>}
+                    ) : (
+                        <>
+                            <Text />
+                            <Text />
+                        </>
+                    )}
                 </div>
+                
                 <div className="r_side">
-                    <div className="right_side_top">
-                        <h2 className='uppercase text-xl font-bold'>{t('Phone')}</h2>
-                        <p>51-261530</p>
-                        <br />
-                        <h2 className='uppercase text-xl font-bold'>
-                            {t('Registration')}
-                        </h2>
-                        <p>Засгийн газрын III байр, Үндэсний Статистикийн хорооны байр, Бага тойруу -44, Улаанбаатар -11, Монгол Улс</p>
-                    </div>
-                    <div className="right_side_bottom">
-                        <p>Таны мэдээлэл манай байгууллагын хүний нөөцийн мэдээллийн санд бүртгэгдэнэ. Байгууллагаас сул орон гарсан тохиолдолд Төрийн албаны тухай хууль болон холбогдох журмын дагуу шаардлага хангасан иргэнийг сонгон шалгаруулж томилох юм.</p>
+                    <div className="r_side_panel">
+                        <div className="workspace_registration">
+                            <h2 className="uppercase text-xl font-bold">
+                                {t('Registration')}
+                            </h2>
+                            <p>Засгийн газрын III байр, Үндэсний Статистикийн хорооны байр, Бага тойруу -44, Улаанбаатар -11, Монгол Улс</p>
+                        </div>
+                        <p className="workspace_info_text">
+                            Таны мэдээлэл манай байгууллагын хүний нөөцийн мэдээллийн санд бүртгэгдэнэ. Байгууллагаас сул орон гарсан тохиолдолд Төрийн албаны тухай хууль болон холбогдох журмын дагуу шаардлага хангасан иргэнийг сонгон шалгаруулж томилох юм.
+                        </p>
+                        <ContactSourceCard lng={lng} sourceKey="contactSource" />
                     </div>
                 </div>
             </div>

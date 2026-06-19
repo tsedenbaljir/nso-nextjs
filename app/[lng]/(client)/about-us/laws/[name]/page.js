@@ -3,7 +3,9 @@ import React, { useState, useEffect, use } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import Text from '@/components/Loading/Text/Index';
 import MainBody from '@/components/laws/MainBody';
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import { useRouter, usePathname } from 'next/navigation'
+import '@/components/styles/contact-us.scss';
 import '@/components/styles/laws.scss';
 
 export default function Home(props) {
@@ -102,6 +104,11 @@ export default function Home(props) {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div className="nso_container">
+                <div className="laws_source_section">
+                    <ContactSourceCard lng={lng} sourceKey="lawsSource" />
                 </div>
             </div>
         </>
