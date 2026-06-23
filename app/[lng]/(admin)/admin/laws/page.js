@@ -8,22 +8,27 @@ import { Toast } from 'primereact/toast';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { showConfirm, showToast } from '@/utils/alerts';
 
+const EMPTY_NEW_LAW = {
+  name: '',
+  file_type: '',
+  description: '',
+  file: null,
+  link_url: '',
+  content_type: 'file'
+};
+
 export default function AdminLaws() {
   const [laws, setLaws] = useState({
     legal: [],
+    rules: [],
     command: [],
-    law: []
+    documents: []
   });
   const [editingLaw, setEditingLaw] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
-  const [newLaw, setNewLaw] = useState({
-    name: '',
-    file_type: '',
-    description: '',
-    file: null
-  });
+  const [newLaw, setNewLaw] = useState(EMPTY_NEW_LAW);
   const toast = useRef(null);
 
   const categories = [
@@ -34,7 +39,6 @@ export default function AdminLaws() {
   ];
 
   useEffect(() => {
-    // Fetch all types at once when component mounts
     categories.forEach(category => {
       fetchLawsByType(category.value);
     });
@@ -44,7 +48,7 @@ export default function AdminLaws() {
     try {
       const response = await fetch(`/api/laws?type=${type}`, {
         cache: 'no-store'
-    });
+      });
       const result = await response.json();
       if (result.status && Array.isArray(result.data)) {
         setLaws(prev => ({
@@ -62,20 +66,34 @@ export default function AdminLaws() {
       id: law.id,
       name: law.name,
       description: law.file_description,
-      file_type: law.file_type
+      file_type: law.file_type,
+      link_url: law.link_url || '',
+      content_type: law.link_url ? 'link' : 'file'
     });
     setIsEditing(true);
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    if (editingLaw.content_type === 'link' && !editingLaw.link_url?.trim()) {
+      showToast(toast, 'error', 'Алдаа', 'Холбоос оруулна уу');
+      return;
+    }
+
     try {
       const response = await fetch('/api/laws', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editingLaw),
+        body: JSON.stringify({
+          id: editingLaw.id,
+          name: editingLaw.name,
+          description: editingLaw.description,
+          file_type: editingLaw.file_type,
+          link_url: editingLaw.content_type === 'link' ? editingLaw.link_url.trim() : null
+        }),
         cache: 'no-store'
       });
 
@@ -84,13 +102,13 @@ export default function AdminLaws() {
         setIsEditing(false);
         setEditingLaw(null);
         fetchLawsByType(editingLaw.file_type);
-        alert('Law updated successfully');
+        showToast(toast, 'success', 'Амжилттай', 'Амжилттай шинэчлэгдлээ');
       } else {
-        alert(result.message || 'Failed to update law');
+        showToast(toast, 'error', 'Алдаа', result.message || 'Шинэчлэхэд алдаа гарлаа');
       }
     } catch (error) {
       console.error('Error updating law:', error);
-      alert('Error updating law');
+      showToast(toast, 'error', 'Алдаа', 'Шинэчлэхэд алдаа гарлаа');
     }
   };
 
@@ -111,7 +129,7 @@ export default function AdminLaws() {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              id: parseInt(id) // Ensure ID is a number
+              id: parseInt(id)
             })
           });
 
@@ -131,6 +149,7 @@ export default function AdminLaws() {
   };
 
   const handleAdd = () => {
+    setNewLaw(EMPTY_NEW_LAW);
     setIsAdding(true);
   };
 
@@ -145,8 +164,13 @@ export default function AdminLaws() {
   const handleSubmitNew = async (e) => {
     e.preventDefault();
 
-    if (!newLaw.file) {
-      alert('Please select a file');
+    if (newLaw.content_type === 'file' && !newLaw.file) {
+      showToast(toast, 'error', 'Алдаа', 'Файл сонгоно уу');
+      return;
+    }
+
+    if (newLaw.content_type === 'link' && !newLaw.link_url?.trim()) {
+      showToast(toast, 'error', 'Алдаа', 'Холбоос оруулна уу');
       return;
     }
 
@@ -155,7 +179,14 @@ export default function AdminLaws() {
       formData.append('name', newLaw.name);
       formData.append('file_type', newLaw.file_type);
       formData.append('description', newLaw.description);
-      formData.append('file', newLaw.file);
+
+      if (newLaw.content_type === 'file' && newLaw.file) {
+        formData.append('file', newLaw.file);
+      }
+
+      if (newLaw.content_type === 'link') {
+        formData.append('link_url', newLaw.link_url.trim());
+      }
 
       const response = await fetch('/api/laws', {
         method: 'POST',
@@ -166,22 +197,58 @@ export default function AdminLaws() {
       const result = await response.json();
       if (result.status) {
         setIsAdding(false);
-        setNewLaw({
-          name: '',
-          file_type: '',
-          description: '',
-          file: null
-        });
+        setNewLaw(EMPTY_NEW_LAW);
         fetchLawsByType(newLaw.file_type);
-        alert('Law added successfully');
+        showToast(toast, 'success', 'Амжилттай', 'Амжилттай нэмэгдлээ');
       } else {
-        alert(result.message || 'Failed to add law');
+        showToast(toast, 'error', 'Алдаа', result.message || 'Нэмэхэд алдаа гарлаа');
       }
     } catch (error) {
       console.error('Error adding law:', error);
-      alert('Error adding law');
+      showToast(toast, 'error', 'Алдаа', 'Нэмэхэд алдаа гарлаа');
     }
   };
+
+  const renderContentTypeFields = (values, onChange) => (
+    <>
+      <div>
+        <label>Агуулгын төрөл:</label>
+        <select
+          value={values.content_type}
+          onChange={(e) => onChange({ ...values, content_type: e.target.value })}
+          required
+        >
+          <option value="file">Файл</option>
+          <option value="link">Холбоос</option>
+        </select>
+      </div>
+      {values.content_type === 'file' ? (
+        <div>
+          <label>Файл:</label>
+          <FileUpload
+            mode="basic"
+            name="file"
+            accept="application/pdf"
+            maxFileSize={100000000}
+            onSelect={handleFileUpload}
+            auto
+            chooseLabel="PDF сонгох"
+          />
+        </div>
+      ) : (
+        <div>
+          <label>Холбоос:</label>
+          <input
+            type="url"
+            value={values.link_url}
+            onChange={(e) => onChange({ ...values, link_url: e.target.value })}
+            placeholder="https://example.com/document"
+            required
+          />
+        </div>
+      )}
+    </>
+  );
 
   return (
     <>
@@ -226,18 +293,7 @@ export default function AdminLaws() {
                     required
                   />
                 </div>
-                <div>
-                  <label>Файл:</label>
-                  <FileUpload
-                    mode="basic"
-                    name="file"
-                    accept="application/pdf"
-                    maxFileSize={100000000}
-                    onSelect={handleFileUpload}
-                    auto
-                    chooseLabel="Choose PDF"
-                  />
-                </div>
+                {renderContentTypeFields(newLaw, setNewLaw)}
                 <div className={styles.formActions}>
                   <button type="submit">Хадгалах</button>
                   <button type="button" onClick={() => setIsAdding(false)}>Болих</button>
@@ -253,7 +309,7 @@ export default function AdminLaws() {
                   <input
                     type="text"
                     value={editingLaw.name}
-                    onChange={(e) => setEditingLaw({ ...editingLaw, Нэр: e.target.value })}
+                    onChange={(e) => setEditingLaw({ ...editingLaw, name: e.target.value })}
                     required
                   />
                 </div>
@@ -279,6 +335,7 @@ export default function AdminLaws() {
                     required
                   />
                 </div>
+                {renderContentTypeFields(editingLaw, setEditingLaw)}
                 <div className={styles.formActions}>
                   <button type="submit">Хадгалах</button>
                   <button type="button" onClick={() => setIsEditing(false)}>Болих</button>
@@ -310,7 +367,7 @@ export default function AdminLaws() {
                         laws[category.value].map((law) => (
                           <div key={law.id} className={styles.lawItem}>
                             <h3>{law.name}</h3>
-                            {/* <p>{law.file_info}</p> */}
+                            <p>{law.link_url ? 'Холбоос' : 'Файл'}</p>
                             <div className={styles.actions}>
                               <button onClick={() => handleEdit(law)}>Засах</button>
                               <button onClick={() => handleDelete(law.id, category.value)}>
@@ -334,4 +391,4 @@ export default function AdminLaws() {
       </div>
     </>
   );
-} 
+}
