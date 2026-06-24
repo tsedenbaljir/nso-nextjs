@@ -8,7 +8,7 @@ export async function GET(req) {
         const results = await db.raw(`
             SELECT * FROM web_1212_content 
             WHERE content_type = 'NEWS' 
-            AND news_type in('LATEST', 'FUTURE') 
+            AND news_type in('LATEST', 'FUTURE', 'UPDATED') 
             ORDER BY published_date DESC
         `);
 

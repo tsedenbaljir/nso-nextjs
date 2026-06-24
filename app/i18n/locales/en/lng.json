@@ -80,6 +80,7 @@
   "news": {
     "latest": "Latest release",
     "future": "Future release",
+    "update": "Revision schedule​",
     "scheduled": "Scheduled News",
     "more": "Show more"
   },
@@ -406,6 +407,7 @@
     "scope": "Scope year",
     "specifications": "Bulletin name",
     "dateDistribution": "Release date",
+    "updateDate": "Update period",
     "time": "Time"
   },
   "tools": {

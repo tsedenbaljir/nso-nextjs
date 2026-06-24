@@ -173,11 +173,12 @@ export default function EditDissemination(props) {
             <div className="items-center justify-between px-4 md:px-5 2xl:px-10">
                 <div className='flex flex-wrap gap-3 mb-4'>
                     <SelectInput
-                        setFields={(value) => setNewsType(value === 1 ? 'LATEST' : 'FUTURE')}
-                        value={newsType === 'LATEST' ? 1 : 2}
+                        setFields={(value) => setNewsType(value === 1 ? 'LATEST' : value === 2 ? 'FUTURE' : 'UPDATED')}
+                        value={newsType === 'LATEST' ? 1 : newsType === 'FUTURE' ? 2 : 3}
                         data={[
                             { id: 1, name: "Сүүлд гарсан" },
-                            { id: 2, name: "Удахгүй гарах" }
+                            { id: 2, name: "Удахгүй гарах" },
+                            { id: 3, name: "Шинэчилж засварлах" }
                         ]}
                     />
                     <SelectInput

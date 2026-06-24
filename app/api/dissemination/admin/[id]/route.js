@@ -135,7 +135,7 @@ export async function PUT(req, props) {
                 last_modified_by = ?,
                 last_modified_date = ?,
                 slug = ?
-            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE')
+            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE', 'UPDATED')
         `, sqlParams);
 
         return NextResponse.json({
@@ -163,7 +163,7 @@ export async function DELETE(req, props) {
 
         await db.raw(`
             DELETE FROM web_1212_content 
-            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE')
+            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE', 'UPDATED')
         `, [id]);
 
         return NextResponse.json({
