@@ -1,15 +1,18 @@
 "use client";
 import { use } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Statistic(props) {
   const { lng } = use(props.params);
-  const isMn = lng === "mn";
-
+  const router = useRouter();
+  const base = `/${lng}/statistic/fun-statistic`;
   return (
     <>
       <div className="nso_container">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-10">
+          {/*
         <div className="w-full pt-10 pb-20">
-          <div
+         <div
             className="w-full overflow-hidden rounded-[28px] border border-[#dbe7f3] bg-white shadow-[0_20px_50px_rgba(15,76,129,0.1)]"
             role="status"
             aria-live="polite"
@@ -58,11 +61,11 @@ export default function Statistic(props) {
                   </div>
                 </div>
             </div>
-          </div>
+          </div> */}
 
-          {/* <div
+          <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/human`)}
+            onClick={() => router.push(`${base}/human`)}
             style={{ width: "300px" }}
           >
             <img
@@ -80,7 +83,7 @@ export default function Statistic(props) {
             </span>
           </div>
           <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/same-day-people`)}
+            onClick={() => router.push(`${base}/same-day-people`)}
             style={{ width: "300px" }}>
             <img
               className="w-[250px] h-[250px] rounded-[20px]"
@@ -92,7 +95,7 @@ export default function Statistic(props) {
             <span className="desc">{lng === "mn" ? "Ижил өдөр төрсөн хүмүүсийн тоогоо эндээс хараарай." : ""}</span>
           </div>
           <div className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/given-name`)}
+            onClick={() => router.push(`${base}/given-name`)}
             style={{ width: "300px" }}>
             <img
               className="w-[250px] h-[250px] rounded-[20px]"
@@ -105,7 +108,7 @@ export default function Statistic(props) {
           </div>
           <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/age-pyramid`)}
+            onClick={() => router.push(`${base}/age-pyramid`)}
             style={{ width: "300px" }}
           >
             <img
@@ -126,7 +129,7 @@ export default function Statistic(props) {
           <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
             onClick={() =>
-              router.push(`/statistic/fun-statistic/historicalGivenName`)
+              router.push(`${base}/historicalGivenName`)
             }
             style={{ width: "300px" }}
           >
@@ -146,7 +149,7 @@ export default function Statistic(props) {
           </div>
           <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/family-name`)}
+            onClick={() => router.push(`${base}/family-name`)}
             style={{ width: "300px" }}
           >
             <img
@@ -165,7 +168,7 @@ export default function Statistic(props) {
           </div>
           <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/population`)}
+            onClick={() => router.push(`${base}/population`)}
             style={{ width: "300px" }}
           >
             <img
@@ -181,10 +184,10 @@ export default function Statistic(props) {
                 ? "1935 оноос 2024 он хүртэлх жилийн эцсийн хүн амын тоо"
                 : ""}
             </span>
-          </div> */}
+          </div>
           {/* <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
-            onClick={() => router.push(`/statistic/fun-statistic/household`)}
+            onClick={() => router.push(`${base}/household`)}
             style={{ width: "300px" }}
           >
             <img

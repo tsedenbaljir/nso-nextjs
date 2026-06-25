@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Loading from "@/app/[lng]/(client)/loading";
-import { getSameDayPeopleCount } from "@/app/services/fun-statistic";
+import { getSameDayPeopleCount } from "@/app/services/fun-statistic-actions";
 
 const monthOptions = [
     { value: 1, label: "1-р сар" },

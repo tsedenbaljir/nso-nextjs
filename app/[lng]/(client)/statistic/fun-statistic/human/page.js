@@ -2,7 +2,7 @@
 import { sanitizeHtml } from '@/utils/sanitizeHtml';
 
 import { useState, useEffect } from "react";
-import { fetchHomoHuman } from "@/app/services/actions";
+import { fetchHomoHuman } from "@/app/services/fun-statistic-actions";
 
 export default function HumanPage() {
     const [letter1, setLetter1] = useState("");

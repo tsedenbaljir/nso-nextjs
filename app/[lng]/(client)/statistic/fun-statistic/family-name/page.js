@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Loading from "@/app/[lng]/(client)/loading";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { getFamilyNameStatistic } from "@/app/services/fun-statistic";
+import { getFamilyNameStatistic } from "@/app/services/fun-statistic-actions";
 
 export default function FamilyNameStatistic() {
     const router = useRouter();

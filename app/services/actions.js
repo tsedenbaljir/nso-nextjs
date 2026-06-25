@@ -1,5 +1,4 @@
 'use server'
-import { Agent } from "undici";
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { db } from "@/app/api/config/db_csweb.config";
@@ -341,8 +340,6 @@ export async function createUserService(data) {
     }
 }
 
-const insecure = new Agent({ connect: { rejectUnauthorized: false } });
-
 export async function submitContactForm(formData) {
     try {
         const cleanedData = {
@@ -474,7 +471,6 @@ export async function fetchTableauKey() {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
     try {
-        // Use absolute URL for server-side requests
         const response = await fetch(`${process.env.BASE_URL}/api/tableau-key`, {
             headers: {
                 "Content-Type": "application/json",
@@ -491,57 +487,4 @@ export async function fetchTableauKey() {
         console.error('Tableau key fetch error:', error);
         return { success: false, error: error.message };
     }
-} 
-
-export async function fetchHomoHuman(registerNo) {
-    try {
-        // Use absolute URL for server-side requests
-        const response = await fetch(`http://localhost:3000/api/human`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ registerNo: registerNo }),
-            cache: 'no-store',
-            // Allow self-signed / untrusted certificates when calling BASE_URL
-            // to avoid UNABLE_TO_VERIFY_LEAF_SIGNATURE errors in Node.
-            dispatcher: insecure,
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch Homo Human');
-        }
-
-        const result = await response.json();
-        return { success: true, data: result };
-    } catch (error) {
-        console.error('Homo Human fetch error:', error);
-        return { success: false, error: error.message };
-    }
-} 
-
-// export async function fetchHomoHuman(registerNo) {
-//     try {
-//         const myHeaders = new Headers();
-//         myHeaders.append("access-token", "a79fb6ab-5953-4c46-a240-a20c2af9150a");
-//         const requestOptions = {
-//             method: 'POST',
-//             headers: myHeaders,
-//             body: JSON.stringify({ registerNo: registerNo }),
-//         };
-
-//         const response = await fetch(`/api/human`, {
-//             ...requestOptions,
-//             cache: 'no-store',
-//             dispatcher: insecure,
-//         });
-//         if (!response.ok) {
-//             throw new Error('Failed to fetch Homo Human');
-//         }
-
-//         const result = await response.json();
-//         return { success: true, data: result };
-//     } catch (error) {
-//         console.error('Homo Human fetch error:', error);
-//         return { success: false, error: error.message };
-//     }
-// }
+}
