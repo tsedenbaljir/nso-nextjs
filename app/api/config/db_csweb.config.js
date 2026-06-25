@@ -57,7 +57,8 @@ const data1212 = knex({
 const homoStatistic = knex({
   client: "mssql",
   connection: {
-    server: "103.85.185.42",
+    server: "0.0.0.0",
+    // server: "103.85.185.42",
     port: 1433,
     user: "1212",
     password: "6sW>'tXJS)31",
