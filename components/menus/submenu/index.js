@@ -19,7 +19,7 @@ export default function Index({ lng }) {
     useEffect(() => {
         const fetchMenus = async () => {
             try {
-                const response = await fetch('/api/menus/admin');
+                const response = await fetch('/api/menus');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

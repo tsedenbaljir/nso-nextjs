@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    logging: process.env.NODE_ENV === "development"
+        ? {
+            incomingRequests: {
+                ignore: [/favicon\.ico/, /googletagmanager\.com/],
+            },
+            browserToTerminal: false,
+        }
+        : undefined,
     serverExternalPackages: ["knex", "mssql", "tedious", "oracledb", "canvas"],
     experimental: {
         serverActions: {
@@ -122,7 +130,7 @@ const nextConfig = {
                             "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
                     },
                 ],
-            },  
+            },
         ];
     },
 };
