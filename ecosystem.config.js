@@ -2,15 +2,10 @@ module.exports = {
   apps: [
     {
       name: "nso.mn",
-      script: "npm",
-      args: "run start",
-      exec_mode: "cluster",
-      instances: "max", // бүх CPU core ашиглана
-      watch: true,      // production дээр watch унтраа
-      max_memory_restart: "1G",
+      script: "npm run start",
+      watch: true,
     },
   ],
-
   deploy: {
     production: {
       user: "nso",
@@ -20,7 +15,7 @@ module.exports = {
       path: "/home/nso/nso.mn",
       "post-deploy":
         "npm install --legacy-peer-deps && npm run build && pm2 reload ecosystem.config.js --env production",
-      shallow: true,
+      shallow: true // <-- This reduces the amount of Git history fetched
     },
   },
 };
