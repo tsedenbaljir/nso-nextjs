@@ -6,6 +6,7 @@ import { useTranslation } from '@/app/i18n/client';
 import Result from '@/components/Search/subMain/Result';
 import MainSearch from '@/components/Search/subMain/MainSearch';
 import LoadingDiv from '@/components/Loading/Text/Index';
+import { encodeQueryParam } from '@/utils/resolveMediaUrl';
 
 export default function DynamicSidebar({ sector, subsector, lng }) {
     const { t } = useTranslation(lng, "lng", "");
@@ -47,7 +48,7 @@ export default function DynamicSidebar({ sector, subsector, lng }) {
                 // Fetch subSectors
                 const fetchSubcategories = async (categoryId) => {
                     try {
-                        const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+                        const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${encodeQueryParam(categoryId)}&lng=${lng}`);
                         const result = await response.json();
 
                         if (!Array.isArray(result.data)) {

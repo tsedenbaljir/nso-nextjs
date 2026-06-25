@@ -14,7 +14,28 @@ function encodePathname(pathname) {
         .join("/");
 }
 
-export { encodePathname };
+function decodeQueryParam(value) {
+    if (!value) return value;
+    let decoded = value;
+    for (let i = 0; i < 3; i++) {
+        try {
+            const next = decodeURIComponent(decoded);
+            if (next === decoded) break;
+            decoded = next;
+        } catch {
+            break;
+        }
+    }
+    return decoded;
+}
+
+/** Decode then encode — avoids double-encoding path/query segments */
+export function encodeQueryParam(value) {
+    if (!value) return "";
+    return encodeURIComponent(decodeQueryParam(value));
+}
+
+export { encodePathname, decodeQueryParam };
 
 /** Encode upload/file URLs so commas, spaces, etc. work with nginx static serving */
 export function resolveMediaUrl(src) {

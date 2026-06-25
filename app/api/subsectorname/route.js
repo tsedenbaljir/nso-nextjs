@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Agent } from "undici";
+import { decodeQueryParam } from "@/utils/resolveMediaUrl";
 
 const BASE_API_URL = process.env.BASE_API_URL;
 // export const dynamicParams = true;
@@ -11,14 +12,21 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const lng = searchParams.get("lng");
-    const subsectorName = searchParams.get("subsectorname");
-    
+    let subsectorName = searchParams.get("subsectorname");
+
     if (!subsectorName) {
       return NextResponse.json({ error: "Missing subsectorName parameter" }, { status: 400 });
     }
 
+    subsectorName = decodeQueryParam(subsectorName);
+
     if (!lng) {
       return NextResponse.json({ error: "Missing lng parameter" }, { status: 400 });
+    }
+
+    if (!BASE_API_URL) {
+      console.error("BASE_API_URL is not configured");
+      return NextResponse.json({ error: "API not configured" }, { status: 500 });
     }
 
     const myHeaders = new Headers();
@@ -38,6 +46,9 @@ export async function GET(req) {
     });
 
     if (!response.ok) {
+      if (response.status === 400 || response.status === 404) {
+        return NextResponse.json({ data: [] });
+      }
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 

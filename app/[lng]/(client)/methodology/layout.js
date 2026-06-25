@@ -5,6 +5,7 @@ import Path from '@/components/path/Index';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryFilter from './Glossary/GlossaryFilter';
+import { encodeQueryParam } from '@/utils/resolveMediaUrl';
 
 export default function Layout(props) {
   const {
@@ -43,7 +44,7 @@ export default function Layout(props) {
         // Fetch subcategories
         const fetchSubcategories = async (categoryId) => {
           try {
-            const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+            const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${encodeQueryParam(categoryId)}&lng=${lng}`);
             const result = await response.json();
 
             if (!Array.isArray(result.data)) {

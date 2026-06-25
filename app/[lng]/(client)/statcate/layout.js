@@ -5,6 +5,7 @@ import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/OneField/Index';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { encodeQueryParam } from '@/utils/resolveMediaUrl';
 
 export default function Statecate(props) {
     const { lng } = use(props.params);
@@ -35,7 +36,7 @@ export default function Statecate(props) {
         };
         const fetchSubsector = async (categoryId) => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${encodeQueryParam(categoryId)}&lng=${lng}`);
                 const result = await response.json();
                 setName(result.data.filter(e => e.id === decodeURIComponent(pathname.split('/')[5])));
                 if (!Array.isArray(result.data)) {

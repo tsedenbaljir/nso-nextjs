@@ -10,6 +10,7 @@ import Updated from "./updated/main";
 import { TabView, TabPanel } from "primereact/tabview";
 import LoadingDiv from '@/components/Loading/OneField/Index';
 import { Skeleton } from 'antd';
+import { encodeQueryParam } from '@/utils/resolveMediaUrl';
 
 export default function Tabs({ lng, tabs, sector, subsector }) {
     const router = useRouter();
@@ -106,7 +107,7 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
         // Fetch subcategories
         const fetchSubcategories = async (categoryId) => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${encodeQueryParam(categoryId)}&lng=${lng}`);
                 const result = await response.json();
                 setName(result.data.filter(e => e.id === decodeURIComponent(subsector)));
 
