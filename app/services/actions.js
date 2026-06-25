@@ -446,6 +446,25 @@ export async function submitViolationReport(formData) {
     }
 }
 
+export async function incrementDownloadViews(id) {
+    try {
+        if (!id) {
+            return { success: false, error: "id is required" };
+        }
+
+        await db.raw(`
+            UPDATE [NSOweb].[dbo].[web_1212_download]
+            SET views = COALESCE(CAST(views AS INT), 0) + 1
+            WHERE id = ?
+        `, [id]);
+
+        return { success: true };
+    } catch (error) {
+        console.error("Error incrementing download views:", error);
+        return { success: false, error: error.message };
+    }
+}
+
 export async function fetchTableauKey() {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 

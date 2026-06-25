@@ -6,6 +6,7 @@ import MainIndicator from "./indicator/main";
 import Report from "./reports/main";
 import Methodology from "./methodology/main";
 import Qualityreport from "./qualityreport/main";
+import Updated from "./updated/main";
 import { TabView, TabPanel } from "primereact/tabview";
 import LoadingDiv from '@/components/Loading/OneField/Index';
 import { Skeleton } from 'antd';
@@ -21,26 +22,31 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     const [hasReportData, setHasReportData] = useState(false);
     const [hasMethodologyData, setHasMethodologyData] = useState(false);
     const [hasQualityReportData, setHasQualityReportData] = useState(false);
+    const [hasUpdateReportData, setHasUpdateReportData] = useState(false);
     const [isCheckingData, setIsCheckingData] = useState(true);
 
     // Build available tabs based on data
     const availableTabs = useMemo(() => {
         const tabs = [{ name: "table", index: 0 }];
-        
+        let idx = 1;
+
         if (hasIndicatorData) {
-            tabs.push({ name: "indicator", index: 1 });
+            tabs.push({ name: "indicator", index: idx++ });
         }
         if (hasReportData) {
-            tabs.push({ name: "report", index: 2 });
+            tabs.push({ name: "report", index: idx++ });
+        }
+        if (hasUpdateReportData) {
+            tabs.push({ name: "updatereport", index: idx++ });
         }
         if (hasMethodologyData) {
-            tabs.push({ name: "methodology", index: 3 });
+            tabs.push({ name: "methodology", index: idx++ });
         }
         if (hasQualityReportData) {
-            tabs.push({ name: "qualityreport", index: 4 });
+            tabs.push({ name: "qualityreport", index: idx++ });
         }
         return tabs;
-    }, [hasIndicatorData, hasReportData, hasMethodologyData, hasQualityReportData]);
+    }, [hasIndicatorData, hasReportData, hasUpdateReportData, hasMethodologyData, hasQualityReportData]);
 
     // Get tab index based on tab name
     const getTabIndex = (tabName) => {
@@ -74,6 +80,11 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 const reportResponse = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=report`);
                 const reportResult = await reportResponse.json();
                 setHasReportData(Array.isArray(reportResult?.data) && reportResult.data.length > 0);
+
+                // Check Update Report data
+                const updateReportResponse = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=updatereports`);
+                const updateReportResult = await updateReportResponse.json();
+                setHasUpdateReportData(Array.isArray(updateReportResult?.data) && updateReportResult.data.length > 0);
 
                 // Check Methodology data
                 const methodologyResponse = await fetch(`/api/methodology/list?catalogue_id=${subsector}&lng=${lng}`);
@@ -187,6 +198,13 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
                 {!isCheckingData ? hasQualityReportData && (
                     <TabPanel header={lng === "mn" ? "Чанарын тайлан" : "Quality Report"}>
                         <Qualityreport sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
+                    </TabPanel>
+                ): <TabPanel header={<Skeleton.Input size={"small"} />}></TabPanel>}
+                
+                {/* ✅ Шинэчлэлт, засварлалтын мэдээлэл - Show only if has data */}
+                {!isCheckingData ? hasUpdateReportData && (
+                    <TabPanel header={lng === "mn" ? "Шинэчлэлт, засварлалтын мэдээлэл" : "Information of Revision"}>
+                        <Updated sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
                     </TabPanel>
                 ): <TabPanel header={<Skeleton.Input size={"small"} />}></TabPanel>}
 

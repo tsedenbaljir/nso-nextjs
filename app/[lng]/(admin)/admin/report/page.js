@@ -62,7 +62,7 @@ export default function ReportAdmin(props) {
         { value: 'report', label: 'Салбарын тайлан' },
         // { value: 'pahc', label: 'Аргачлал' },
         { value: 'reportSector', label: 'Чанарын тайлан' },
-        // { value: 'other', label: 'Бусад' }
+        { value: 'updatereports', label: 'Шинэчлэлт, засварлалтын мэдээлэл' }
     ];
 
     const languages = [
