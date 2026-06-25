@@ -1,4 +1,5 @@
 "use client";
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 
 import { useState, useEffect } from "react";
 import { fetchHomoHuman } from "@/app/services/actions";
@@ -296,7 +297,7 @@ export default function HumanPage() {
                                 fontSize: 14,
                                 lineHeight: 1.6,
                             }}
-                            dangerouslySetInnerHTML={{ __html: result.description }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(result.description)}}
                         />
                     </section> */}
 

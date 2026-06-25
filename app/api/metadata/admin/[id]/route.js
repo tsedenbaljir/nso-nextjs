@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 
 // ==================== GET ====================
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function GET(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   const params = await props.params;
   const { id } = params;
   try {
@@ -62,6 +66,9 @@ export async function GET(req, props) {
 
 // ==================== PUT ====================
 export async function PUT(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   const params = await props.params;
   const { id } = params;
   try {

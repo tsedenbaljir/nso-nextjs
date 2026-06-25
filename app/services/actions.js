@@ -3,6 +3,7 @@ import { Agent } from "undici";
 import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { db } from "@/app/api/config/db_csweb.config";
+import { hasAdminRole } from "@/app/api/auth/adminAuth";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
@@ -12,6 +13,9 @@ async function requireAdminAuth() {
     const session = await getServerSession(options);
     if (!session?.user) {
         return { isAuthenticated: false, error: "Not authenticated" };
+    }
+    if (!hasAdminRole(session.user.role)) {
+        return { isAuthenticated: false, error: "Forbidden" };
     }
     return { isAuthenticated: true, user: session.user };
 }
@@ -93,10 +97,11 @@ export async function createAdminUser({ username, password, role }) {
 
         const [nextIdRow] = await db.raw("SELECT max(id) as nextId FROM [user]");
         const nextId = (parseInt(nextIdRow?.nextId, 10) || 0) + 1;
+        const hashedPassword = await bcrypt.hash(password, 10);
         const insertData = {
             id: nextId,
             username,
-            password,
+            password: hashedPassword,
             Roles: role || null,
         };
 

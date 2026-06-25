@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { Client } from "@elastic/elasticsearch";
 import { db } from "../config/db_csweb.config";
+import { requireAdminApi } from "@/app/api/auth/adminAuth";
 
 const ELASTIC_URL = "https://45.117.34.245:9200";
 const INDEX_NAME = "search-nso-1212";
 
-export async function POST() {
+export async function POST(req) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   const client = new Client({
     node: ELASTIC_URL,
     auth: {

@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 import dayjs from 'dayjs';
 
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function GET(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   try {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get('page') || '0', 10);
@@ -79,6 +82,9 @@ export async function GET(req) {
 
 // ==================== POST ====================
 export async function POST(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   const auth = await checkAdminAuth(req);
   if (!auth.isAuthenticated) {
     return NextResponse.json({ status: false, message: auth.error }, { status: 401 });

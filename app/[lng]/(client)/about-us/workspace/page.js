@@ -1,4 +1,5 @@
 "use client"
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from "next/navigation";
 import { useSearchParams } from 'next/navigation';
@@ -127,7 +128,7 @@ export default function Home(props) {
                                         <div
                                             className="ws_desc my-4 text-base"
                                             dangerouslySetInnerHTML={{
-                                                __html: dt.body.length > 250 ? dt.body.substr(0, 500) + '...' : dt.body
+                                                __html: sanitizeHtml(dt.body.length > 250 ? dt.body.substr(0, 500) + '...' : dt.body)
                                             }}
                                         ></div>
 

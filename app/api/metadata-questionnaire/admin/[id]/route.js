@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config.js";
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 import dayjs from 'dayjs';
 
 async function getLatestMdvMap(questionnaireId) {
@@ -69,7 +68,11 @@ async function tryProcMdvAdmin(id) {
 }
 
 // ==================== GET ====================
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function GET(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   const params = await props.params;
   const { id } = params;
   const qpOrQnrId = String(id);
@@ -233,6 +236,9 @@ export async function GET(req, props) {
 
 // ==================== PUT ====================
 export async function PUT(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   const params = await props.params;
   const { id } = params;
   const auth = await checkAdminAuth(req);
@@ -421,6 +427,9 @@ export async function PUT(req, props) {
 
 // ==================== DELETE (soft deactivate) ====================
 export async function DELETE(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   const params = await props.params;
   const auth = await checkAdminAuth(req);
   if (!auth.isAuthenticated) {

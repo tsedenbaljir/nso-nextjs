@@ -1,4 +1,5 @@
 "use client";
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
@@ -52,7 +53,7 @@ export default function Statcate(props) {
                     <div className="nso_tab_content">
                         <div className="__stat_detail_tableau">
                             <div className='__dtab_main_text'
-                                dangerouslySetInnerHTML={{ __html: data.info }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.info)}}
                             />
                         </div>
                     </div>

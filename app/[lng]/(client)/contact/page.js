@@ -1,4 +1,5 @@
 "use client"
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import React, { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { Tabs, notification } from 'antd';
@@ -183,7 +184,7 @@ export default function Contact(props) {
                                 </iframe>
                             </div>
                             {webpageData && (
-                                <div dangerouslySetInnerHTML={{ __html: webpageData.body }} />
+                                <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(webpageData.body)}} />
                             )}
                             <ContactForm isMn={lng === "mn"} />
                             <ContactSourceCard lng={lng} />
@@ -203,7 +204,7 @@ export default function Contact(props) {
                     ) : (
                         contactUsData[6] && (
                             <div dangerouslySetInnerHTML={{
-                                __html: lng === "mn" ? contactUsData[6].bodyMn : contactUsData[6].bodyEn
+                                __html: sanitizeHtml(lng === "mn" ? contactUsData[6].bodyMn : contactUsData[6].bodyEn)
                             }} />
                         )
                     )}
@@ -221,7 +222,7 @@ export default function Contact(props) {
                     ) : (
                         contactUsData[5] && (
                             <div dangerouslySetInnerHTML={{
-                                __html: lng === "mn" ? contactUsData[5].bodyMn : contactUsData[5].bodyEn
+                                __html: sanitizeHtml(lng === "mn" ? contactUsData[5].bodyMn : contactUsData[5].bodyEn)
                             }} />
                         )
                     )}

@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config.js";
 
-export async function GET() {
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
+export async function GET(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   try {
     // Дата каталог
     // const catalogues = await db("data_catalogue")
@@ -40,6 +44,9 @@ export async function GET() {
 }
 
 export async function POST(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   try {
     const body = await req.json();
     const {

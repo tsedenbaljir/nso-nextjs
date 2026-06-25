@@ -1,18 +1,12 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+import { checkAdminAuth, requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function DELETE(req, props) {
-    const params = await props.params;
-    // Check authentication
-    const auth = await checkAdminAuth(req);
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
+    const params = await props.params;
     try {
         await db('web_1212_content')
             .where('id', params.id)
@@ -33,16 +27,11 @@ export async function DELETE(req, props) {
 }
 
 export async function PUT(req, props) {
-    const params = await props.params;
-    // Check authentication
-    const auth = await checkAdminAuth(req);
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
+    const params = await props.params;
+    const auth = await checkAdminAuth(req);
     try {
         const body = await req.json();
         
@@ -86,16 +75,10 @@ export async function PUT(req, props) {
 
 // Add GET endpoint for fetching single article
 export async function GET(req, props) {
-    const params = await props.params;
-    // Check authentication
-    const auth = await checkAdminAuth(req);
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
+    const params = await props.params;
     try {
         const article = await db('web_1212_content')
             .where('id', params.id)

@@ -1,18 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+import { checkAdminAuth, requireAdminApi } from '@/app/api/auth/adminAuth';
 export const dynamic = "force-dynamic";
 export async function GET(req) {
-    // Check authentication
-    // const auth = await checkAdminAuth(req);
-    
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
     try {
         const results = await db('web_1212_content')
@@ -37,16 +30,9 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-    // Check authentication
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
     const auth = await checkAdminAuth(req);
-    
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
-
     try {
         const body = await req.json();
         

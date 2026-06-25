@@ -1,4 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 import { db } from "@/app/api/config/db_csweb.config.js";
 import { ADMIN_SESSION_MAX_AGE } from "@/app/api/auth/sessionConfig";
 
@@ -25,25 +26,35 @@ export const options = {
         },
       },
       async authorize(credentials) {
-        
         try {
           const user = await db("user")
             .where("username", credentials.name)
             .first();
-          
+
           if (!user) {
             return null;
           }
 
-          if (credentials.password === user.password) {
-            return {
-              id: user.id,
-              name: user.username,
-              // email: user.email,
-              role: user.Roles
-            };
+          const storedPassword = user.password || "";
+          const isBcryptHash = storedPassword.startsWith("$2");
+          const passwordValid = isBcryptHash
+            ? await bcrypt.compare(credentials.password, storedPassword)
+            : credentials.password === storedPassword;
+
+          if (!passwordValid) {
+            return null;
           }
-          return null;
+
+          if (!isBcryptHash) {
+            const hashedPassword = await bcrypt.hash(credentials.password, 10);
+            await db("user").where({ id: user.id }).update({ password: hashedPassword });
+          }
+
+          return {
+            id: user.id,
+            name: user.username,
+            role: user.Roles,
+          };
         } catch (error) {
           console.error("Auth error:", error);
           return null;

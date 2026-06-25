@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config.js";
 
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export const dynamic = 'force-dynamic';
-export async function GET() {
+export async function GET(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
   try {
     const metaValues = await db("question_pool").select("id", "namemn", "nameen");
     const catalogues = await db("data_catalogue")

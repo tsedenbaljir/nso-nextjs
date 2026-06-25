@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+import { checkAdminAuth, requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function GET(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     const params = await props.params;
     const { id } = params;
     const { searchParams } = new URL(req.url);
@@ -42,21 +45,14 @@ export async function GET(req, props) {
 }
 
 export async function PUT(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     const params = await props.params;
     const { id } = params;
 
     try {
         const auth = await checkAdminAuth(req);
-        if (!auth.isAuthenticated) {
-            return NextResponse.json(
-                {
-                    status: false,
-                    message: auth.message
-                },
-                { status: 401 }
-            );
-        }
-
         const data = await req.json();
         
         // Update last_modified_date and last_modified_by
@@ -88,20 +84,14 @@ export async function PUT(req, props) {
 }
 
 export async function DELETE(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     const params = await props.params;
     const { id } = params;
 
     try {
-        const auth = await checkAdminAuth(req);
-        if (!auth.isAuthenticated) {
-            return NextResponse.json(
-                {
-                    status: false,
-                    message: auth.message
-                },
-                { status: 401 }
-            );
-        }
+        await checkAdminAuth(req);
 
         await db('job_posting')
             .where({ id })

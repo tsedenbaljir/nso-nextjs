@@ -1,4 +1,5 @@
 "use client";
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -45,7 +46,7 @@ export default function TransparencyDetailPage() {
           <h2 className="text-3xl font-bold mb-4">{data.title}</h2>
           <div
             className="mt-1"
-            dangerouslySetInnerHTML={{ __html: data.description || "" }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.description || "")}}
           />
         </div>
 

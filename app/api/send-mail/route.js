@@ -1,26 +1,39 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import { requireAdminApi } from "@/app/api/auth/adminAuth";
 
 export async function POST(req) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   const { to, subject, html } = await req.json();
+
+  const smtpUser = process.env.INFO_EMAIL_1212;
+  const smtpPass = process.env.INFO_PASSWORD_1212;
+
+  if (!smtpUser || !smtpPass) {
+    return NextResponse.json(
+      { status: false, message: "SMTP credentials are not configured" },
+      { status: 500 }
+    );
+  }
+
   try {
-    // Configure the transporter
     const transporter = nodemailer.createTransport({
-      host: "smtp.office365.com", // Replace with your SMTP host
-      port: 465, // Usually 587 for TLS
-      secure: true, // Use true for port 465, false for others
+      host: "smtp.office365.com",
+      port: 465,
+      secure: true,
       auth: {
-        user: "developer1212@nso.mn", // Replace with your email
-        pass: "25veDloper$#", // Replace with your password
+        user: smtpUser,
+        pass: smtpPass,
       },
     });
 
-    // Send the email
     const info = await transporter.sendMail({
-      from: `<developer1212@nso.mn>`, //<${process.env.INFO_EMAIL_1212}>`, // Sender address
-      to, // Recipient address
-      subject, // Subject line
-      html, // HTML body
+      from: `<${smtpUser}>`,
+      to,
+      subject,
+      html,
     });
 
     return NextResponse.json({

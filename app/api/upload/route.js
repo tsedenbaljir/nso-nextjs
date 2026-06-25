@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import path from 'path';
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const formData = await req.formData();
         const file = formData.get('file');
