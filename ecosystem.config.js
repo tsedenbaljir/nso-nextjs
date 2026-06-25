@@ -6,7 +6,7 @@ module.exports = {
       args: "run start",
       exec_mode: "cluster",
       instances: "max", // бүх CPU core ашиглана
-      watch: false,      // production дээр watch унтраа
+      watch: true,      // production дээр watch унтраа
       max_memory_restart: "1G",
     },
   ],
