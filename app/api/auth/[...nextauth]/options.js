@@ -2,6 +2,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { db } from "@/app/api/config/db_csweb.config.js";
 import { ADMIN_SESSION_MAX_AGE } from "@/app/api/auth/sessionConfig";
+import { fallbackLng } from "@/app/i18n/settings";
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error(
@@ -27,8 +28,15 @@ export const options = {
       },
       async authorize(credentials) {
         try {
+          const username = credentials?.name?.trim();
+          const password = credentials?.password?.trim();
+
+          if (!username || !password) {
+            return null;
+          }
+
           const user = await db("user")
-            .where("username", credentials.name)
+            .where("username", username)
             .first();
 
           if (!user) {
@@ -38,18 +46,16 @@ export const options = {
           const storedPassword = user.password || "";
           const isBcryptHash = storedPassword.startsWith("$2");
           const passwordValid = isBcryptHash
-            ? await bcrypt.compare(credentials.password, storedPassword)
-            : credentials.password === storedPassword;
+            ? await bcrypt.compare(password, storedPassword)
+            : password === storedPassword;
 
           if (!passwordValid) {
             return null;
           }
-
-          if (!isBcryptHash) {
-            const hashedPassword = await bcrypt.hash(credentials.password, 10);
-            await db("user").where({ id: user.id }).update({ password: hashedPassword });
-          }
-
+          // if (!isBcryptHash) {
+          //   const hashedPassword = await bcrypt.hash(credentials.password, 10);
+          //   await db("user").where({ id: user.id }).update({ password: hashedPassword });
+          // }
           return {
             id: user.id,
             name: user.username,
@@ -79,7 +85,7 @@ export const options = {
     }
   },
   pages: {
-    signIn: "/admin/dashboard",
+    signIn: `/${fallbackLng}/login`,
   },
   session: {
     strategy: "jwt",

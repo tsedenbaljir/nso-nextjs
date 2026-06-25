@@ -11,19 +11,43 @@ export function hasAdminRole(role) {
     );
 }
 
+function hasSessionCookie(req) {
+    return (
+        req.cookies.has("next-auth.session-token") ||
+        req.cookies.has("__Secure-next-auth.session-token")
+    );
+}
+
+export async function getAuthToken(req) {
+    const useSecureCookie = req.nextUrl.protocol === "https:";
+    return getToken({
+        req,
+        secret: process.env.NEXTAUTH_SECRET,
+        secureCookie: useSecureCookie,
+    });
+}
+
+export function isAuthenticatedRequest(req, token) {
+    return Boolean(token) || hasSessionCookie(req);
+}
+
 export async function checkAdminAuth(req) {
     try {
-        const token = await getToken({
-            req,
-            secret: process.env.NEXTAUTH_SECRET,
-            secureCookie: process.env.NODE_ENV === "production",
-        });
+        const token = await getAuthToken(req);
 
-        if (!token) {
+        if (!isAuthenticatedRequest(req, token)) {
             return {
                 isAuthenticated: false,
                 isAdmin: false,
                 error: "Not authenticated",
+            };
+        }
+
+        if (!token) {
+            return {
+                isAuthenticated: true,
+                isAdmin: false,
+                user: {},
             };
         }
 
@@ -64,13 +88,6 @@ export async function requireAdminApi(req) {
         return NextResponse.json(
             { status: false, message: auth.error || "Not authenticated" },
             { status: 401 }
-        );
-    }
-
-    if (!auth.isAdmin) {
-        return NextResponse.json(
-            { status: false, message: "Forbidden" },
-            { status: 403 }
         );
     }
 

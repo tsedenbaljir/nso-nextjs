@@ -3,8 +3,8 @@ import { getToken } from "next-auth/jwt";
 import acceptLanguage from "accept-language";
 import { fallbackLng, languages, cookieName } from "@/app/i18n/settings";
 import { encodePathname } from "@/utils/resolveMediaUrl";
-import { hasAdminRole } from "@/app/api/auth/adminAuth";
 import { isAuthRateLimited } from "@/utils/rateLimit";
+import { getAuthToken, isAuthenticatedRequest } from "@/app/api/auth/adminAuth";
 
 acceptLanguage.languages(languages);
 
@@ -20,23 +20,12 @@ export const config = {
 const STATIC_FILE = /\.(ico|png|jpe?g|gif|svg|webp|css|js|mjs|woff2?|ttf|eot|map|txt|xml|json|otf|pdf|docx?|xlsx?|pptx?)$/i;
 
 async function enforceAdminApi(req) {
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-    secureCookie: process.env.NODE_ENV === "production",
-  });
+  const token = await getAuthToken(req);
 
-  if (!token) {
+  if (!isAuthenticatedRequest(req, token)) {
     return NextResponse.json(
       { status: false, message: "Not authenticated" },
       { status: 401 }
-    );
-  }
-
-  if (!hasAdminRole(token.role)) {
-    return NextResponse.json(
-      { status: false, message: "Forbidden" },
-      { status: 403 }
     );
   }
 
@@ -64,18 +53,12 @@ export async function proxy(req) {
   const adminPageMatch = pathname.match(/^\/(mn|en)\/admin(?:\/|$)/);
   if (adminPageMatch) {
     const lng = adminPageMatch[1];
-    const token = await getToken({
-      req,
-      secret: process.env.NEXTAUTH_SECRET,
-      secureCookie: process.env.NODE_ENV === "production",
-    });
+    const token = await getAuthToken(req);
 
-    if (!token) {
-      return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
-    }
-
-    if (!hasAdminRole(token.role)) {
-      return NextResponse.redirect(new URL(`/${lng}`, req.url));
+    if (!isAuthenticatedRequest(req, token)) {
+      const url = req.nextUrl.clone();
+      url.pathname = `/${lng}/login`;
+      return NextResponse.redirect(url);
     }
 
     return NextResponse.next();
@@ -117,9 +100,9 @@ export async function proxy(req) {
     !req.nextUrl.pathname.startsWith("/_next") &&
     !req.nextUrl.pathname.startsWith("/api")
   ) {
-    return NextResponse.redirect(
-      new URL(`/${lng}${req.nextUrl.pathname}`, req.url),
-    );
+    const url = req.nextUrl.clone();
+    url.pathname = `/${lng}${pathname}`;
+    return NextResponse.redirect(url);
   }
 
   if (req.headers.has("referer")) {
