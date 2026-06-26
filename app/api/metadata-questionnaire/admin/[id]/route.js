@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config.js";
 import dayjs from 'dayjs';
+import { requireAdminApi, checkAdminAuth } from '@/app/api/auth/adminAuth';
 
 async function getLatestMdvMap(questionnaireId) {
   const rows = await db("meta_data_value")
@@ -68,7 +69,6 @@ async function tryProcMdvAdmin(id) {
 }
 
 // ==================== GET ====================
-import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function GET(req, props) {
     const denied = await requireAdminApi(req);
     if (denied) return denied;
