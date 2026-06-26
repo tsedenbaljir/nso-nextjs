@@ -2,7 +2,10 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 
 import { requireAdminApi } from '@/app/api/auth/adminAuth';
+
 export const dynamic = 'force-dynamic';
+
+const REPORT_FILE_TYPES = ['report', 'reportSector', 'updatereports'];
 
 export async function GET(req) {
     const denied = await requireAdminApi(req);
@@ -21,9 +24,9 @@ export async function GET(req) {
         let query = `
             SELECT *
             FROM [NSOweb].[dbo].[web_1212_download]
-            WHERE file_type in('report','reportSector') and 1=1
+            WHERE file_type IN (${REPORT_FILE_TYPES.map(() => '?').join(', ')})
         `;
-        let params = [];
+        let params = [...REPORT_FILE_TYPES];
 
         if (lng) {
             query += ` AND language = ?`;
