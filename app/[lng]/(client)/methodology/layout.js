@@ -117,16 +117,25 @@ export default function Layout(props) {
     }
   };
 
-  const onPageChange = (e) => {
-    setFirst(e.first);
-    setRows(e.rows);
-    window.scrollTo(0, 0);
-  };
+  const baseLng = lng === 'mn' ? '/mn' : '/en';
 
-  const breadMap = [
-    { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-    { label: t('statCate.methodologyText'), url: [lng === 'mn' ? '/mn/methodology/list' : '/en/methodology/list'] },
-    { label: t('metadata.classificationcode'), url: [lng === 'mn' ? '/mn/methodology/classification' : '/en/methodology/classification'] }
+  const breadMap = pathname.includes('/methodology/classification/') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
+    { label: t('metadata.classificationcode'), url: [`${baseLng}/methodology/classification`] },
+  ] : pathname.includes('/methodology/classification') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
+    { label: t('metadata.classificationcode') },
+  ] : pathname.includes('/methodology/list/') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
+  ] : pathname.includes('/methodology/list') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText') },
+  ] : [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
   ];
 
   return (

@@ -116,6 +116,28 @@ export default function Result({ type, showResult, t, loading, data, lng }) {
                             ))}
                         </div>
                     )}
+                    {data.classification && data.classification.length > 0 && type === 7 && (
+                        <div className="result_col">
+                            <span className="group_title">{t('elastic.classcode')}</span>
+                            {data.classification.map((dt, i) => (
+                                <Link
+                                    href={`/${lng}/methodology/classification/${dt._source.id}`}
+                                    key={`classification-${dt._source.id}-${i}`}
+                                    className="group_item"
+                                >
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: sanitizeHtml(
+                                                dt?.highlight?.name ||
+                                                (lng === 'mn' ? dt._source.namemn : dt._source.nameen) ||
+                                                dt._source.name
+                                            )
+                                        }}
+                                    />
+                                </Link>
+                            ))}
+                        </div>
+                    )}
                     {data.laws && data.laws.length > 0 && type === 6 && (
                         <div className="result_col">
                             <span className="group_title">{t('menuAboutUs.legal')}</span>

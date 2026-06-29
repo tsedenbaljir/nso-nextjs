@@ -15,7 +15,7 @@ export default function SideBar({ lng }) {
     const [menuItems, setMenuItems] = useState([]);
 
     const [showResult, setShowResult] = useState(false);
-    const [search, setSearching] = useState({});
+    const [search, setSearching] = useState("");
     const [data, setData] = useState({});
     const [loadingSearch, setLoadingSearch] = useState(true);
 
@@ -48,12 +48,17 @@ export default function SideBar({ lng }) {
         ]);
     }, [path]);
 
+    const isClassificationPage = path.includes('classification');
+    const resultType = isClassificationPage ? 7 : 5;
+
     return (
         <div className='pb-15'>
             <div className="__cate_search -mt-5">
                 <div className="__main_search">
                     <MainSearch setShowResult={setShowResult} t={t} setSearching={setSearching} setData={setData} setLoading={setLoadingSearch} />
-                    {search.length > 2 && <Result type={5} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />}
+                    {typeof search === 'string' && search.length > 2 && (
+                        <Result type={resultType} showResult={showResult} t={t} loading={loadingSearch} data={data} lng={lng} />
+                    )}
                 </div>
             </div>
 

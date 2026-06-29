@@ -1,24 +1,16 @@
 "use client"
 import React, { useState, useEffect, use } from 'react';
 import { Spin } from 'antd';
-import { useTranslation } from '@/app/i18n/client';
 import ClassificationList from '../ClassificationCode/ClassificationList';
-import GlossaryFilter from '../Glossary/GlossaryFilter';
-
-import Result from '@/components/Search/subMain/Result';
-import MainSearch from '@/components/Search/subMain/MainSearch';
 
 export default function Glossary(props) {
   const { lng } = use(props.params);
-  const { t } = useTranslation(lng, "lng", "");
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterLoading, setFilterLoading] = useState(false);
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
-  const [filterList, setFilterList] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState(null);
 
   const isMn = lng === 'mn';
 
@@ -29,14 +21,10 @@ export default function Glossary(props) {
       try {
         // Prepare query parameters
         const queryParams = new URLSearchParams({
-          page: Math.floor(first / rows),  // ✅ Proper pagination calculation
+          page: Math.floor(first / rows),
           pageSize: rows,
           lng: lng
         });
-
-        if (selectedFilter?.id) {
-          queryParams.append("catalogue_id", selectedFilter.id);
-        }
 
         const response = await fetch(`/api/methodology/classification?${queryParams.toString()}`);
         const result = await response.json();
@@ -59,13 +47,7 @@ export default function Glossary(props) {
     };
 
     fetchMethodology();
-  }, [first, rows, lng, selectedFilter]); // ✅ `first`, `rows`, `lng`, and `selectedFilter` are now working properly!
-
-  // const handleFilterChange = (filter) => {
-  //   setSelectedFilter(filter);
-  //   setFirst(0);
-  //   window.scrollTo(0, 0);
-  // };
+  }, [first, rows, lng]);
 
   const onPageChange = (e) => {
     setFirst(e.first);
