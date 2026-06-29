@@ -1,5 +1,8 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 import { db } from "@/app/api/config/db_csweb.config.js";
+import { ADMIN_SESSION_MAX_AGE } from "@/app/api/auth/sessionConfig";
+import { fallbackLng } from "@/app/i18n/settings";
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error(
@@ -24,25 +27,40 @@ export const options = {
         },
       },
       async authorize(credentials) {
-        
         try {
+          const username = credentials?.name?.trim();
+          const password = credentials?.password?.trim();
+
+          if (!username || !password) {
+            return null;
+          }
+
           const user = await db("user")
-            .where("username", credentials.name)
+            .where("username", username)
             .first();
-          
+
           if (!user) {
             return null;
           }
 
-          if (credentials.password === user.password) {
-            return {
-              id: user.id,
-              name: user.username,
-              // email: user.email,
-              role: user.Roles
-            };
+          const storedPassword = user.password || "";
+          const isBcryptHash = storedPassword.startsWith("$2");
+          const passwordValid = isBcryptHash
+            ? await bcrypt.compare(password, storedPassword)
+            : password === storedPassword;
+
+          if (!passwordValid) {
+            return null;
           }
-          return null;
+          // if (!isBcryptHash) {
+          //   const hashedPassword = await bcrypt.hash(credentials.password, 10);
+          //   await db("user").where({ id: user.id }).update({ password: hashedPassword });
+          // }
+          return {
+            id: user.id,
+            name: user.username,
+            role: user.Roles,
+          };
         } catch (error) {
           console.error("Auth error:", error);
           return null;
@@ -67,11 +85,14 @@ export const options = {
     }
   },
   pages: {
-    signIn: "/admin/dashboard",
+    signIn: `/${fallbackLng}/login`,
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: ADMIN_SESSION_MAX_AGE,
+  },
+  jwt: {
+    maxAge: ADMIN_SESSION_MAX_AGE,
   },
   secret: process.env.NEXTAUTH_SECRET
 };

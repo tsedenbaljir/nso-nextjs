@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/api/config/db_csweb.config.js";
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 import dayjs from 'dayjs';
+import { requireAdminApi, checkAdminAuth } from '@/app/api/auth/adminAuth';
 
 async function getLatestMdvMap(questionnaireId) {
   const rows = await db("meta_data_value")
@@ -69,7 +69,11 @@ async function tryProcMdvAdmin(id) {
 }
 
 // ==================== GET ====================
-export async function GET(req, { params }) {
+export async function GET(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+  const params = await props.params;
   const { id } = params;
   const qpOrQnrId = String(id);
 
@@ -231,7 +235,11 @@ export async function GET(req, { params }) {
 }
 
 // ==================== PUT ====================
-export async function PUT(req, { params }) {
+export async function PUT(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+  const params = await props.params;
   const { id } = params;
   const auth = await checkAdminAuth(req);
   if (!auth.isAuthenticated) {
@@ -418,7 +426,11 @@ export async function PUT(req, { params }) {
 }
 
 // ==================== DELETE (soft deactivate) ====================
-export async function DELETE(req, { params }) {
+export async function DELETE(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+  const params = await props.params;
   const auth = await checkAdminAuth(req);
   if (!auth.isAuthenticated) {
     return NextResponse.json({

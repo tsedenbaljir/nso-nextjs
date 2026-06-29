@@ -1,9 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, use } from "react";
 import { subsectorDataMap } from "./subsectorDataMap";
 import SubsectorPage from "./SubsectorPage";
 
-export default function Layout({ params: { lng } }) {
+export default function Layout(props) {
+  const {
+    lng
+  } = use(props.params);
+
   const [selectedId, setSelectedId] = useState("Subsector1");
 
   // Салбаруудыг ангилж өгнө

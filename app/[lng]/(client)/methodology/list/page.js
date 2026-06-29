@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { Spin } from "antd";
 import { useSearchParams } from 'next/navigation';
 import GlossaryList from "../Glossary/GlossaryList";
 
-export default function Glossary({ params }) {
-  const { lng } = params;
+export default function Glossary(props) {
+  const { lng } = use(props.params);
   const searchParams = useSearchParams();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,6 +83,9 @@ export default function Glossary({ params }) {
     );
   }
 
+  const selectedFromUrl = searchParams?.get('catalogue_id');
+  const catalogueId = selectedFilter?.id || selectedFromUrl || null;
+
   return (
     <div className="nso_container">
       <GlossaryList
@@ -94,6 +97,7 @@ export default function Glossary({ params }) {
         rows={rows}
         onPageChange={onPageChange}
         lng={lng}
+        catalogueId={catalogueId}
       />
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getHistoricalNames } from "@/app/services/fun-statistic";
+import { getHistoricalNames } from "@/app/services/fun-statistic-actions";
 
 export default function HistoricalGivenName() {
     const [historicalNames, setHistoricalNames] = useState([]);

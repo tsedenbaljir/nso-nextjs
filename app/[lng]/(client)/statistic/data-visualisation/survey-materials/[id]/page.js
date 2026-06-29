@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import styles from './styles.module.scss';
 
-export default function SurveyMaterials({ params }) {
+export default function SurveyMaterials(props) {
+    const { id } = use(props.params);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [lazyState, setLazyState] = useState({
@@ -21,11 +22,12 @@ export default function SurveyMaterials({ params }) {
     const loadData = async (page = 1, pageSize = 10) => {
         try {
             setLoading(true);
-            const response = await fetch(`/api/data-visualisation/downloads?data_viz_id=${params.id}&page=${page}&pageSize=${pageSize}`);
+            const response = await fetch(`/api/data-visualisation/downloads?data_viz_id=${id}&page=${page}&pageSize=${pageSize}`);
             if (!response.ok) throw new Error("Failed to fetch data");
 
             const results = await response.json();
-            const transformedData = transformDownloadData(results.data);
+            const items = Array.isArray(results) ? results : (results.data || []);
+            const transformedData = transformDownloadData(items);
             
             setData(transformedData);
             setLazyState(prev => ({
@@ -46,7 +48,7 @@ export default function SurveyMaterials({ params }) {
 
     useEffect(() => {
         loadData(lazyState.page, lazyState.rows);
-    }, [params.id]);
+    }, [id]);
 
     const transformDownloadData = (downloads) => {
         const groupedData = downloads.reduce((acc, item) => {
@@ -125,8 +127,8 @@ export default function SurveyMaterials({ params }) {
                 loading={loading}
                 className="p-datatable-sm"
                 emptyMessage="Одоогоор мэдээлэл байхгүй байна."
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport"
                 currentPageReportTemplate="Нийт: {totalRecords}"
-                showCurrentPageReport
             >
                 <Column field="name" header="Нэр" style={{ width: '50%' }} />
                 <Column header="1-р үе" body={downloadButtonTemplate(1)} style={{ width: '100px' }} />

@@ -12,8 +12,8 @@ export default function ModalImages() {
 
   const images = [
     {
-      src: "/images/Customer_Satisfaction_Survey.jpg",
-      link: "https://forms.office.com/r/zjd39SmGTF?origin=lprLink",
+      src: "/images/aant2026.jpg",
+      link: "https://2026.mn/login",
     }
   ];
 
@@ -37,7 +37,7 @@ export default function ModalImages() {
         open={open}
         footer={null}
         onCancel={() => setOpen(false)}
-        width={1000}
+        width={800}
         centered
         style={{ padding: 0, zIndex: 999999, borderRadius: 8 }}
       >

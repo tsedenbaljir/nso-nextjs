@@ -150,13 +150,23 @@
         margin-right: 50px;
         text-align: justify;
 
-        ::ng-deep img {
+        img {
             width: 100%;
+            max-width: 100%;
             height: auto;
+            display: block;
+            margin: 1rem 0;
         }
 
-        .one {
+        .one,
+        .article-body-html {
             width: 100%;
+
+            div[dir="auto"] img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+            }
         }
     }
 

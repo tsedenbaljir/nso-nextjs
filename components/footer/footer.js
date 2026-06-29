@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/i18n/client'
 import NavbarDialog from '../Dialog/NavbarDialog';
+import FooterCarousel from './FooterCarousel';
 import { notification } from 'antd';
 
 const BRANCH_SITES_NAVITEMS = [
@@ -379,6 +380,14 @@ export default function Footer({ lng }) {
                                 <div className="__plus">
                                     <i className="pi pi-file"></i>
                                 </div>
+                                <span className="__text" onClick={() => directLink("https://nsdp.nso.mn")}>
+                                    {lng === "mn" ? "SDDS үзүүлэлтүүд" : "NSDP"}
+                                </span>
+                            </div> 
+                            <div className="nso_add_item">
+                                <div className="__plus">
+                                    <i className="pi pi-file"></i>
+                                </div>
                                 <span className="__text" onClick={() => directLink("https://www.1212.mn/uploads/1764580796064-%D0%A1%D1%82%D0%B0%D1%82%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8%D0%B9%D0%BD%20%D0%BC%D1%8D%D0%B4%D1%8D%D1%8D%D0%BB%D1%8D%D0%BB%20%D1%85%D0%B0%D0%B9%D1%85%20%D0%B3%D0%B0%D1%80%D1%8B%D0%BD%20%D0%B0%D0%B2%D0%BB%D0%B0%D0%B3%D0%B0%20-%202025.pdf")}>
                                     {lng === "mn" ? "Гарын авлага" : "User manual"}
                                 </span>
@@ -388,7 +397,7 @@ export default function Footer({ lng }) {
                                     <i className="pi pi-check"></i>
                                 </div>
                                 <span className="__text">
-                                    <a href={`${lng === "mn" ? "https://www.nso.mn/mn/terms_of_use" : 'https://www.nso.mn/en/terms_of_use'}`} target="_blank" rel="noopener noreferrer">
+                                    <a href={`${lng === "mn" ? "https://www.1212.mn/mn/terms_of_use" : 'https://www.1212.mn/en/terms_of_use'}`} target="_blank" rel="noopener noreferrer">
                                         {lng === "mn" ? "Ашиглах нөхцөл" : "Terms of use"}
                                     </a>
                                 </span>
@@ -414,6 +423,9 @@ export default function Footer({ lng }) {
                                 <span>{t('footer.total')}</span>
                                 <span>{!loading && Number(data?.rows[0]?.metricValues[0]?.value).toLocaleString('en-US')}</span>
                             </div>
+                            {/* <div style={{ marginTop: '90px' }}>
+                                <FooterCarousel />
+                            </div> */}
                         </div>
                     </div>
                     <div className="col-12 md:col-4 lg:col-4">

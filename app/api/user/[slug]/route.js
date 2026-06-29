@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { getUserInfoModel } from "@/app/services/model/UserModel";
 
-export async function GET(request, { params: { slug } }) {
+export async function GET(request, props) {
+  const params = await props.params;
+
+  const {
+    slug
+  } = params;
+
   if (!request.headers.get("X-API-Key")) {
     return NextResponse.json({ message: "Unauthorized" });
   }

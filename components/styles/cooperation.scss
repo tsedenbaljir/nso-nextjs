@@ -9,13 +9,13 @@
         color: var(--text-main);
     }
 
-    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
         color: var(--accent);
         border-top: 2px solid;
         background-color: #e4eeff5c;
     }
     
-    ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
         padding: 0;
         background: none;
 

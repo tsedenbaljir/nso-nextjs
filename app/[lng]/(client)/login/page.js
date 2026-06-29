@@ -1,12 +1,13 @@
 "use client"
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Spin, message } from "antd";
 
 export default function Login() {
-  const router = useRouter();
+  const pathname = usePathname();
+  const lng = pathname?.split("/")[1] || "mn";
   const [loading, setLoading] = useState(false)
 
   const onFinish = async (values) => {
@@ -17,12 +18,11 @@ export default function Login() {
         password: values.password,
         redirect: false,
       });
-      if (result.error) {
+      if (result?.error) {
         message.error("Хэрэглэгчийн нэр эсвэл нууц үг буруу байна.");
         setLoading(false);
       } else {
-        router.refresh();
-        router.push("/admin/dashboard");
+        window.location.assign(`/${lng}/admin/dashboard`);
       }
     } catch (error) {
       setLoading(false);

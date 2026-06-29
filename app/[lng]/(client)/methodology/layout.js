@@ -1,12 +1,21 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import Sidebar from './sidebar';
 import Path from '@/components/path/Index';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import GlossaryFilter from './Glossary/GlossaryFilter';
+import { encodeQueryParam } from '@/utils/resolveMediaUrl';
 
-export default function Layout({ children, params: { lng } }) {
+export default function Layout(props) {
+  const {
+    lng
+  } = use(props.params);
+
+  const {
+    children
+  } = props;
+
   const { t } = useTranslation(lng, "lng", "");
   const [loading, setLoading] = useState(true);
   const [first, setFirst] = useState(0);
@@ -35,7 +44,7 @@ export default function Layout({ children, params: { lng } }) {
         // Fetch subcategories
         const fetchSubcategories = async (categoryId) => {
           try {
-            const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+            const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${encodeQueryParam(categoryId)}&lng=${lng}`);
             const result = await response.json();
 
             if (!Array.isArray(result.data)) {
@@ -108,16 +117,25 @@ export default function Layout({ children, params: { lng } }) {
     }
   };
 
-  const onPageChange = (e) => {
-    setFirst(e.first);
-    setRows(e.rows);
-    window.scrollTo(0, 0);
-  };
+  const baseLng = lng === 'mn' ? '/mn' : '/en';
 
-  const breadMap = [
-    { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
-    { label: t('statCate.methodologyText'), url: [lng === 'mn' ? '/mn/methodology/list' : '/en/methodology/list'] },
-    { label: t('metadata.classificationcode'), url: [lng === 'mn' ? '/mn/methodology/classification' : '/en/methodology/classification'] }
+  const breadMap = pathname.includes('/methodology/classification/') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
+    { label: t('metadata.classificationcode'), url: [`${baseLng}/methodology/classification`] },
+  ] : pathname.includes('/methodology/classification') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
+    { label: t('metadata.classificationcode') },
+  ] : pathname.includes('/methodology/list/') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
+  ] : pathname.includes('/methodology/list') ? [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText') },
+  ] : [
+    { label: t('home'), url: [baseLng] },
+    { label: t('statCate.methodologyText'), url: [`${baseLng}/methodology/list`] },
   ];
 
   return (

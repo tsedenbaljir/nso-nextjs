@@ -1,4 +1,5 @@
 "use client"
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import React, { useState, useEffect } from 'react';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
@@ -372,7 +373,7 @@ export default function ContactUsAdmin() {
                                     maxHeight: '200px',
                                     overflow: 'auto'
                                 }}
-                                dangerouslySetInnerHTML={{ __html: selectedItem.bodyMn || 'Агуулга байхгүй' }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedItem.bodyMn || 'Агуулга байхгүй')}}
                                 />
                             </Col>
                             <Col span={12}>
@@ -387,7 +388,7 @@ export default function ContactUsAdmin() {
                                     maxHeight: '200px',
                                     overflow: 'auto'
                                 }}
-                                dangerouslySetInnerHTML={{ __html: selectedItem.bodyEn || 'No content' }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedItem.bodyEn || 'No content')}}
                                 />
                             </Col>
                         </Row>

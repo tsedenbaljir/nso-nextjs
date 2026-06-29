@@ -1,9 +1,15 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import Layout from '@/components/baseLayout';
 import Link from 'next/link';
 
-export default function Download({ params: { id, file, lng } }) {
+export default function Download(props) {
+    const {
+        id,
+        file,
+        lng
+    } = use(props.params);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -31,7 +37,7 @@ export default function Download({ params: { id, file, lng } }) {
                 // Check if we have news data and headerImage
                 if (sideBarNews && sideBarNews.data[0].header_image) {
                     // Redirect to the download URL
-                    window.location.replace(`https://www.nso.mn/uploads/${sideBarNews.data[0].header_image}`, '_blank');
+                    window.location.replace(`https://www.1212.mn/uploads/${sideBarNews.data[0].header_image}`, '_blank');
                     setLoading(false);
                 } else {
                     setError('No download file found');

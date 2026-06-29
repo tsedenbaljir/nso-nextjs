@@ -1,6 +1,10 @@
+"use client";
 import { useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Paginator } from "primereact/paginator";
 import { getSectorNameById } from "./sectors";
+import { CENSUS_SUB_FILTER_YEARS_BY_ID } from "@/lib/census-file-library-years";
+import { resolveMediaUrl } from "@/utils/resolveMediaUrl";
 
 export default function Tabs({
     lng,
@@ -10,6 +14,32 @@ export default function Tabs({
     pagination,
     setPagination,
 }) {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const activeSub = searchParams.get("sub") ?? undefined;
+
+    const typeNum =
+        type === undefined || type === null || type === ""
+            ? NaN
+            : parseInt(String(type), 10);
+    const censusYearOptions =
+        !Number.isNaN(typeNum) &&
+        (CENSUS_SUB_FILTER_YEARS_BY_ID[typeNum]?.length ?? 0) > 0
+            ? CENSUS_SUB_FILTER_YEARS_BY_ID[typeNum]
+            : null;
+
+    const setSubYearFilter = (year) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (year == null || year === "") {
+            params.delete("sub");
+        } else {
+            params.set("sub", String(year));
+        }
+        const q = params.toString();
+        router.push(q ? `${pathname}?${q}` : pathname);
+    };
+
     const [isOpen, setIsOpen] = useState(false);
     const [activeFilter, setActiveFilter] = useState(lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first");
 
@@ -63,7 +93,7 @@ export default function Tabs({
             const parsed =
                 typeof fileInfo === "string" ? JSON.parse(fileInfo) : fileInfo;
             if (!parsed?.pathName) return;
-            const url = `${process.env.FRONTEND}/uploads/${parsed.pathName}`;
+            const url = resolveMediaUrl(`/uploads/${parsed.pathName}`);
             window.open(url, "_blank");
             await fetch(`/api/file-library`, {
                 method: "POST",
@@ -143,6 +173,42 @@ export default function Tabs({
                                 )}
                             </div>
                         </div>
+                        {censusYearOptions && (
+                            <div className="flex gap-2 mb-3 mt-2 items-start">
+                                <span className="text-sm text-gray-600 mr-1 shrink-0 pt-1.5">
+                                    {lng === "mn" ? "Он:" : "Year:"}
+                                </span>
+                                <div className="min-w-0 flex-1 max-h-32 sm:max-h-36 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-gutter:stable]">
+                                    <div className="flex flex-wrap gap-2 items-center">
+                                        <button
+                                            type="button"
+                                            onClick={() => setSubYearFilter(null)}
+                                            className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                activeSub == null || activeSub === ""
+                                                    ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                    : "border-gray-300 bg-white hover:bg-gray-50"
+                                            }`}
+                                        >
+                                            {lng === "mn" ? "Бүгд" : "All"}
+                                        </button>
+                                        {censusYearOptions.map((year) => (
+                                            <button
+                                                key={year}
+                                                type="button"
+                                                onClick={() => setSubYearFilter(year)}
+                                                className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                    activeSub === String(year)
+                                                        ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                        : "border-gray-300 bg-white hover:bg-gray-50"
+                                                }`}
+                                            >
+                                                {year}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         <div className='mb-4' style={{
                             height: 30,
                             fontWeight: 500,

@@ -10,6 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "ҮСХ - Үндэсний статистикийн хороо",
   description: "Үндэсний статистикийн хороо – Монгол Улсын албан ёсны статистик мэдээллийн нэгдсэн сан. Эдийн засаг, хүн ам, нийгэм, байгаль орчны статистик мэдээ, тайлан, дата.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
   keywords: [
       "ҮСХ", 
       "Үндэсний статистикийн хороо", 
@@ -80,7 +84,6 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-9DGLNDV1MB');
           `}
         </Script>
-        <Script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=loadCaptcha" async defer></Script>
       </head>
       <body className={inter.className}>
         <Providers>

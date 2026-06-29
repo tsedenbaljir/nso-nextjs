@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import LoadingDiv from "@/components/Loading/Text/Index";
 import "@/components/styles/statistic.scss";
 
-export default function Statcate({ params }) {
+export default function Statcate(props) {
+  const { id } = use(props.params);
   const [data, setData] = useState([]);
   const [dashboard, setDashboard] = useState("");
   const [loading, setLoading] = useState(true);
@@ -14,7 +15,7 @@ export default function Statcate({ params }) {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `/api/data-visualisation/dashboard?data_viz_id=${params.id}`
+          `/api/data-visualisation/dashboard?data_viz_id=${id}`
         );
         if (!response.ok) throw new Error("Failed to fetch data");
 
@@ -28,24 +29,23 @@ export default function Statcate({ params }) {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   const onSelectItem = async (dash) => {
+    if (!dash) return;
     setLoadingDash(true);
-    const params = new URLSearchParams();
-    params.append("key", "value");
-    // Fetch Tableau Key
-    const tableauResponse = await fetch(
-      `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${params.toString()}`,
-      { cache: "no-store" }
-    );
-    if (!tableauResponse.ok) throw new Error("Failed to fetch Tableau key");
-
-    const tableauResult = await tableauResponse.json();
-    const tkt = tableauResult?.value;
-    // Ensure `data.tableau` exists before setting `iframeSrc`
-    if (tkt && dash) {
+    setError(null);
+    try {
+      const res = await fetch("/api/tableau-key?key=ViewerUser", { cache: "no-store" });
+      if (!res.ok) throw new Error(`Tableau key алдаа: ${res.status}`);
+      const tableauResult = await res.json();
+      const tkt = tableauResult?.value;
+      if (!tkt) throw new Error("Tableau ticket олдсонгүй");
       setDashboard(`https://tableau.1212.mn/trusted/${tkt}${dash}`);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Дашбоард ачаалахад алдаа гарлаа.");
+    } finally {
       setLoadingDash(false);
     }
   };
@@ -70,10 +70,10 @@ export default function Statcate({ params }) {
           )}
           <div className="__data_vis_cards w-full">
             {data.length > 0 &&
-              data.map((dt, index) => {
+              data.map((dt) => {
                 return (
                   <div
-                    index={index}
+                    key={dt.id}
                     onClick={() => {
                       onSelectItem(dt.tableau);
                     }}

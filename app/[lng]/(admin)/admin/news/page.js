@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, use } from 'react';
 import { useTranslation } from '@/app/i18n/client'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
@@ -15,7 +15,11 @@ import "primereact/resources/themes/lara-light-indigo/theme.css"
 import "primereact/resources/primereact.min.css"
 import "primeicons/primeicons.css"
 
-export default function AllNews({ params: { lng } }) {
+export default function AllNews(props) {
+    const {
+        lng
+    } = use(props.params);
+
     const router = useRouter()
     const { t } = useTranslation(lng)
     const [articles, setArticles] = useState([])

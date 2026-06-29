@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Form, message, Button, Modal, Input, Select, Space, Card, Statistic, Row, Col, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 import { DataTable } from 'primereact/datatable';
@@ -18,7 +18,11 @@ import {
 
 const { Option } = Select;
 
-export default function ReportAdmin({ params: { lng } }) {
+export default function ReportAdmin(props) {
+    const {
+        lng
+    } = use(props.params);
+
     const [form] = Form.useForm();
     const [editForm] = Form.useForm();
     const [loading, setLoading] = useState(true);
@@ -58,7 +62,7 @@ export default function ReportAdmin({ params: { lng } }) {
         { value: 'report', label: 'Салбарын тайлан' },
         // { value: 'pahc', label: 'Аргачлал' },
         { value: 'reportSector', label: 'Чанарын тайлан' },
-        // { value: 'other', label: 'Бусад' }
+        { value: 'updatereports', label: 'Шинэчлэлт, засварлалтын мэдээлэл' }
     ];
 
     const languages = [

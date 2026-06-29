@@ -39,114 +39,112 @@
 }
 
 
-:host {
-    ::ng-deep .p-datatable {
-        font-style: normal;
-        font-size: var(--font-size14);
-        line-height: 20px;
+.p-datatable {
+    font-style: normal;
+    font-size: var(--font-size14);
+    line-height: 20px;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+    padding: .8rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--surface-dark);
+
+    &:first-child {
+        text-align: left;
     }
+}
 
-    ::ng-deep .p-datatable .p-datatable-thead>tr>th {
-        padding: .8rem 1rem;
-        text-align: center;
-        border-bottom: 1px solid var(--surface-dark);
+.p-datatable .p-sortable-column.p-highlight {
+    background: var(--table-header);
+}
 
-        &:first-child {
-            text-align: left;
-        }
-    }
+.p-datatable .p-datatable-tbody>tr {
+    background-color: transparent;
+}
 
-    ::ng-deep .p-datatable .p-sortable-column.p-highlight {
-        background: var(--table-header);
-    }
+.p-datatable .p-datatable-tbody>tr>td {
+    color: var(--text-main) !important;
+}
 
-    ::ng-deep .p-datatable .p-datatable-tbody>tr {
-        background-color: transparent;
-    }
+.p-datatable .p-datatable-tbody>tr>td:first-child {
+    font-weight: 500;
+    letter-spacing: -1px;
+}
 
-    ::ng-deep .p-datatable .p-datatable-tbody>tr>td {
-        color: var(--text-main) !important;
-    }
+.p-paginator .p-paginator-current {
+    font-size: var(--font-size14);
+}
 
-    ::ng-deep .p-datatable .p-datatable-tbody>tr>td:first-child {
-        font-weight: 500;
-        letter-spacing: -1px;
-    }
+.p-paginator .p-paginator-pages .p-paginator-page {
+    font-size: var(--font-size15);
+    background: var(--surface-a);
+    border: 1px solid rgba(206, 208, 209, 0.32);
+    color: var(--text-main);
 
-    ::ng-deep .p-paginator .p-paginator-current {
-        font-size: var(--font-size14);
-    }
-
-    ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
-        font-size: var(--font-size15);
-        background: var(--surface-a);
-        border: 1px solid rgba(206, 208, 209, 0.32);
-        color: var(--text-main);
-
-        &:hover {
-            color: var(--surface-c);
-        }
-    }
-
-    ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-        background: var(--surface-a);
-        border: 1px solid var(--surface-c);
-        border-radius: 0;
+    &:hover {
         color: var(--surface-c);
-        font-weight: 700;
-
-        &:hover {
-            background: var(--surface-c);
-            color: var(--surface-a);
-        }
     }
+}
 
-    ::ng-deep .p-paginator .p-paginator-first {
-        display: none;
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: var(--surface-a);
+    border: 1px solid var(--surface-c);
+    border-radius: 0;
+    color: var(--surface-c);
+    font-weight: 700;
+
+    &:hover {
+        background: var(--surface-c);
+        color: var(--surface-a);
     }
+}
 
-    ::ng-deep .p-paginator .p-paginator-last {
-        display: none;
+.p-paginator .p-paginator-first {
+    display: none;
+}
+
+.p-paginator .p-paginator-last {
+    display: none;
+}
+
+.p-paginator .p-paginator-next {
+    font-size: var(--font-size15);
+    background: var(--surface-a);
+    border-radius: 0;
+    border: 1px solid rgba(206, 208, 209, 0.32);
+    color: var(--devide);
+
+    &:hover {
+        background: var(--surface-a) !important;
+        color: var(--text-main);
+        border: 1px solid rgba(206, 208, 209, 0.32) !important;
     }
+}
 
-    ::ng-deep .p-paginator .p-paginator-next {
-        font-size: var(--font-size15);
-        background: var(--surface-a);
-        border-radius: 0;
-        border: 1px solid rgba(206, 208, 209, 0.32);
-        color: var(--devide);
+.p-paginator .p-paginator-prev {
+    font-size: var(--font-size15);
+    background: var(--surface-a);
+    border-radius: 0;
+    border: 1px solid rgba(206, 208, 209, 0.32);
+    color: var(--devide);
 
-        &:hover {
-            background: var(--surface-a) !important;
-            color: var(--text-main);
-            border: 1px solid rgba(206, 208, 209, 0.32) !important;
-        }
+    &:hover {
+        background: var(--surface-a) !important;
+        color: var(--text-main);
+        border: 1px solid rgba(206, 208, 209, 0.32) !important;
     }
+}
 
-    ::ng-deep .p-paginator .p-paginator-prev {
-        font-size: var(--font-size15);
-        background: var(--surface-a);
-        border-radius: 0;
-        border: 1px solid rgba(206, 208, 209, 0.32);
-        color: var(--devide);
+.p-disabled,
+.p-component:disabled {
+    background: var(--text-main) !important;
+    color: var(--surface-a) !important;
+    opacity: 0.12;
+}
 
-        &:hover {
-            background: var(--surface-a) !important;
-            color: var(--text-main);
-            border: 1px solid rgba(206, 208, 209, 0.32) !important;
-        }
-    }
-
-    ::ng-deep .p-disabled,
-    .p-component:disabled {
-        background: var(--text-main) !important;
-        color: var(--surface-a) !important;
-        opacity: 0.12;
-    }
-
-    ::ng-deep .p-datatable .p-paginator-bottom {
-        border-width: 0;
-    }
+.p-datatable .p-paginator-bottom {
+    border-width: 0;
 }
 
 .__row_link {

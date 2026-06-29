@@ -1,9 +1,10 @@
 "use client";
+import { use } from "react";
 import Tabs from "../../../tabs";
 import Sidebar from "../../../sidebar";
 
-export default function StateCate({ params: { lng }, params }) {
-    const { tabs, sector, subsector } = params;
+export default function StateCate(props) {
+    const { tabs, sector, subsector, lng } = use(props.params);
 
     if (decodeURIComponent(sector) === "Historical data" && tabs === "report") {
         return <div className="nso_container">

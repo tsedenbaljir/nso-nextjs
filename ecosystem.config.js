@@ -14,7 +14,7 @@ module.exports = {
       repo: "https://github.com/tsedenbaljir/nso-nextjs.git",
       path: "/home/nso/nso.mn",
       "post-deploy":
-        "npm install --force && npm run build && pm2 reload ecosystem.config.js --env production",
+        "npm install --legacy-peer-deps && npm run build && pm2 reload ecosystem.config.js --env production",
       shallow: true // <-- This reduces the amount of Git history fetched
     },
   },

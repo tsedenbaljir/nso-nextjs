@@ -18,11 +18,7 @@ export default function DynamicSidebar({ lng, type, sub }) {
             if (s.subFilters?.length) {
                 const isActive =
                     typeId === String(s.id) ||
-                    s.subFilters.some(
-                        (subItem) =>
-                            typeId === String(subItem.id) ||
-                            (subItem.years && subItem.years.includes(sub))
-                    );
+                    s.subFilters.some((subItem) => typeId === String(subItem.id));
                 if (isActive) initial[String(s.id)] = true;
             }
         });
@@ -37,11 +33,7 @@ export default function DynamicSidebar({ lng, type, sub }) {
                 if (!s.subFilters?.length) return;
                 const isActive =
                     typeId === String(s.id) ||
-                    s.subFilters.some(
-                        (subItem) =>
-                            typeId === String(subItem.id) ||
-                            (subItem.years && subItem.years.includes(sub))
-                    );
+                    s.subFilters.some((subItem) => typeId === String(subItem.id));
                 if (isActive) next[String(s.id)] = true;
             });
             return next;
@@ -102,35 +94,12 @@ export default function DynamicSidebar({ lng, type, sub }) {
                             <ul className="__cate_sub_list">
                                 {lt.subFilters.map((subItem, subIndex) => (
                                     <li key={subItem.id ?? subIndex} className="__cate_sub_li">
-                                        {subItem.years ? (
-                                            <>
-                                                <div className="__cate_sub_label">
-                                                    {lng === 'mn' ? subItem.mnName : subItem.enName}
-                                                </div>
-                                                <ul className="__cate_year_list">
-                                                    {subItem.years.map((year) => {
-                                                        const isYearActive = typeId === String(subItem.id) && sub === year;
-                                                        return (
-                                                            <li key={year} className="__cate_year_li">
-                                                                <a
-                                                                    className={`__cate_year_link min_cate border-0 small ${isYearActive ? 'active' : ''}`}
-                                                                    onClick={(e) => handleSubClick(e, subItem.id, { value: year })}
-                                                                >
-                                                                    – {year}
-                                                                </a>
-                                                            </li>
-                                                        );
-                                                    })}
-                                                </ul>
-                                            </>
-                                        ) : (
-                                            <a
-                                                className={`__cate_sub_link min_cate border-0 small ${typeId === String(subItem.id) ? 'active' : ''}`}
-                                                onClick={(e) => handleSubClick(e, lt.id, subItem)}
-                                            >
-                                                – {lng === 'mn' ? subItem.mnName : subItem.enName}
-                                            </a>
-                                        )}
+                                        <a
+                                            className={`__cate_sub_link min_cate border-0 small ${typeId === String(subItem.id) ? 'active' : ''}`}
+                                            onClick={(e) => handleSubClick(e, lt.id, subItem)}
+                                        >
+                                            – {lng === 'mn' ? subItem.mnName : subItem.enName}
+                                        </a>
                                     </li>
                                 ))}
                             </ul>

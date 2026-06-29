@@ -2,6 +2,17 @@
 import { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
+import { resolveMediaUrl } from "@/utils/resolveMediaUrl";
+
+function formatDateYMD(value) {
+    if (value == null || value === "") return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
 
 export default function Main({ sector, subsector, lng }) {
 
@@ -72,7 +83,7 @@ export default function Main({ sector, subsector, lng }) {
                             incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
+                                window.open(resolveMediaUrl(`/uploads/${filePath}`), "_blank");
                             }
                         }}
                             className="md:w-[200px] lg:w-[300px] xl:w-[400px] break-words hover:text-blue-700 hover:underline text-gray-900 font-medium cursor-pointer">
@@ -111,7 +122,7 @@ export default function Main({ sector, subsector, lng }) {
                     className="nso_table_col"
                     body={(rowData) => (
                         <span className="text-black font-normal">
-                            {rowData.published_date.substr(0, 10)}
+                            {formatDateYMD(rowData.published_date)}
                         </span>
                     )}
                 />
@@ -135,7 +146,7 @@ export default function Main({ sector, subsector, lng }) {
                             incrementViews(rowData.id)
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
+                                window.open(resolveMediaUrl(`/uploads/${filePath}`), "_blank");
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">

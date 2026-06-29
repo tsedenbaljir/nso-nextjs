@@ -371,6 +371,12 @@
   display: block;
 }
 
+/* Fixed .nso_header-ийн өндөрт тохируулан үндсэн агуулгыг доошлуулна */
+.nso-main-below-header {
+  padding-top: var(--header-h, 161px);
+  min-width: 0;
+}
+
 
 // .dropdown:hover a {
 //   background-color: #3e8e41;

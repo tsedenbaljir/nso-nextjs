@@ -1,11 +1,12 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import "@/components/styles/news.scss";
 import Articles from '@/components/articles/Articles';
 import TextLoading from '@/components/Loading/Text/Index';
 import ArticleSideBar from '@/components/articles/ArticleSideBar';
 
-export default function Home({ params: { lng }, params }) {
+export default function Home(props) {
+    const { lng, id } = use(props.params);
     const [article, setAritcles] = useState([]);
     const [sidebar, setSidebar] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export default function Home({ params: { lng }, params }) {
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(`/api/articles/${params.id}`, {
+                const response = await fetch(`/api/articles/${id}`, {
                     ...requestOptions,
                     cache: 'no-store',  // Prevents caching
                 });
@@ -56,7 +57,7 @@ export default function Home({ params: { lng }, params }) {
         };
 
         fetchSideBar();
-    }, [lng]);
+    }, [lng, id]);
 
     return (
         <>

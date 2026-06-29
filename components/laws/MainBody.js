@@ -3,13 +3,22 @@ import { useRouter } from "next/navigation";
 
 export default function Body({ dt }) {
     const router = useRouter();
+
+    const handleOpen = () => {
+        if (dt.link_url) {
+            window.open(dt.link_url, '_blank', 'noopener,noreferrer');
+            return;
+        }
+        if (dt.file_path) {
+            router.push(dt.file_path);
+        }
+    };
+
     return (
         <div
             className="__post"
             target="blank"
-            onClick={() => {
-                router.push(dt.file_path);
-            }}
+            onClick={handleOpen}
         >
             <img
                 src="/images/about_us/pdf-logo.png"
@@ -20,7 +29,7 @@ export default function Body({ dt }) {
                     {dt.name}
                 </div>
                 <div className="__view_comments">
-                    <span className="__date text-gray-5 text-sm ml-2">{dt.created_date.substr(0, 10)}</span>
+                    <span className="__date text-gray-5 text-sm ml-2">{dt.created_date?.substr(0, 10) || ''}</span>
                 </div>
             </div>
             <img

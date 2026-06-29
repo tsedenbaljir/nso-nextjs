@@ -1,10 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function MenuItems({ name, isActive, link }) {
+    const pathname = usePathname();
+    const lng = pathname?.split("/")[1] || "mn";
+
     return (
         <li>
-            <Link href={"/admin/" + link}>
+            <Link href={`/${lng}/admin/${link}`}>
                 <div
                     className={`relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out ${isActive
                         ? "dark:bg-white/10 text-white bg-blue-600"

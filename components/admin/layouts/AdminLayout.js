@@ -1,21 +1,42 @@
 'use client';
 import React, { useEffect } from 'react';
 import { Spin } from 'antd';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
+import { message } from 'antd';
 import Sidebar from '@/components/admin/sidebar/page';
 import Header from '@/components/admin/header/index';
 
 const AdminLayout = ({ children }) => {
     const router = useRouter();
+    const pathname = usePathname();
+    const lng = pathname?.split('/')[1] || 'mn';
     const { data: session, status } = useSession();
 
     useEffect(() => {
         if (status === 'loading') return;
         if (!session) {
-            router.push('/login');
+            router.push(`/${lng}/login`);
         }
-    }, [session, status, router]);
+    }, [session, status, router, lng]);
+
+    useEffect(() => {
+        if (status === 'loading' || !session?.expires) return;
+
+        const logoutExpired = () => {
+            message.warning('Нэвтрэх хугацаа дууссан. Дахин нэвтэрнэ үү.');
+            signOut({ redirect: false }).then(() => router.push(`/${lng}/login`));
+        };
+
+        const remaining = new Date(session.expires).getTime() - Date.now();
+        if (remaining <= 0) {
+            logoutExpired();
+            return;
+        }
+
+        const timer = setTimeout(logoutExpired, remaining);
+        return () => clearTimeout(timer);
+    }, [session?.expires, status, router, lng]);
 
     // Show loading state while checking authentication
     if (status === 'loading') {

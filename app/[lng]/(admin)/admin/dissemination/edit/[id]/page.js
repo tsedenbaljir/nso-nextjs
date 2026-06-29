@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation'
 import LoaderText from '@/components/Loading/Text/Index'
 import Editor from '@/components/admin/Editor/editor'
@@ -7,7 +7,11 @@ import InputItems from "@/components/admin/Edits/AddNew/InputItems"
 import SelectInput from "@/components/admin/Edits/Select/SelectInput"
 import Upload from "@/components/admin/Edits/UploadImages/Upload"
 
-export default function EditDissemination({ params: { id } }) {
+export default function EditDissemination(props) {
+    const {
+        id
+    } = use(props.params);
+
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [title, setTitle] = useState('')
@@ -169,11 +173,12 @@ export default function EditDissemination({ params: { id } }) {
             <div className="items-center justify-between px-4 md:px-5 2xl:px-10">
                 <div className='flex flex-wrap gap-3 mb-4'>
                     <SelectInput
-                        setFields={(value) => setNewsType(value === 1 ? 'LATEST' : 'FUTURE')}
-                        value={newsType === 'LATEST' ? 1 : 2}
+                        setFields={(value) => setNewsType(value === 1 ? 'LATEST' : value === 2 ? 'FUTURE' : 'UPDATED')}
+                        value={newsType === 'LATEST' ? 1 : newsType === 'FUTURE' ? 2 : 3}
                         data={[
                             { id: 1, name: "Сүүлд гарсан" },
-                            { id: 2, name: "Удахгүй гарах" }
+                            { id: 2, name: "Удахгүй гарах" },
+                            { id: 3, name: "Шинэчилж засварлах" }
                         ]}
                     />
                     <SelectInput

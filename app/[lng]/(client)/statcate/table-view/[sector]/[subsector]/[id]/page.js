@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useSearchParams } from "next/navigation";
 import VariablesPanel from '@/components/table-view/VariablePanel';
 import Loading from '@/components/Loader';
@@ -7,13 +7,8 @@ import DataQueryInterface from '@/components/DataQueryInterface';
 import { Collapse, Space } from 'antd';
 import { ApiOutlined } from '@ant-design/icons';
 
-const { Panel } = Collapse;
-
-export default function TableView({ params }) {
-    const lng = params.lng;
-    const sector = params.sector;
-    const subsector = params.subsector;
-    const id = params.id;
+export default function TableView(props) {
+    const { lng, sector, subsector, id } = use(props.params);
     const searchParams = useSearchParams();
     const subtables = searchParams.get('subtables');
 
@@ -76,7 +71,7 @@ export default function TableView({ params }) {
             }
         }
         getMetadata()
-    }, [params, subtables]);
+    }, [lng, sector, subsector, id, subtables]);
 
     return (
         <div className="nso_container">
@@ -98,19 +93,22 @@ export default function TableView({ params }) {
 
                 {/* Data Query Interface */}
                 <div className="mt-8">
-                    <Collapse>
-                        <Panel
-                            header={
-                                <Space>
-                                    <ApiOutlined />
-                                    <span className='text-lg font-normal'>{lng === 'mn' ? 'Дараах хаягаас POST хүсэлт илгээх' : 'Send POST request from the following URL'}</span>
-                                </Space>
-                            }
-                            key="1"
-                        >
-                            <DataQueryInterface subtables={subtables} sector={sector} subsector={subsector} id={id} lng={lng} selectedValues={selectedValues} />
-                        </Panel>
-                    </Collapse>
+                    <Collapse
+                        items={[
+                            {
+                                key: "1",
+                                label: (
+                                    <Space>
+                                        <ApiOutlined />
+                                        <span className='text-lg font-normal'>{lng === 'mn' ? 'Дараах хаягаас POST хүсэлт илгээх' : 'Send POST request from the following URL'}</span>
+                                    </Space>
+                                ),
+                                children: (
+                                    <DataQueryInterface subtables={subtables} sector={sector} subsector={subsector} id={id} lng={lng} selectedValues={selectedValues} />
+                                ),
+                            },
+                        ]}
+                    />
                 </div>
             </div>
         </div>

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 
-export async function GET(req, { params }) {
+export async function GET(req, props) {
+  const params = await props.params;
   try {
     const { id } = params;
     

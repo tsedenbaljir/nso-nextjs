@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, { params }) {
+export async function GET(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+    const params = await props.params;
     try {
         const { id } = params;
         // First check if article exists
@@ -35,7 +40,11 @@ export async function GET(req, { params }) {
     }
 }
 
-export async function PUT(req, { params }) {
+export async function PUT(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+    const params = await props.params;
     try {
         const { id } = params;
         const data = await req.json();
@@ -133,7 +142,7 @@ export async function PUT(req, { params }) {
                 last_modified_by = ?,
                 last_modified_date = ?,
                 slug = ?
-            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE')
+            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE', 'UPDATED')
         `, sqlParams);
 
         return NextResponse.json({
@@ -154,13 +163,17 @@ export async function PUT(req, { params }) {
     }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+    const params = await props.params;
     try {
         const { id } = params;
 
         await db.raw(`
             DELETE FROM web_1212_content 
-            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE')
+            WHERE id = ? AND content_type = 'NEWS' AND news_type in('LATEST', 'FUTURE', 'UPDATED')
         `, [id]);
 
         return NextResponse.json({

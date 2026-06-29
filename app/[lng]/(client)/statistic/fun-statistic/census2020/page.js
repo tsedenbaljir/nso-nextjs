@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import LoadingDiv from "@/components/Loading/Text/Index";
 import "@/components/styles/statistic.scss";
-import { fetchTableauTicket } from "@/app/services/fun-statistic";
+import { fetchTableauTicket } from "@/app/services/fun-statistic-actions";
 
 export default function Statcate() {
   const [dashboard, setDashboard] = useState("");

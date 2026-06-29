@@ -62,13 +62,6 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
         }
     };
 
-    const handleKeyPress = (event) => {
-        if (event.key === 'Enter' && searchTerm.length > 2) {
-            performSearch(searchTerm);
-            setShowResult(true);
-        }
-    };
-
     return (
         <span className="__search"
             style={{ border: "2px solid #005baa" }}>
