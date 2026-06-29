@@ -69,6 +69,19 @@ function homoReturnNii(count) {
     }
 }
 
+function toHomoIntParam(value, fallback = 0) {
+    if (value == null || value === "") return fallback;
+    if (typeof value === "number" && Number.isFinite(value)) {
+        return Math.trunc(value);
+    }
+
+    const str = String(value).trim();
+    if (!str || str === "*") return fallback;
+
+    const num = Number(str);
+    return Number.isInteger(num) ? num : fallback;
+}
+
 async function getHomoDataFromLegacy(registerNo) {
     const homoNameResult = await homoStatistic.raw(
         "EXEC [dbo].[HomoGetNames] @RegisterNo = ?",
@@ -78,19 +91,15 @@ async function getHomoDataFromLegacy(registerNo) {
 
     const nameParam =
         homoName.givenName || homoName.name || homoName.Name || "";
-    const ageParam = homoName.age || homoName.Age || 0;
-    const educationLevelIDParam =
-        homoName.educationLevelID ||
-        homoName.EducationLevelID ||
-        homoName.educationLevel ||
-        homoName.EducationLevel ||
-        "";
-    const employmentStatusIDParam =
-        homoName.employmentStatusID ||
-        homoName.EmploymentStatusID ||
-        homoName.employmentStatus ||
-        homoName.EmploymentStatus ||
-        0;
+    const ageParam = toHomoIntParam(homoName.age ?? homoName.Age, 0);
+    const educationLevelIDParam = toHomoIntParam(
+        homoName.educationLevelID ?? homoName.EducationLevelID,
+        0
+    );
+    const employmentStatusIDParam = toHomoIntParam(
+        homoName.employmentStatusID ?? homoName.EmploymentStatusID,
+        0
+    );
     const birthDateParam =
         homoName.BirthDate || homoName.birthDate || homoName.dateBirth || null;
     const registerNoParam =
