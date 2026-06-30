@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { resolveMediaUrl } from "@/utils/resolveMediaUrl";
+import HistoricalYearLinks from "./historical-year-links";
 
 function formatDateYMD(value) {
     if (value == null || value === "") return "";
@@ -21,7 +22,11 @@ export default function Main({ sector, subsector, lng }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch subcategories
+        if (sector === "Historical data") {
+            setLoading(false);
+            return;
+        }
+
         const fetchSubcategories = async () => {
             try {
                 const response = await fetch(`/api/download?info=${subsector}&lng=${lng}&type=report`);
@@ -40,6 +45,10 @@ export default function Main({ sector, subsector, lng }) {
         };
         fetchSubcategories();
     }, [sector, subsector, lng]);
+
+    if (sector === "Historical data") {
+        return <HistoricalYearLinks subsector={subsector} lng={lng} />;
+    }
 
     const incrementViews = async (id) => {
         try {

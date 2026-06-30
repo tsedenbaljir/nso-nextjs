@@ -127,15 +127,15 @@ export default function Tabs({ lng, tabs, sector, subsector }) {
     if (decodeURIComponent(sector) === "Historical data" && tabs === "report") {
         return <div id="stat_cate" className="nso_cate_body pl-0">
             {/* Title */}
-            <span className="__cate_title">БНМАУ -ын тайлан</span>
+            <span className="__cate_title">Статистикийн эмхэтгэл</span>
             {/* PrimeReact Tabs */}
-            <TabView
+            {/* <TabView
                 activeIndex={0}
             >
-                <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}>
+                <TabPanel header={lng === "mn" ? "Тайлан" : "Report"}> */}
                     <Report sector={decodeURIComponent(sector)} subsector={subsector} lng={lng} />
-                </TabPanel>
-            </TabView>
+                {/* </TabPanel>
+            </TabView> */}
         </div>
     }
 
