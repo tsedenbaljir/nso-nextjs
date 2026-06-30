@@ -125,11 +125,11 @@
       "status": "Director Administration<br/> Department",
       "education": [
         {
-          "edu": ""Ulaanbaatar Erdem-Oyu" Institute, Economist, accountant-Bachelor",
+          "edu": "Ulaanbaatar Erdem-Oyu Institute, Economist, accountant-Bachelor",
           "year": "2003–2004"
         },
         {
-          "edu": ""Ulaanbaatar Erdem-Oyu" Institute, Economist, accountant-Bachelor",
+          "edu": "Ulaanbaatar Erdem-Oyu Institute, Economist, accountant-Bachelor",
           "year": "2001–2004"
         },
         {
@@ -1423,7 +1423,7 @@
           "title": "Орон нутгийн статистикийн хэлтсийн санхүүгийн үйл ажиллагаанд хяналт тавьж, санхүү хариуцсан нягтлан бодогч нартай нягт холбоотой ажиллаж тэдэнд шаардлагатай зөвлөгөө, мэдээ, мэдээллийг өгч нэгдсэн удирдлагаар хангаж ажиллах;"
         },
         {
-          "title": ""Шилэн дансны тухай" хууль болон холбогдох хууль, тогтоомжид заасны дагуу төсөв, санхүү, худалдан авах ажиллагааны ил тод байдлыг хангаж ажиллах;"
+          "title": "Шилэн дансны тухай хууль болон холбогдох хууль, тогтоомжид заасны дагуу төсөв, санхүү, худалдан авах ажиллагааны ил тод байдлыг хангаж ажиллах;"
         },
         {
           "title": "Монгол Улсын эдийн засаг, нийгмийг хөгжүүлэх үндсэн чиглэлийн төсөлд тусгуулах статистикийн салбарын зорилт, арга хэмжээний саналыг нэгтгэн боловсруулж, Сангийн яаманд хүргүүлэх;"
@@ -1735,7 +1735,21 @@
           "title": "Газрын дотоод үйл ажиллагааг хэрэгжүүлэх, удирдлагаас өгсөн үүрэг даалгаврыг хэрэгжүүлэх,  бусад үйл ажиллагаанд оролцох"
         }
       ]
-    }
+    },
+    {
+      "id": 24,
+        "title": "Board of Directors",
+        
+        "duties": ""
+        
+      },
+    {
+      "id": 25,
+        "title": "National Council",
+        
+        "duties": "The Statistical Council of the National Statistics Office shall perform its functions with the mandate to support the implementation of official statistical activities, and provide recommendations on matters related to enhancement of methodological coherence, improvement of the quality of official statistics, strengthening of coordination among data producers"
+        
+      }
   ],
   "organizational": {
     "title": "National Statistics Office",

@@ -2087,6 +2087,20 @@
             "title": "To implement the internal activities of the department, carry out tasks assigned by the leadership of the National Statistics Office, and participate in other activities organized by the National Statistics Office"
           }
         ]
-      }
+      },
+      {
+        "id": 24,
+          "title": "Board of Directors",
+          
+          "duties": ""
+          
+        },
+      {
+        "id": 25,
+          "title": "National Council",
+          
+          "duties": "The Statistical Council of the National Statistics Office shall perform its functions with the mandate to support the implementation of official statistical activities, and provide recommendations on matters related to enhancement of methodological coherence, improvement of the quality of official statistics, strengthening of coordination among data producers"
+          
+        }
   ]
 }
