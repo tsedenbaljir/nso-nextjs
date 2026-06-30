@@ -4,8 +4,10 @@ import { useEffect, useState, use } from "react";
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/OneField/Index';
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { encodeQueryParam } from '@/utils/resolveMediaUrl';
+import '@/components/styles/contact-us.scss';
 
 export default function Statecate(props) {
     const { lng } = use(props.params);
@@ -113,6 +115,11 @@ export default function Statecate(props) {
         <div className='nso_page_wrap'>
             <Path name={t('statistic')} breadMap={breadMap} />
             {children}
+            <div className="nso_container">
+                <div className="page_source_section">
+                    <ContactSourceCard lng={lng} sourceKey="aboutUsSource" />
+                </div>
+            </div>
         </div>
     );
 }
