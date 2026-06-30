@@ -1,5 +1,14 @@
-.transparency_detail_page {
+.transparency_layout_footer {
+    width: 100%;
+    background: white;
+    padding-bottom: 48px;
+
+    .nso_container {
+        display: block;
+    }
+
     .transparency_source_section {
+        width: 100%;
         margin-top: 48px;
         padding-top: 48px;
         border-top: 2px solid rgba(0, 91, 170, 0.15);
@@ -11,7 +20,9 @@
 }
 
 @media only screen and (max-width: 768px) {
-    .transparency_detail_page {
+    .transparency_layout_footer {
+        padding-bottom: 32px;
+
         .transparency_source_section {
             margin-top: 32px;
             padding-top: 32px;

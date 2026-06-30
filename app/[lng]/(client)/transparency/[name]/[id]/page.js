@@ -5,12 +5,9 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import PdfViewer from '@/components/PdfViewer/index';
 import TextLoading from '@/components/Loading/Text/Index';
-import ContactSourceCard from '@/components/contact/ContactSourceCard';
-import '@/components/styles/contact-us.scss';
-import './detail.scss';
 
 export default function TransparencyDetailPage() {
-  const { id, lng } = useParams();
+  const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -55,10 +52,6 @@ export default function TransparencyDetailPage() {
             <PdfViewer fileUrl={data.file_path} />
           </div>
         )}
-
-        <div className="transparency_source_section">
-          <ContactSourceCard lng={lng} sourceKey="transparencySource" />
-        </div>
       </div>
     </div>
   );

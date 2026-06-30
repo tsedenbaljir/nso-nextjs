@@ -78,7 +78,7 @@ export default function Statecate(props) {
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },
         { label: lng === 'mn' ? 'БНМАУ' : 'Republic of Mongolia', url: ['/statcate/table/Historical%20data/Enterprise'] },
-        { label: lng === 'mn' ? 'БНМАУ -ын тайлан' : 'Republic of Mongolia report' }
+        { label: lng === 'mn' ? 'Статистикийн эмхэтгэл' : 'Republic of Mongolia report' }
     ] : pathname.includes('/table/Historical%20data') ? [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
         { label: t('statistic'), url: ['/statcate'] },

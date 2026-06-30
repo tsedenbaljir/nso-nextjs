@@ -7,7 +7,7 @@ import { createPortal } from "react-dom";
 import ReactECharts from "echarts-for-react";
 import type { EChartsOption } from "echarts";
 import { dashboards } from "@/config/socio-dashboards";
-import { Beef, Wheat } from "lucide-react";
+import { Beef, Factory, Wheat } from "lucide-react";
 import "./socio-dashboard-shell.scss";
 
 type KpiMap = Record<string, { value: string; period: string; growthPercent?: number }>;
@@ -302,6 +302,7 @@ const cardIcons: Record<string, ReactNode> = {
     </svg>
   ),
   livestock: <Wheat className="size-3 shrink-0" />,
+  "industrial-production": <Factory className="size-3 shrink-0" />,
   "population-by-region": (
     <svg
       viewBox="0 0 24 24"

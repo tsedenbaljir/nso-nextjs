@@ -62,6 +62,7 @@ export default function Sidebar({ user, userstatus }) {
     { name: "Тайлан", link: "report" },
     { name: "Тайлан эмхэтгэл", link: "file-library" },
     { name: "Арга зүй", link: "methodology" },
+    { name: "Ангилал, код", link: "classification" },
     { name: "Холбоо барих", link: "contact-us" },
     { name: "Хэрэглэгч нэмэх", link: "user-management" },
   ];

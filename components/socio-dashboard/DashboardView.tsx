@@ -818,7 +818,7 @@ export function DashboardView({ config }: DashboardViewProps) {
       return;
     }
     if (!metadata || !apiUrl) return;
-    if (config.id === "money-finance" || config.id === "balance-of-payments") {
+    if (config.id === "money-finance" || config.id === "balance-of-payments" || config.id === "industrial-production") {
       setLoading(true);
       try {
         const chartApiCharts = charts.filter((c) => getChartApiUrl(c));
@@ -1371,6 +1371,13 @@ export function DashboardView({ config }: DashboardViewProps) {
             }
             if (config.id === "cpi-commodity-prices" && v.code === "Хугацаа" && v.values?.length) {
               initial[v.code] = v.values.slice(0, 24).map(String);
+            }
+            // Аж үйлдвэр: зөвхөн Нийт дүн + бүх сар (38 дэд салбар × 105 сар = PX timeout)
+            if (config.id === "industrial-production" && v.code === "Дэд салбар" && v.values?.length) {
+              initial[v.code] = ["0"];
+            }
+            if (config.id === "industrial-production" && v.code === "Сар" && v.values?.length) {
+              initial[v.code] = v.values.map(String);
             }
           });
           // Household-survey: Бүс default-ыг chartMeta-с авна
@@ -10456,6 +10463,130 @@ export function DashboardView({ config }: DashboardViewProps) {
                       </div>
                     );
                   })()}
+                </div>
+              );
+            }
+
+            if (config.id === "industrial-production" && (chart.id === "industrial-output-total" || chart.id === "industrial-product-sales")) {
+              return null;
+            }
+
+            if (config.id === "industrial-production" && chart.id === "industrial-output-sales-combined") {
+              const outputRows = processedChartData["industrial-output-total"] ?? [];
+              const salesRows = processedChartData["industrial-product-sales"] ?? [];
+              const metaCombined = metadataByChartId["industrial-output-total"] ?? metadata;
+              if (!metaCombined) return null;
+              if (!outputRows.length && !salesRows.length) {
+                return (
+                  <div key={chart.id} className="py-8 text-center text-[var(--muted-foreground)]">
+                    Мэдээлэл татагдаж байна...
+                  </div>
+                );
+              }
+              const mergedData: DataRow[] = [
+                ...outputRows.map((r) => ({
+                  ...r,
+                  Үзүүлэлт: "Нийт үйлдвэрлэл",
+                  Үзүүлэлт_code: "output",
+                })),
+                ...salesRows.map((r) => ({
+                  ...r,
+                  Үзүүлэлт: "Бүтээгдэхүүний борлуулалт",
+                  Үзүүлэлт_code: "sales",
+                })),
+              ];
+              const industrialFormatter = (v: number) =>
+                `${Math.round(Number(v)).toLocaleString(undefined, { useGrouping: false }).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} сая ₮`;
+              return (
+                <div key={chart.id} className="min-w-0">
+                  {renderTrendChart(chart, mergedData, metaCombined, {
+                    valueFormatter: industrialFormatter,
+                    latestValueFormatter: industrialFormatter,
+                    axisFormatter: (v: number) =>
+                      Math.round(Number(v)).toLocaleString(undefined, { useGrouping: false }).replace(/\B(?=(\d{3})+(?!\d))/g, "."),
+                    valueAxisTitle: "сая ₮",
+                    tooltipUnit: "сая ₮",
+                    showRangeSlider: true,
+                    showLatestValueBySeries: true,
+                  })}
+                </div>
+              );
+            }
+
+            if (config.id === "industrial-production" && chart.id === "industrial-main-products") {
+              const productRows = processedChartData["industrial-main-products"] ?? [];
+              const metaProducts = metadataByChartId["industrial-main-products"];
+              if (!metaProducts) return null;
+              if (!productRows.length) {
+                return (
+                  <div key={chart.id} className="py-8 text-center text-[var(--muted-foreground)]">
+                    Мэдээлэл татагдаж байна...
+                  </div>
+                );
+              }
+              const productDim = "Гол нэр төрлийн бүтээгдэхүүн";
+              const productVar = metaProducts.variables.find((v) => v.code === productDim);
+              const selectedProductCodes =
+                trendChartSeriesSelection[chart.id] ??
+                chart.defaultSeriesCodes?.[productDim] ??
+                (productVar?.values?.[0] != null ? [String(productVar.values[0])] : []);
+              const filteredProductRows = productRows.filter((r) => {
+                const code = String(r[`${productDim}_code`] ?? r[productDim] ?? "");
+                return selectedProductCodes.includes(code);
+              });
+              const productFilter = productVar?.values?.length ? (
+                <Select
+                  size="small"
+                  showSearch
+                  optionFilterProp="label"
+                  value={selectedProductCodes[0] ?? productVar.values[0]}
+                  onChange={(val) => {
+                    setTrendChartSeriesSelection((prev) => ({ ...prev, [chart.id]: [String(val)] }));
+                  }}
+                  options={(productVar.values ?? []).map((val, i) => ({
+                    value: val,
+                    label: String(productVar.valueTexts?.[i] ?? val).trim(),
+                  }))}
+                  style={{ minWidth: 280, maxWidth: "100%" }}
+                />
+              ) : null;
+              const formatProductValue = (v: number) => {
+                if (!Number.isFinite(v)) return "—";
+                const [intPart, decPart] = v.toString().split(".");
+                const intWithDots = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return decPart != null ? `${intWithDots},${decPart}` : intWithDots;
+              };
+              return (
+                <div key={chart.id} className="min-w-0">
+                  {renderTrendChart(chart, filteredProductRows, metaProducts, {
+                    valueFormatter: formatProductValue,
+                    latestValueFormatter: formatProductValue,
+                    axisFormatter: formatProductValue,
+                    valueAxisTitle: null,
+                    showRangeSlider: true,
+                    enableSlicers: false,
+                    showLatestValue: true,
+                    headerExtraTitleRow: productFilter,
+                  })}
+                </div>
+              );
+            }
+
+            if (config.id === "industrial-production") {
+              const industrialFormatter = (v: number) =>
+                `${Math.round(Number(v)).toLocaleString(undefined, { useGrouping: false }).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} сая ₮`;
+              const industrialOpts = {
+                valueFormatter: industrialFormatter,
+                latestValueFormatter: industrialFormatter,
+                axisFormatter: (v: number) =>
+                  Math.round(Number(v)).toLocaleString(undefined, { useGrouping: false }).replace(/\B(?=(\d{3})+(?!\d))/g, "."),
+                valueAxisTitle: "сая ₮",
+                tooltipUnit: "сая ₮",
+                showRangeSlider: true,
+              };
+              return (
+                <div key={chart.id} className="min-w-0">
+                  {renderTrendChart(chart, trendDataToShow, metaForChart, industrialOpts)}
                 </div>
               );
             }

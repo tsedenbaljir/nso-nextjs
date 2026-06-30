@@ -216,3 +216,23 @@
     }
   }
 }
+
+.page_source_section {
+  width: 100%;
+  margin-top: 48px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  border-top: 2px solid rgba(0, 91, 170, 0.15);
+
+  .contact_source {
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .page_source_section {
+    margin-top: 32px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+}

@@ -3,7 +3,9 @@ import { useEffect, useState, use } from "react";
 import { useSearchParams } from "next/navigation";
 import List from "../../list";
 import Sidebar from "../../sidebar";
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import { useTranslation } from "@/app/i18n/client";
+import '@/components/styles/contact-us.scss';
 
 export default function StateCate(props) {
   const { type, lng } = use(props.params);
@@ -118,6 +120,13 @@ export default function StateCate(props) {
           setPagination={setPagination}
         />
       </div>
+      {type === "all" && (
+        <div className="nso_container">
+          <div className="page_source_section">
+            <ContactSourceCard lng={lng} sourceKey="aboutUsSource" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

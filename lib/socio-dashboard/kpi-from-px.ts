@@ -647,6 +647,81 @@ export async function getStateBudgetCardTrend(apiUrl: string): Promise<TrendResu
   return { periods, values };
 }
 
+/** DT_NSO_1100_001V2 — Нийт дүн, бүх сар */
+function buildIndustrialProductionCardQuery(metadata: PxMetadata): PxDataRequest {
+  const subsectorVar = metadata.variables.find((v) => v.code === "Дэд салбар");
+  const timeVar = metadata.variables.find((v) => v.code === "Сар");
+  const monthCodes = (timeVar?.values ?? []).map(String);
+  return {
+    query: [
+      {
+        code: subsectorVar?.code ?? "Дэд салбар",
+        selection: { filter: "item", values: ["0"] },
+      },
+      {
+        code: timeVar?.code ?? "Сар",
+        selection: { filter: "item", values: monthCodes },
+      },
+    ],
+    response: { format: "json-stat2" },
+  };
+}
+
+export async function getIndustrialProductionKpi(apiUrl: string): Promise<KpiResult> {
+  const metadata = await fetchPxMetadata(apiUrl);
+  const timeVar = metadata.variables.find((v) => v.code === "Сар");
+  if (!timeVar?.values.length) return { value: null, period: "" };
+
+  const dataset = await fetchPxData(apiUrl, buildIndustrialProductionCardQuery(metadata));
+  const rows = jsonStatToRows(dataset);
+  const codeKey = "Сар_code";
+  const latestCode = String(timeVar.values[0] ?? "0");
+  const latestRow =
+    rows.find((r) => String(r[codeKey] ?? r["Сар"] ?? "").trim() === latestCode) ?? rows[0];
+  const value = Number(latestRow?.value);
+  const period = String(timeVar.valueTexts?.[0] ?? latestCode);
+  return {
+    value: Number.isFinite(value) ? value : null,
+    period,
+  };
+}
+
+export async function getIndustrialProductionCardTrend(
+  apiUrl: string,
+  points = 12
+): Promise<TrendResult> {
+  const metadata = await fetchPxMetadata(apiUrl);
+  const timeVar = metadata.variables.find((v) => v.code === "Сар");
+  if (!timeVar?.values.length) return { periods: [], values: [] };
+
+  const n = Math.min(points, timeVar.values.length);
+  const timeCodes = timeVar.values.slice(0, n).map(String);
+  const dataset = await fetchPxData(apiUrl, {
+    query: [
+      { code: "Дэд салбар", selection: { filter: "item", values: ["0"] } },
+      { code: "Сар", selection: { filter: "item", values: timeCodes } },
+    ],
+    response: { format: "json-stat2" },
+  });
+  const rows = jsonStatToRows(dataset);
+  const codeKey = "Сар_code";
+  const byCode = new Map<string, number>();
+  for (const row of rows) {
+    const code = String(row[codeKey] ?? row["Сар"] ?? "").trim();
+    const v = Number(row.value);
+    if (!Number.isFinite(v)) continue;
+    byCode.set(code, v);
+  }
+
+  const timeCodesChronological = [...timeCodes].reverse();
+  const periods = timeCodesChronological.map(
+    (c) => timeVar.valueTexts?.[timeVar.values.indexOf(c)] ?? c
+  );
+  const values = timeCodesChronological.map((c) => byCode.get(c) ?? 0);
+  if (!values.some((v) => Number.isFinite(v) && v !== 0)) return { periods: [], values: [] };
+  return { periods, values };
+}
+
 function formatNumberWithDots(value: number): string {
   const rounded = Math.round(value);
   const str = String(rounded);

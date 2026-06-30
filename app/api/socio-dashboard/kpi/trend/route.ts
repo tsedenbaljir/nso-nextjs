@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dashboards } from "@/config/socio-dashboards";
-import { getTrendFromPx, getTrendFromPxLastN, getBopCumulativeTrend, getForeignTradeCardTrend, getStateBudgetCardTrend } from "@/lib/socio-dashboard/kpi-from-px";
+import { getTrendFromPx, getTrendFromPxLastN, getBopCumulativeTrend, getForeignTradeCardTrend, getStateBudgetCardTrend, getIndustrialProductionCardTrend } from "@/lib/socio-dashboard/kpi-from-px";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -91,6 +91,13 @@ export async function GET() {
       }
       if (d.id === "state-budget" && apiUrl) {
         const trend = await getStateBudgetCardTrend(apiUrl);
+        if (trend.values.length > 0) {
+          result[d.id] = trend;
+        }
+        continue;
+      }
+      if (d.id === "industrial-production" && apiUrl) {
+        const trend = await getIndustrialProductionCardTrend(apiUrl, trendPoints);
         if (trend.values.length > 0) {
           result[d.id] = trend;
         }
