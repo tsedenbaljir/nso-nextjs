@@ -4,6 +4,8 @@ import "@/components/styles/news.scss";
 import Articles from '@/components/articles/Articles';
 import TextLoading from '@/components/Loading/Text/Index';
 import ArticleSideBar from '@/components/articles/ArticleSideBar';
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
+import '@/components/styles/contact-us.scss';
 
 export default function Home(props) {
     const { lng, id } = use(props.params);
@@ -61,12 +63,19 @@ export default function Home(props) {
 
     return (
         <>
-            {loading ? <div className='nso_about_us'>
-                <div className="nso_container">
-                    <Articles article={article} />
-                    <ArticleSideBar article={sidebar} lng={lng} />
+            {loading ? <>
+                <div className='nso_about_us'>
+                    <div className="nso_container">
+                        <Articles article={article} />
+                        <ArticleSideBar article={sidebar} lng={lng} />
+                    </div>
                 </div>
-            </div> : <div className='nso_about_us'>
+                <div className="nso_container">
+                    <div className="page_source_section">
+                        <ContactSourceCard lng={lng} sourceKey="aboutUsSource" />
+                    </div>
+                </div>
+            </> : <div className='nso_about_us'>
                 <div className="nso_container">
                     <TextLoading />
                     <TextLoading />
