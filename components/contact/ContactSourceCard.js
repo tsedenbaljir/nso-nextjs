@@ -7,6 +7,7 @@ const SOURCE_CONFIG = {
     aboutUsSource: { tel: "70141212", email: "tungalag_p@nso.mn" },
     lawsSource: { tel: "51263968", email: "bolorzul@nso.mn" },
     transparencySource: { tel: "51263152", email: "altansukh@nso.mn" },
+    munkhOchSource: { tel: "11321433", email: "Munkh-och@nso.mn" },
 };
 
 export default function ContactSourceCard({ lng, sourceKey = "contactSource" }) {

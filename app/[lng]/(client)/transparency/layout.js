@@ -5,6 +5,7 @@ import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import TextLoading from '@/components/Loading/OneField/Index';
 import ContactSourceCard from '@/components/contact/ContactSourceCard';
+import { getTransparencySourceKey } from './transparencyContacts';
 import '@/components/styles/contact-us.scss';
 import './transparency.scss';
 
@@ -99,7 +100,7 @@ export default function TransparencyLayout(props) {
             <div className="transparency_layout_footer">
                 <div className="nso_container">
                     <div className="transparency_source_section">
-                        <ContactSourceCard lng={lng} sourceKey="transparencySource" />
+                        <ContactSourceCard lng={lng} sourceKey={getTransparencySourceKey(id)} />
                     </div>
                 </div>
             </div>
