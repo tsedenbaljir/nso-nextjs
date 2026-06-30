@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dashboards } from "@/config/socio-dashboards";
-import { getLatestKpiFromPx, getLatestKpiWithGrowthFromPx, getLatestBopKpi, getLatestMoneySupplyKpi, formatKpiValue } from "@/lib/socio-dashboard/kpi-from-px";
+import { getLatestKpiFromPx, getLatestKpiWithGrowthFromPx, getLatestBopKpi, getLatestMoneySupplyKpi, getIndustrialProductionKpi, formatKpiValue } from "@/lib/socio-dashboard/kpi-from-px";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -37,6 +37,14 @@ export async function GET() {
         continue;
       }
       // BOP: тухайн жилийн өнөөгийн сарын хүртэлх өссөн дүн (жил бүр ижил сар хүртэл)
+      if (d.id === "industrial-production") {
+        const { value, period } = await getIndustrialProductionKpi(apiUrl);
+        result[d.id] = {
+          value: formatKpiValue(value, d.kpiFormat),
+          period: period ?? "",
+        };
+        continue;
+      }
       if (d.id === "balance-of-payments") {
         const indCode = d.kpiSelections?.Үзүүлэлт?.[0] ?? "66";
         const { value, period } = await getLatestBopKpi(apiUrl, indCode);

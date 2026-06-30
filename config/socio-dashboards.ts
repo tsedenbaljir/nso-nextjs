@@ -140,6 +140,15 @@ const BUSINESS_REGISTER_018_URL = `${BASE_URL}Labour,%20business/Statistical%20B
 
 /** Малын тоо — Малын төрөл, Бүс, Он (Улсын дүн) */
 const LIVESTOCK_TOTAL_URL = "https://data.1212.mn/api/v1/mn/NSO/Industry%2C%20service/Livestock/DT_NSO_1001_021V1.px";
+/** Аж үйлдвэрийн салбарын нийт үйлдвэрлэл — Дэд салбар, Сар */
+const INDUSTRY_OUTPUT_URL =
+  "https://data.1212.mn:443/api/v1/mn/NSO/Industry,%20service/Industry/DT_NSO_1100_001V2.px";
+/** Аж үйлдвэрийн салбарын бүтээгдэхүүний борлуулалт — Дэд салбар, Сар */
+const INDUSTRY_SALES_URL =
+  "https://data.1212.mn:443/api/v1/mn/NSO/Industry,%20service/Industry/DT_NSO_1100_032V1.px";
+/** Гол нэр төрлийн бүтээгдэхүүний үйлдвэрлэл — Гол нэр төрлийн бүтээгдэхүүн, Сар */
+const INDUSTRY_MAIN_PRODUCTS_URL =
+  "https://data.1212.mn:443/api/v1/mn/NSO/Industry,%20service/Industry/DT_NSO_1100_006V2.px";
 
 /** Гадаад худалдаа - сарын эргэлт */
 const FOREIGN_TRADE_MONTHLY_URL = "https://data.1212.mn:443/api/v1/mn/NSO/Economy,%20environment/Foreign%20Trade/DT_NSO_1400_003V1.px";
@@ -2242,6 +2251,87 @@ export const dashboards: DashboardConfig[] = [
     kpiLabel: "Нийт малын тоо",
     kpiValueSuffix: " сая.толгой",
     charts: [],
+  },
+  {
+    id: "industrial-production",
+    name: "Аж үйлдвэр",
+    category: "ЭДИЙН ЗАСАГ",
+    shortTitle: "Аж үйлдвэр",
+    // description: "Аж үйлдвэрийн салбарын нийт үйлдвэрлэл, дэд салбараар, сараар.",
+    apiUrl: INDUSTRY_OUTPUT_URL,
+    primaryDimension: "Сар",
+    kpiFromApi: true,
+    kpiApiUrl: INDUSTRY_OUTPUT_URL,
+    kpiTimeDimension: "Сар",
+    kpiSelections: { "Дэд салбар": ["0"] },
+    kpiFormat: "number",
+    kpiLabel: "Нийт үйлдвэрлэл",
+    kpiValueSuffix: " сая ₮",
+    trendApiUrl: INDUSTRY_OUTPUT_URL,
+    trendTimeDimension: "Сар",
+    trendValueSuffix: " сая ₮",
+    charts: [
+      {
+        id: "industrial-output-total",
+        title: "",
+        type: "area",
+        xDimension: "Сар",
+        chartApiUrl: INDUSTRY_OUTPUT_URL,
+        chartFixedQuery: {
+          query: [
+            { code: "Дэд салбар", selection: { filter: "item", values: ["0"] } },
+            { code: "Сар", selection: { filter: "item", values: range(105) } },
+          ],
+          response: { format: "json-stat2" },
+        },
+      },
+      {
+        id: "industrial-product-sales",
+        title: "",
+        type: "area",
+        xDimension: "Сар",
+        chartApiUrl: INDUSTRY_SALES_URL,
+        chartFixedQuery: {
+          query: [
+            { code: "Дэд салбар", selection: { filter: "item", values: ["0"] } },
+            { code: "Сар", selection: { filter: "item", values: range(113) } },
+          ],
+          response: { format: "json-stat2" },
+        },
+      },
+      {
+        id: "industrial-output-sales-combined",
+        title: "НИЙТ ҮЙЛДВЭРЛЭЛ, БҮТЭЭГДЭХҮҮНИЙ БОРЛУУЛАЛТ",
+        // description:
+        //   "Аж үйлдвэрийн салбарын нийт үйлдвэрлэл болон бүтээгдэхүүний борлуулалт (сая ₮).",
+        type: "area",
+        xDimension: "Сар",
+        seriesDimensions: ["Үзүүлэлт"],
+        chartHeight: 420,
+      },
+      {
+        id: "industrial-main-products",
+        title: "ГОЛ НЭР ТӨРЛИЙН БҮТЭЭГДЭХҮҮНИЙ ҮЙЛДВЭРЛЭЛ",
+        // description:
+          // "Аж үйлдвэрийн салбарын гол нэр төрлийн бүтээгдэхүүний үйлдвэрлэл, улсын дүнгээр, сараар.",
+        type: "area",
+        xDimension: "Сар",
+        seriesDimensions: ["Гол нэр төрлийн бүтээгдэхүүн"],
+        defaultSeriesCodes: { "Гол нэр төрлийн бүтээгдэхүүн": ["4"] },
+        chartApiUrl: INDUSTRY_MAIN_PRODUCTS_URL,
+        chartFixedQuery: {
+          query: [
+            {
+              code: "Гол нэр төрлийн бүтээгдэхүүн",
+              selection: { filter: "item", values: range(82) },
+            },
+            { code: "Сар", selection: { filter: "item", values: range(317) } },
+          ],
+          response: { format: "json-stat2" },
+        },
+        chartHeight: 480,
+      },
+    ],
   },
   {
     id: "population-by-region",
