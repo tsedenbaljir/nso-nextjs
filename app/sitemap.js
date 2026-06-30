@@ -1,5 +1,5 @@
 export default function sitemap() {
-    const baseUrl = 'https://www.nso.mn';
+    const baseUrl = process.env.BASE_URL;
     
     // Static pages
     const staticPages = [

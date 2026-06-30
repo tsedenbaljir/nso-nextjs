@@ -70,7 +70,7 @@ export default function WYSIWYGEditor({ setBody, defaultValue = '' }) {
                         height: 500,
                         skin: 'oxide',
                         content_css: 'default',
-                        plugins: 'paste autolink code image link media table charmap hr advlist lists',
+                        plugins: 'autolink code image link media table charmap advlist lists',
                         toolbar: 'undo redo | bold italic underline | fontsizeselect formatselect | alignleft aligncenter alignright alignjustify outdent indent | numlist bullist | forecolor backcolor removeformat | image media link',
                         file_picker_types: 'file image media',
                         relative_urls: false,

@@ -3,7 +3,8 @@ import { db } from '@/app/api/config/db_csweb.config';
 
 export const dynamic = 'force-dynamic';
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, props) {
+    const params = await props.params;
     try {
         const { id } = params;
 

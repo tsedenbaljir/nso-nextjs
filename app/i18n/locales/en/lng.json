@@ -16,7 +16,7 @@
     "D1": "Chairman of NSO",
     "D2": "Vice-Chairman",
     "D3": "Director Administration<br /> Department",
-    "G1": "Integrated Statistics Departmen",
+    "G1": "Integrated Statistics Department",
     "G1x1": "Policy and Cooperation Division",
     "G1x2": "National Accounts Division",
     "G2": "Economic Statistics Department",
@@ -35,7 +35,7 @@
     "G6": "Internal Audit, Monitoring and Evaluation Department",
     "G7": "Administration Department",
     "G7x1": "Human Resources and Training Division",
-    "G7x2": "Administrative and legal Division",
+    "G7x2": "Administration and Legal‑Affairs Division",
     "G7x3": "Finance and Investment Division"
   },
   "footer": {
@@ -80,6 +80,7 @@
   "news": {
     "latest": "Latest release",
     "future": "Future release",
+    "update": "Revision schedule​",
     "scheduled": "Scheduled News",
     "more": "Show more"
   },
@@ -143,6 +144,30 @@
   "vision": {
     "title": "Vision",
     "desc": "We are committed to providing users with reliable and high-quality statistical data, sustaining the continuity of evidence-based policies and decisions, and advancing toward global leadership in statistical capacity."
+  },
+  "contactSource": {
+    "title": "Detailed source information:",
+    "contact": "Ch. Batsuuri, Referent, Human Resources and Training Department, Secretariat Office,",
+    "phone": "51-261530",
+    "room": "Room number: 315"
+  },
+  "aboutUsSource": {
+    "title": "Detailed source information:",
+    "contact": "P. Tungalag, Senior Statistician, Policy and Cooperation Department, Integrated Statistics Office,",
+    "phone": "70141212",
+    "room": "Room number: 306"
+  },
+  "lawsSource": {
+    "title": "Detailed source information:",
+    "contact": "B. Bolorzul, Senior Referent, Administration, Legal and Regulatory Department, Secretariat Office,",
+    "phone": "51-263968",
+    "room": "Room number: 319"
+  },
+  "transparencySource": {
+    "title": "Detailed source information:",
+    "contact": "B. Gotsbayar, Senior Referent, Internal Audit, Monitoring and Evaluation Department,",
+    "phone": "51-261560",
+    "room": "Room number: 311"
   },
   "Objective": "Objective",
   "menuAboutUs": {
@@ -382,6 +407,7 @@
     "scope": "Scope year",
     "specifications": "Bulletin name",
     "dateDistribution": "Release date",
+    "updateDate": "Update period",
     "time": "Time"
   },
   "tools": {

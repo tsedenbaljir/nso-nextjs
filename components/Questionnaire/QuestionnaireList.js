@@ -5,6 +5,16 @@ import QuestionnaireItem from "./QuestionnaireItem";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
+function appendMetadataFilters(params, metadata) {
+  if (!metadata) return;
+  if (typeof metadata === "object") {
+    if (metadata.observe_interval) params.append("interval", metadata.observe_interval);
+    if (metadata.id) params.append("orgId", metadata.id);
+  } else if (typeof metadata === "string") {
+    params.append("label", metadata);
+  }
+}
+
 export default function QuestionnaireList({
   filterLoading,
   list,
@@ -14,9 +24,13 @@ export default function QuestionnaireList({
   rows,
   onPageChange,
   path,
+  lng,
+  metadata,
+  searchQuery,
 }) {
   const [sortType, setSortType] = useState(isMn ? "Эхэнд шинэчлэгдсэн" : "Newest first");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const getSortedList = () => {
     const sorted = [...list];
@@ -32,44 +46,68 @@ export default function QuestionnaireList({
     return sorted;
   };
 
-  const handleDownloadExcel = () => {
-    const exportData = list.map((item) => {
-      let fileInfo = item.file_info;
-      if (typeof fileInfo === "string") {
-        try {
-          fileInfo = JSON.parse(fileInfo);
-        } catch (e) {
-          fileInfo = {};
-        }
-      }
+  const rowsToExcel = (items) =>
+    items.map((item) => {
+      const date =
+        item.last_modified_date || item.published_date || item.approved_date;
       return {
-        Гарчиг: isMn ? "Гарчиг" : "Name",
-        Тайлбар: isMn ? "Тайлбар" : "Info",
-        Огноо: item.published_date
-          ? new Date(item.published_date).toISOString().split("T")[0]
-          : "",
+        Гарчиг: isMn ? item.name || "" : item.name_eng || item.name || "",
+        Тайлбар: isMn
+          ? item.descriptionmn || item.info || ""
+          : item.descriptionen || item.info_eng || item.info || "",
+        Код: item.code || "",
+        Огноо: date ? new Date(date).toISOString().split("T")[0] : "",
         Хандалт: item.views ?? 0,
-        Төрөл: fileInfo?.extension?.toUpperCase() || "N/A",
-        Хэмжээ_MB: item.file_size
-          ? (item.file_size / 1024 / 1024).toFixed(2)
-          : "0.00",
+        Хувилбар: item.version || "",
       };
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  const handleDownloadExcel = async () => {
+    setExporting(true);
+    try {
+      let allItems = [];
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
+      if (searchQuery) {
+        const response = await fetch(
+          `/api/questionnaire/search?search=${encodeURIComponent(searchQuery)}&lng=${lng || "mn"}`
+        );
+        const result = await response.json();
+        if (result.status) {
+          allItems = Array.isArray(result.data) ? result.data : [result.data];
+        }
+      } else {
+        const params = new URLSearchParams({
+          page: "0",
+          pageSize: String(Math.max(totalRecords, 1)),
+        });
+        appendMetadataFilters(params, metadata);
 
-    const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
+        const response = await fetch(`/api/questionnaire?${params}`);
+        const result = await response.json();
+        if (result.status) allItems = result.data || [];
+      }
 
-    saveAs(blob, "questionnaire_list.xlsx");
+      if (allItems.length === 0) return;
+
+      const worksheet = XLSX.utils.json_to_sheet(rowsToExcel(allItems));
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, isMn ? "Асуулга" : "Questionnaire");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blob, "questionnaire_list.xlsx");
+    } catch (error) {
+      console.error("Excel export failed:", error);
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -80,8 +118,16 @@ export default function QuestionnaireList({
           <button
             className="__download_button text-sm"
             onClick={handleDownloadExcel}
+            disabled={exporting || totalRecords === 0}
           >
-            <i className="pi pi-cloud-download"></i> {isMn ? "Excel татах" : "Download Excel"}
+            <i className="pi pi-cloud-download"></i>{" "}
+            {exporting
+              ? isMn
+                ? "Татаж байна..."
+                : "Downloading..."
+              : isMn
+                ? "Excel татах"
+                : "Download Excel"}
           </button>
 
           {/* Sort Dropdown */}

@@ -5,7 +5,7 @@ import { PanelMenu } from "primereact/panelmenu";
 import { usePathname } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
 
-export default function DynamicSidebar({ params, lng }) {
+export default function DynamicSidebar({ lng }) {
     const pathname = usePathname();
 
     const [menuItems, setMenuItems] = useState([]);

@@ -11,7 +11,9 @@ import MenuItems from './MenuItems';
 // import DarkModeSwitcher from './darkMode';
 
 export default function Sidebar({ user, userstatus }) {
-  var pth = Path().split("/")[3];
+  const pathname = Path();
+  var pth = pathname.split("/")[3];
+  const lng = pathname.split("/")[1] || "mn";
   const router = useRouter();
 
   const isAdmin =
@@ -95,7 +97,7 @@ export default function Sidebar({ user, userstatus }) {
     <>
       <aside className="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden border-r border-stroke  dark:border-stroke-dark dark:bg-gray-dark lg:static lg:translate-x-0">
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 xl:py-10">
-          <Link href="/admin/dashboard">
+          <Link href={`/${lng}/admin/dashboard`}>
             <img
               width={200}
               height={32}

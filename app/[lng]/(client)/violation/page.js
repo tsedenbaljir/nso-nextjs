@@ -1,12 +1,16 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, use } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import { submitViolationReport } from '@/app/services/actions';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import { Toast } from 'primereact/toast';
 import './styles.scss';
 
-export default function ViolationPage({ params: { lng } }) {
+export default function ViolationPage(props) {
+    const {
+        lng
+    } = use(props.params);
+
     const { t } = useTranslation(lng, "lng", "");
     const toast = useRef(null);
 

@@ -1,22 +1,22 @@
-:host ::ng-deep .p-button-icon {
+.p-button-icon {
     font-size: var(--font-size24);
 }
 
-:host ::ng-deep .p-autocomplete-input::placeholder {
+.p-autocomplete-input::placeholder {
     color: var(--text-main);
     opacity: .5;
 }
 
-:host ::ng-deep .p-autocomplete-panel {
+.p-autocomplete-panel {
     display: none;
 }
 
-:host ::ng-deep .pi-chevron-left::before {
+.pi-chevron-left::before {
     content: "\e91a";
     font-weight: 700;
 }
 
-:host ::ng-deep .pi-chevron-right::before {
+.pi-chevron-right::before {
     content: "\e91b";
     font-weight: 700;
 }

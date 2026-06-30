@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import { use } from "react";
 import ServiceGrid from '@/components/home/ServiceGrid';
 import { useTranslation } from '@/app/i18n/client';
 import {
@@ -13,7 +14,11 @@ import {
     TeamOutlined
 } from '@ant-design/icons';
 
-export default function Home({ params: { lng } }) {
+export default function Home(props) {
+    const {
+        lng
+    } = use(props.params);
+
     const { t } = useTranslation(lng, "lng", "");
 
     const services = [

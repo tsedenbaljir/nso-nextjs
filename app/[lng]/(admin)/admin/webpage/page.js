@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import { Table, Button, Modal, Form, Input, Select, message } from 'antd';
@@ -12,7 +12,11 @@ const Editor = dynamic(() => import('@/components/admin/Editor/editor'), {
 
 const { Option } = Select;
 
-export default function WebpageAdmin({ params: { lng } }) {
+export default function WebpageAdmin(props) {
+    const {
+        lng
+    } = use(props.params);
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);

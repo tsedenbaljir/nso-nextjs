@@ -1,10 +1,15 @@
 "use client";
+import { use } from "react";
 
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 
-export default function Statecate({ children, params }) {
-    const { lng } = params;
+export default function Statecate(props) {
+    const { lng } = use(props.params);
+
+    const {
+        children
+    } = props;
     const { t } = useTranslation(lng, "lng", "");
 
     const breadMap = [
@@ -16,7 +21,7 @@ export default function Statecate({ children, params }) {
     return (
         <>
             <div className="nso_page_wrap">
-                <Path params={params} name={t('statistic')} breadMap={breadMap} />
+                <Path name={t('statistic')} breadMap={breadMap} />
                 {children}
             </div>
         </>

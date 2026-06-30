@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Modal, Form, Input, Select, message } from 'antd';
@@ -11,7 +11,13 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 const { TextArea } = Input;
 const { Option } = Select;
 
-export default function ContactAdmin({ params: { lng } }) {
+export default function ContactAdmin(props0) {
+    const params = use(props0.params);
+
+    const {
+        lng
+    } = params;
+
     const { t } = useTranslation(lng);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
@@ -54,12 +60,12 @@ export default function ContactAdmin({ params: { lng } }) {
         } finally {
             setLoading(false);
         }
-    };    
+    };
 
     useEffect(() => {
         fetchData();
     }, []);
-    
+
     const onPage = (event) => {
         fetchData(event.page + 1, event.rows);
     };

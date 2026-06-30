@@ -1,5 +1,10 @@
-"use client"
-export default function TermsOfUse({ params: { lng } }) {
+"use client";
+import { use } from "react";
+export default function TermsOfUse(props) {
+    const {
+        lng
+    } = use(props.params);
+
     return (
         <>
             <div className="nso_statistic_section">

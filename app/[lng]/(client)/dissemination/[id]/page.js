@@ -1,15 +1,20 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import ReactMarkdown from 'react-markdown';
 import Text from '@/components/Loading/Text/Index';
 import PdfViewer from '@/components/PdfViewer/index';
+import { resolveMediaUrl } from '@/utils/resolveMediaUrl';
 
 import "@/components/styles/news.scss";
 import "@/components/styles/dissemination-view.scss";
 
-export default function Home({ params: { lng, id } }) {
+export default function Home(props) {
+    const {
+        lng,
+        id
+    } = use(props.params);
 
     const [article, setArticle] = useState(null);
     const [pdfUrl, setPdfUrl] = useState('');
@@ -37,7 +42,7 @@ export default function Home({ params: { lng, id } }) {
                     // Extract PDF URL and text from body
                     const urlMatch = result.data.body.match(/src="([^"]+)"/);
                     const textMatch = result.data.body.match(/<p>(.*?)<\/p>/);
-                    if (urlMatch) setPdfUrl(urlMatch[1]);
+                    if (urlMatch) setPdfUrl(resolveMediaUrl(urlMatch[1]));
                     if (textMatch) setText(textMatch[0]);
                 }
             } catch (error) {

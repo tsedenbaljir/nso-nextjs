@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 import { Button, Modal, Form, Input, Select, message } from 'antd';
 import { DataTable } from 'primereact/datatable';
@@ -8,7 +8,13 @@ import { Column } from 'primereact/column';
 const { TextArea } = Input;
 const { Option } = Select;
 
-export default function subscribeEmailAdmin({ params: { lng } }) {
+export default function subscribeEmailAdmin(props0) {
+    const params = use(props0.params);
+
+    const {
+        lng
+    } = params;
+
     const { t } = useTranslation(lng);
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
@@ -51,12 +57,12 @@ export default function subscribeEmailAdmin({ params: { lng } }) {
         } finally {
             setLoading(false);
         }
-    };    
+    };
 
     useEffect(() => {
         fetchData();
     }, []);
-    
+
     const onPage = (event) => {
         fetchData(event.page + 1, event.rows);
     };

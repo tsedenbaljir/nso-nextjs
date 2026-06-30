@@ -1,11 +1,15 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 
-export default function Statecate({ children, params }) {
-  const { lng } = params;
+export default function Statecate(props) {
+  const { lng } = use(props.params);
+
+  const {
+    children
+  } = props;
   const { t } = useTranslation(lng, "lng", "");
 
   const breadMap = [
@@ -15,7 +19,7 @@ export default function Statecate({ children, params }) {
 
   return (
     <div className='nso_page_wrap'>
-      <Path params={params} name={'Хэрэглэгч үүсгэх'} breadMap={breadMap} />
+      <Path name={'Хэрэглэгч үүсгэх'} breadMap={breadMap} />
       <Suspense>
         {children}
       </Suspense>

@@ -1,11 +1,16 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Spin } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
 import { useMetadata } from '@/utils/contexts/Metadata';
 import QuestionnaireList from '@/components/Questionnaire/QuestionnaireList';
 
-export default function Questionnaire({ params: { lng }, searchParams }) {
+export default function Questionnaire(props) {
+    const searchParams = use(props.searchParams);
+    const {
+        lng
+    } = use(props.params);
+
     const { t } = useTranslation(lng, "lng", "");
     const { metadata } = useMetadata();
 
@@ -102,6 +107,9 @@ export default function Questionnaire({ params: { lng }, searchParams }) {
             first={first}
             rows={rows}
             onPageChange={onPageChange}
+            lng={lng}
+            metadata={metadata}
+            searchQuery={searchParams?.search}
         />
     );
 }

@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
+import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
 import DynamicSidebar from "@/components/statcate/DynamicSidebar";
 import '@/components/styles/statistic.scss';
 
-export default function Statcate({ params }) {
+export default function Statcate(props) {
+    const { id } = use(props.params);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,7 +17,7 @@ export default function Statcate({ params }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/data-visualisation?id=${params.id}`);
+                const response = await fetch(`/api/data-visualisation?id=${id}`);
                 if (!response.ok) throw new Error("Failed to fetch data");
 
                 const result = await response.json();
@@ -51,7 +53,7 @@ export default function Statcate({ params }) {
                     <div className="nso_tab_content">
                         <div className="__stat_detail_tableau">
                             <div className='__dtab_main_text'
-                                dangerouslySetInnerHTML={{ __html: data.info }}
+                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.info)}}
                             />
                         </div>
                     </div>

@@ -1,14 +1,18 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const results = await db.raw(`
             SELECT * FROM web_1212_content 
             WHERE content_type = 'NEWS' 
-            AND news_type in('LATEST', 'FUTURE') 
+            AND news_type in('LATEST', 'FUTURE', 'UPDATED') 
             ORDER BY published_date DESC
         `);
 
@@ -31,6 +35,9 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const data = await req.json();
         const currentDate = new Date().toISOString();
@@ -96,6 +103,9 @@ export async function POST(req) {
 }
 
 export async function PUT(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const data = await req.json();
         const currentDate = new Date().toISOString();
@@ -152,7 +162,11 @@ export async function PUT(req) {
     }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+    const params = await props.params;
     try {
         const id = params.id;
 

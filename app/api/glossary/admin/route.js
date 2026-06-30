@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 
 // Create new glossary entry
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function POST(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const body = await req.json();
         
@@ -58,6 +62,9 @@ export async function POST(req) {
 
 // Update existing glossary entry
 export async function PUT(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const body = await req.json();
         const {
@@ -112,6 +119,9 @@ export async function PUT(req) {
 
 // Delete glossary entry
 export async function DELETE(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');
@@ -146,6 +156,9 @@ export async function DELETE(req) {
 
 // Get single glossary entry for editing
 export async function GET(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');

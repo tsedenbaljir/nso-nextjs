@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import "@/components/styles/statistics-news.scss";
@@ -70,7 +71,7 @@ export default function DisseminationHome({ lng }) {
                                         <div
                                             className="one"
                                             dangerouslySetInnerHTML={{
-                                                __html: nameFields(news[0]?.body)
+                                                __html: sanitizeHtml(nameFields(news[0]?.body))
                                             }}
                                         />
                                     </span>
@@ -102,7 +103,7 @@ export default function DisseminationHome({ lng }) {
                                                     <span
                                                         className="__name"
                                                         dangerouslySetInnerHTML={{
-                                                            __html: nameFields(newsItem?.body)
+                                                            __html: sanitizeHtml(nameFields(newsItem?.body))
                                                         }}
                                                     />
                                                     <div className="__info">

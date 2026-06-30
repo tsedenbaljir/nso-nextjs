@@ -23,7 +23,7 @@ const Dashboard = () => {
     useEffect(() => {
 
         async function data() {
-            const response = await fetch('https://www.nso.mn/api/subsectorlist');
+            const response = await fetch('https://www.1212.mn/api/subsectorlist');
             const sectors = await response.json();
             const allSubsectors = [];
             sectors.data.map((dt, index) => {

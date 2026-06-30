@@ -1,11 +1,16 @@
-"use client"
+"use client";
+import { use } from "react";
 import Sector from '@/components/home/Sector/Index';
 import HomeSection from '@/components/home/HomeSection';
 import CarouselNews from '@/components/home/CarouselNews';
 import DisseminationHome from '@/components/home/disshome/home';
 // import ModalImages from "@/components/ModalImages";
 
-export default function Home({ params: { lng } }) {
+export default function Home(props) {
+  const {
+    lng
+  } = use(props.params);
+
   return (
     <>
       <HomeSection indicators={[]} searchData={[]} lng={lng} />

@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Loading from "@/app/[lng]/(client)/loading";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { getGivenNameStatistic } from "@/app/services/fun-statistic";
+import { getGivenNameStatistic } from "@/app/services/fun-statistic-actions";
 
 export default function GivenNameStatistic() {
     const router = useRouter();

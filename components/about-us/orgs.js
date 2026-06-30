@@ -110,23 +110,27 @@ export default function Orgs({ lng }) {
                                 <div className="title" style={{ color: "#333a3f", fontWeight: 700, fontSize: "xx-large", marginLeft: 20 }}>{datas[where]?.title}</div>
                                 <div className="dialog-body">
                                     <div className="header">
-                                        <div className="title">{t('Goals')}</div>
-                                        <div className="bfr">
-                                            <div>{datas[where]?.goals}</div>
-                                        </div>
-                                        <br />
-                                        <div className="title">
-                                            {datas[where]?.id !== 24 ? t('Objective') : 'Даргын зөвлөлийн хурлын гишүүд: '}
-                                        </div>
-                                        <div className="bfr">
-                                            <div>
-                                                {datas[where]?.Objective.map((data, index) => (
-                                                    <p key={index}>
-                                                        {index + 1}. {data?.title}
-                                                    </p>
-                                                ))}
-                                            </div>
-                                        </div>
+                                        {datas[where]?.id !== 25 && (
+                                            <>
+                                                <div className="title">{t('Goals')}</div>
+                                                <div className="bfr">
+                                                    <div>{datas[where]?.goals}</div>
+                                                </div>
+                                                <br />
+                                                <div className="title">
+                                                    {datas[where]?.id !== 24 ? t('Objective') : 'Даргын зөвлөлийн хурлын гишүүд: '}
+                                                </div>
+                                                <div className="bfr">
+                                                    <div>
+                                                        {datas[where]?.Objective?.map((data, index) => (
+                                                            <p key={index}>
+                                                                {index + 1}. {data?.title}
+                                                            </p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
                                         {lng === "mn" && (
                                             <>
                                                 <div className="title">
@@ -135,7 +139,28 @@ export default function Orgs({ lng }) {
                                                 </div>
                                                 <div className="bfr">
                                                     <div>
-                                                        {datas[where]?.duties.map((data, index) => (
+                                                        {typeof datas[where]?.duties === 'string' ? (
+                                                            <p>{datas[where].duties}</p>
+                                                        ) : datas[where]?.duties?.map((data, index) => (
+                                                            <p key={index}>
+                                                                {index + 1}. {data?.title}
+                                                            </p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                        {lng === "en" && (
+                                            <>
+                                                <div className="title">
+                                                    {datas[where]?.id === 24 ? "Даргын зөвлөлийн хурлын хуралдааны дэг:" :
+                                                        datas[where]?.id !== 15 ? "Functions" : ""}
+                                                </div>
+                                                <div className="bfr">
+                                                    <div>
+                                                        {typeof datas[where]?.duties === 'string' ? (
+                                                            <p>{datas[where].duties}</p>
+                                                        ) : datas[where]?.duties?.map((data, index) => (
                                                             <p key={index}>
                                                                 {index + 1}. {data?.title}
                                                             </p>
@@ -156,7 +181,19 @@ export default function Orgs({ lng }) {
                                                 </a>
                                                 <br />
                                                 <a className="underline" href="/uploads/P4rQhUz5Qba8trdnzPkj1q3Vx-crSIq8_o_HMwS6.pdf" target="_blank">
-                                                    ДЗХ-ын 2024 оны төлөвлөгөө 5
+                                                    ДЗХ-ын 2024 оны төлөвлөгөө 5 
+                                                </a>
+                                                <br />
+                                                <a className="underline" href="/uploads/1782724632303-А44%20ДЗХ-ын%202026%20оны%20төлөвлөгөө%20тодотгосон%201.pdf" target="_blank">
+                                                    ДЗХ-ын 2026 оны төлөвлөгөө
+                                                </a>
+                                            </>
+                                        )}
+                                        {datas[where]?.id === 25 && (
+                                            <>
+                                                <br />
+                                                <a className="underline" href="/uploads/1782724599273-NSO_Zuvlul_juram_2018.03.16.pdf" target="_blank">
+                                                    Үндэсний зөвлөлийн журам 2018 А25
                                                 </a>
                                             </>
                                         )}

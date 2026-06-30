@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
 
 // GET - Fetch single contact-us entry by ID
-export async function GET(request, { params }) {
+export async function GET(request, props) {
+    const params = await props.params;
     try {
         const { id } = params;
 

@@ -1,3 +1,4 @@
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import React from 'react';
 import Link from 'next/link';
 import { Spin } from 'antd';
@@ -46,7 +47,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 >
                                     <span
                                         dangerouslySetInnerHTML={{
-                                            __html: dt?.highlight?.name || dt._source.name
+                                            __html: sanitizeHtml(dt?.highlight?.name || dt._source.name)
                                         }}
                                     />
                                 </Link>
@@ -65,7 +66,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 >
                                     <span
                                         dangerouslySetInnerHTML={{
-                                            __html: dt?.highlight?.name || dt._source.name
+                                            __html: sanitizeHtml(dt?.highlight?.name || dt._source.name)
                                         }}
                                     />
                                 </Link>
@@ -84,7 +85,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 >
                                     <span
                                         dangerouslySetInnerHTML={{
-                                            __html: dt?.highlight?.name || dt._source.name
+                                            __html: sanitizeHtml(dt?.highlight?.name || dt._source.name)
                                         }}
                                     />
                                 </Link>
@@ -103,7 +104,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 >
                                     <span
                                         dangerouslySetInnerHTML={{
-                                            __html: dt?.highlight?.name || dt._source.name
+                                            __html: sanitizeHtml(dt?.highlight?.name || dt._source.name)
                                         }}
                                     />
                                 </Link>
@@ -122,7 +123,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 >
                                     <span
                                         dangerouslySetInnerHTML={{
-                                            __html: dt?.highlight?.name || dt._source.name
+                                            __html: sanitizeHtml(dt?.highlight?.name || dt._source.name)
                                         }}
                                     />
                                 </Link>
@@ -141,7 +142,7 @@ export default function Result({ showResult, t, loading, data, lng }) {
                                 >
                                     <span
                                         dangerouslySetInnerHTML={{
-                                            __html: dt?.highlight?.name || dt._source.name
+                                            __html: sanitizeHtml(dt?.highlight?.name || dt._source.name)
                                         }}
                                     />
                                 </Link>

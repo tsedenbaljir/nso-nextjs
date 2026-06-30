@@ -1,36 +1,67 @@
 import { NextResponse } from "next/server";
-import axios from 'axios';
+import https from "https";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-    const params = new URLSearchParams();
-    params.append('key', 'ViewerUser');
+const TABLEAU_GATEWAY =
+    "https://gateway.1212.mn/services/dynamic/api/public/tableau-report";
+
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+    timeout: 30000,
+});
+
+export async function GET(req) {
+    const { searchParams } = new URL(req.url);
+    const key = searchParams.get("key") || "ViewerUser";
+
+    const url = `${TABLEAU_GATEWAY}?${new URLSearchParams({ key }).toString()}`;
 
     try {
-        // Fetch data using axios instead of fetch
-        const response = await axios.get(
-            `https://gateway.1212.mn/services/dynamic/api/public/tableau-report?${params.toString()}`,
-            {
+        const result = await new Promise((resolve, reject) => {
+            const reqUrl = new URL(url);
+            const options = {
+                hostname: reqUrl.hostname,
+                path: reqUrl.pathname + reqUrl.search,
+                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Cache-Control": "no-store", // Prevent caching at all levels
-                    "Pragma": "no-cache", // HTTP 1.0
-                    "Expires": "0" // Prevent caching by proxies
+                    "Cache-Control": "no-cache",
                 },
-            }
-        );
+                agent: httpsAgent,
+                timeout: 30000,
+            };
 
-        // With axios, the data is already parsed (no need for .json())
-        const apiResponse = NextResponse.json(response.data, { status: 200 });
+            const request = https.get(options, (res) => {
+                let data = "";
+                res.on("data", (chunk) => { data += chunk; });
+                res.on("end", () => {
+                    try {
+                        if (res.statusCode >= 200 && res.statusCode < 300) {
+                            resolve(JSON.parse(data));
+                        } else {
+                            reject(new Error(`Gateway HTTP ${res.statusCode}`));
+                        }
+                    } catch {
+                        reject(new Error("Invalid JSON from gateway"));
+                    }
+                });
+            });
 
-        // Prevent caching for the API response
-        apiResponse.headers.set('Cache-Control', 'no-store'); // no-store prevents any caching
-        apiResponse.headers.set('Pragma', 'no-cache'); // Disable caching in HTTP/1.0
-        apiResponse.headers.set('Expires', '0'); // Expired immediately
+            request.on("timeout", () => {
+                request.destroy();
+                reject(new Error("Gateway timeout"));
+            });
 
-        return apiResponse;
+            request.on("error", reject);
+        });
+
+        return NextResponse.json(result, {
+            status: 200,
+            headers: { "Cache-Control": "no-store" },
+        });
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch Tableau key' }, { status: 500 });
+        console.error("Tableau key fetch error:", error.message);
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

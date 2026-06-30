@@ -1,18 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export const dynamic = "force-dynamic";
 export async function GET(req) {
-    // Check authentication
-    // const auth = await checkAdminAuth(req);
-
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
     try {
         const { searchParams } = new URL(req.url);
@@ -68,15 +61,8 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-    // Check authentication
-    // const auth = await checkAdminAuth(req);
-
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
     try {
         const body = await req.json();
@@ -108,15 +94,8 @@ export async function POST(req) {
 }
 
 export async function PUT(req) {
-    // Check authentication
-    // const auth = await checkAdminAuth(req);
-
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
     try {
         const body = await req.json();
@@ -160,16 +139,8 @@ export async function PUT(req) {
 }
 
 export async function DELETE(req) {
-    // Check authentication
-    const auth = await checkAdminAuth(req);
-
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
-
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
     try {
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');

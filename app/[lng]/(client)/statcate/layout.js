@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import Path from '@/components/path/Index';
 import { useTranslation } from '@/app/i18n/client';
 import LoadingDiv from '@/components/Loading/OneField/Index';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { encodeQueryParam } from '@/utils/resolveMediaUrl';
 
-export default function Statecate({ children, params }) {
-    const { lng } = params;
+export default function Statecate(props) {
+    const { lng } = use(props.params);
+
+    const {
+        children
+    } = props;
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const subtables = searchParams.get('subtables');
@@ -31,7 +36,7 @@ export default function Statecate({ children, params }) {
         };
         const fetchSubsector = async (categoryId) => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${categoryId}&lng=${lng}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${encodeQueryParam(categoryId)}&lng=${lng}`);
                 const result = await response.json();
                 setName(result.data.filter(e => e.id === decodeURIComponent(pathname.split('/')[5])));
                 if (!Array.isArray(result.data)) {
@@ -106,7 +111,7 @@ export default function Statecate({ children, params }) {
 
     return (
         <div className='nso_page_wrap'>
-            <Path params={params} name={t('statistic')} breadMap={breadMap} />
+            <Path name={t('statistic')} breadMap={breadMap} />
             {children}
         </div>
     );

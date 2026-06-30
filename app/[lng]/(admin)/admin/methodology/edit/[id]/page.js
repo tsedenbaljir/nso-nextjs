@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation'
 import LoaderText from '@/components/Loading/Text/Index'
 import InputItems from "@/components/admin/Edits/AddNew/InputItems"
@@ -8,7 +8,12 @@ import Upload from "@/components/admin/Edits/UploadImages/Upload"
 import { Select, DatePicker } from 'antd';
 import dayjs from 'dayjs';
 
-export default function EditMethodology({ params: { lng, id } }) {
+export default function EditMethodology(props) {
+    const {
+        lng,
+        id
+    } = use(props.params);
+
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [sector_types, setTypes] = useState([])

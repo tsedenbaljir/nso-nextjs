@@ -158,7 +158,7 @@ export default function AreaChart({ data, lng, title }) {
                     text: title || (lng === 'mn' ? 'График' : 'Chart')
                 },
                 subtitle: {
-                    text: lng === 'mn' ? 'Эх сурвалж: www.nso.mn, www.1212.mn' : 'Source: www.nso.mn, www.1212.mn',
+                    text: lng === 'mn' ? 'Эх сурвалж: www.1212.mn' : 'Source: www.1212.mn',
                     align: 'left',
                     x: 10,
                     y: 30,

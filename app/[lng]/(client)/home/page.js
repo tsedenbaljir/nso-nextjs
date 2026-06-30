@@ -1,11 +1,16 @@
-"use client"
+"use client";
+import { use } from "react";
 import Layout from '@/components/baseLayout';
 import Sector from '@/components/home/Sector/Index';
 import HomeSection from '@/components/home/HomeSection';
 import CarouselNews from '@/components/home/CarouselNews';
 import DisseminationHome from '@/components/home/disshome/home';
 
-export default function Home({ params: { lng } }) {
+export default function Home(props) {
+  const {
+    lng
+  } = use(props.params);
+
   return (
     <Layout lng={lng}>
       <HomeSection indicators={[]} searchData={[]} lng={lng} />

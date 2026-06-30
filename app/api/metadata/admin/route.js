@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+import { checkAdminAuth, requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function GET(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     try {
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get('page') || '0', 10);
@@ -56,10 +59,10 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     const auth = await checkAdminAuth(req);
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({ status: false, message: auth.error }, { status: 401 });
-    }
 
     try {
         const body = await req.json();
@@ -143,6 +146,9 @@ export async function POST(req) {
 }
 
 export async function PUT(req) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
     const auth = await checkAdminAuth(req);
     if (!auth.isAuthenticated) {
         return NextResponse.json({ status: false, message: auth.error }, { status: 401 });
@@ -200,5 +206,4 @@ export async function PUT(req) {
         return NextResponse.json({ status: false, message: 'Failed to update metadata' }, { status: 500 });
     }
 }
-
 

@@ -1,17 +1,10 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config.js';
-import { checkAdminAuth } from '@/app/api/auth/adminAuth';
 
+import { checkAdminAuth, requireAdminApi } from '@/app/api/auth/adminAuth';
 export async function GET(req) {
-    // Check authentication
-    // const auth = await checkAdminAuth(req);
-    
-    // if (!auth.isAuthenticated) {
-    //     return NextResponse.json({
-    //         status: false,
-    //         message: auth.error
-    //     }, { status: 401 });
-    // }
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
 
     try {
         const results = await db('web_1212_methodology')
@@ -34,16 +27,9 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-    // Check authentication
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
     const auth = await checkAdminAuth(req);
-    
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
-
     try {
         const body = await req.json();
         
@@ -54,8 +40,8 @@ export async function POST(req) {
         const articleData = {
             id: parseInt(nextId.nextId) + 1 || 1,
             ...body,
-            created_by: auth?.user?.name || "admin",
-            last_modified_by: auth?.user?.name || "admin"
+            created_by: auth.user?.name || "admin",
+            last_modified_by: auth.user?.name || "admin"
         };
 
         const result = await db('web_1212_methodology').insert(articleData);
@@ -75,16 +61,8 @@ export async function POST(req) {
 }
 
 export async function DELETE(req) {
-    // Check authentication
-    const auth = await checkAdminAuth(req);
-    
-    if (!auth.isAuthenticated) {
-        return NextResponse.json({
-            status: false,
-            message: auth.error
-        }, { status: 401 });
-    }
-
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
     try {
         const body = await req.json();
         const id = body.id;

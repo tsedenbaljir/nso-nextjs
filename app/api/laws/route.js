@@ -30,16 +30,17 @@ export async function GET(req) {
 export async function PUT(req) {
   try {
     const body = await req.json();
-    const { id, name, description, file_type } = body;
+    const { id, name, description, file_type, link_url } = body;
 
     await db.raw(`
       UPDATE web_1212_downloadnew 
       SET name = ?, 
           file_description = ?, 
           file_type = ?,
+          link_url = ?,
           updated_date = GETDATE()
       WHERE id = ?
-    `, [name, description, file_type, id]);
+    `, [name, description, file_type, link_url || null, id]);
 
     return NextResponse.json({ 
       status: true, 
@@ -61,16 +62,21 @@ export async function POST(req) {
     const name = formData.get('name');
     const file_type = formData.get('file_type');
     const description = formData.get('description');
+    const link_url = (formData.get('link_url') || '').trim();
 
-    if (!file) {
+    const hasFile = file && typeof file === 'object' && file.size > 0;
+
+    if (!hasFile && !link_url) {
       return NextResponse.json({ 
         status: false, 
-        message: "File is required" 
+        message: "File or link is required" 
       }, { status: 400 });
     }
 
-    // Upload file and get the file path
-    const file_path = await uploadFile(file);
+    let file_path = null;
+    if (hasFile) {
+      file_path = await uploadFile(file);
+    }
 
     // Insert into database using MSSQL syntax
     await db.raw(`
@@ -79,6 +85,7 @@ export async function POST(req) {
         file_type, 
         file_description, 
         file_path,
+        link_url,
         created_date,
         updated_date,
         insert_user,
@@ -89,12 +96,13 @@ export async function POST(req) {
         ?, 
         ?, 
         ?,
+        ?,
         GETDATE(),
         GETDATE(),
         ?,
         ?
       )
-    `, [name, file_type, description, file_path, 'admin', 'admin']);
+    `, [name, file_type, description, file_path, link_url || null, 'admin', 'admin']);
 
     return NextResponse.json({ 
       status: true, 

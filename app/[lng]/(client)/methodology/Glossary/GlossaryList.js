@@ -14,9 +14,11 @@ export default function GlossaryList({
   rows,
   onPageChange,
   lng,
+  catalogueId,
 }) {
   const [sortType, setSortType] = useState(lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   const getSortedList = () => {
     const sorted = [...list];
@@ -32,13 +34,13 @@ export default function GlossaryList({
     return sorted;
   };
 
-  const handleDownloadExcel = () => {
-    const exportData = list.map((item) => {
+  const rowsToExcel = (items) =>
+    items.map((item) => {
       let fileInfo = item.file_info;
       if (typeof fileInfo === "string") {
         try {
           fileInfo = JSON.parse(fileInfo);
-        } catch (e) {
+        } catch {
           fileInfo = {};
         }
       }
@@ -56,27 +58,59 @@ export default function GlossaryList({
       };
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  const handleDownloadExcel = async () => {
+    setExporting(true);
+    try {
+      const params = new URLSearchParams({
+        page: "0",
+        pageSize: String(Math.max(totalRecords, 1)),
+        lng,
+      });
+      if (catalogueId) params.append("catalogue_id", catalogueId);
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
+      const response = await fetch(`/api/methodology/list?${params.toString()}`);
+      const result = await response.json();
+      const allItems = result.status ? result.data || [] : [];
 
-    const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
+      if (allItems.length === 0) return;
 
-    saveAs(blob, "questionnaire_list.xlsx");
+      const worksheet = XLSX.utils.json_to_sheet(rowsToExcel(allItems));
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Арга зүй");
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const blob = new Blob([excelBuffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blob, "methodology_list.xlsx");
+    } catch (error) {
+      console.error("Excel export failed:", error);
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
     <div className="__table_container w-full">
       <div className="_filter_side ">
-        <button className="__download_button whitespace-nowrap text-sm" onClick={handleDownloadExcel}>
-          <i className="pi pi-cloud-download"></i> {lng === "mn" ? "Excel татах" : "Download Excel"}
+        <button
+          className="__download_button whitespace-nowrap text-sm"
+          onClick={handleDownloadExcel}
+          disabled={exporting || totalRecords === 0}
+        >
+          <i className="pi pi-cloud-download"></i>{" "}
+          {exporting
+            ? lng === "mn"
+              ? "Татаж байна..."
+              : "Downloading..."
+            : lng === "mn"
+              ? "Excel татах"
+              : "Download Excel"}
         </button>
 
         {/* Sort Dropdown */}

@@ -1,7 +1,8 @@
 "use client";
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 
 import { useState, useEffect } from "react";
-import { fetchHomoHuman } from "@/app/services/actions";
+import { fetchHomoHuman } from "@/app/services/fun-statistic-actions";
 
 export default function HumanPage() {
     const [letter1, setLetter1] = useState("");
@@ -296,7 +297,7 @@ export default function HumanPage() {
                                 fontSize: 14,
                                 lineHeight: 1.6,
                             }}
-                            dangerouslySetInnerHTML={{ __html: result.description }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(result.description)}}
                         />
                     </section> */}
 

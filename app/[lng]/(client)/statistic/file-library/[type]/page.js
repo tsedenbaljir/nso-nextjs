@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useSearchParams } from "next/navigation";
 import List from "../../list";
 import Sidebar from "../../sidebar";
 import { useTranslation } from "@/app/i18n/client";
 
-export default function StateCate({ params: { lng }, params }) {
-  const { type } = params;
+export default function StateCate(props) {
+  const { type, lng } = use(props.params);
   const searchParams = useSearchParams();
   const sub = searchParams.get("sub") ?? undefined;
   const { t } = useTranslation(lng, "lng", "");

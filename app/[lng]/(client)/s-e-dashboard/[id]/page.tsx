@@ -7,11 +7,12 @@ export function generateStaticParams() {
   return getDashboardIds().map((id) => ({ id }));
 }
 
-export default function SocioDashboardDetailPage({
-  params,
-}: {
-  params: { lng: string; id: string };
-}) {
+export default async function SocioDashboardDetailPage(
+  props: {
+    params: Promise<{ lng: string; id: string }>;
+  }
+) {
+  const params = await props.params;
   const config = getDashboard(params.id);
   if (!config) {
     notFound();

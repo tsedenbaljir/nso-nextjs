@@ -1,14 +1,20 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
+import React, { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { Tabs, notification } from 'antd';
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
 import ContactForm from '@/components/contactForm';
+import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import LoadingDiv from '@/components/Loading/Text/Index';
 import '@/components/styles/contact-us.scss';
 
-export default function Contact({ params: { lng } }) {
+export default function Contact(props) {
+    const {
+        lng
+    } = use(props.params);
+
     const [loading, setLoading] = useState(true);
     const [webpageData, setWebpageData] = useState(null);
     const [contactUsData, setContactUsData] = useState({});
@@ -178,9 +184,10 @@ export default function Contact({ params: { lng } }) {
                                 </iframe>
                             </div>
                             {webpageData && (
-                                <div dangerouslySetInnerHTML={{ __html: webpageData.body }} />
+                                <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(webpageData.body)}} />
                             )}
                             <ContactForm isMn={lng === "mn"} />
+                            <ContactSourceCard lng={lng} />
                         </>
                     )}
                 </div>
@@ -197,7 +204,7 @@ export default function Contact({ params: { lng } }) {
                     ) : (
                         contactUsData[6] && (
                             <div dangerouslySetInnerHTML={{
-                                __html: lng === "mn" ? contactUsData[6].bodyMn : contactUsData[6].bodyEn
+                                __html: sanitizeHtml(lng === "mn" ? contactUsData[6].bodyMn : contactUsData[6].bodyEn)
                             }} />
                         )
                     )}
@@ -215,7 +222,7 @@ export default function Contact({ params: { lng } }) {
                     ) : (
                         contactUsData[5] && (
                             <div dangerouslySetInnerHTML={{
-                                __html: lng === "mn" ? contactUsData[5].bodyMn : contactUsData[5].bodyEn
+                                __html: sanitizeHtml(lng === "mn" ? contactUsData[5].bodyMn : contactUsData[5].bodyEn)
                             }} />
                         )
                     )}

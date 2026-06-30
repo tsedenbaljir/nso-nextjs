@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import LoadingDiv from '@/components/Loading/Text/Index';
+import { encodeQueryParam } from '@/utils/resolveMediaUrl';
 
 export default function DynamicSidebar({ sectorData, subsector, lng }) {
     const [menuItems, setMenuItems] = useState([]);
@@ -12,7 +13,7 @@ export default function DynamicSidebar({ sectorData, subsector, lng }) {
     useEffect(() => {
         const fetchSubcategories = async (categoryId) => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${decodeURIComponent(categoryId)}&lng=${lng}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/subsectorname?subsectorname=${encodeQueryParam(categoryId)}&lng=${lng}`);
                 if (!response.ok) throw new Error(`Failed to fetch subcategories for ${categoryId}`);
 
                 const result = await response.json();

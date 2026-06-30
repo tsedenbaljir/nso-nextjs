@@ -1,10 +1,18 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
 
-export default function Statecate({ children, params: { lng } }) {
+export default function Statecate(props) {
+    const {
+        lng
+    } = use(props.params);
+
+    const {
+        children
+    } = props;
+
     const router = useRouter();
     const pathname = usePathname();
     const { t } = useTranslation(lng, "lng", "");

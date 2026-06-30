@@ -1,5 +1,6 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter } from "next/navigation";
 import { useSearchParams } from 'next/navigation';
 import TextLoading from '@/components/Loading/Text/Index';
@@ -7,7 +8,11 @@ import Pagination from '@/components/articles/Pagination';
 import OneField from '@/components/Loading/OneField/Index';
 import './workspace.scss';
 
-export default function Home({ params: { lng } }) {
+export default function Home(props) {
+    const {
+        lng
+    } = use(props.params);
+
     const router = useRouter();
 
     const searchParams = useSearchParams();
@@ -123,7 +128,7 @@ export default function Home({ params: { lng } }) {
                                         <div
                                             className="ws_desc my-4 text-base"
                                             dangerouslySetInnerHTML={{
-                                                __html: dt.body.length > 250 ? dt.body.substr(0, 500) + '...' : dt.body
+                                                __html: sanitizeHtml(dt.body.length > 250 ? dt.body.substr(0, 500) + '...' : dt.body)
                                             }}
                                         ></div>
 

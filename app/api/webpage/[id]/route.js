@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 
 // Update webpage
-export async function PUT(request, { params }) {
+export async function PUT(request, props) {
+    const params = await props.params;
     try {
         const { id } = params;
         const body = await request.json();
@@ -23,7 +24,8 @@ export async function PUT(request, { params }) {
 }
 
 // Delete webpage
-export async function DELETE(request, { params }) {
+export async function DELETE(request, props) {
+    const params = await props.params;
     try {
         const { id } = params;
 

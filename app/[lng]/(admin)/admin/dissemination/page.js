@@ -12,7 +12,7 @@ import "primeicons/primeicons.css";
 
 export default function Dissemination() {
     const router = useRouter()
-    const [articles, setArticles] = useState([])
+    const [articles, setArticles] = useState({ latest: [], future: [], update: [] })
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -37,7 +37,8 @@ export default function Dissemination() {
             if (data.status) {
                 const latestNews = data.data.filter(article => article.news_type === 'LATEST')
                 const futureNews = data.data.filter(article => article.news_type === 'FUTURE')
-                setArticles({ latest: latestNews, future: futureNews })
+                const updateNews = data.data.filter(article => article.news_type === 'UPDATED')
+                setArticles({ latest: latestNews, future: futureNews, update: updateNews })
             }
         } catch (error) {
             console.error('Error fetching articles:', error)
@@ -130,6 +131,17 @@ export default function Dissemination() {
                     <TabPanel header="Удахгүй гарах">
                         <DisseminationTable 
                             data={articles.future}
+                            loading={loading}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                            languageBodyTemplate={languageBodyTemplate}
+                            statusBodyTemplate={statusBodyTemplate}
+                            dateBodyTemplate={dateBodyTemplate}
+                        />
+                    </TabPanel>
+                    <TabPanel header="Шинэчлэх">
+                        <DisseminationTable 
+                            data={articles.update}
                             loading={loading}
                             onEdit={handleEdit}
                             onDelete={handleDelete}

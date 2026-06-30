@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
 import { Client } from "@elastic/elasticsearch";
 import { db } from "../config/db_csweb.config";
+import { requireAdminApi } from "@/app/api/auth/adminAuth";
+import { fetchTablenameIndexData } from "@/app/api/lib/tablenameIndexData";
 
 const ELASTIC_URL = "https://45.117.34.245:9200";
 const INDEX_NAME = "search-nso-1212";
 
-export async function POST() {
+export async function POST(req) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   const client = new Client({
     node: ELASTIC_URL,
     auth: {
@@ -38,7 +43,14 @@ export async function POST() {
     });
 
     // Fetch data from database
-    const [web_1212_content, web_1212_tender, web_1212_download, web_1212_laws, web_1212_glossary] = await Promise.all([
+    const [
+      web_1212_content,
+      web_1212_tender,
+      web_1212_download,
+      web_1212_laws,
+      web_1212_glossary,
+      classificationRows,
+    ] = await Promise.all([
       db.raw(
         `SELECT * from web_1212_content where content_type = 'NSONEWS' and published = 1 and news_type in('LATEST','MEDIA')`
       ),
@@ -52,7 +64,24 @@ export async function POST() {
         `SELECT * from web_1212_download where file_type in('Command','Law','Legal','Docs_s') and published = 1`
       ),
       db.raw(`SELECT * from web_1212_glossary where published = 1`),
+      db("classification_code")
+        .where({
+          is_current: 1,
+          is_secure: 0,
+          active: 1,
+          deleted: null,
+        })
+        .select("id", "namemn", "nameen", "descriptionmn", "descriptionen", "code"),
     ]);
+
+    const classificationData = classificationRows.map((row) => ({
+      id: String(row.id),
+      name: [row.namemn, row.nameen, row.code].filter(Boolean).join(" "),
+      body: [row.descriptionmn, row.descriptionen].filter(Boolean).join(" "),
+      namemn: row.namemn,
+      nameen: row.nameen,
+      _type: "classification",
+    }));
 
     const allData = [
       ...web_1212_content.map((data) => ({ ...data, _type: "content" })),
@@ -60,27 +89,26 @@ export async function POST() {
       ...web_1212_download.map((data) => ({ ...data, _type: "download" })),
       ...web_1212_laws.map((data) => ({ ...data, _type: "laws" })),
       ...web_1212_glossary.map((data) => ({ ...data, _type: "glossary" })),
+      ...classificationData,
     ];
 
-    // 🔽 Fetch data from external API using absolute URL 🔽
-    const apiResponse = await fetch(`https://www.nso.mn/api/tablename`, { cache: 'no-store' });
-    const { response: apiData } = await apiResponse.json();
-
-    if (!Array.isArray(apiData)) {
-      console.error("Unexpected API response format:", apiData);
-      return NextResponse.json({ error: "Invalid API response format." }, { status: 500 });
+    let formattedApiData = [];
+    try {
+      const apiData = await fetchTablenameIndexData();
+      if (Array.isArray(apiData)) {
+        formattedApiData = apiData.map((item) => ({
+          id: item.id,
+          name: item.name,
+          link: item.link,
+          date: item.date,
+          category: item.category,
+          sector: item.sector,
+          _type: "tablename",
+        }));
+      }
+    } catch (error) {
+      console.error("Tablename index fetch error:", error);
     }
-
-    // Append API data to Elasticsearch data
-    const formattedApiData = apiData.map((item) => ({
-      id: item.id,
-      name: item.name,
-      link: item.link,
-      date: item.date,
-      category: item.category,
-      sector: item.sector,
-      _type: "tablename",
-    }));
 
     allData.push(...formattedApiData);
 

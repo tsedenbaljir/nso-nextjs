@@ -1,4 +1,5 @@
 "use client";
+import { sanitizeHtml } from '@/utils/sanitizeHtml';
 import { useState } from 'react';
 import { useTranslation } from '@/app/i18n/client';
 
@@ -43,7 +44,7 @@ export default function OpendataTable({ params: { lng }, data, subData }) {
                                                 {item.dataType}
                                             </code>
                                         </td>
-                                        <td dangerouslySetInnerHTML={{ __html: item.addition || '' }} />
+                                        <td dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.addition || '')}} />
                                     </tr>
                                 ))}
                             </tbody>

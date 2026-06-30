@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useRouter } from "next/navigation";
+import { resolveMediaUrl } from "@/utils/resolveMediaUrl";
 
 export default function Main({ sector, subsector, lng }) {
 
@@ -119,7 +120,7 @@ export default function Main({ sector, subsector, lng }) {
                         <div onClick={() => {
                             const filePath = JSON.parse(rowData.file_info)?.pathName;
                             if (filePath) {
-                                window.open(`${process.env.FRONTEND}/uploads/${filePath}`, "_blank");
+                                window.open(resolveMediaUrl(`/uploads/${filePath}`), "_blank");
                             }
                         }}
                             className="hover:text-blue-700 hover:underline text-red-300 font-medium text-nowrap text-center cursor-pointer">

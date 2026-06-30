@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/app/api/config/db_csweb.config';
 
+import { requireAdminApi } from '@/app/api/auth/adminAuth';
 export const dynamic = 'force-dynamic';
 
-export async function GET(req, { params }) {
+export async function GET(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+    const params = await props.params;
     try {
         const { id } = params;
         const [menu] = await db.raw(`
@@ -33,7 +38,11 @@ export async function GET(req, { params }) {
     }
 }
 
-export async function PUT(req, { params }) {
+export async function PUT(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+    const params = await props.params;
     try {
         const { id } = params;
         const data = await req.json();
@@ -81,7 +90,11 @@ export async function PUT(req, { params }) {
     }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE(req, props) {
+    const denied = await requireAdminApi(req);
+    if (denied) return denied;
+
+    const params = await props.params;
     try {
         const { id } = params;
 

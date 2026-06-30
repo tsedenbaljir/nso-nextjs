@@ -28,6 +28,14 @@ export default function Main({ children, type, lng, filterSection }) {
                                     <div className="ng-star-inserted">{t('news.latest')}</div>
                                 </div>
                             </li>
+                            <li className={`p-tabmenuitem ${type === "update" && 'p-highlight'} cursor-pointer`}
+                                onClick={() => {
+                                    router.push("/dissemination/update")
+                                }}>
+                                <div className="p-menuitem-link p-ripple">
+                                    <div className="ng-star-inserted">{t('news.update')}</div>
+                                </div>
+                            </li>
                         </ul>
                     </div>
 

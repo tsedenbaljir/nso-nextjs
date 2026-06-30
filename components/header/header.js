@@ -48,7 +48,7 @@ const Header = ({ lng }) => {
     useEffect(() => {
         const fetchMenusSub = async () => {
             try {
-                const response = await fetch('/api/menus/admin');
+                const response = await fetch('/api/menus');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -68,7 +68,7 @@ const Header = ({ lng }) => {
 
         const fetchMenus = async () => {
             try {
-                const response = await fetch('/api/menus/admin');
+                const response = await fetch('/api/menus');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

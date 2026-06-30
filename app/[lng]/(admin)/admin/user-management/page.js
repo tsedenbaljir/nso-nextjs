@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Table, Button, Modal, Form, Input, Space, Popconfirm, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { fetchAdminUsers, createAdminUser, deleteAdminUser } from "@/app/services/actions";
 
 export default function UserManagementPage() {
     const [loading, setLoading] = useState(false);
@@ -12,7 +13,6 @@ export default function UserManagementPage() {
     const columns = useMemo(() => [
         { title: "ID", dataIndex: "id", key: "id", width: 80 },
         { title: "Username", dataIndex: "username", key: "username" },
-        { title: "Password", dataIndex: "password", key: "password" },
         { title: "Roles", dataIndex: "Roles", key: "Roles" },
         {
             title: "Actions",
@@ -37,8 +37,7 @@ export default function UserManagementPage() {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`/api/user/admin`, { cache: "no-store" });
-            const json = await res.json();
+            const json = await fetchAdminUsers();
             if (!json?.success) throw new Error(json?.error || "Failed to load users");
             setUsers(Array.isArray(json.data) ? json.data : []);
         } catch (err) {
@@ -52,8 +51,7 @@ export default function UserManagementPage() {
     const handleDelete = async (id) => {
         try {
             setLoading(true);
-            const res = await fetch(`/api/user/admin?id=${encodeURIComponent(id)}`, { method: "DELETE" });
-            const json = await res.json();
+            const json = await deleteAdminUser(id);
             if (!json?.success) throw new Error(json?.error || "Failed to delete user");
             message.success("User deleted");
             await fetchUsers();
@@ -74,16 +72,11 @@ export default function UserManagementPage() {
         try {
             const values = await form.validateFields();
             setLoading(true);
-            const res = await fetch(`/api/user/admin`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: values.username,
-                    password: values.password,
-                    role: values.role,
-                })
+            const json = await createAdminUser({
+                username: values.username,
+                password: values.password,
+                role: values.role,
             });
-            const json = await res.json();
             if (!json?.success) throw new Error(json?.error || "Failed to create user");
             message.success("User created");
             setIsModalOpen(false);
@@ -126,14 +119,21 @@ export default function UserManagementPage() {
                 okText="Create"
             >
                 <Form form={form} layout="vertical">
-                    <Form.Item name="username" label="Username" rules={[{ required: true, message: "Required" }]}>
+                    <Form.Item name="username" label="Хэрэглэгчийн нэр" rules={[{ required: true, message: "Хэрэглэгчийн нэр оруулна уу" }]}>
                         <Input placeholder="username" />
                     </Form.Item>
-                    <Form.Item name="password" label="Password" rules={[{ required: true, message: "Required" }]}>
-                        <Input.Password placeholder="password" maxLength={10} />
+                    <Form.Item
+                        name="password"
+                        label="Нууц үг"
+                        rules={[
+                            { required: true, message: "Нууц үг оруулна уу" },
+                            { min: 6, message: "6-аас дээш тэмдэгтээр оруулна уу" },
+                        ]}
+                    >
+                        <Input.Password placeholder="Нууц үг" />
                     </Form.Item>
-                    <Form.Item name="role" label="Roles">
-                        <Input placeholder="e.g. admin or csv of slugs" />
+                    <Form.Item name="role" label="Хэрэглэгчийн түвшин">
+                        <Input placeholder="admin, laws, transparency, metadata-questionnaire." />
                     </Form.Item>
                 </Form>
             </Modal>

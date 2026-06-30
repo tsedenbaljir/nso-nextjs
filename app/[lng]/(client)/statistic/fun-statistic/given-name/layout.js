@@ -1,10 +1,15 @@
 "use client";
+import { use } from "react";
 
 import Path from "@/components/path/Index";
 import { useTranslation } from "@/app/i18n/client";
 
-export default function Statistic({ children, params }) {
-  const { lng } = params;
+export default function Statistic(props) {
+  const { lng } = use(props.params);
+
+  const {
+    children
+  } = props;
   const { t } = useTranslation(lng, "lng", "");
 
   const breadMap = [
