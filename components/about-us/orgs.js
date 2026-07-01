@@ -122,7 +122,9 @@ export default function Orgs({ lng }) {
                                                 </div>
                                                 <div className="bfr">
                                                     <div>
-                                                        {datas[where]?.Objective?.map((data, index) => (
+                                                        {typeof datas[where]?.Objective === 'string' ? (
+                                                            <p>{datas[where].Objective}</p>
+                                                        ) : datas[where]?.Objective?.map((data, index) => (
                                                             <p key={index}>
                                                                 {index + 1}. {data?.title}
                                                             </p>
