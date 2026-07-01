@@ -1,6 +1,7 @@
 export const TRANSPARENCY_CONTACT_BY_ID = {
     54: "contactSource",
     59: "munkhOchSource",
+    68: "gotsbayarSource",
 };
 
 export function getTransparencySourceKey(id) {
