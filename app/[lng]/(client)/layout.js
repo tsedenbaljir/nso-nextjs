@@ -31,7 +31,7 @@ export default async function ClientLayout(props) {
 
   return (
     <Layout lng={lng}>
-      <Script async src="/egune-chat.js"></Script>
+      {/* <Script async src="/egune-chat.js"></Script> */}
       {children}
     </Layout>
   );
