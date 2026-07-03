@@ -6,9 +6,11 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const username = searchParams.get("username") || undefined;
+    const hostHeader =
+        req.headers.get("x-forwarded-host") || req.headers.get("host") || undefined;
 
     try {
-        const payload = getTableauEmbedAuthPayload(username);
+        const payload = await getTableauEmbedAuthPayload(username, hostHeader);
         return NextResponse.json(
             {
                 token: payload.token,
@@ -17,6 +19,8 @@ export async function GET(req) {
                     ? {
                           environment: payload.environment,
                           appName: payload.appName,
+                          host: payload.host,
+                          envPrefix: payload.envPrefix,
                       }
                     : {}),
             },

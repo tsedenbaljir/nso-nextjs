@@ -492,7 +492,7 @@ export async function fetchTableauKey() {
 
 export async function fetchTableauEmbedToken(username) {
     try {
-        const data = getTableauEmbedAuthPayload(username);
+        const data = await getTableauEmbedAuthPayload(username);
         return { success: true, data };
     } catch (error) {
         console.error("Tableau embed token error:", error);
