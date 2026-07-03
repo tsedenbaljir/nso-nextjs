@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { db } from "@/app/api/config/db_csweb.config";
 import { hasAdminRole } from "@/app/api/auth/adminAuth";
+import { getTableauEmbedAuthPayload } from "@/lib/tableau/token";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
@@ -485,6 +486,16 @@ export async function fetchTableauKey() {
         return { success: true, data: result };
     } catch (error) {
         console.error('Tableau key fetch error:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+export async function fetchTableauEmbedToken(username) {
+    try {
+        const data = getTableauEmbedAuthPayload(username);
+        return { success: true, data };
+    } catch (error) {
+        console.error("Tableau embed token error:", error);
         return { success: false, error: error.message };
     }
 }
