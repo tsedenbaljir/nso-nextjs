@@ -27,13 +27,19 @@ var chatBoxStyle = `
   bottom: 110px;
   transform: scale(0.3)`;
 
+var chatBtnSize = 60;
+
 var chatBtnStyle = `
   z-index: 999;
-  width: 56px;
-  height: 56px;
-  border-radius: 100px;
-  font-size: 40px;
-  box-shadow: 0px 2px 4px 0px rgba(29, 33, 45, 0.08), 0px 0px 2px 0px rgba(29, 33, 45, 0.08), 0px 0px 1px 0px rgba(29, 33, 45, 0.20);
+  width: ${chatBtnSize}px;
+  height: ${chatBtnSize}px;
+  min-width: ${chatBtnSize}px;
+  min-height: ${chatBtnSize}px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #2b6cb8 url('/NSO-chatbot-02.png') center center / cover no-repeat;
+  box-shadow: 0 4px 12px rgba(29, 33, 45, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -42,8 +48,8 @@ var chatBtnStyle = `
   bottom: 40px;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s;
-  background: #87ceeb`;
+  transition: transform 0.2s ease;
+  line-height: 0;`;
 
 var full_screen_style = `
   z-index: 10000; 
@@ -75,6 +81,8 @@ if (document.body != null) {
 
     const buttonElement = document.createElement("button");
     buttonElement.className = "floating-btn";
+    buttonElement.setAttribute("type", "button");
+    buttonElement.setAttribute("aria-label", "NSO chatbot");
     buttonElement.addEventListener("click", buttonClick);
     buttonElement.addEventListener("mouseover", mouseOver);
     buttonElement.addEventListener("mouseleave", mouseLeave);
@@ -88,13 +96,16 @@ if (document.body != null) {
 }
 
 const floatingBtn = document.getElementsByClassName("floating-btn")[0];
-var botIcon = document.createElement("img");
-botIcon.setAttribute('src', 'https://statgpt.egune.com/images/chatbot.png');
-botIcon.setAttribute('alt', 'na');
-botIcon.setAttribute('height', '36px');
-botIcon.setAttribute('width', '36px');
-floatingBtn.appendChild(botIcon);
-floatingBtn.style = chatBtnStyle;
+floatingBtn.style.cssText = chatBtnStyle;
+
+const floatingBtnStyle = document.createElement("style");
+floatingBtnStyle.textContent = `
+  .floating-btn {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+`;
+document.head.appendChild(floatingBtnStyle);
 
 function greetingBoxCreater() {
     const createElement = (tag, className, attributes = {}) => {
@@ -187,7 +198,7 @@ function greetingBoxCreater() {
 function initChat() {
     let chatBoxEl = document.getElementsByClassName("egune-chat-box")[0];
     chatBoxEl.innerHTML = `
-    <iframe allow="microphone" id='chimegeChatBotId' scrolling="no" src="https://statgpt.egune.com/chatbot/" 
+    <iframe allow="microphone" id='chimegeChatBotId' scrolling="no" src="https://statgpt.nso.mn/widget" 
     style="border: none; margin: 0; padding: 0;display: flex;
     width: 100%; height: 100%; object-fit: cover; flex-direction: column;"></iframe>`;
     chatBoxEl.style = chatBoxStyle + `transform: scale(0);`;
@@ -207,11 +218,6 @@ function buttonClick() {
         greetingBox.style.display = "none";
     }
 
-    floatingBtn.style.transform = "scale(1.0)";
-    setTimeout(() => {
-        floatingBtn.style.transform = "scale(1.1)";
-    }, 150);
-
     if (!isOpen) {
         initChat();
     }
@@ -224,11 +230,11 @@ function buttonClick() {
 }
 
 function mouseOver() {
-    document.getElementsByClassName("floating-btn")[0].style.transform = "scale(1.1)";
+    document.getElementsByClassName("floating-btn")[0].style.boxShadow = "0 6px 18px rgba(29, 33, 45, 0.28)";
 }
 
 function mouseLeave() {
-    document.getElementsByClassName("floating-btn")[0].style.transform = "scale(1)";
+    document.getElementsByClassName("floating-btn")[0].style.boxShadow = "0 4px 12px rgba(29, 33, 45, 0.18)";
 }
 
 window.addEventListener("message", handleMessage, false);
