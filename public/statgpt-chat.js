@@ -136,20 +136,23 @@ function setChatActiveState(active) {
 
 function mountChatOnTop() {
     const root = document.getElementById("egune-chat-root");
-    if (root && document.body && root.parentNode === document.body) {
+    if (!root || !document.body) {
+        return;
+    }
+
+    if (root.parentNode !== document.body) {
+        document.body.appendChild(root);
+        return;
+    }
+
+    // Only move when not already last — appendChild on same node still fires mutations.
+    if (document.body.lastElementChild !== root) {
         document.body.appendChild(root);
     }
 }
 
 function watchChatMount() {
-    if (window.__eguneChatMountObserver || !document.body) {
-        return;
-    }
-
-    window.__eguneChatMountObserver = new MutationObserver(function () {
-        mountChatOnTop();
-    });
-    window.__eguneChatMountObserver.observe(document.body, { childList: true });
+    // Avoid MutationObserver here: appendChild triggers childList mutations and can freeze the page.
 }
 
 function bindMobileViewport(chatBoxEl) {
@@ -341,6 +344,7 @@ function scheduleInit() {
     }
 
     window.addEventListener("load", mountChatOnTop);
+    window.addEventListener("pageshow", mountChatOnTop);
 }
 
 scheduleInit();
