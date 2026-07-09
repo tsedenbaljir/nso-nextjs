@@ -1,6 +1,10 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    outputFileTracingRoot: path.dirname(fileURLToPath(import.meta.url)),
     devIndicators: false,
     logging: process.env.NODE_ENV === "development"
         ? {
