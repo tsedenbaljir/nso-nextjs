@@ -89,7 +89,7 @@ export default function RootLayout({ children }) {
         <Providers>
           {children}
         </Providers>
-        <Script src="/egune-chat.js" strategy="afterInteractive" />
+        <Script src="/statgpt-chat.js" strategy="afterInteractive" />
       </body>
     </html>
   );

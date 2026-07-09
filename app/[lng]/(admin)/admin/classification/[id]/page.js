@@ -1,13 +1,16 @@
 "use client"
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, use, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     EditOutlined,
     DeleteOutlined,
     PlusOutlined,
     ArrowLeftOutlined,
+    UploadOutlined,
+    DownloadOutlined,
+    FileExcelOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Form, Input, Select, message, Tabs, Spin } from 'antd';
+import { Button, Modal, Form, Input, Select, message, Tabs, Spin, Upload } from 'antd';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { confirmDialog } from 'primereact/confirmdialog';
@@ -15,6 +18,21 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 
 const { TextArea } = Input;
 const { Option } = Select;
+
+function parseFileInfo(raw) {
+    if (!raw) return null;
+    try {
+        return typeof raw === 'string' ? JSON.parse(raw) : raw;
+    } catch {
+        return null;
+    }
+}
+
+function getExcelUrl(fileInfo) {
+    if (!fileInfo?.pathName) return null;
+    const pathName = String(fileInfo.pathName).replace(/^\/+/, '').replace(/^uploads\//, '');
+    return `/uploads/${pathName}`;
+}
 
 export default function ClassificationDetailAdmin(props0) {
     const { lng, id } = use(props0.params);
@@ -39,6 +57,13 @@ export default function ClassificationDetailAdmin(props0) {
     // Main record (indicator) edit
     const [mainModal, setMainModal] = useState(false);
     const [mainForm] = Form.useForm();
+
+    // Excel file
+    const [excelUploading, setExcelUploading] = useState(false);
+    const excelInputRef = useRef(null);
+
+    const excelInfo = parseFileInfo(mainRecord?.file_info);
+    const excelUrl = getExcelUrl(excelInfo);
 
     const fetchMain = async () => {
         try {
@@ -260,6 +285,64 @@ export default function ClassificationDetailAdmin(props0) {
         }
     };
 
+    /* ---------- Excel upload / delete ---------- */
+    const uploadExcel = async (file) => {
+        const name = file?.name || '';
+        const ext = name.split('.').pop()?.toLowerCase();
+        if (!['xlsx', 'xls'].includes(ext)) {
+            message.error('Зөвхөн .xlsx эсвэл .xls файл оруулна уу');
+            return Upload.LIST_IGNORE;
+        }
+
+        setExcelUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('id', id);
+
+            const res = await fetch('/api/methodology/classification/file', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await res.json();
+            if (result.status) {
+                message.success(result.message || 'Excel файл амжилттай хадгаллаа');
+                fetchMain();
+            } else {
+                message.error(result.message || 'Файл хуулахад алдаа гарлаа');
+            }
+        } catch (e) {
+            message.error('Файл хуулахад алдаа гарлаа');
+        } finally {
+            setExcelUploading(false);
+            if (excelInputRef.current) excelInputRef.current.value = '';
+        }
+
+        return false;
+    };
+
+    const deleteExcel = () => {
+        confirmDialog({
+            message: 'Оруулсан Excel файлыг устгах уу?',
+            header: 'Устгах уу?',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Тийм',
+            rejectLabel: 'Үгүй',
+            accept: async () => {
+                const res = await fetch(`/api/methodology/classification/file?id=${id}`, {
+                    method: 'DELETE',
+                });
+                const result = await res.json();
+                if (result.status) {
+                    message.success(result.message || 'Файл устгалаа');
+                    fetchMain();
+                } else {
+                    message.error(result.message || 'Файл устгахад алдаа гарлаа');
+                }
+            },
+        });
+    };
+
     const indexTemplate = (rowData, options) => options.rowIndex + 1;
 
     const generalActions = (row) => (
@@ -361,6 +444,53 @@ export default function ClassificationDetailAdmin(props0) {
             {mainRecord?.descriptionmn && (
                 <p className="text-gray-500 mb-4">{mainRecord.descriptionmn}</p>
             )}
+
+            <div className="mb-4 p-3 border border-gray-200 rounded-md bg-gray-50">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 min-w-0">
+                        <FileExcelOutlined className="text-green-600 text-lg" />
+                        <div className="min-w-0">
+                            <div className="font-medium">Excel файл</div>
+                            {excelInfo ? (
+                                <div className="text-sm text-gray-600 truncate">
+                                    {excelInfo.originalName || excelInfo.pathName}
+                                </div>
+                            ) : (
+                                <div className="text-sm text-gray-500">
+                                    Файл оруулаагүй. Оруулсан файл нийтийн хуудсаас татагдана.
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        {excelUrl && (
+                            <Button
+                                icon={<DownloadOutlined />}
+                                href={excelUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Татах
+                            </Button>
+                        )}
+                        <Upload
+                            accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                            showUploadList={false}
+                            beforeUpload={uploadExcel}
+                            disabled={excelUploading}
+                        >
+                            <Button type="primary" icon={<UploadOutlined />} loading={excelUploading}>
+                                {excelInfo ? 'Файл солих' : 'Excel оруулах'}
+                            </Button>
+                        </Upload>
+                        {excelInfo && (
+                            <Button danger icon={<DeleteOutlined />} onClick={deleteExcel}>
+                                Устгах
+                            </Button>
+                        )}
+                    </div>
+                </div>
+            </div>
 
             <Tabs defaultActiveKey="general" items={tabItems} />
 

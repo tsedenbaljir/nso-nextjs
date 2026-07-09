@@ -57,12 +57,18 @@ export async function POST(req) {
             ORDER BY b.[meta_data_id]
         `;
         const metaResults = await db.raw(metaQuery, [classification_code_id]);
+        const titleRows = Array.isArray(subTitleResults)
+            ? subTitleResults
+            : (subTitleResults?.recordset || []);
+        const titleRow = titleRows[0] || null;
+
         return NextResponse.json({
             status: true,
             data: {
                 sub_classifications: subClassResults || [],
                 meta_data_values: metaResults || [],
-                sub_Title: subTitleResults || []
+                sub_Title: subTitleResults || [],
+                file_info: titleRow?.file_info || null,
             },
             message: "Data retrieved successfully"
         });

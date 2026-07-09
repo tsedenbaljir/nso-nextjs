@@ -2,46 +2,50 @@
 var domain = "nso";
 
 var EGUNE_Z_INDEX = 2147483000;
+var STATGPT_WIDGET_URL = "https://statgpt.nso.mn/widget";
 
 var isOpen = false;
 var responsiveType = false;
+var chatBtnSize = 60;
 
 var chatBoxDesktopStyle = `
-  z-index: ${EGUNE_Z_INDEX};
+  z-index: ${EGUNE_Z_INDEX + 5};
   overflow: hidden;
-  visibility: hidden;
   border-radius: 30px;
   position: fixed;
   box-shadow: 0px 16px 32px 0px rgba(2, 2, 2, 0.1), 0px 1px 4px 0px rgba(29, 33, 45, 0.15), 0px 0px 1px 0px rgba(29, 33, 45, 0.20);
   box-sizing: border-box;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
-  transform-origin: bottom right;
+  transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
   max-width: 860px;
-  width: 100%;
+  width: min(100%, 860px);
   height: 80%;
   right: 40px;
   bottom: 110px;
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.3);`;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;`;
 
 var chatBoxHiddenStyle = `
   z-index: ${EGUNE_Z_INDEX};
   position: fixed;
-  width: 0;
-  height: 0;
+  left: 0;
+  top: 0;
+  width: 0 !important;
+  height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
+  pointer-events: none !important;
   border: none;
   box-shadow: none;
-  transform: none;`;
-
-var chatBtnSize = 60;
+  transform: none;
+  inset: auto;`;
 
 var chatBtnStyle = `
-  z-index: ${EGUNE_Z_INDEX + 1};
+  z-index: ${EGUNE_Z_INDEX + 2};
   width: ${chatBtnSize}px;
   height: ${chatBtnSize}px;
   min-width: ${chatBtnSize}px;
@@ -60,12 +64,12 @@ var chatBtnStyle = `
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
   line-height: 0;`;
 
 var full_screen_style = `
-  z-index: ${EGUNE_Z_INDEX};
+  z-index: ${EGUNE_Z_INDEX + 5};
   position: fixed;
-  inset: 0;
   left: 0;
   top: 0;
   right: 0;
@@ -97,14 +101,37 @@ function getClosedChatStyle() {
 }
 
 function getOpenChatStyle() {
-    if (isMobileView()) {
-        return full_screen_style;
-    }
-    return chatBoxDesktopStyle + "opacity: 1; visibility: visible; pointer-events: auto; transform: scale(1);";
+    return isMobileView() ? full_screen_style : chatBoxDesktopStyle;
 }
 
 function applyChatBoxStyle(chatBoxEl, open) {
     chatBoxEl.style.cssText = open ? getOpenChatStyle() : getClosedChatStyle();
+}
+
+function setChatActiveState(active) {
+    const root = document.getElementById("egune-chat-root");
+    const greetingBox = document.getElementById("egune-greeting-box");
+    const floatingBtn = document.querySelector("#egune-chat-root .floating-btn");
+    const chatBoxEl = document.querySelector("#egune-chat-root .egune-chat-box");
+
+    if (root) {
+        root.classList.toggle("chat-active", active);
+    }
+
+    if (greetingBox) {
+        greetingBox.style.display = active ? "none" : "";
+        greetingBox.style.pointerEvents = active ? "none" : "auto";
+    }
+
+    if (floatingBtn) {
+        floatingBtn.style.display = active ? "none" : "flex";
+        floatingBtn.style.pointerEvents = active ? "none" : "auto";
+    }
+
+    if (chatBoxEl) {
+        chatBoxEl.classList.toggle("is-open", active);
+        chatBoxEl.style.pointerEvents = active ? "auto" : "none";
+    }
 }
 
 function mountChatOnTop() {
@@ -114,6 +141,17 @@ function mountChatOnTop() {
     }
 }
 
+function watchChatMount() {
+    if (window.__eguneChatMountObserver || !document.body) {
+        return;
+    }
+
+    window.__eguneChatMountObserver = new MutationObserver(function () {
+        mountChatOnTop();
+    });
+    window.__eguneChatMountObserver.observe(document.body, { childList: true });
+}
+
 function bindMobileViewport(chatBoxEl) {
     if (!window.visualViewport || chatBoxEl.dataset.viewportBound === "true") {
         return;
@@ -121,12 +159,16 @@ function bindMobileViewport(chatBoxEl) {
 
     chatBoxEl.dataset.viewportBound = "true";
 
-    const syncHeight = () => {
+    const syncHeight = function () {
         if (!isOpen || !isMobileView()) {
             return;
         }
         chatBoxEl.style.height = window.visualViewport.height + "px";
         chatBoxEl.style.top = window.visualViewport.offsetTop + "px";
+        chatBoxEl.style.left = "0";
+        chatBoxEl.style.right = "0";
+        chatBoxEl.style.bottom = "auto";
+        chatBoxEl.style.width = "100%";
     };
 
     window.visualViewport.addEventListener("resize", syncHeight);
@@ -144,7 +186,11 @@ function createMobileCloseButton(chatBoxEl) {
     closeBtn.type = "button";
     closeBtn.setAttribute("aria-label", "Close chat");
     closeBtn.innerHTML = "&times;";
-    closeBtn.addEventListener("click", buttonClick);
+    closeBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        buttonClick();
+    });
     chatBoxEl.appendChild(closeBtn);
 }
 
@@ -183,18 +229,32 @@ function initEguneChat() {
     buttonElement.className = "floating-btn";
     buttonElement.setAttribute("type", "button");
     buttonElement.setAttribute("aria-label", "NSO chatbot");
-    buttonElement.addEventListener("click", buttonClick);
+    buttonElement.addEventListener("click", function (event) {
+        event.preventDefault();
+        buttonClick();
+    });
     buttonElement.style.cssText = chatBtnStyle;
     chatbotElement.appendChild(buttonElement);
 
     document.body.appendChild(chatbotElement);
     mountChatOnTop();
+    watchChatMount();
 
     const floatingBtnStyle = document.createElement("style");
     floatingBtnStyle.textContent = `
       #egune-chat-root {
-        position: static;
+        position: fixed;
+        inset: 0;
+        width: 0;
+        height: 0;
+        overflow: visible;
         z-index: ${EGUNE_Z_INDEX};
+        pointer-events: none;
+      }
+      #egune-chat-root.chat-active {
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
       }
       #egune-chat-root .floating-btn {
         appearance: none;
@@ -202,12 +262,19 @@ function initEguneChat() {
         box-shadow: 0 4px 12px rgba(29, 33, 45, 0.18);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         transform: scale(1);
+        pointer-events: auto !important;
       }
       @media (hover: hover) and (pointer: fine) {
         #egune-chat-root .floating-btn:hover {
           transform: scale(1.08);
           box-shadow: 0 6px 18px rgba(29, 33, 45, 0.28);
         }
+      }
+      #egune-chat-root .egune-chat-box {
+        pointer-events: none;
+      }
+      #egune-chat-root.chat-active .egune-chat-box.is-open {
+        pointer-events: auto !important;
       }
       #egune-chat-root .egune-chat-box iframe {
         border: none;
@@ -217,23 +284,38 @@ function initEguneChat() {
         width: 100%;
         height: 100%;
         touch-action: auto;
+        background: #fff;
+        position: relative;
+        z-index: 1;
+        pointer-events: auto;
       }
       #egune-chat-close-btn {
         display: none;
         position: absolute;
         top: max(12px, env(safe-area-inset-top, 12px));
         right: max(12px, env(safe-area-inset-right, 12px));
-        z-index: ${EGUNE_Z_INDEX + 2};
-        width: 30px;
-        height: 30px;
+        z-index: 10;
+        width: 36px;
+        height: 36px;
         border: none;
         border-radius: 50%;
         background: #89c9f6;
         color: #fff;
-        font-size: 18px;
+        font-size: 22px;
         line-height: 1;
         cursor: pointer;
         touch-action: manipulation;
+        pointer-events: auto !important;
+      }
+      #egune-chat-root.chat-active .egune-chat-box.is-open #egune-chat-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #egune-chat-root.chat-active .floating-btn,
+      #egune-chat-root.chat-active .egune-greeting-box {
+        display: none !important;
+        pointer-events: none !important;
       }
       @media (max-width: 860px) {
         .egune-greeting-box {
@@ -241,19 +323,13 @@ function initEguneChat() {
           bottom: calc(${chatBtnSize}px + max(16px, env(safe-area-inset-bottom, 16px)) + 12px) !important;
           max-width: min(230px, calc(100vw - 32px)) !important;
         }
-        #egune-chat-root .egune-chat-box.is-open #egune-chat-close-btn {
-          display: block;
-        }
-        #egune-chat-root .egune-chat-box.is-open {
-          transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out !important;
-        }
       }
     `;
     document.head.appendChild(floatingBtnStyle);
 }
 
 function scheduleInit() {
-    const run = () => {
+    const run = function () {
         initEguneChat();
         mountChatOnTop();
     };
@@ -270,10 +346,13 @@ function scheduleInit() {
 scheduleInit();
 
 function greetingBoxCreater() {
-    const createElement = (tag, className, attributes = {}) => {
+    const createElement = function (tag, className, attributes) {
+        attributes = attributes || {};
         const el = document.createElement(tag);
         if (className) el.className = className;
-        Object.entries(attributes).forEach(([key, value]) => (el[key] = value));
+        Object.entries(attributes).forEach(function (entry) {
+            el[entry[0]] = entry[1];
+        });
         return el;
     };
 
@@ -290,8 +369,10 @@ function greetingBoxCreater() {
     `,
     });
     const description = createElement("span", "egune-greeting-desc", { textContent: "Танд юугаар туслах вэ?" });
-    const greetingMessage = createElement("span", "egune-greeting-message", { textContent: "Би статистик мэдээллийн хиймэл оюунт чатбот байна. " });
-    closeButton.addEventListener("click", () => {
+    const greetingMessage = createElement("span", "egune-greeting-message", {
+        textContent: "Би статистик мэдээллийн хиймэл оюунт чатбот байна. ",
+    });
+    closeButton.addEventListener("click", function () {
         greetingBox.style.display = "none";
     });
     header.append(emoji, title, closeButton);
@@ -314,7 +395,7 @@ function greetingBoxCreater() {
           bottom: 90px;
           box-sizing: border-box;
           box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.16);
-          z-index: ${EGUNE_Z_INDEX + 1};
+          z-index: ${EGUNE_Z_INDEX + 2};
           pointer-events: auto;
         }
         .egune-greeting-box .egune-bot-header {
@@ -330,6 +411,7 @@ function greetingBoxCreater() {
           border: none;
           cursor: pointer;
           touch-action: manipulation;
+          pointer-events: auto;
         }
         .egune-greeting-title {
           color: #353841;
@@ -339,13 +421,7 @@ function greetingBoxCreater() {
           line-height: 24px;
           letter-spacing: -0.09px;
         }
-        .egune-greeting-desc {
-          color: #22242A;
-          font-family: Inter, sans-serif;
-          font-size: 14px;
-          line-height: 24px;
-          letter-spacing: -0.09px;
-        }
+        .egune-greeting-desc,
         .egune-greeting-message {
           color: #22242A;
           font-family: Inter, sans-serif;
@@ -361,22 +437,26 @@ function greetingBoxCreater() {
 
 function initChat() {
     const chatBoxEl = document.getElementsByClassName("egune-chat-box")[0];
-    chatBoxEl.innerHTML = `
-    <iframe
-      allow="microphone *; clipboard-write *; fullscreen *"
-      id="chimegeChatBotId"
-      title="NSO chatbot"
-      src="https://statgpt.nso.mn/widget"
-    ></iframe>`;
+    if (!chatBoxEl) return;
+
+    if (!document.getElementById("chimegeChatBotId")) {
+        chatBoxEl.innerHTML = `
+          <iframe
+            allow="microphone *; clipboard-write *; fullscreen *"
+            id="chimegeChatBotId"
+            title="NSO chatbot"
+            src="${STATGPT_WIDGET_URL}"
+          ></iframe>`;
+        createMobileCloseButton(chatBoxEl);
+    }
+
     responsiveType = isMobileView() ? "full_screen" : "large";
-    createMobileCloseButton(chatBoxEl);
     applyChatBoxStyle(chatBoxEl, false);
 }
 
 function buttonClick() {
-    const greetingBox = document.getElementById("egune-greeting-box");
-    const floatingBtn = document.getElementsByClassName("floating-btn")[0];
     const chatBoxEl = document.getElementsByClassName("egune-chat-box")[0];
+    const floatingBtn = document.getElementsByClassName("floating-btn")[0];
 
     if (!chatBoxEl || !floatingBtn) {
         return;
@@ -384,20 +464,15 @@ function buttonClick() {
 
     mountChatOnTop();
 
-    if (greetingBox) {
-        greetingBox.style.display = "none";
-    }
-
     if (!isOpen) {
         initChat();
     }
 
     isOpen = !isOpen;
     applyChatBoxStyle(chatBoxEl, isOpen);
-    chatBoxEl.classList.toggle("is-open", isOpen);
+    setChatActiveState(isOpen);
 
-    if (isMobileView()) {
-        floatingBtn.style.display = isOpen ? "none" : "flex";
+    if (isOpen && isMobileView()) {
         bindMobileViewport(chatBoxEl);
     }
 }
@@ -406,6 +481,8 @@ window.addEventListener("message", handleMessage, false);
 
 function handleMessage(event) {
     if (event.data == "close_iframe") {
-        buttonClick();
+        if (isOpen) {
+            buttonClick();
+        }
     }
 }

@@ -6,10 +6,25 @@ import { useParams } from "next/navigation";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
+function parseFileInfo(raw) {
+  if (!raw) return null;
+  try {
+    return typeof raw === "string" ? JSON.parse(raw) : raw;
+  } catch {
+    return null;
+  }
+}
+
+function getExcelUrl(fileInfo) {
+  if (!fileInfo?.pathName) return null;
+  const pathName = String(fileInfo.pathName).replace(/^\/+/, "").replace(/^uploads\//, "");
+  return `/uploads/${pathName}`;
+}
+
 export default function Methodology() {
   const { methodologyId } = useParams();
   const [methodology, setMethodology] = useState(null);
-  const [pdfUrl, setPdfUrl] = useState(null);
+  const [uploadedExcel, setUploadedExcel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("general");
 
@@ -57,6 +72,19 @@ export default function Methodology() {
     saveAs(new Blob([wbout], { type: "application/octet-stream" }), `${title}.xlsx`);
   };
 
+  const handleUploadedExcelDownload = () => {
+    const url = getExcelUrl(uploadedExcel);
+    if (!url) return;
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = uploadedExcel.originalName || "classification.xlsx";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
   useEffect(() => {
     const fetchMethodology = async () => {
       try {
@@ -70,10 +98,7 @@ export default function Methodology() {
         const data = await response.json();
         if (data.status) {
           setMethodology(data.data);
-          if (data.data.file_info) {
-            const fileInfo = JSON.parse(data.data.file_info);
-            setPdfUrl(process.env.FRONTEND + "/uploads/" + fileInfo.pathName);
-          }
+          setUploadedExcel(parseFileInfo(data.data.file_info));
         } else {
           console.error("Failed to fetch methodology:", data.message);
         }
@@ -141,12 +166,23 @@ export default function Methodology() {
             </span>
           </div>
 
+          {uploadedExcel && (
+            <button
+              className="__li_f_item __download_button inline-flex items-center gap-2 px-3 py-0.5 rounded-full border border-blue-400 text-blue-700 bg-blue-50 hover:bg-blue-100 transition shadow-sm"
+              onClick={handleUploadedExcelDownload}
+              style={{ minWidth: '80px', justifyContent: 'center' }}
+              title={uploadedExcel.originalName || "Excel файл"}
+            >
+              <i className="pi pi-file-excel"></i> Excel файл татах
+            </button>
+          )}
+
           <button
             className="__li_f_item __download_button inline-flex items-center gap-2 px-3 py-0.5 rounded-full border border-green-400 text-green-700 bg-green-50 hover:bg-green-100 transition shadow-sm"
             onClick={handleExcelDownload}
             style={{ minWidth: '80px', justifyContent: 'center' }}
           >
-            <i className="pi pi-cloud-download"></i> Excel татах
+            <i className="pi pi-cloud-download"></i> Хүснэгт Excel-ээр
           </button>
         </div>
       </ul>
