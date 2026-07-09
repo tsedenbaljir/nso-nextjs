@@ -111,10 +111,14 @@ function openDesktopChat() {
     if (!document.getElementById("chimegeChatBotId")) {
         chatBoxEl.innerHTML = "";
 
+        var closeBtn = createCloseButton("egune-chat-close-btn", closeDesktopChat);
+        closeBtn.className = "egune-chat-close-btn egune-desktop-close";
+
         var frameWrap = document.createElement("div");
         frameWrap.className = "egune-chat-frame-wrap";
         frameWrap.appendChild(createChatIframe());
 
+        chatBoxEl.appendChild(closeBtn);
         chatBoxEl.appendChild(frameWrap);
     }
 
@@ -227,6 +231,7 @@ function initEguneChat() {
         "px + max(16px,env(safe-area-inset-bottom,16px)) + 34px);width:min(calc(100vw - 32px),860px);height:min(80vh,calc(100dvh - " +
         chatBtnSize +
         "px - max(16px,env(safe-area-inset-bottom,16px)) - 50px));max-width:860px;border-radius:30px;overflow:hidden;box-shadow:0 16px 32px rgba(2,2,2,.1),0 1px 4px rgba(29,33,45,.15);background:#fff}" +
+        "#egune-chat-root .egune-desktop-close{position:absolute;top:12px;right:12px;z-index:2}" +
         "#egune-chat-root .egune-chat-frame-wrap{flex:1;min-height:0;position:relative;height:100%}" +
         "#egune-chat-root .egune-chat-iframe,#egune-mobile-portal .egune-chat-iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#fff}" +
         ".egune-chat-close-btn{width:26px;height:26px;border:none;border-radius:50%;background:#89c9f6;color:#fff;font-size:16px;line-height:1;cursor:pointer;touch-action:manipulation;flex-shrink:0}" +
