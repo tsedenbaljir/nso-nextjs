@@ -7,15 +7,9 @@ export default function Result({ showResult, t, loading, data, lng }) {
     if (!showResult) return null;
 
     const hasResults = data && Object.keys(data).length > 0;
-    const bottomSectors = new Set(['Regional development', 'Historical data']);
+    // Хамгийн өндөр score-той нь дээрээ
     const sortedTablename = data?.tablename
-        ? [...data.tablename].sort((a, b) => {
-            const aIsBottom = bottomSectors.has(a?._source?.sector);
-            const bIsBottom = bottomSectors.has(b?._source?.sector);
-
-            if (aIsBottom === bIsBottom) return 0;
-            return aIsBottom ? 1 : -1;
-        })
+        ? [...data.tablename].sort((a, b) => (b._score || 0) - (a._score || 0))
         : [];
 
     return (

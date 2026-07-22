@@ -16,15 +16,18 @@ export default function MainSearch({ setShowResult, t, setData, setLoading, setS
 
             const resdata = JSON.parse(response.data.response);
             const groupedData = resdata.hits.hits.reduce((acc, item) => {
-                if (item.highlight) {
-                    const key = item._source._type;
-                    if (!acc[key]) {
-                        acc[key] = [];
-                    }
-                    acc[key].push(item);
+                const key = item._source._type;
+                if (!acc[key]) {
+                    acc[key] = [];
                 }
+                acc[key].push(item);
                 return acc;
             }, {});
+
+            // Бүлэг бүрийг score-оор буурахаар эрэмбэлнэ (хамгийн өндөр нь дээрээ)
+            Object.keys(groupedData).forEach((key) => {
+                groupedData[key].sort((a, b) => (b._score || 0) - (a._score || 0));
+            });
 
             setData(groupedData);
         } catch (error) {
