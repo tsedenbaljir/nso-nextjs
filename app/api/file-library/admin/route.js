@@ -111,6 +111,7 @@ export async function POST(req) {
             isPublic,
             lng,
             fileInfo,
+            publishedDate,
         } = body;
 
         // Validate required fields
@@ -141,7 +142,7 @@ export async function POST(req) {
             file_size: parseInt(fileInfo?.fileSize || 0),
             views: 0,
             published: isPublic === true ? 1 : 0,
-            published_date: new Date(),
+            published_date: publishedDate ? new Date(publishedDate) : new Date(),
             created_by: "admin",
             created_date: new Date(),
             last_modified_by: "admin",
@@ -179,6 +180,7 @@ export async function PUT(req) {
             lng,
             isPublic,
             fileInfo,
+            publishedDate,
         } = body;
 
         if (!id) {
@@ -209,6 +211,11 @@ export async function PUT(req) {
         if (fileInfo) {
             updateData.file_info = JSON.stringify(fileInfo);
             updateData.file_size = parseInt(fileInfo.fileSize || 0);
+        }
+
+        // Update published date when provided
+        if (publishedDate) {
+            updateData.published_date = new Date(publishedDate);
         }
 
         // Remove undefined values

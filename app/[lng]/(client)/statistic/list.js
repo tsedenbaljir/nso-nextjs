@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Paginator } from "primereact/paginator";
 import { getSectorNameById } from "./sectors";
+import { YEAR_CHIP_SECTOR_IDS } from "@/lib/sectors";
 import { CENSUS_SUB_FILTER_YEARS_BY_ID } from "@/lib/census-file-library-years";
 import { resolveMediaUrl } from "@/utils/resolveMediaUrl";
 
@@ -23,7 +24,10 @@ export default function Tabs({
         type === undefined || type === null || type === ""
             ? NaN
             : parseInt(String(type), 10);
+    // Он даруултай төрлүүд — файлуудын оноор шүүнэ (?sub=YEAR)
+    const isOthersType = YEAR_CHIP_SECTOR_IDS.includes(typeNum);
     const censusYearOptions =
+        !isOthersType &&
         !Number.isNaN(typeNum) &&
         (CENSUS_SUB_FILTER_YEARS_BY_ID[typeNum]?.length ?? 0) > 0
             ? CENSUS_SUB_FILTER_YEARS_BY_ID[typeNum]
@@ -63,8 +67,8 @@ export default function Tabs({
         });
     };
 
-    const getSortedItems = () => {
-        const sorted = [...menuItems];
+    const getSortedItems = (items) => {
+        const sorted = [...items];
         if (activeFilter === (lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first")) {
             sorted.sort(
                 (a, b) =>
@@ -112,7 +116,37 @@ export default function Tabs({
             return null; // алдаатай бол null буцаана
         }
     };
-    const pagedItems = getSortedItems().slice(
+    // Файлын он: file_info.subYear, байхгүй бол нийтэлсэн огнооны он
+    const getYearFromItem = (item) => {
+        const fileInfo = safeParse(item.file_info);
+        if (fileInfo?.subYear) return String(fileInfo.subYear);
+        if (item.published_date) {
+            const y = new Date(item.published_date).getFullYear();
+            if (!Number.isNaN(y)) return String(y);
+        }
+        return null;
+    };
+
+    // Файлуудаас давхардалгүй онуудын жагсаалт (шүүлтүүрийн даруулууд)
+    const othersYearOptions = (() => {
+        if (!isOthersType) return [];
+        const years = new Set();
+        for (const item of menuItems) {
+            const year = getYearFromItem(item);
+            if (year) years.add(year);
+        }
+        return [...years].sort((a, b) => parseInt(b, 10) - parseInt(a, 10));
+    })();
+
+    // Он сонгосон бол тухайн оны файлуудыг клиент талд шүүнэ
+    const visibleItems =
+        isOthersType && activeSub
+            ? menuItems.filter((item) => getYearFromItem(item) === String(activeSub))
+            : menuItems;
+
+    const totalVisible = isOthersType ? visibleItems.length : pagination.total;
+
+    const pagedItems = getSortedItems(visibleItems).slice(
         pagination.first,
         pagination.first + pagination.rows
     );
@@ -173,38 +207,77 @@ export default function Tabs({
                                 )}
                             </div>
                         </div>
-                        {censusYearOptions && (
+                        {(censusYearOptions || isOthersType) && (
                             <div className="flex gap-2 mb-3 mt-2 items-start">
                                 <span className="text-sm text-gray-600 mr-1 shrink-0 pt-1.5">
                                     {lng === "mn" ? "Он:" : "Year:"}
                                 </span>
                                 <div className="min-w-0 flex-1 max-h-32 sm:max-h-36 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-gutter:stable]">
                                     <div className="flex flex-wrap gap-2 items-center">
-                                        <button
-                                            type="button"
-                                            onClick={() => setSubYearFilter(null)}
-                                            className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
-                                                activeSub == null || activeSub === ""
-                                                    ? "border-[#005baa] bg-blue-50 text-[#005baa]"
-                                                    : "border-gray-300 bg-white hover:bg-gray-50"
-                                            }`}
-                                        >
-                                            {lng === "mn" ? "Бүгд" : "All"}
-                                        </button>
-                                        {censusYearOptions.map((year) => (
-                                            <button
-                                                key={year}
-                                                type="button"
-                                                onClick={() => setSubYearFilter(year)}
-                                                className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
-                                                    activeSub === String(year)
-                                                        ? "border-[#005baa] bg-blue-50 text-[#005baa]"
-                                                        : "border-gray-300 bg-white hover:bg-gray-50"
-                                                }`}
-                                            >
-                                                {year}
-                                            </button>
-                                        ))}
+                                        {isOthersType ? (
+                                            <>
+                                                {othersYearOptions.length === 0 && !loading && (
+                                                    <span className="text-sm text-gray-500 pt-1">
+                                                        {lng === "mn" ? "Файл байхгүй байна." : "No files found."}
+                                                    </span>
+                                                )}
+                                                {othersYearOptions.length > 0 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setSubYearFilter(null)}
+                                                        className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                            activeSub == null || activeSub === ""
+                                                                ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                                : "border-gray-300 bg-white hover:bg-gray-50"
+                                                        }`}
+                                                    >
+                                                        {lng === "mn" ? "Бүгд" : "All"}
+                                                    </button>
+                                                )}
+                                                {othersYearOptions.map((year) => (
+                                                    <button
+                                                        key={year}
+                                                        type="button"
+                                                        onClick={() => setSubYearFilter(year)}
+                                                        className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                            activeSub === String(year)
+                                                                ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                                : "border-gray-300 bg-white hover:bg-gray-50"
+                                                        }`}
+                                                    >
+                                                        {year}
+                                                    </button>
+                                                ))}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setSubYearFilter(null)}
+                                                    className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                        activeSub == null || activeSub === ""
+                                                            ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                            : "border-gray-300 bg-white hover:bg-gray-50"
+                                                    }`}
+                                                >
+                                                    {lng === "mn" ? "Бүгд" : "All"}
+                                                </button>
+                                                {censusYearOptions.map((year) => (
+                                                    <button
+                                                        key={year}
+                                                        type="button"
+                                                        onClick={() => setSubYearFilter(year)}
+                                                        className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                            activeSub === String(year)
+                                                                ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                                : "border-gray-300 bg-white hover:bg-gray-50"
+                                                        }`}
+                                                    >
+                                                        {year}
+                                                    </button>
+                                                ))}
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -273,12 +346,12 @@ export default function Tabs({
                         <div className="__pagination mt-6 flex items-center justify-between">
                             <span>
                                 {lng === "mn" ? "Нийт:" : "Total:"}{" "}
-                                <strong>{pagination.total}</strong>
+                                <strong>{totalVisible}</strong>
                             </span>
                             <Paginator
                                 first={pagination.first}
                                 rows={pagination.rows}
-                                totalRecords={pagination.total}
+                                totalRecords={totalVisible}
                                 onPageChange={onPageChange}
                             />
                         </div>
