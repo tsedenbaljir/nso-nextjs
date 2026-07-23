@@ -885,14 +885,35 @@ export default function FileLibraryAdmin() {
               name="subYear"
               label="Он"
               style={{ width: "100%" }}
+              extra="Нэг он (2021) эсвэл оны завсар (2006-2007) гэж бичнэ үү"
+              getValueFromEvent={(e) => {
+                const raw = typeof e === "string" ? e : e?.target?.value;
+                if (raw == null || raw === "") return undefined;
+                // Normalize: trim, en/em dash → hyphen, remove spaces around hyphen
+                return String(raw)
+                  .trim()
+                  .replace(/[–—−]/g, "-")
+                  .replace(/\s*-\s*/g, "-");
+              }}
               rules={[
                 {
-                  pattern: /^\d{4}(-\d{4})?$/,
-                  message: "Он 4 оронтой тоо байна (жишээ: 2021 эсвэл 2008-2009)",
+                  validator: (_, value) => {
+                    if (value == null || value === "") return Promise.resolve();
+                    if (/^\d{4}(-\d{4})?$/.test(String(value))) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Жишээ: 2021 эсвэл 2006-2007"),
+                    );
+                  },
                 },
               ]}
             >
-              <Input placeholder="Он гараар бичнэ үү (жишээ: 2021)" allowClear />
+              <Input
+                placeholder="Жишээ: 2021 эсвэл 2006-2007"
+                allowClear
+                maxLength={9}
+              />
             </Form.Item>
           </div>
 
