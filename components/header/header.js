@@ -250,7 +250,7 @@ const Header = ({ lng }) => {
                         </div>
                     })}
                 </div>
-                <div className={`__dropdown ${menuShow && 'show'}`}>
+                <div className={`__dropdown ${menuShow && 'show'} absolute`}>
                     <div className="nso_container">
                         <div className="__groups">
                             {
