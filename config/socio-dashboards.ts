@@ -2344,12 +2344,12 @@ export const dashboards: DashboardConfig[] = [
   },
   {
     id: "resident-population",
-    name: "ХАОСЗТ-2025ын тоо",
+    name: "Оршин суугаа хүн амын тоо",
     category: "ХАОСЗТ-2025",
-    shortTitle: "ХАОСЗТ-2025ын тоо",
+    shortTitle: "Оршин суугаа хүн амын тоо",
     description: "",
     tableauViews: [
-      { path: "/views/-_17834054664630/sheet0", title: "ХАОСЗТ-2025ын тоо" },
+      { path: "/views/-_17834054664630/sheet0", title: "Оршин суугаа хүн амын тоо" },
     ],
     charts: [],
   },

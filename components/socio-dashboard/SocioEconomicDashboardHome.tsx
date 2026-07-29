@@ -430,7 +430,7 @@ const DASHBOARD_CATEGORIES = [...new Set(dashboards.map((d) => d.category).filte
 const ALL_CATEGORIES = [...new Set([...DASHBOARD_CATEGORIES, ...EXTERNAL_CATEGORIES])];
 
 /** Үндсэн салбарууд (дотоод dashboard-тай) */
-const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ", "Оршин суугаа хүн ам"];
+const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ", "ХАОСЗТ-2025"];
 
 /** Их өгөгдлийн хянах самбарын салбарууд */
 const SECONDARY_CATEGORIES = ["БОЛОВСРОЛ", "НИЙГМИЙН ХАЛАМЖ", "ЭРҮҮЛ МЭНД", "ХУУЛЬ ЗҮЙ", "БАЙГАЛЬ ОРЧИН", "ЗАМ ТЭЭВЭР", "АЯЛАЛ ЖУУЛЧЛАЛ", "ЭРЧИМ ХҮЧ"];
