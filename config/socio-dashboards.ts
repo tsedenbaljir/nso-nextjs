@@ -2344,19 +2344,19 @@ export const dashboards: DashboardConfig[] = [
   },
   {
     id: "resident-population",
-    name: "Оршин суугаа хүн амын тоо",
-    category: "Оршин суугаа хүн ам",
-    shortTitle: "Оршин суугаа хүн амын тоо",
+    name: "ХАОСЗТ-2025ын тоо",
+    category: "ХАОСЗТ-2025",
+    shortTitle: "ХАОСЗТ-2025ын тоо",
     description: "",
     tableauViews: [
-      { path: "/views/-_17834054664630/sheet0", title: "Оршин суугаа хүн амын тоо" },
+      { path: "/views/-_17834054664630/sheet0", title: "ХАОСЗТ-2025ын тоо" },
     ],
     charts: [],
   },
   {
     id: "resident-population-sex-ratio",
     name: "Хүйсийн харьцаа",
-    category: "Оршин суугаа хүн ам",
+    category: "ХАОСЗТ-2025",
     shortTitle: "Хүйсийн харьцаа",
     description: "",
     tableauViews: [
@@ -2367,7 +2367,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-ethnicity",
     name: "Үндэс угсаа",
-    category: "Оршин суугаа хүн ам",
+    category: "ХАОСЗТ-2025",
     shortTitle: "Үндэс угсаа",
     description: "",
     tableauViews: [
@@ -2378,7 +2378,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-birthplace",
     name: "Төрсөн газрын харьяалал, хүйс, насны бүлгээр",
-    category: "Оршин суугаа хүн ам",
+    category: "ХАОСЗТ-2025",
     shortTitle: "Төрсөн газрын харьяалал",
     description: "",
     tableauViews: [
@@ -2392,7 +2392,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-dependency-ratio",
     name: "Хүн ам зүйн ачаалал, бүлгээр",
-    category: "Оршин суугаа хүн ам",
+    category: "ХАОСЗТ-2025",
     shortTitle: "Хүн ам зүйн ачаалал",
     description: "",
     tableauViews: [
@@ -2403,7 +2403,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-marital-status",
     name: "Гэрлэлтийн байдал",
-    category: "Оршин суугаа хүн ам",
+    category: "ХАОСЗТ-2025",
     shortTitle: "Гэрлэлтийн байдал",
     description: "",
     tableauViews: [
