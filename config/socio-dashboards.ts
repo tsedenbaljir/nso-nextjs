@@ -2342,6 +2342,75 @@ export const dashboards: DashboardConfig[] = [
     cardHref: "/population/by-region",
     charts: [],
   },
+  {
+    id: "resident-population",
+    name: "Оршин суугаа хүн амын тоо",
+    category: "Оршин суугаа хүн ам",
+    shortTitle: "Оршин суугаа хүн амын тоо",
+    description: "",
+    tableauViews: [
+      { path: "/views/-_17834054664630/sheet0", title: "Оршин суугаа хүн амын тоо" },
+    ],
+    charts: [],
+  },
+  {
+    id: "resident-population-sex-ratio",
+    name: "Хүйсийн харьцаа",
+    category: "Оршин суугаа хүн ам",
+    shortTitle: "Хүйсийн харьцаа",
+    description: "",
+    tableauViews: [
+      { path: "/views/-_17834054664630/sheet1", title: "Хүйсийн харьцаа" },
+    ],
+    charts: [],
+  },
+  {
+    id: "resident-population-ethnicity",
+    name: "Үндэс угсаа",
+    category: "Оршин суугаа хүн ам",
+    shortTitle: "Үндэс угсаа",
+    description: "",
+    tableauViews: [
+      { path: "/views/-_17834054664630/sheet2", title: "Үндэс угсаа" },
+    ],
+    charts: [],
+  },
+  {
+    id: "resident-population-birthplace",
+    name: "Төрсөн газрын харьяалал, хүйс, насны бүлгээр",
+    category: "Оршин суугаа хүн ам",
+    shortTitle: "Төрсөн газрын харьяалал",
+    description: "",
+    tableauViews: [
+      {
+        path: "/views/-_17834054664630/sheet3",
+        title: "Төрсөн газрын харьяалал, хүйс, насны бүлгээр",
+      },
+    ],
+    charts: [],
+  },
+  {
+    id: "resident-population-dependency-ratio",
+    name: "Хүн ам зүйн ачаалал, бүлгээр",
+    category: "Оршин суугаа хүн ам",
+    shortTitle: "Хүн ам зүйн ачаалал",
+    description: "",
+    tableauViews: [
+      { path: "/views/-_17834054664630/sheet4", title: "Хүн ам зүйн ачаалал, бүлгээр" },
+    ],
+    charts: [],
+  },
+  {
+    id: "resident-population-marital-status",
+    name: "Гэрлэлтийн байдал",
+    category: "Оршин суугаа хүн ам",
+    shortTitle: "Гэрлэлтийн байдал",
+    description: "",
+    tableauViews: [
+      { path: "/views/-_17834054664630/sheet5", title: "Гэрлэлтийн байдал" },
+    ],
+    charts: [],
+  },
 ];
 
 /** Тусдаа App Router хуудас (cardHref) — /statistics-dashboard/[id] дээр хоосон dashboard биш */

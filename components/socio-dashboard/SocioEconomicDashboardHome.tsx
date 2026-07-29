@@ -106,6 +106,22 @@ const cardIcons: Record<string, ReactNode> = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   ),
+  "resident-population": (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="size-3 shrink-0"
+    >
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  ),
   cpi: (
     <svg
       viewBox="0 0 24 24"
@@ -389,6 +405,7 @@ const defaultCardIcon = (
 /** Салбар бүрийн өнгө */
 const CATEGORY_COLORS: Record<string, string> = {
   "ХҮН АМ": "#64748b",        // slate бүдэг
+  "Оршин суугаа хүн ам": "#64748b",
   "ЭДИЙН ЗАСАГ": "#0050C3",   // цэнхэр (primary)
   "БОЛОВСРОЛ": "#78909c",     // blue-gray бүдэг
   "НИЙГМИЙН ХАЛАМЖ": "#607d8b", // blue-gray бүдэг
@@ -413,7 +430,7 @@ const DASHBOARD_CATEGORIES = [...new Set(dashboards.map((d) => d.category).filte
 const ALL_CATEGORIES = [...new Set([...DASHBOARD_CATEGORIES, ...EXTERNAL_CATEGORIES])];
 
 /** Үндсэн салбарууд (дотоод dashboard-тай) */
-const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ"];
+const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ", "Оршин суугаа хүн ам"];
 
 /** Их өгөгдлийн хянах самбарын салбарууд */
 const SECONDARY_CATEGORIES = ["БОЛОВСРОЛ", "НИЙГМИЙН ХАЛАМЖ", "ЭРҮҮЛ МЭНД", "ХУУЛЬ ЗҮЙ", "БАЙГАЛЬ ОРЧИН", "ЗАМ ТЭЭВЭР", "АЯЛАЛ ЖУУЛЧЛАЛ", "ЭРЧИМ ХҮЧ"];
@@ -808,6 +825,9 @@ export default function SocioEconomicDashboardHome({ lng }: { lng: string }) {
                   <li key={d.id} className="socio-dash-kpi-grid__cell">
                     <Link
                       href={dashboardCardHref(d)}
+                      {...(d.cardHref?.startsWith("http")
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       className="group flex h-full w-full min-w-0 flex-col overflow-hidden rounded-lg border border-[var(--card-border)] border-l-4 bg-[var(--card-bg)] p-3 shadow-sm transition-all duration-200 active:scale-[0.99] hover:-translate-y-1 hover:shadow-lg sm:p-4 dark:shadow-none dark:hover:shadow-md"
                       style={{ borderLeftColor: catColor }}
                     >
