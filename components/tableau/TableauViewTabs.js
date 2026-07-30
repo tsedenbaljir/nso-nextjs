@@ -1,44 +1,81 @@
 "use client";
 
-import { useState } from "react";
-import TableauPublicEmbed from "./TableauPublicEmbed";
+import { useEffect, useRef, useState } from "react";
+import TableauVizEmbed from "./TableauVizEmbed";
+
+/** Tableau path-аас ?:iid=... гэх мэт query-г цэвэрлэнэ */
+function cleanViewPath(path) {
+    if (!path) return "";
+    return path.split("?")[0];
+}
 
 /**
- * Олон Tableau view-г таб хэлбэрээр сольж харуулна.
- * views: [{ path: "/views/xxx/sheet0", title?: "Нэр" }]
+ * Viewport-д орсон үед л Tableau embed ачаална.
+ * Олон view нэгэн зэрэг mount хийхэд Generic алдаа гарахаас сэргийлнэ.
  */
-export default function TableauViewTabs({ views, height = 900, className = "" }) {
-    const [activeIndex, setActiveIndex] = useState(0);
+function LazyTableauView({ path, title, height }) {
+    const ref = useRef(null);
+    const [active, setActive] = useState(false);
 
-    if (!views?.length) return null;
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return undefined;
 
-    const active = views[Math.min(activeIndex, views.length - 1)];
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry?.isIntersecting) {
+                    setActive(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: "240px 0px", threshold: 0.01 }
+        );
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     return (
-        <div className={className}>
-            {views.length > 1 && (
-                <div className="mb-3 flex flex-wrap gap-2">
-                    {views.map((view, i) => {
-                        const isActive = i === activeIndex;
-                        return (
-                            <button
-                                key={`${view.path}-${i}`}
-                                type="button"
-                                onClick={() => setActiveIndex(i)}
-                                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all sm:text-sm ${
-                                    isActive
-                                        ? "bg-slate-800 text-white shadow-sm"
-                                        : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300"
-                                }`}
-                            >
-                                {view.title || `Самбар ${i + 1}`}
-                            </button>
-                        );
-                    })}
+        <section ref={ref} className="min-w-0">
+            {/* {title ? (
+                <h2 className="mb-3 text-base font-medium text-[var(--foreground)] sm:text-lg">
+                    {title}
+                </h2>
+            ) : null} */}
+            {active ? (
+                <TableauVizEmbed viewPath={path} height={height} />
+            ) : (
+                <div
+                    className="flex items-center justify-center rounded border border-dashed border-slate-200 bg-slate-50 text-sm text-slate-400 dark:border-slate-700 dark:bg-slate-800/40"
+                    style={{ height }}
+                >
+                    Гүйлгэхэд ачаална...
                 </div>
             )}
-            {/* key — таб солиход embed-ийг дахин ачаална (trusted ticket нэг удаагийн) */}
-            <TableauPublicEmbed key={active.path} viewPath={active.path} height={height} />
+        </section>
+    );
+}
+
+/**
+ * Олон Tableau view-г нэг хуудсанд доош нь залгаж харуулна.
+ * View бүрийг viewport-д ороход л ачаална (зэрэг ачаалбал Tableau Generic error гарна).
+ */
+export default function TableauViewTabs({ views, height = 900, className = "" }) {
+    if (!views?.length) return null;
+
+    return (
+        <div className={`flex flex-col gap-8 ${className}`}>
+            {views.map((view, i) => {
+                const path = cleanViewPath(view.path);
+                return (
+                    <LazyTableauView
+                        key={`${path}-${i}`}
+                        path={path}
+                        title={view.title}
+                        height={height}
+                    />
+                );
+            })}
         </div>
     );
 }

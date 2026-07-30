@@ -76,13 +76,13 @@ export default function TableauPublicEmbed({ viewPath, height = 900, className =
         <div className={className}>
             {loading && (
                 <p className="py-4 text-center text-sm text-gray-500">
-                    Tableau ачаалж байна...
+                    Мэдээллийг ачаалж байна...
                 </p>
             )}
             {iframeUrl && (
                 <iframe
                     src={iframeUrl}
-                    title="Tableau dashboard"
+                    title="Dashboard"
                     width="100%"
                     height={height}
                     style={{ border: "none", display: "block" }}

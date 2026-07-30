@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { fetchTableauEmbedToken } from "@/app/services/actions";
 import { parseTableauEmbedError } from "@/lib/tableau/errors";
 import { toTableauViewUrl } from "@/lib/tableau/viewUrl";
 
@@ -22,8 +21,10 @@ function loadTableauEmbeddingApi(serverUrl) {
             script.type = "module";
             script.src = `${serverUrl}/javascripts/api/tableau.embedding.3.latest.min.js`;
             script.onload = () => resolve();
-            script.onerror = () =>
+            script.onerror = () => {
+                tableauScriptPromise = null;
                 reject(new Error("Tableau Embedding API ачаалахад алдаа гарлаа"));
+            };
             document.head.appendChild(script);
         });
     }
@@ -31,7 +32,21 @@ function loadTableauEmbeddingApi(serverUrl) {
     return tableauScriptPromise;
 }
 
-export default function TableauVizEmbed({ viewPath, height = 850, className = "" }) {
+/**
+ * @param {object} props
+ * @param {string} props.viewPath
+ * @param {number} [props.height]
+ * @param {string} [props.className]
+ * @param {string} [props.token] - Shared JWT (parent-аас өгвөл дахин татахгүй)
+ * @param {string} [props.serverUrl]
+ */
+export default function TableauVizEmbed({
+    viewPath,
+    height = 850,
+    className = "",
+    token: tokenProp,
+    serverUrl: serverUrlProp,
+}) {
     const containerRef = useRef(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -43,19 +58,26 @@ export default function TableauVizEmbed({ viewPath, height = 850, className = ""
         }
 
         let cancelled = false;
+        const container = containerRef.current;
 
         async function embed() {
             setLoading(true);
             setError(null);
 
             try {
-                const result = await fetchTableauEmbedToken();
-                if (!result?.success || !result?.data?.token) {
-                    throw new Error(result?.error || "Tableau token авахад алдаа гарлаа");
+                let token = tokenProp;
+                let serverUrl = serverUrlProp || "https://tableau.1212.mn";
+
+                if (!token) {
+                    const res = await fetch("/api/tableau-token", { cache: "no-store" });
+                    const data = await res.json();
+                    if (!res.ok || !data?.token) {
+                        throw new Error(data?.error || "Tableau token авахад алдаа гарлаа");
+                    }
+                    token = data.token;
+                    serverUrl = data.serverUrl || serverUrl;
                 }
 
-                const payload = result.data;
-                const serverUrl = payload.serverUrl || "https://tableau.1212.mn";
                 await loadTableauEmbeddingApi(serverUrl);
 
                 if (cancelled || !containerRef.current) return;
@@ -64,7 +86,7 @@ export default function TableauVizEmbed({ viewPath, height = 850, className = ""
 
                 const viz = document.createElement("tableau-viz");
                 viz.setAttribute("src", toTableauViewUrl(viewPath));
-                viz.setAttribute("token", payload.token);
+                viz.setAttribute("token", token);
                 viz.setAttribute("toolbar", "hidden");
                 viz.setAttribute("hide-tabs", "true");
                 viz.style.width = "100%";
@@ -78,16 +100,18 @@ export default function TableauVizEmbed({ viewPath, height = 850, className = ""
                     }
                 };
 
+                viz.addEventListener("vizloaderror", handleVizError);
                 viz.addEventListener("vizerror", handleVizError);
+                viz.addEventListener("authenticationfailed", handleVizError);
                 viz.addEventListener("authentication_error", handleVizError);
+                viz.addEventListener("firstinteractive", () => {
+                    if (!cancelled) setLoading(false);
+                });
 
                 containerRef.current.appendChild(viz);
             } catch (err) {
                 if (!cancelled) {
                     setError(err.message || "Tableau дашбоард ачаалахад алдаа гарлаа");
-                }
-            } finally {
-                if (!cancelled) {
                     setLoading(false);
                 }
             }
@@ -97,25 +121,31 @@ export default function TableauVizEmbed({ viewPath, height = 850, className = ""
 
         return () => {
             cancelled = true;
-            if (containerRef.current) {
-                containerRef.current.innerHTML = "";
+            if (container) {
+                container.innerHTML = "";
             }
         };
-    }, [viewPath, height]);
+    }, [viewPath, height, tokenProp, serverUrlProp]);
 
     if (!viewPath) return null;
 
     return (
         <div className={className}>
             {loading && !error && (
-                <p className="py-4 text-center text-sm text-gray-500">Tableau ачаалж байна...</p>
+                <p className="py-4 text-center text-sm text-gray-500">
+                    Мэдээллийг ачаалж байна...
+                </p>
             )}
             {error && (
                 <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                     {error}
                 </div>
             )}
-            <div ref={containerRef} className="w-full" style={{ minHeight: error ? 0 : height }} />
+            <div
+                ref={containerRef}
+                className="w-full"
+                style={{ minHeight: error ? 0 : height }}
+            />
         </div>
     );
 }
