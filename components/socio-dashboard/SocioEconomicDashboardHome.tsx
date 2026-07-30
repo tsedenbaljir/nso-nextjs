@@ -405,7 +405,7 @@ const defaultCardIcon = (
 /** Салбар бүрийн өнгө */
 const CATEGORY_COLORS: Record<string, string> = {
   "ХҮН АМ": "#64748b",        // slate бүдэг
-  "ХАОСЗТ-2025": "#64748b",
+  "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025": "#64748b",
   "ЭДИЙН ЗАСАГ": "#0050C3",   // цэнхэр (primary)
   "БОЛОВСРОЛ": "#78909c",     // blue-gray бүдэг
   "НИЙГМИЙН ХАЛАМЖ": "#607d8b", // blue-gray бүдэг
@@ -430,7 +430,7 @@ const DASHBOARD_CATEGORIES = [...new Set(dashboards.map((d) => d.category).filte
 const ALL_CATEGORIES = [...new Set([...DASHBOARD_CATEGORIES, ...EXTERNAL_CATEGORIES])];
 
 /** Үндсэн салбарууд (дотоод dashboard-тай) */
-const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ", "ХАОСЗТ-2025"];
+const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ", "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025"];
 
 /** Их өгөгдлийн хянах самбарын салбарууд */
 const SECONDARY_CATEGORIES = ["БОЛОВСРОЛ", "НИЙГМИЙН ХАЛАМЖ", "ЭРҮҮЛ МЭНД", "ХУУЛЬ ЗҮЙ", "БАЙГАЛЬ ОРЧИН", "ЗАМ ТЭЭВЭР", "АЯЛАЛ ЖУУЛЧЛАЛ", "ЭРЧИМ ХҮЧ"];

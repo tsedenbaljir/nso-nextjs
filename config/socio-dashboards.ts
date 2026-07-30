@@ -2345,7 +2345,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population",
     name: "Оршин суугаа хүн амын тоо",
-    category: "ХАОСЗТ-2025",
+    category: "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025",
     shortTitle: "Оршин суугаа хүн амын тоо",
     description: "",
     tableauViews: [
@@ -2356,7 +2356,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-sex-ratio",
     name: "Хүйсийн харьцаа",
-    category: "ХАОСЗТ-2025",
+    category: "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025",
     shortTitle: "Хүйсийн харьцаа",
     description: "",
     tableauViews: [
@@ -2367,7 +2367,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-ethnicity",
     name: "Үндэс угсаа",
-    category: "ХАОСЗТ-2025",
+    category: "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025",
     shortTitle: "Үндэс угсаа",
     description: "",
     tableauViews: [
@@ -2378,7 +2378,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-birthplace",
     name: "Төрсөн газрын харьяалал, хүйс, насны бүлгээр",
-    category: "ХАОСЗТ-2025",
+    category: "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025",
     shortTitle: "Төрсөн газрын харьяалал",
     description: "",
     tableauViews: [
@@ -2392,7 +2392,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-dependency-ratio",
     name: "Хүн ам зүйн ачаалал, бүлгээр",
-    category: "ХАОСЗТ-2025",
+    category: "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025",
     shortTitle: "Хүн ам зүйн ачаалал",
     description: "",
     tableauViews: [
@@ -2403,7 +2403,7 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "resident-population-marital-status",
     name: "Гэрлэлтийн байдал",
-    category: "ХАОСЗТ-2025",
+    category: "ХҮН АМ, ОРОН СУУЦНЫ ЗАВСРЫН ТООЛЛОГО-2025",
     shortTitle: "Гэрлэлтийн байдал",
     description: "",
     tableauViews: [
