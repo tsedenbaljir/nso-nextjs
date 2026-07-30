@@ -2411,17 +2411,6 @@ export const dashboards: DashboardConfig[] = [
     charts: [],
   },
   {
-    id: "census-health",
-    name: "Эрүүл мэнд",
-    category: "ТООЛЛОГО",
-    shortTitle: "Эрүүл мэнд",
-    description: "",
-    tableauViews: [
-      { path: "/views/_17835065313890/Sheet1", title: "Хөгжлийн бэрхшээлтэй иргэд" },
-    ],
-    charts: [],
-  },
-  {
     id: "census-social-protection",
     name: "Нийгмийн хамгаалал",
     category: "ТООЛЛОГО",
@@ -2456,6 +2445,17 @@ export const dashboards: DashboardConfig[] = [
         title: "Сургуульд хамрагдалт, боловсролын түвшнээр",
       },
       { path: "/views/_17835668874250/sheet3", title: "Сургуульд сурдаггүй хүн ам" },
+    ],
+    charts: [],
+  },
+  {
+    id: "census-health",
+    name: "Эрүүл мэнд",
+    category: "ТООЛЛОГО",
+    shortTitle: "Эрүүл мэнд",
+    description: "",
+    tableauViews: [
+      { path: "/views/_17835065313890/Sheet1", title: "Хөгжлийн бэрхшээлтэй иргэд" },
     ],
     charts: [],
   },
