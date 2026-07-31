@@ -54,12 +54,30 @@ function createCloseButton(id, onClose) {
     return closeBtn;
 }
 
+/** Site locale from URL (/en/... or /mn/...). Default mn. */
+function getSiteLang() {
+    var match = window.location.pathname.match(/^\/(mn|en)(?:\/|$)/i);
+    return match ? match[1].toLowerCase() : "mn";
+}
+
+function getWidgetUrl() {
+    return STATGPT_WIDGET_URL + "?lang=" + encodeURIComponent(getSiteLang());
+}
+
+function syncChatIframeLang(iframe) {
+    if (!iframe) return;
+    var nextSrc = getWidgetUrl();
+    if (iframe.getAttribute("src") !== nextSrc) {
+        iframe.src = nextSrc;
+    }
+}
+
 function createChatIframe() {
     var iframe = document.createElement("iframe");
     iframe.id = "chimegeChatBotId";
     iframe.className = "egune-chat-iframe";
     iframe.title = "NSO chatbot";
-    iframe.src = STATGPT_WIDGET_URL;
+    iframe.src = getWidgetUrl();
     iframe.allow = "microphone; clipboard-write; fullscreen";
     iframe.setAttribute("allowfullscreen", "true");
     return iframe;
@@ -272,6 +290,7 @@ function openMobileChat() {
     }
 
     portal.classList.add("is-open");
+    syncChatIframeLang(document.getElementById("chimegeChatBotId"));
     isOpen = true;
 }
 
@@ -312,6 +331,7 @@ function openDesktopChat() {
     }
 
     restoreDesktopChatSize(chatBoxEl);
+    syncChatIframeLang(document.getElementById("chimegeChatBotId"));
     chatBoxEl.classList.add("is-open");
     if (root) {
         root.classList.add("desktop-chat-open");
@@ -471,6 +491,8 @@ function greetingBoxCreater() {
     greetingBox.className = "egune-greeting-box";
     greetingBox.id = "egune-greeting-box";
 
+    var isEn = getSiteLang() === "en";
+
     var header = document.createElement("div");
     header.className = "egune-bot-header";
 
@@ -479,7 +501,7 @@ function greetingBoxCreater() {
 
     var title = document.createElement("span");
     title.className = "egune-greeting-title";
-    title.textContent = "Сайн байна уу.";
+    title.textContent = isEn ? "Hello." : "Сайн байна уу.";
 
     var closeButton = document.createElement("button");
     closeButton.type = "button";
@@ -491,11 +513,13 @@ function greetingBoxCreater() {
 
     var message = document.createElement("span");
     message.className = "egune-greeting-message";
-    message.textContent = "Би статистик мэдээллийн хиймэл оюунт чатбот байна.";
+    message.textContent = isEn
+        ? "I'm an AI chatbot for statistical information."
+        : "Би статистик мэдээллийн хиймэл оюунт чатбот байна.";
 
     var description = document.createElement("span");
     description.className = "egune-greeting-desc";
-    description.textContent = "Танд юугаар туслах вэ?";
+    description.textContent = isEn ? "How can I help you?" : "Танд юугаар туслах вэ?";
 
     header.appendChild(emoji);
     header.appendChild(title);
