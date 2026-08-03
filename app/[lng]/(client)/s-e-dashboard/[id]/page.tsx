@@ -29,9 +29,9 @@ export default async function SocioDashboardDetailPage(
       <main className="socio-dash-safe-x mx-auto w-full min-w-0 max-w-[90rem] overflow-x-hidden px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-6 sm:py-5 sm:pb-[max(1.25rem,env(safe-area-inset-bottom))] md:px-8 lg:px-10">
         {tableauViews.length > 0 ? (
           <>
-            <h1 className="mb-3 text-lg font-medium text-[var(--foreground)] sm:mb-4 sm:text-xl">
+            {/* <h1 className="mb-3 text-lg font-medium text-[var(--foreground)] sm:mb-4 sm:text-xl">
               {config.name}
-            </h1>
+            </h1> */}
             <TableauViewTabs views={tableauViews} height={900} />
           </>
         ) : (
