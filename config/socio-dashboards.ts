@@ -2349,7 +2349,7 @@ export const dashboards: DashboardConfig[] = [
     shortTitle: "Хүн ам",
     description: "",
     tableauViews: [
-      { path: "/views/-_17834054664630/sheet6", title: "Оршин суугаа хүн амын тоо" },
+      { path: "/views/-_17834054664630/sheet0_1", title: "Оршин суугаа хүн амын тоо" },
       // { path: "/views/-_17834054664630/sheet0", title: "Оршин суугаа хүн амын тоо" },
       // { path: "/views/-_17834054664630/sheet1", title: "Хүйсийн харьцаа" },
       // { path: "/views/-_17834054664630/sheet2", title: "Үндэс угсаа" },
