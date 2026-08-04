@@ -1,10 +1,14 @@
 "use server";
 
+import { Agent } from "undici";
 import { homoStatistic } from "@/app/api/config/db_csweb.config";
 import { setImage, setImage1 } from "@/utils/imageGeneration";
 
 const TABLEAU_REPORT_URL =
     "https://gateway.1212.mn/services/dynamic/api/public/tableau-report";
+
+// gateway.1212.mn leaf cert often fails verification on the production host
+const insecureTlsAgent = new Agent({ connect: { rejectUnauthorized: false } });
 
 function normalizeHomoRows(result) {
     if (!result) return [];
@@ -487,6 +491,7 @@ export async function fetchTableauTicket(params = {}) {
             cache: "no-store",
             signal: controller.signal,
             headers: { "Cache-Control": "no-cache" },
+            dispatcher: insecureTlsAgent,
         });
 
         let payload;
