@@ -2368,20 +2368,21 @@ export const dashboards: DashboardConfig[] = [
     shortTitle: "Өрх",
     description: "",
     tableauViews: [
-      { path: "/views/_17834997437830/sheet0", title: "Өрхийн тэргүүлэгчийн хүйс" },
-      { path: "/views/_17834997437830/sheet1", title: "Өрхийн төрөл" },
-      { path: "/views/_17834997437830/sheet2", title: "Өрх ам бүлийн тоо" },
-      { path: "/views/_17834997437830/sheet3", title: "Өрх, хүүхдийн тооны бүлгээр" },
-      { path: "/views/_17834997437830/sheet4", title: "Өрхийн сууцны төрөл" },
-      { path: "/views/_17834997437830/sheet5", title: "Өрхийн дулааны эх үүсвэр" },
-      { path: "/views/_17834997437830/sheet6", title: "Өрхийн цахилгаан хангамж" },
-      { path: "/views/_17834997437830/sheet7", title: "Өрхийн усан хангамж" },
-      { path: "/views/_17834997437830/sheet8", title: "Бохир ус зайлуулалт" },
-      { path: "/views/_17834997437830/sheet9", title: "Бие засах газар" },
-      { path: "/views/_17834997437830/sheet10", title: "Сууцны өмчийн хэлбэр" },
-      { path: "/views/_17834997437830/sheet11", title: "Сууцны эзэмшлийн хэлбэр" },
-      { path: "/views/_17834997437830/sheet12", title: "Тээврийн хэрэгсэлтэй өрх" },
-      { path: "/views/_17834997437830/sheet13", title: "Өрхийн бусад үзүүлэлт" },
+      { path: "/views/_17834997437830/1_", title: "Өрхийн тэргүүлэгчийн хүйс" },
+      // { path: "/views/_17834997437830/sheet0", title: "Өрхийн тэргүүлэгчийн хүйс" },
+      // { path: "/views/_17834997437830/sheet1", title: "Өрхийн төрөл" },
+      // { path: "/views/_17834997437830/sheet2", title: "Өрх ам бүлийн тоо" },
+      // { path: "/views/_17834997437830/sheet3", title: "Өрх, хүүхдийн тооны бүлгээр" },
+      // { path: "/views/_17834997437830/sheet4", title: "Өрхийн сууцны төрөл" },
+      // { path: "/views/_17834997437830/sheet5", title: "Өрхийн дулааны эх үүсвэр" },
+      // { path: "/views/_17834997437830/sheet6", title: "Өрхийн цахилгаан хангамж" },
+      // { path: "/views/_17834997437830/sheet7", title: "Өрхийн усан хангамж" },
+      // { path: "/views/_17834997437830/sheet8", title: "Бохир ус зайлуулалт" },
+      // { path: "/views/_17834997437830/sheet9", title: "Бие засах газар" },
+      // { path: "/views/_17834997437830/sheet10", title: "Сууцны өмчийн хэлбэр" },
+      // { path: "/views/_17834997437830/sheet11", title: "Сууцны эзэмшлийн хэлбэр" },
+      // { path: "/views/_17834997437830/sheet12", title: "Тээврийн хэрэгсэлтэй өрх" },
+      // { path: "/views/_17834997437830/sheet13", title: "Өрхийн бусад үзүүлэлт" },
     ],
     charts: [],
   },
@@ -2393,25 +2394,25 @@ export const dashboards: DashboardConfig[] = [
     description: "",
     tableauViews: [
       {
-        path: "/views/_17835050747040/sheet0",
+        path: "/_17858144480220/1_",
         title:
           "Хөдөлмөр эрхлэлтийн байдал, ажилгүйдлийн түвшин, ажиллах хүчний оролцооны түвшнээр",
       },
-      {
-        path: "/views/_17835050747040/15",
-        title:
-          "Ажиллах хүчнээс гадуурх хүн амын 15, түүнээс дээш насны хүн амд эзлэх дүн",
-      },
-      {
-        path: "/views/_17835050747040/sheet2",
-        title: "Хөдөлмөрийн насны хүн амын нийгмийн даатгалд хамрагдсан байдал",
-      },
-      {
-        path: "/views/_17835050747040/sheet3",
-        title: "Ажиллах хүчний хүн ам нийгмийн даатгалд хамрагдсан эсэх",
-      },
-      { path: "/views/SecondDashboard/sheet2", title: "Оршин суугаа хүн амын тоо" },
-      { path: "/views/SecondDashboard/sheet3", title: "Хүйсийн харьцаа" },
+      // {
+      //   path: "/views/_17835050747040/15",
+      //   title:
+      //     "Ажиллах хүчнээс гадуурх хүн амын 15, түүнээс дээш насны хүн амд эзлэх дүн",
+      // },
+      // {
+      //   path: "/views/_17835050747040/sheet2",
+      //   title: "Хөдөлмөрийн насны хүн амын нийгмийн даатгалд хамрагдсан байдал",
+      // },
+      // {
+      //   path: "/views/_17835050747040/sheet3",
+      //   title: "Ажиллах хүчний хүн ам нийгмийн даатгалд хамрагдсан эсэх",
+      // },
+      // { path: "/views/SecondDashboard/sheet2", title: "Оршин суугаа хүн амын тоо" },
+      // { path: "/views/SecondDashboard/sheet3", title: "Хүйсийн харьцаа" },
     ],
     charts: [],
   },
@@ -2423,21 +2424,21 @@ export const dashboards: DashboardConfig[] = [
     description: "",
     tableauViews: [
       {
-        path: "/views/_17835086849550/sheet0",
+        path: "/views/_17858214475510/1_",
         title: "Нийгмийн хамгаалалд хамрагдалтын байдлаар",
       },
-      {
-        path: "/views/_17835086849550/sheet1",
-        title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
-      },
-      {
-        path: "/views/SecondDashboard/sheet4",
-        title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
-      },
-      {
-        path: "/views/SecondDashboard/sheet5",
-        title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
-      },
+      // {
+      //   path: "/views/_17835086849550/sheet1",
+      //   title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
+      // },
+      // {
+      //   path: "/views/SecondDashboard/sheet4",
+      //   title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
+      // },
+      // {
+      //   path: "/views/SecondDashboard/sheet5",
+      //   title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
+      // },
     ],
     charts: [],
   },
@@ -2449,19 +2450,19 @@ export const dashboards: DashboardConfig[] = [
     description: "",
     tableauViews: [
       {
-        path: "/views/_17835668874250/sheet0",
+        path: "/views/SecondDashboard/1_",
         title: "Боловсролын түвшин, боловсролын зэргээр",
       },
-      { path: "/views/_17835668874250/sheet1", title: "Боловсролгүй хүн ам" },
-      {
-        path: "/views/_17835668874250/sheet2",
-        title: "Сургуульд хамрагдалт, боловсролын түвшнээр",
-      },
-      { path: "/views/_17835668874250/sheet3", title: "Сургуульд сурдаггүй хүн ам" },
-      { path: "/views/SecondDashboard/sheet6", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
-      { path: "/views/SecondDashboard/sheet7", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
-      { path: "/views/SecondDashboard/sheet8", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
-      { path: "/views/SecondDashboard/sheet9", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
+      // { path: "/views/_17835668874250/sheet1", title: "Боловсролгүй хүн ам" },
+      // {
+      //   path: "/views/_17835668874250/sheet2",
+      //   title: "Сургуульд хамрагдалт, боловсролын түвшнээр",
+      // },
+      // { path: "/views/_17835668874250/sheet3", title: "Сургуульд сурдаггүй хүн ам" },
+      // { path: "/views/SecondDashboard/sheet6", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
+      // { path: "/views/SecondDashboard/sheet7", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
+      // { path: "/views/SecondDashboard/sheet8", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
+      // { path: "/views/SecondDashboard/sheet9", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
     ],
     charts: [],
   },
@@ -2472,7 +2473,7 @@ export const dashboards: DashboardConfig[] = [
     shortTitle: "Эрүүл мэнд",
     description: "",
     tableauViews: [
-      { path: "/views/_17835065313890/Sheet1", title: "Хөгжлийн бэрхшээлтэй иргэд" },
+      { path: "/views/_17835065313890/sheet1", title: "Хөгжлийн бэрхшээлтэй иргэд" },
     ],
     charts: [],
   },
