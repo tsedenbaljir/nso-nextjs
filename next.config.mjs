@@ -21,7 +21,6 @@ const nextConfig = {
         },
         // proxy.js clones request bodies; default 10MB truncates large /api/upload FormData
         proxyClientMaxBodySize: "100mb",
-        middlewareClientMaxBodySize: "100mb",
     },
     turbopack: {},
     sassOptions: {
