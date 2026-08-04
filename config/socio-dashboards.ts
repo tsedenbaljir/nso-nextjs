@@ -2394,7 +2394,7 @@ export const dashboards: DashboardConfig[] = [
     description: "",
     tableauViews: [
       {
-        path: "/_17858144480220/1_",
+        path: "/views/_17858144480220/1_",
         title:
           "Хөдөлмөр эрхлэлтийн байдал, ажилгүйдлийн түвшин, ажиллах хүчний оролцооны түвшнээр",
       },
