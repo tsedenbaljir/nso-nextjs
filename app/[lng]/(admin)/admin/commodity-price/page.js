@@ -258,12 +258,11 @@ export default function CommodityPriceAdminPage() {
                     setEditingKey(null);
                 }}
                 footer={null}
-                width={900}
-                destroyOnClose
-                styles={{ body: { maxHeight: "70vh", overflowY: "auto" } }}
+                width={1000}
+                styles={{ body: { maxHeight: "80vh", overflowY: "auto" } }}
             >
                 <Form form={form} layout="vertical" onFinish={handleSubmit}>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3 p-2">
                         <Form.Item
                             name="year"
                             label="Он"
@@ -292,7 +291,7 @@ export default function CommodityPriceAdminPage() {
                     <p className="mb-3 text-sm font-medium text-gray-600">
                         Бүтээгдэхүүний үнэ (төгрөг)
                     </p>
-                    <div className="grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2 p-2">
                         {products.map((p) => (
                             <Form.Item
                                 key={p.code}
