@@ -269,7 +269,7 @@ export default function HumanPage() {
                                     onClick={clearKeyboard}
                                     className="w-full py-3 border-2 border-red-400 text-red-500 rounded-lg font-medium hover:bg-red-50 transition-colors"
                                 >
-                                    ЦУГЛАХ
+                                    ЦУЦЛАХ
                                 </button>
                             </div>
                         </div>
