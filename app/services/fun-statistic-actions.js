@@ -1,7 +1,7 @@
 "use server";
 
 import { Agent } from "undici";
-import { homoStatistic } from "@/app/api/config/db_csweb.config";
+import { db, homoStatistic } from "@/app/api/config/db_csweb.config";
 import { setImage, setImage1 } from "@/utils/imageGeneration";
 
 const TABLEAU_REPORT_URL =
@@ -511,3 +511,323 @@ export async function fetchTableauTicket(params = {}) {
         clearTimeout(timeoutId);
     }
 }
+
+const ROMAN_MONTHS = [
+    "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII",
+];
+
+const MONTH_GENITIVE = {
+    1: "1 дүгээр",
+    2: "2 дугаар",
+    3: "3 дугаар",
+    4: "4 дүгээр",
+    5: "5 дугаар",
+    6: "6 дугаар",
+    7: "7 дугаар",
+    8: "8 дугаар",
+    9: "9 дүгээр",
+    10: "10 дугаар",
+    11: "11 дүгээр",
+    12: "12 дугаар",
+};
+
+/** Columns of [NSOweb].[dbo].[price_data] excluding Year/Month */
+const PRICE_DATA_PRODUCTS = [
+    { code: "FLOUR_HG", name: "Гурил, дээд зэрэг, кг", unit: "кг", phrase: "1 кг гурилын (дээд зэрэг)" },
+    { code: "FLOUR_G1", name: "Гурил, 1-р зэрэг, кг", unit: "кг", phrase: "1 кг гурилын (1-р зэрэг)" },
+    { code: "FLOUR_G2", name: "Гурил, 2-р зэрэг, кг", unit: "кг", phrase: "1 кг гурилын (2-р зэрэг)" },
+    { code: "BREAD_ATAR", name: "Талх, кг", unit: "кг", phrase: "1 кг талхны" },
+    { code: "RICE", name: "Цагаан будаа, кг", unit: "кг", phrase: "1 кг цагаан будааны" },
+    { code: "MUTTON_G1", name: "Хонины мах, ястай, кг", unit: "кг", phrase: "1 кг хонины махны" },
+    { code: "BEEF_G1", name: "Үхрийн мах, ястай, кг", unit: "кг", phrase: "1 кг үхрийн махны" },
+    { code: "MILK", name: "Сүү, л", unit: "л", phrase: "1 л сүүний" },
+    { code: "YOGURT", name: "Тараг, л", unit: "л", phrase: "1 л тарагны" },
+    { code: "SUGAR", name: "Элсэн чихэр, кг", unit: "кг", phrase: "1 кг элсэн чихрийн" },
+    { code: "APPLE", name: "Алим, кг", unit: "кг", phrase: "1 кг алимын" },
+    { code: "POTATO", name: "Төмс, кг", unit: "кг", phrase: "1 кг төмсний" },
+    { code: "CABBAGE", name: "Байцаа, кг", unit: "кг", phrase: "1 кг байцааны" },
+    { code: "CARROT", name: "Лууван, кг", unit: "кг", phrase: "1 кг лууваны" },
+    { code: "ONION", name: "Сонгино, кг", unit: "кг", phrase: "1 кг сонгины" },
+    { code: "SALT", name: "Давс, кг", unit: "кг", phrase: "1 кг давсны" },
+    { code: "VEG_OIL", name: "Ургамлын тос, л", unit: "л", phrase: "1 л ургамлын тосны" },
+    { code: "EGG", name: "Өндөг, ш", unit: "ш", phrase: "1 ширхэг өндөгний" },
+    { code: "PETROL_HIGH", name: "Бензин, А-92, л", unit: "л", phrase: "1 л бензины (А-92)" },
+];
+
+const PRICE_PRODUCT_BY_CODE = Object.fromEntries(
+    PRICE_DATA_PRODUCTS.map((p) => [p.code, p])
+);
+
+function normalizeDbRows(result) {
+    if (!result) return [];
+    if (Array.isArray(result)) {
+        if (Array.isArray(result[0])) return result[0];
+        return result;
+    }
+    if (result.recordset && Array.isArray(result.recordset)) return result.recordset;
+    if (result.rows && Array.isArray(result.rows)) return result.rows;
+    return [];
+}
+
+function formatPeriodDisplay(yearNum, monthNum) {
+    const roman = ROMAN_MONTHS[monthNum] || String(monthNum);
+    return `${yearNum} - ${roman}`;
+}
+
+function formatPeriodLong(yearNum, monthNum) {
+    const g = MONTH_GENITIVE[monthNum] || `${monthNum}-р`;
+    return `${yearNum} оны ${g} сар`;
+}
+
+function formatPriceMnt(value) {
+    if (value == null || !Number.isFinite(Number(value))) return null;
+    const n = Math.round(Number(value));
+    // space as thousand separator: 1 234 567
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+function periodKey(year, month) {
+    return `${year}-${String(month).padStart(2, "0")}`;
+}
+
+function parsePeriodKey(periodCode) {
+    if (!periodCode) return null;
+    const m = String(periodCode).match(/^(\d{4})-(\d{1,2})$/);
+    if (!m) return null;
+    const year = Number(m[1]);
+    const month = Number(m[2]);
+    if (!year || month < 1 || month > 12) return null;
+    return { year, month };
+}
+
+export async function getCommodityProducts() {
+    try {
+        const products = [...PRICE_DATA_PRODUCTS]
+            .sort((a, b) =>
+                a.name.localeCompare(b.name, "mn", { sensitivity: "base" })
+            )
+            .map((p) => ({
+                code: p.code,
+                name: p.name,
+                unit: p.unit,
+            }));
+        return { success: true, products };
+    } catch (error) {
+        console.error("getCommodityProducts error:", error);
+        return { success: false, error: "Бүтээгдэхүүний жагсаалт татахад алдаа гарлаа.", products: [] };
+    }
+}
+
+export async function getCommodityPeriods() {
+    try {
+        const rows = normalizeDbRows(
+            await db("price_data")
+                .select("Year as year", "Month as month")
+                .orderBy([
+                    { column: "Year", order: "desc" },
+                    { column: "Month", order: "desc" },
+                ])
+        );
+        return {
+            success: true,
+            periods: rows.map((r) => {
+                const year = Number(r.year ?? r.Year);
+                const month = Number(r.month ?? r.Month);
+                return {
+                    code: periodKey(year, month),
+                    label: `${year}-${String(month).padStart(2, "0")}`,
+                    year,
+                    month,
+                    display: formatPeriodDisplay(year, month),
+                };
+            }),
+        };
+    } catch (error) {
+        console.error("getCommodityPeriods error:", error);
+        return { success: false, error: "Хугацааны жагсаалт татахад алдаа гарлаа.", periods: [] };
+    }
+}
+
+export async function getCommodityPrice({ productCode, periodCode }) {
+    if (!productCode || !periodCode) {
+        return { success: false, error: "Бүтээгдэхүүн болон хугацаа заавал сонгоно уу." };
+    }
+
+    const product = PRICE_PRODUCT_BY_CODE[productCode];
+    if (!product) {
+        return { success: false, error: "Бүтээгдэхүүн олдсонгүй." };
+    }
+
+    const period = parsePeriodKey(periodCode);
+    if (!period) {
+        return { success: false, error: "Хугацааны формат буруу байна." };
+    }
+
+    try {
+        // Whitelisted column only — never interpolate untrusted product codes.
+        const col = product.code;
+        const rows = normalizeDbRows(
+            await db.raw(
+                `SELECT TOP 1 [Year], [Month], [${col}] AS price
+                 FROM [NSOweb].[dbo].[price_data]
+                 WHERE [Year] = ? AND [Month] = ?`,
+                [period.year, period.month]
+            )
+        );
+        const row = rows[0];
+        if (!row || row.price == null) {
+            return { success: false, error: "Тухайн хугацаанд үнэ олдсонгүй." };
+        }
+        const price = Number(row.price);
+        if (!Number.isFinite(price)) {
+            return { success: false, error: "Тухайн хугацаанд үнэ олдсонгүй." };
+        }
+        const year = Number(row.Year ?? row.year ?? period.year);
+        const month = Number(row.Month ?? row.month ?? period.month);
+        return {
+            success: true,
+            price,
+            priceLabel: `${formatPriceMnt(price)} төгрөг`,
+            periodCode: periodKey(year, month),
+            periodLabel: `${year}-${String(month).padStart(2, "0")}`,
+            periodDisplay: formatPeriodDisplay(year, month),
+            year,
+            month,
+            productCode: product.code,
+            productName: product.name,
+            unit: product.unit,
+            productPhrase: product.phrase,
+        };
+    } catch (error) {
+        console.error("getCommodityPrice error:", error);
+        return { success: false, error: "Үнэ татахад алдаа гарлаа." };
+    }
+}
+
+export async function compareCommodityPrices({
+    productCode,
+    periodFrom,
+    periodTo,
+}) {
+    if (!productCode || !periodFrom || !periodTo) {
+        return {
+            success: false,
+            error: "Бүтээгдэхүүн болон хоёр хугацааг сонгоно уу.",
+        };
+    }
+    if (String(periodFrom) === String(periodTo)) {
+        return {
+            success: false,
+            error: "Харьцуулах хугацаанууд өөр байх ёстой.",
+        };
+    }
+
+    const parsePeriodOrder = (code) => {
+        const m = String(code).match(/^(\d{4})-(\d{1,2})$/);
+        if (!m) return null;
+        return Number(m[1]) * 12 + Number(m[2]);
+    };
+    const fromOrder = parsePeriodOrder(periodFrom);
+    const toOrder = parsePeriodOrder(periodTo);
+    if (fromOrder == null || toOrder == null || toOrder <= fromOrder) {
+        return {
+            success: false,
+            error: "Харьцуулах хугацаа эхний хугацаанаас хойш байх ёстой.",
+        };
+    }
+
+    try {
+        const [fromRes, toRes] = await Promise.all([
+            getCommodityPrice({ productCode, periodCode: periodFrom }),
+            getCommodityPrice({ productCode, periodCode: periodTo }),
+        ]);
+
+        if (!fromRes.success) return fromRes;
+        if (!toRes.success) return toRes;
+
+        const priceFrom = fromRes.price;
+        const priceTo = toRes.price;
+        let percent = null;
+        let direction = "өөрчлөгдөөгүй";
+        if (priceFrom > 0) {
+            percent = ((priceTo - priceFrom) / priceFrom) * 100;
+            if (percent > 0.05) direction = "өссөн";
+            else if (percent < -0.05) direction = "буурсан";
+            else direction = "өөрчлөгдөөгүй";
+        }
+
+        const absPercentNum = percent == null ? null : Math.abs(percent);
+        const absPercent =
+            absPercentNum == null
+                ? null
+                : absPercentNum.toLocaleString("mn-MN", {
+                      maximumFractionDigits: 1,
+                      minimumFractionDigits: 0,
+                  });
+
+        // өсөлт ≥ 100%: "X дахин их"; otherwise "<100 хувиар өссөн/буурсан"
+        const useTimes =
+            direction === "өссөн" &&
+            absPercentNum != null &&
+            absPercentNum >= 100 &&
+            priceFrom > 0;
+        const timesValue = useTimes ? priceTo / priceFrom : null;
+        const timesLabel =
+            timesValue == null
+                ? null
+                : timesValue.toLocaleString("mn-MN", {
+                      maximumFractionDigits: 1,
+                      minimumFractionDigits: 0,
+                  });
+
+        const productPhrase =
+            toRes.productPhrase ||
+            fromRes.productPhrase ||
+            `1 ${toRes.unit || ""} ${(toRes.productName || "").split(",")[0]}-ны`.trim();
+        const toLong = formatPeriodLong(toRes.year, toRes.month);
+        const fromLong = formatPeriodLong(fromRes.year, fromRes.month);
+        const priceToFmt = formatPriceMnt(priceTo);
+
+        let change;
+        let suffix;
+        if (direction === "өөрчлөгдөөгүй") {
+            change = " өөрчлөгдөөгүй";
+            suffix = " байна.";
+        } else if (useTimes) {
+            change = `${timesLabel} дахин өссөн`;
+            suffix = " байна.";
+        } else {
+            change = `${absPercent} хувиар ${direction}`;
+            suffix = ` байна.`;
+        }
+
+        // e.g. "… 50 хувиар өссөн байна." / "… 2.5 дахин өссөн байна."
+        const sentenceParts = {
+            prefix: `${productPhrase} үнэ `,
+            current: `${toLong}д ${priceToFmt}`,
+            mid: " төгрөг болж, ",
+            base: `${fromLong}тай`,
+            mid2: " харьцуулахад ",
+            change,
+            suffix,
+        };
+
+        return {
+            success: true,
+            productCode,
+            productName: toRes.productName || fromRes.productName,
+            from: fromRes,
+            to: toRes,
+            percent,
+            absPercent,
+            times: timesValue,
+            timesLabel,
+            direction,
+            sentenceParts,
+        };
+    } catch (error) {
+        console.error("compareCommodityPrices error:", error);
+        return { success: false, error: "Харьцуулалт хийхэд алдаа гарлаа." };
+    }
+}
+

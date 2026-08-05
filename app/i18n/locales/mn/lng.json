@@ -459,7 +459,8 @@
     "sexTooltip": "Хүйс",
     "enterYourSalary": "Та цалингаа оруулна уу",
     "giveName": "Нэрийн статистик",
-    "history": ""
+    "history": "",
+    "commodityPrice": "Гол нэрийн барааны үнийн тооцоолол"
   },
   "report": {
     "bulletin": "Сарын танилцуулга",
