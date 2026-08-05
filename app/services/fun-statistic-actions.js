@@ -531,32 +531,10 @@ const MONTH_GENITIVE = {
     12: "12 дугаар",
 };
 
-/** Columns of [NSOweb].[dbo].[price_data] excluding Year/Month */
-const PRICE_DATA_PRODUCTS = [
-    { code: "FLOUR_HG", name: "Гурил, дээд зэрэг, кг", unit: "кг", phrase: "1 кг гурилын (дээд зэрэг)" },
-    { code: "FLOUR_G1", name: "Гурил, 1-р зэрэг, кг", unit: "кг", phrase: "1 кг гурилын (1-р зэрэг)" },
-    { code: "FLOUR_G2", name: "Гурил, 2-р зэрэг, кг", unit: "кг", phrase: "1 кг гурилын (2-р зэрэг)" },
-    { code: "BREAD_ATAR", name: "Талх, кг", unit: "кг", phrase: "1 кг талхны" },
-    { code: "RICE", name: "Цагаан будаа, кг", unit: "кг", phrase: "1 кг цагаан будааны" },
-    { code: "MUTTON_G1", name: "Хонины мах, ястай, кг", unit: "кг", phrase: "1 кг хонины махны" },
-    { code: "BEEF_G1", name: "Үхрийн мах, ястай, кг", unit: "кг", phrase: "1 кг үхрийн махны" },
-    { code: "MILK", name: "Сүү, л", unit: "л", phrase: "1 л сүүний" },
-    { code: "YOGURT", name: "Тараг, л", unit: "л", phrase: "1 л тарагны" },
-    { code: "SUGAR", name: "Элсэн чихэр, кг", unit: "кг", phrase: "1 кг элсэн чихрийн" },
-    { code: "APPLE", name: "Алим, кг", unit: "кг", phrase: "1 кг алимын" },
-    { code: "POTATO", name: "Төмс, кг", unit: "кг", phrase: "1 кг төмсний" },
-    { code: "CABBAGE", name: "Байцаа, кг", unit: "кг", phrase: "1 кг байцааны" },
-    { code: "CARROT", name: "Лууван, кг", unit: "кг", phrase: "1 кг луувангийн" },
-    { code: "ONION", name: "Сонгино, кг", unit: "кг", phrase: "1 кг сонгинын" },
-    { code: "SALT", name: "Давс, кг", unit: "кг", phrase: "1 кг давсны" },
-    { code: "VEG_OIL", name: "Ургамлын тос, л", unit: "л", phrase: "1 л ургамлын тосны" },
-    { code: "EGG", name: "Өндөг, ш", unit: "ш", phrase: "1 ширхэг өндөгний" },
-    { code: "PETROL_HIGH", name: "Бензин, А-92, л", unit: "л", phrase: "1 л бензиний (А-92)" },
-];
-
-const PRICE_PRODUCT_BY_CODE = Object.fromEntries(
-    PRICE_DATA_PRODUCTS.map((p) => [p.code, p])
-);
+import {
+    PRICE_DATA_PRODUCTS,
+    PRICE_PRODUCT_BY_CODE,
+} from "@/app/lib/commodity-price-products";
 
 function normalizeDbRows(result) {
     if (!result) return [];
