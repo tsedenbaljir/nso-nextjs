@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, use, useRef } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     EditOutlined,
@@ -9,6 +9,8 @@ import {
     UploadOutlined,
     DownloadOutlined,
     FileExcelOutlined,
+    FilePdfOutlined,
+    FileTextOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, Form, Input, Select, message, Tabs, Spin, Upload } from 'antd';
 import { DataTable } from 'primereact/datatable';
@@ -28,7 +30,27 @@ function parseFileInfo(raw) {
     }
 }
 
-function getExcelUrl(fileInfo) {
+/** Legacy single excel object or { excel, pdf, tushaal } */
+function normalizeFilesBundle(raw) {
+    const empty = { excel: null, pdf: null, tushaal: null };
+    const parsed = parseFileInfo(raw);
+    if (!parsed) return empty;
+    if (
+        parsed.excel !== undefined ||
+        parsed.pdf !== undefined ||
+        parsed.tushaal !== undefined
+    ) {
+        return {
+            excel: parsed.excel || null,
+            pdf: parsed.pdf || null,
+            tushaal: parsed.tushaal || null,
+        };
+    }
+    if (parsed.pathName) return { excel: parsed, pdf: null, tushaal: null };
+    return empty;
+}
+
+function getFileUrl(fileInfo) {
     if (!fileInfo?.pathName) return null;
     const pathName = String(fileInfo.pathName).replace(/^\/+/, '').replace(/^uploads\//, '');
     return `/uploads/${pathName}`;
@@ -48,22 +70,14 @@ export default function ClassificationDetailAdmin(props0) {
     const [generalEditingId, setGeneralEditingId] = useState(null);
     const [generalForm] = Form.useForm();
 
-    // Sub-classification codes
-    const [subData, setSubData] = useState([]);
-    const [subModal, setSubModal] = useState(false);
-    const [subEditingId, setSubEditingId] = useState(null);
-    const [subForm] = Form.useForm();
-
     // Main record (indicator) edit
     const [mainModal, setMainModal] = useState(false);
     const [mainForm] = Form.useForm();
 
-    // Excel file
-    const [excelUploading, setExcelUploading] = useState(false);
-    const excelInputRef = useRef(null);
+    // Files
+    const [uploading, setUploading] = useState({ excel: false, pdf: false, tushaal: false });
 
-    const excelInfo = parseFileInfo(mainRecord?.file_info);
-    const excelUrl = getExcelUrl(excelInfo);
+    const filesBundle = normalizeFilesBundle(mainRecord?.file_info);
 
     const fetchMain = async () => {
         try {
@@ -91,22 +105,9 @@ export default function ClassificationDetailAdmin(props0) {
         }
     };
 
-    const fetchSub = async () => {
-        try {
-            const res = await fetch(
-                `/api/methodology/classification/sub?classification_code_id=${id}`,
-                { cache: 'no-store' }
-            );
-            const result = await res.json();
-            if (result.status) setSubData(result.data || []);
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
     const loadAll = async () => {
         setLoading(true);
-        await Promise.all([fetchMain(), fetchGeneral(), fetchSub()]);
+        await Promise.all([fetchMain(), fetchGeneral()]);
         setLoading(false);
     };
 
@@ -180,77 +181,6 @@ export default function ClassificationDetailAdmin(props0) {
         });
     };
 
-    /* ---------- Sub-classification (Ангилал, кодын мэдээлэл) ---------- */
-    const openSubAdd = () => {
-        setSubEditingId(null);
-        subForm.resetFields();
-        subForm.setFieldsValue({ active: 1 });
-        setSubModal(true);
-    };
-
-    const openSubEdit = (row) => {
-        setSubEditingId(row.id);
-        subForm.setFieldsValue({
-            namemn: row.namemn,
-            nameen: row.nameen,
-            code: row.code,
-            app_order: row.app_order,
-            active: row.active ?? 1,
-        });
-        setSubModal(true);
-    };
-
-    const submitSub = async (values) => {
-        try {
-            const method = subEditingId ? 'PUT' : 'POST';
-            const body = {
-                id: subEditingId || undefined,
-                classification_code_id: id,
-                namemn: values.namemn,
-                nameen: values.nameen,
-                code: values.code,
-                app_order: values.app_order,
-                active: values.active ?? 1,
-            };
-            const res = await fetch('/api/methodology/classification/sub', {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
-            const result = await res.json();
-            if (result.status) {
-                message.success(result.message);
-                setSubModal(false);
-                subForm.resetFields();
-                fetchSub();
-            } else {
-                message.error(result.message);
-            }
-        } catch (e) {
-            message.error('Алдаа гарлаа');
-        }
-    };
-
-    const deleteSub = (rowId) => {
-        confirmDialog({
-            message: 'Энэ ангиллын кодыг устгах уу?',
-            header: 'Устгах уу?',
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Тийм',
-            rejectLabel: 'Үгүй',
-            accept: async () => {
-                const res = await fetch(`/api/methodology/classification/sub?id=${rowId}`, { method: 'DELETE' });
-                const result = await res.json();
-                if (result.status) {
-                    message.success('Амжилттай устгалаа');
-                    fetchSub();
-                } else {
-                    message.error(result.message);
-                }
-            },
-        });
-    };
-
     /* ---------- Main record (Үзүүлэлтийн мэдээлэл) ---------- */
     const openMainEdit = () => {
         if (!mainRecord) return;
@@ -285,20 +215,32 @@ export default function ClassificationDetailAdmin(props0) {
         }
     };
 
-    /* ---------- Excel upload / delete ---------- */
-    const uploadExcel = async (file) => {
+    /* ---------- File upload / delete (excel | pdf) ---------- */
+    const uploadFile = async (file, type) => {
         const name = file?.name || '';
         const ext = name.split('.').pop()?.toLowerCase();
-        if (!['xlsx', 'xls'].includes(ext)) {
+        if (type === 'excel' && !['xlsx', 'xls'].includes(ext)) {
             message.error('Зөвхөн .xlsx эсвэл .xls файл оруулна уу');
             return Upload.LIST_IGNORE;
         }
+        if (type === 'pdf' && ext !== 'pdf') {
+            message.error('Зөвхөн .pdf файл оруулна уу');
+            return Upload.LIST_IGNORE;
+        }
+        if (
+            type === 'tushaal' &&
+            !['pdf', 'doc', 'docx', 'xlsx', 'xls', 'jpg', 'jpeg', 'png'].includes(ext)
+        ) {
+            message.error('Тушаалын файл: pdf, doc, docx, xlsx гэх мэт');
+            return Upload.LIST_IGNORE;
+        }
 
-        setExcelUploading(true);
+        setUploading((s) => ({ ...s, [type]: true }));
         try {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('id', id);
+            formData.append('type', type);
 
             const res = await fetch('/api/methodology/classification/file', {
                 method: 'POST',
@@ -306,7 +248,7 @@ export default function ClassificationDetailAdmin(props0) {
             });
             const result = await res.json();
             if (result.status) {
-                message.success(result.message || 'Excel файл амжилттай хадгаллаа');
+                message.success(result.message || 'Файл амжилттай хадгаллаа');
                 fetchMain();
             } else {
                 message.error(result.message || 'Файл хуулахад алдаа гарлаа');
@@ -314,24 +256,26 @@ export default function ClassificationDetailAdmin(props0) {
         } catch (e) {
             message.error('Файл хуулахад алдаа гарлаа');
         } finally {
-            setExcelUploading(false);
-            if (excelInputRef.current) excelInputRef.current.value = '';
+            setUploading((s) => ({ ...s, [type]: false }));
         }
 
         return false;
     };
 
-    const deleteExcel = () => {
+    const deleteFile = (type) => {
+        const label =
+            type === 'pdf' ? 'PDF' : type === 'tushaal' ? 'Тушаал' : 'Excel';
         confirmDialog({
-            message: 'Оруулсан Excel файлыг устгах уу?',
+            message: `Оруулсан ${label} файлыг устгах уу?`,
             header: 'Устгах уу?',
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: 'Тийм',
             rejectLabel: 'Үгүй',
             accept: async () => {
-                const res = await fetch(`/api/methodology/classification/file?id=${id}`, {
-                    method: 'DELETE',
-                });
+                const res = await fetch(
+                    `/api/methodology/classification/file?id=${id}&type=${type}`,
+                    { method: 'DELETE' }
+                );
                 const result = await res.json();
                 if (result.status) {
                     message.success(result.message || 'Файл устгалаа');
@@ -343,19 +287,61 @@ export default function ClassificationDetailAdmin(props0) {
         });
     };
 
+    const FileSlot = ({ type, title, accept, icon }) => {
+        const info = filesBundle[type];
+        const url = getFileUrl(info);
+        return (
+            <div className="flex-1 min-w-[260px] p-3 border border-gray-200 rounded-md bg-white">
+                <div className="flex items-center gap-2 mb-2">
+                    {icon}
+                    <div className="font-medium">{title}</div>
+                </div>
+                {info ? (
+                    <div className="text-sm text-gray-600 truncate mb-3" title={info.originalName || info.pathName}>
+                        {info.originalName || info.pathName}
+                    </div>
+                ) : (
+                    <div className="text-sm text-gray-500 mb-3">
+                        Файл оруулаагүй
+                    </div>
+                )}
+                <div className="flex flex-wrap gap-2">
+                    {url && (
+                        <Button
+                            icon={<DownloadOutlined />}
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Татах
+                        </Button>
+                    )}
+                    <Upload
+                        accept={accept}
+                        showUploadList={false}
+                        beforeUpload={(file) => uploadFile(file, type)}
+                        disabled={uploading[type]}
+                    >
+                        <Button type="primary" icon={<UploadOutlined />} loading={uploading[type]}>
+                            {info ? 'Файл солих' : 'Оруулах'}
+                        </Button>
+                    </Upload>
+                    {info && (
+                        <Button danger icon={<DeleteOutlined />} onClick={() => deleteFile(type)}>
+                            Устгах
+                        </Button>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
     const indexTemplate = (rowData, options) => options.rowIndex + 1;
 
     const generalActions = (row) => (
         <div className="flex gap-2">
             <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => openGeneralEdit(row)} />
             <Button danger size="small" icon={<DeleteOutlined />} onClick={() => deleteGeneral(row.id)} />
-        </div>
-    );
-
-    const subActions = (row) => (
-        <div className="flex gap-2">
-            <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => openSubEdit(row)} />
-            <Button danger size="small" icon={<DeleteOutlined />} onClick={() => deleteSub(row.id)} />
         </div>
     );
 
@@ -408,26 +394,6 @@ export default function ClassificationDetailAdmin(props0) {
                 </div>
             ),
         },
-        {
-            key: 'classification',
-            label: 'Ангилал, кодын мэдээлэл',
-            children: (
-                <div>
-                    <div className="flex justify-end mb-3">
-                        <Button type="primary" icon={<PlusOutlined />} onClick={openSubAdd}>
-                            Код нэмэх
-                        </Button>
-                    </div>
-                    <DataTable value={subData} className="p-datatable-sm" paginator rows={20} emptyMessage="Мэдээлэл олдсонгүй">
-                        <Column header="#" body={indexTemplate} style={{ width: 50 }} />
-                        <Column field="namemn" header="Нэр" style={{ width: '30%' }} />
-                        <Column field="code" header="Код" style={{ width: '20%' }} />
-                        <Column field="nameen" header="Англи нэр" style={{ width: '30%' }} />
-                        <Column body={subActions} header="Үйлдэл" style={{ width: '15%' }} />
-                    </DataTable>
-                </div>
-            ),
-        },
     ];
 
     return (
@@ -446,50 +412,31 @@ export default function ClassificationDetailAdmin(props0) {
             )}
 
             <div className="mb-4 p-3 border border-gray-200 rounded-md bg-gray-50">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-2 min-w-0">
-                        <FileExcelOutlined className="text-green-600 text-lg" />
-                        <div className="min-w-0">
-                            <div className="font-medium">Excel файл</div>
-                            {excelInfo ? (
-                                <div className="text-sm text-gray-600 truncate">
-                                    {excelInfo.originalName || excelInfo.pathName}
-                                </div>
-                            ) : (
-                                <div className="text-sm text-gray-500">
-                                    Файл оруулаагүй. Оруулсан файл нийтийн хуудсаас татагдана.
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {excelUrl && (
-                            <Button
-                                icon={<DownloadOutlined />}
-                                href={excelUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Татах
-                            </Button>
-                        )}
-                        <Upload
-                            accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-                            showUploadList={false}
-                            beforeUpload={uploadExcel}
-                            disabled={excelUploading}
-                        >
-                            <Button type="primary" icon={<UploadOutlined />} loading={excelUploading}>
-                                {excelInfo ? 'Файл солих' : 'Excel оруулах'}
-                            </Button>
-                        </Upload>
-                        {excelInfo && (
-                            <Button danger icon={<DeleteOutlined />} onClick={deleteExcel}>
-                                Устгах
-                            </Button>
-                        )}
-                    </div>
+                <div className="font-medium mb-3">Файл оруулах</div>
+                <div className="flex flex-wrap gap-3">
+                    <FileSlot
+                        type="excel"
+                        title="Excel файл"
+                        accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                        icon={<FileExcelOutlined className="text-green-600 text-lg" />}
+                    />
+                    <FileSlot
+                        type="pdf"
+                        title="PDF файл"
+                        accept=".pdf,application/pdf"
+                        icon={<FilePdfOutlined className="text-red-600 text-lg" />}
+                    />
+                    <FileSlot
+                        type="tushaal"
+                        title="Тушаал"
+                        accept=".pdf,.doc,.docx,.xlsx,.xls,.jpg,.jpeg,.png,application/pdf"
+                        icon={<FileTextOutlined className="text-blue-600 text-lg" />}
+                    />
                 </div>
+                <p className="text-xs text-gray-500 mt-3 mb-0">
+                    PDF/Excel — «Татах» товч. Тушаал — ерөнхий мэдээлэл дэх «Тушаал» нэрийг холбоос болгоно.
+                    Тушаалын нэр/утгыг өмнөх шиг Ерөнхий мэдээлэлд бичнэ.
+                </p>
             </div>
 
             <Tabs defaultActiveKey="general" items={tabItems} />
@@ -524,40 +471,6 @@ export default function ClassificationDetailAdmin(props0) {
                     </Form.Item>
                     <Form.Item className="mb-0 text-right">
                         <Button onClick={() => setGeneralModal(false)} className="mr-2">Болих</Button>
-                        <Button type="primary" htmlType="submit">Хадгалах</Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
-
-            {/* Sub-classification modal */}
-            <Modal
-                title={subEditingId ? 'Код засах' : 'Код нэмэх'}
-                open={subModal}
-                onCancel={() => setSubModal(false)}
-                footer={null}
-                width={700}
-            >
-                <Form form={subForm} layout="vertical" onFinish={submitSub}>
-                    <Form.Item name="namemn" label="Нэр (Монгол)" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="nameen" label="Нэр (Англи)" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="code" label="Код">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="app_order" label="Эрэмбэ">
-                        <Input type="number" />
-                    </Form.Item>
-                    <Form.Item name="active" label="Төлөв" initialValue={1}>
-                        <Select>
-                            <Option value={1}>Идэвхтэй</Option>
-                            <Option value={0}>Идэвхгүй</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item className="mb-0 text-right">
-                        <Button onClick={() => setSubModal(false)} className="mr-2">Болих</Button>
                         <Button type="primary" htmlType="submit">Хадгалах</Button>
                     </Form.Item>
                 </Form>
