@@ -17,7 +17,7 @@ export const config = {
   ],
 };
 
-const STATIC_FILE = /\.(ico|png|jpe?g|gif|svg|webp|css|js|mjs|woff2?|ttf|eot|map|txt|xml|json|otf|pdf|docx?|xlsx?|pptx?)$/i;
+const STATIC_FILE = /\.(ico|png|jpe?g|gif|svg|webp|css|js|mjs|woff2?|ttf|eot|map|txt|xml|json|geojson|otf|pdf|docx?|xlsx?|pptx?)$/i;
 
 async function enforceAdminApi(req) {
   const token = await getAuthToken(req);
@@ -98,7 +98,8 @@ export async function proxy(req) {
   if (
     !languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
     !req.nextUrl.pathname.startsWith("/_next") &&
-    !req.nextUrl.pathname.startsWith("/api")
+    !req.nextUrl.pathname.startsWith("/api") &&
+    !req.nextUrl.pathname.startsWith("/geo")
   ) {
     const url = req.nextUrl.clone();
     url.pathname = `/${lng}${pathname}`;
