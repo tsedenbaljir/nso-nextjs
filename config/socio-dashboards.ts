@@ -1,4 +1,5 @@
 import type { DashboardConfig } from "@/lib/socio-dashboard/types";
+import router from "next/router";
 
 function range(startOrCount: number, end?: number): string[] {
   if (end === undefined) {
@@ -1105,8 +1106,7 @@ export const dashboards: DashboardConfig[] = [
       },
     ],
   },
-  
-  
+
   {
     id: "cpi",
     name: "Хэрэглээний үнийн индекс",
@@ -2477,6 +2477,14 @@ export const dashboards: DashboardConfig[] = [
     ],
     charts: [],
   },
+  {
+    id: "commodity-price-and-producer-price",
+    name: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
+    category: "ҮНЭ",
+    shortTitle: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
+    cardHref: "https://nso-dashboard.app.nso.mn/",
+  },
+
 ];
 
 /** Тусдаа App Router хуудас (cardHref) — /statistics-dashboard/[id] дээр хоосон dashboard биш */
