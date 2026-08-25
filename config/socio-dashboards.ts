@@ -2342,6 +2342,26 @@ export const dashboards: DashboardConfig[] = [
     cardHref: "/population/by-region",
     charts: [],
   },
+  
+  {
+    id: "commodity-price-and-producer-price",
+    name: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
+    category: "ҮНЭ",
+    shortTitle: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
+  },
+  {
+    id: "population-census",
+    name: "Хүн амын тооллого",
+    category: "ТООЛЛОГО",
+    shortTitle: "Хүн амын тооллого",
+  },
+];
+
+/**
+ * Tableau тооллогын 6 карт — түр нуусан backup.
+ * Дахин нээхдээ `dashboards` руу буцааж оруулна.
+ */
+export const CENSUS_TABLEAU_CARDS_BACKUP: DashboardConfig[] = [
   {
     id: "census-population",
     name: "Хүн ам",
@@ -2350,14 +2370,6 @@ export const dashboards: DashboardConfig[] = [
     description: "",
     tableauViews: [
       { path: "/views/-_17834054664630/sheet0_1", title: "Оршин суугаа хүн амын тоо" },
-      // { path: "/views/-_17834054664630/sheet0", title: "Оршин суугаа хүн амын тоо" },
-      // { path: "/views/-_17834054664630/sheet1", title: "Хүйсийн харьцаа" },
-      // { path: "/views/-_17834054664630/sheet2", title: "Үндэс угсаа" },
-      // { path: "/views/-_17834054664630/sheet3", title: "Төрсөн газрын харьяалал, хүйс, насны бүлгээр" },
-      // { path: "/views/-_17834054664630/sheet4", title: "Хүн ам зүйн ачаалал, бүлгээр" },
-      // { path: "/views/-_17834054664630/sheet5", title: "Гэрлэлтийн байдал" },
-      // { path: "/views/SecondDashboard/sheet0", title: "Оршин суугаа хүн амын тоо" },
-      // { path: "/views/SecondDashboard/sheet1", title: "Хүйсийн харьцаа" },
     ],
     charts: [],
   },
@@ -2369,20 +2381,6 @@ export const dashboards: DashboardConfig[] = [
     description: "",
     tableauViews: [
       { path: "/views/_17834997437830/1_", title: "Өрхийн тэргүүлэгчийн хүйс" },
-      // { path: "/views/_17834997437830/sheet0", title: "Өрхийн тэргүүлэгчийн хүйс" },
-      // { path: "/views/_17834997437830/sheet1", title: "Өрхийн төрөл" },
-      // { path: "/views/_17834997437830/sheet2", title: "Өрх ам бүлийн тоо" },
-      // { path: "/views/_17834997437830/sheet3", title: "Өрх, хүүхдийн тооны бүлгээр" },
-      // { path: "/views/_17834997437830/sheet4", title: "Өрхийн сууцны төрөл" },
-      // { path: "/views/_17834997437830/sheet5", title: "Өрхийн дулааны эх үүсвэр" },
-      // { path: "/views/_17834997437830/sheet6", title: "Өрхийн цахилгаан хангамж" },
-      // { path: "/views/_17834997437830/sheet7", title: "Өрхийн усан хангамж" },
-      // { path: "/views/_17834997437830/sheet8", title: "Бохир ус зайлуулалт" },
-      // { path: "/views/_17834997437830/sheet9", title: "Бие засах газар" },
-      // { path: "/views/_17834997437830/sheet10", title: "Сууцны өмчийн хэлбэр" },
-      // { path: "/views/_17834997437830/sheet11", title: "Сууцны эзэмшлийн хэлбэр" },
-      // { path: "/views/_17834997437830/sheet12", title: "Тээврийн хэрэгсэлтэй өрх" },
-      // { path: "/views/_17834997437830/sheet13", title: "Өрхийн бусад үзүүлэлт" },
     ],
     charts: [],
   },
@@ -2398,21 +2396,6 @@ export const dashboards: DashboardConfig[] = [
         title:
           "Хөдөлмөр эрхлэлтийн байдал, ажилгүйдлийн түвшин, ажиллах хүчний оролцооны түвшнээр",
       },
-      // {
-      //   path: "/views/_17835050747040/15",
-      //   title:
-      //     "Ажиллах хүчнээс гадуурх хүн амын 15, түүнээс дээш насны хүн амд эзлэх дүн",
-      // },
-      // {
-      //   path: "/views/_17835050747040/sheet2",
-      //   title: "Хөдөлмөрийн насны хүн амын нийгмийн даатгалд хамрагдсан байдал",
-      // },
-      // {
-      //   path: "/views/_17835050747040/sheet3",
-      //   title: "Ажиллах хүчний хүн ам нийгмийн даатгалд хамрагдсан эсэх",
-      // },
-      // { path: "/views/SecondDashboard/sheet2", title: "Оршин суугаа хүн амын тоо" },
-      // { path: "/views/SecondDashboard/sheet3", title: "Хүйсийн харьцаа" },
     ],
     charts: [],
   },
@@ -2427,18 +2410,6 @@ export const dashboards: DashboardConfig[] = [
         path: "/views/_17858214475510/1_",
         title: "Нийгмийн хамгаалалд хамрагдалтын байдлаар",
       },
-      // {
-      //   path: "/views/_17835086849550/sheet1",
-      //   title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
-      // },
-      // {
-      //   path: "/views/SecondDashboard/sheet4",
-      //   title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
-      // },
-      // {
-      //   path: "/views/SecondDashboard/sheet5",
-      //   title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар",
-      // },
     ],
     charts: [],
   },
@@ -2453,16 +2424,6 @@ export const dashboards: DashboardConfig[] = [
         path: "/views/SecondDashboard/1_",
         title: "Боловсролын түвшин, боловсролын зэргээр",
       },
-      // { path: "/views/_17835668874250/sheet1", title: "Боловсролгүй хүн ам" },
-      // {
-      //   path: "/views/_17835668874250/sheet2",
-      //   title: "Сургуульд хамрагдалт, боловсролын түвшнээр",
-      // },
-      // { path: "/views/_17835668874250/sheet3", title: "Сургуульд сурдаггүй хүн ам" },
-      // { path: "/views/SecondDashboard/sheet6", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
-      // { path: "/views/SecondDashboard/sheet7", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
-      // { path: "/views/SecondDashboard/sheet8", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
-      // { path: "/views/SecondDashboard/sheet9", title: "Өндөр насны тэтгэвэрт хамрагдалтын байдлаар" },
     ],
     charts: [],
   },
@@ -2477,13 +2438,6 @@ export const dashboards: DashboardConfig[] = [
     ],
     charts: [],
   },
-  {
-    id: "commodity-price-and-producer-price",
-    name: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
-    category: "ҮНЭ",
-    shortTitle: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
-  },
-
 ];
 
 /** Тусдаа App Router хуудас (cardHref) — /statistics-dashboard/[id] дээр хоосон dashboard биш */

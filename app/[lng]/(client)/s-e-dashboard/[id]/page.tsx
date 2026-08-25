@@ -5,6 +5,7 @@ import TableauViewTabs from "@/components/tableau/TableauViewTabs";
 import { getDashboard, getDashboardIds } from "@/config/socio-dashboards";
 import { fetchPriceTable } from "@/lib/commodity-price-dashboard/nso";
 import { CommodityPriceDashboard } from "@/components/commodity-price-dashboard/dashboard";
+import { CensusDashboard } from "@/components/census-dashboard/Dashboard";
 
 export function generateStaticParams() {
   return getDashboardIds().map((id) => ({ id }));
@@ -16,6 +17,15 @@ export default async function SocioDashboardDetailPage(
   }
 ) {
   const params = await props.params;
+
+  if (params.id === "population-census") {
+    return (
+      <div className="min-w-0 max-w-full overflow-x-hidden">
+        <SocioDashboardBackNav lng={params.lng} />
+        <CensusDashboard />
+      </div>
+    );
+  }
 
   if (params.id === "commodity-price-and-producer-price") {
     try {
