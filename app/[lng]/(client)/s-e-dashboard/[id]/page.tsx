@@ -21,10 +21,10 @@ export default async function SocioDashboardDetailPage(
     try {
       const data = await fetchPriceTable();
       return (
-        <>
+        <div className="min-w-0 max-w-full overflow-x-hidden">
           <SocioDashboardBackNav lng={params.lng} />
           <CommodityPriceDashboard data={data} />
-        </>
+        </div>
       );
     } catch {
       return (

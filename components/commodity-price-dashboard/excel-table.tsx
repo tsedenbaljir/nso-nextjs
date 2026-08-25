@@ -64,6 +64,7 @@ export function ExcelTable({ selected }: { selected: string[] }) {
         <div className="panel-head">
           <h2 className="panel-title">Хэрэглээний үнэ ба үйлдвэрлэгчийн үнэ</h2>
         </div>
+        <p className="month-scroll-hint">Хүснэгтийг хажуу тийш гүйлгэж үзнэ үү</p>
         <Scroller>
           <table className="data-table month-table">
             <colgroup>
