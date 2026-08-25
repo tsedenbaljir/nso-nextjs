@@ -222,6 +222,7 @@ const cardIcons: Record<string, ReactNode> = {
     </svg>
   ),
   "cpi-commodity-prices": <Beef className="size-3 shrink-0" />,
+  "commodity-price-and-producer-price": <Factory className="size-3 shrink-0" />,
   ppi: (
     <svg
       viewBox="0 0 24 24"

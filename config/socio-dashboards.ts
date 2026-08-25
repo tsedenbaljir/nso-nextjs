@@ -2482,7 +2482,6 @@ export const dashboards: DashboardConfig[] = [
     name: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
     category: "ҮНЭ",
     shortTitle: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
-    cardHref: "https://nso-dashboard.app.nso.mn/",
   },
 
 ];

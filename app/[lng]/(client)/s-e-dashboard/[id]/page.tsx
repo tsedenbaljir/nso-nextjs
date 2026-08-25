@@ -3,6 +3,8 @@ import { DashboardView } from "@/components/socio-dashboard/DashboardView";
 import { SocioDashboardBackNav } from "@/components/socio-dashboard/SocioDashboardBackNav";
 import TableauViewTabs from "@/components/tableau/TableauViewTabs";
 import { getDashboard, getDashboardIds } from "@/config/socio-dashboards";
+import { fetchPriceTable } from "@/lib/commodity-price-dashboard/nso";
+import { CommodityPriceDashboard } from "@/components/commodity-price-dashboard/dashboard";
 
 export function generateStaticParams() {
   return getDashboardIds().map((id) => ({ id }));
@@ -14,6 +16,28 @@ export default async function SocioDashboardDetailPage(
   }
 ) {
   const params = await props.params;
+
+  if (params.id === "commodity-price-and-producer-price") {
+    try {
+      const data = await fetchPriceTable();
+      return (
+        <>
+          <SocioDashboardBackNav lng={params.lng} />
+          <CommodityPriceDashboard data={data} />
+        </>
+      );
+    } catch {
+      return (
+        <>
+          <SocioDashboardBackNav lng={params.lng} />
+          <p className="px-4 py-10 text-center text-sm text-red-600">
+            Өгөгдөл татахад алдаа гарлаа. Дахин оролдоно уу.
+          </p>
+        </>
+      );
+    }
+  }
+
   const config = getDashboard(params.id);
   if (!config) {
     notFound();
