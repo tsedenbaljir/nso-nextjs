@@ -26,10 +26,10 @@ export const CENSUS_TYPES = [
   { value: "phc", label: "Хүн ам, орон сууцны тооллого" },
 ] as const;
 
-export const LAYER_ITEMS: { id: MapLayer; label: string }[] = [
-  { id: "aimag", label: "Аймаг, нийслэл" },
-  { id: "soum", label: "Сум, дүүрэг" },
-  { id: "bag", label: "Баг, хороо" },
+export const LAYER_ITEMS: { id: MapLayer; label: string; shortLabel: string }[] = [
+  { id: "aimag", label: "Аймаг, нийслэл", shortLabel: "Аймаг" },
+  { id: "soum", label: "Сум, дүүрэг", shortLabel: "Сум" },
+  { id: "bag", label: "Баг, хороо", shortLabel: "Баг" },
 ];
 
 export const DEFAULT_LAYERS: MapLayer[] = LAYER_ITEMS.map((item) => item.id);

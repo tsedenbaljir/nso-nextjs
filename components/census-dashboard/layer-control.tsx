@@ -26,7 +26,8 @@ export default function LayerControl({ layer, layers, onLayerChange }: Props) {
             aria-pressed={layer === item.id}
             onClick={() => onLayerChange(item.id)}
           >
-            {item.label}
+            <span className="layer-toggle-full">{item.label}</span>
+            <span className="layer-toggle-short">{item.shortLabel}</span>
           </button>
         ))}
       </div>

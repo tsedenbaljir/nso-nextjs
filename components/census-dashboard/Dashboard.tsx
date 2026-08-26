@@ -365,7 +365,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
               </p>
             </header>
             <div className="dashboard-sidebar-filters">
-              <label className="dashboard-filter-block">
+              <label className="dashboard-filter-block dashboard-filter-census">
                 <span className="dashboard-filter-label">Тооллого</span>
                 <Select
                   className="dashboard-select"
@@ -373,7 +373,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
                   options={[...CENSUS_TYPES]}
                 />
               </label>
-              <label className="dashboard-filter-block">
+              <label className="dashboard-filter-block dashboard-filter-topic">
                 <span className="dashboard-filter-label">Бүлэг</span>
                 <Select
                   className="dashboard-select"
@@ -390,7 +390,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 activeId={indicatorId}
                 onSelect={handleSubFilter}
               />
-              <label className="dashboard-filter-block">
+              <label className="dashboard-filter-block dashboard-filter-year">
                 <span className="dashboard-filter-label">Он</span>
                 <Select
                   className="dashboard-select"

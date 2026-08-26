@@ -7,17 +7,11 @@ const QUERY = {
   query: [
     {
       code: "Бүтээгдэхүүн",
-      selection: {
-        filter: "item",
-        values: [...Array.from({ length: 30 }, (_, i) => String(i + 2)), ""],
-      },
+      selection: { filter: "all", values: ["*"] },
     },
     {
       code: "Хугацаа",
-      selection: {
-        filter: "item",
-        values: Array.from({ length: 284 }, (_, i) => String(i)),
-      },
+      selection: { filter: "all", values: ["*"] },
     },
   ],
   response: { format: "json-stat2" },

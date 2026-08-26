@@ -111,6 +111,10 @@ const nextConfig = {
     async rewrites() {
         return [
             {
+                source: "/:lng/statistics-dashboard/:id/embed",
+                destination: "/:lng/embed/:id",
+            },
+            {
                 source: "/:lng/statistics-dashboard",
                 destination: "/:lng/s-e-dashboard",
             },
@@ -122,6 +126,18 @@ const nextConfig = {
     },
     async headers() {
         return [
+            {
+                source: "/:lng/embed/:path*",
+                headers: [
+                    { key: "Content-Security-Policy", value: "frame-ancestors *" },
+                ],
+            },
+            {
+                source: "/:lng/statistics-dashboard/:id/embed",
+                headers: [
+                    { key: "Content-Security-Policy", value: "frame-ancestors *" },
+                ],
+            },
             {
                 source: "/(.*)",
                 headers: [
