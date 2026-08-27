@@ -14,6 +14,7 @@ import { YEAR_OPTIONS, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/l
 import { aggregateValue, lookupValue, TOTAL_CATEGORY } from "@/lib/census-dashboard/indicators";
 import { AIMAG_OPTIONS } from "@/lib/census-dashboard/aimags";
 import { CENSUS_TYPES, DEFAULT_LAYERS, TOPICS, getTopic, type Topic } from "@/lib/census-dashboard/topics";
+import { captionNotes, formatShareCaption, isAllChoice } from "@/lib/census-dashboard/caption";
 import type { MapLayer } from "@/lib/census-dashboard/geo";
 import "@/components/census-dashboard/nso-census-dash.scss";
 
@@ -230,27 +231,68 @@ function Dashboard({ topic, onTopicChange }: Props) {
   const selectedCategoryLabel = indicator?.categories.find(
     (item) => item.id === categoryId,
   )?.label;
+  const sexLabel = !isAllChoice(sexId)
+    ? indicator?.sexes?.find((item) => item.id === sexId)?.label
+    : undefined;
+  const ageLabel = !isAllChoice(ageId)
+    ? indicator?.ages?.find((item) => item.id === ageId)?.label
+    : undefined;
   const categoryLabel = [
     selectedCategoryLabel && selectedCategoryLabel !== indicatorLabel
       ? selectedCategoryLabel
       : undefined,
-    sexId !== TOTAL_CATEGORY
-      ? indicator?.sexes?.find((item) => item.id === sexId)?.label
-      : undefined,
-    ageId !== TOTAL_CATEGORY
-      ? indicator?.ages?.find((item) => item.id === ageId)?.label
-      : undefined,
+    sexLabel,
+    ageLabel,
   ]
     .filter(Boolean)
     .join(" · ");
 
+  const shareNoun = topic.id === "household" ? "өрхийн" : "хүн амын";
+  const isShare = indicator?.unit === "share" && Boolean(selectedCategoryLabel);
+  const isNationalFocus = !selectedRow;
+  const shareCaption = isShare
+    ? formatShareCaption({
+        place: focusTitle,
+        layer,
+        value: focusValue,
+        category: selectedCategoryLabel!,
+        sex: sexLabel,
+        age: ageLabel,
+        noun: shareNoun,
+        national: isNationalFocus,
+      })
+    : null;
+  const notes = captionNotes(indicatorId);
+  const cardNote =
+    indicatorId === "sex-ratio" || indicatorId === "dependency"
+      ? notes[0]
+      : undefined;
+
   const tooltip = useMemo(
     () => ({
+      kind: isShare ? ("share" as const) : ("plain" as const),
+      layer,
+      noun: shareNoun,
+      category: selectedCategoryLabel,
+      sex: sexLabel,
+      age: ageLabel,
       indicatorLabel,
       categoryLabel: categoryLabel || undefined,
       year,
+      note: cardNote,
     }),
-    [categoryLabel, indicatorLabel, year],
+    [
+      ageLabel,
+      cardNote,
+      categoryLabel,
+      indicatorLabel,
+      isShare,
+      layer,
+      selectedCategoryLabel,
+      sexLabel,
+      shareNoun,
+      year,
+    ],
   );
 
   const loading = geo.loading || stats.loading;
@@ -416,6 +458,13 @@ function Dashboard({ topic, onTopicChange }: Props) {
               {!indicator ? (
                 <p className="dashboard-note">Энэ үзүүлэлтийн өгөгдөл байхгүй байна.</p>
               ) : null}
+              {notes.length > 0 && !cardNote ? (
+                <div className="dashboard-note">
+                  {notes.map((item) => (
+                    <p key={item}>{item}</p>
+                  ))}
+                </div>
+              ) : null}
               {error && <p className="dashboard-note">{error}</p>}
             </div>
           </aside>
@@ -439,7 +488,11 @@ function Dashboard({ topic, onTopicChange }: Props) {
             {indicator && !loading ? (
               <MapFocusCard
                 title={focusTitle}
-                subtitle={[indicatorLabel, categoryLabel, year].filter(Boolean).join(" · ")}
+                subtitle={
+                  shareCaption ??
+                  [indicatorLabel, categoryLabel, year].filter(Boolean).join(" · ")
+                }
+                note={cardNote}
                 value={focusValue}
                 min={legendScale.min}
                 max={legendScale.max}

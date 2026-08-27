@@ -6,6 +6,7 @@ import { formatNumber } from "@/lib/census-dashboard/dashboard";
 type Props = {
   title: string;
   subtitle: string;
+  note?: string;
   value: number;
   min: number;
   max: number;
@@ -15,6 +16,7 @@ type Props = {
 export default function MapFocusCard({
   title,
   subtitle,
+  note,
   value,
   min,
   max,
@@ -68,6 +70,7 @@ export default function MapFocusCard({
         </div>
         <span>Их</span>
       </div>
+      {note ? <p className="map-focus-note">{note}</p> : null}
     </div>
   );
 }

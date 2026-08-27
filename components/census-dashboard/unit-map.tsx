@@ -5,13 +5,21 @@ import L from "leaflet";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import "leaflet/dist/leaflet.css";
 import { colorScaleBounds, formatNumber, parseUnitKey, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
+import { formatShareCaption } from "@/lib/census-dashboard/caption";
 import { AIMAG_LABEL_OFFSET } from "@/lib/census-dashboard/aimags";
 import type { MapLayer } from "@/lib/census-dashboard/geo";
 
 type TooltipInfo = {
+  kind: "share" | "plain";
+  layer: MapLayer;
+  noun: "хүн амын" | "өрхийн";
+  category?: string;
+  sex?: string;
+  age?: string;
   indicatorLabel: string;
   categoryLabel?: string;
   year?: string;
+  note?: string;
 };
 
 type BorderOverlay = {
@@ -53,7 +61,7 @@ const MAP_COLORS = [
   "#2B0A7A",
 ];
 const BASEMAP =
-  "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png";
+  "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}";
 // Доод талд илүү зай нөөцөлж, газрын зургийг focus картны дээгүүр гаргана.
 const FIT_PADDING_TOP: L.PointTuple = [50, 14];
 const FIT_PADDING_BOTTOM: L.PointTuple = [50, 114];
@@ -109,9 +117,29 @@ function tooltipHtml(
   path: string,
   value: number,
 ) {
+  if (tooltip.kind === "share" && tooltip.category) {
+    const caption = escapeHtml(
+      formatShareCaption({
+        place: displayName,
+        layer: tooltip.layer,
+        value,
+        category: tooltip.category,
+        sex: tooltip.sex,
+        age: tooltip.age,
+        noun: tooltip.noun,
+      }),
+    );
+    const trail = escapeHtml(path);
+    return `<div class="map-tooltip">
+      ${trail ? `<div class="map-tooltip-path">${trail}</div>` : ""}
+      <p class="map-tooltip-caption">${caption}</p>
+    </div>`;
+  }
+
   const name = escapeHtml(displayName);
   const trail = escapeHtml(path);
-  const label = escapeHtml(tooltip.categoryLabel || "Тоо");
+  const label = escapeHtml(tooltip.categoryLabel || tooltip.indicatorLabel || "Тоо");
+  const note = tooltip.note ? escapeHtml(tooltip.note) : "";
   return `<div class="map-tooltip">
     <div class="map-tooltip-head">
       <span class="map-tooltip-dot"></span>
@@ -124,6 +152,7 @@ function tooltipHtml(
       <span class="map-tooltip-label">${label}</span>
       <span class="map-tooltip-value">${formatNumber(value)}</span>
     </div>
+    ${note ? `<p class="map-tooltip-caption">${note}</p>` : ""}
   </div>`;
 }
 
@@ -268,8 +297,7 @@ export default function UnitMap({
 
     L.control.zoom({ position: "topright" }).addTo(map);
     L.tileLayer(BASEMAP, {
-      subdomains: "abcd",
-      maxZoom: 19,
+      maxZoom: 16,
     }).addTo(map);
 
     const labels = L.layerGroup().addTo(map);

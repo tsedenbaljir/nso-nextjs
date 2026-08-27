@@ -131,8 +131,17 @@
 
   .dashboard-note {
     margin: 12px 0 0;
-    color: #94a3b8;
-    font-size: 12px;
+    color: #5b6e80;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  .dashboard-note p {
+    margin: 0 0 8px;
+  }
+
+  .dashboard-note p:last-child {
+    margin-bottom: 0;
   }
 
   .dashboard-empty,
@@ -203,11 +212,9 @@
 
   .map-focus-sub {
     margin: 4px 0 0;
-    overflow: hidden;
-    color: #7b8ea0;
+    color: #5b6e80;
     font-size: 13px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.45;
   }
 
   .map-focus-scale {
@@ -217,6 +224,13 @@
     margin-top: 14px;
     color: #94a3b8;
     font-size: 12px;
+  }
+
+  .map-focus-note {
+    margin: 10px 0 0;
+    color: #5b6e80;
+    font-size: 12.5px;
+    line-height: 1.45;
   }
 
   .map-focus-bar {
@@ -319,6 +333,7 @@
 
   .map-tooltip {
     min-width: 168px;
+    max-width: 320px;
     padding: 10px 12px 12px;
     font-family: Arial, Helvetica, sans-serif;
     color: #fff;
@@ -360,6 +375,20 @@
     color: #8b93a7;
     font-size: 11px;
     line-height: 1.3;
+  }
+
+  .map-tooltip-caption {
+    margin: 6px 0 0;
+    color: #f1f5f9;
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .map-tooltip-path + .map-tooltip-caption {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #2a3142;
   }
 
   .map-tooltip-row {
@@ -603,11 +632,11 @@
     .map-focus-sub {
       margin-top: 2px;
       font-size: 11px;
-      white-space: normal;
-      display: -webkit-box;
-      overflow: hidden;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+    }
+
+    .map-focus-note {
+      margin-top: 8px;
+      font-size: 11px;
     }
 
     .map-focus-scale {
@@ -644,7 +673,7 @@
 
     .map-tooltip {
       min-width: 0;
-      max-width: min(78vw, 260px);
+      max-width: min(86vw, 280px);
       padding: 8px 10px 10px;
     }
 
