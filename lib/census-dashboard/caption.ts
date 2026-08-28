@@ -7,11 +7,12 @@ export const LAYER_GENITIVE: Record<MapLayer, string> = {
   bag: "баг/хорооны",
 };
 
-const EDUCATION_AGE_IDS = new Set([
-  "education-level",
-  "uneducated",
-  "enrollment",
-]);
+/** Боловсролын үзүүлэлтүүдийн 0-14-ийг өгүүлбэр/шүүлтүүрт өөр насны бүлгээр харуулна. */
+const AGE_LABEL_REMAP: Record<string, string> = {
+  "education-level": "10-14",
+  uneducated: "10-14",
+  enrollment: "6-14",
+};
 
 export function isAllChoice(id?: string | null, label?: string | null) {
   if (!id && !label) return true;
@@ -48,13 +49,17 @@ function formatAgePhrase(age?: string | null, fallback?: string) {
 }
 
 export function displayAgeLabel(indicatorId: string, label: string) {
-  if (EDUCATION_AGE_IDS.has(indicatorId) && label === "0-14") return "6-14";
+  if (label === "0-14" && AGE_LABEL_REMAP[indicatorId]) {
+    return AGE_LABEL_REMAP[indicatorId];
+  }
   return label;
 }
 
 function remapAge(indicatorId: string | undefined, age?: string | null) {
-  if (!age || !indicatorId) return age;
-  if (EDUCATION_AGE_IDS.has(indicatorId) && age === "0-14") return "6-14";
+  if (!age || !indicatorId || isAllChoice(undefined, age)) return undefined;
+  if (age === "0-14" && AGE_LABEL_REMAP[indicatorId]) {
+    return AGE_LABEL_REMAP[indicatorId];
+  }
   return age;
 }
 
@@ -100,10 +105,10 @@ const CAPTION_SPEC: Record<string, CaptionSpec> = {
   },
   "education-level": {
     noun: ({ age }) =>
-      age ? "хүн амын" : "6, түүнээс дээш насны боловсролтой хүн амын",
+      age ? "хүн амын" : "10, түүнээс дээш насны боловсролтой хүн амын",
   },
   uneducated: {
-    noun: ({ age }) => (age ? "хүн амын" : "6, түүнээс дээш насны хүн амын"),
+    noun: ({ age }) => (age ? "хүн амын" : "10, түүнээс дээш насны хүн амын"),
     categoryPhrase: () => "боловсролгүй",
   },
   "out-of-school": {
