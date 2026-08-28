@@ -2,9 +2,11 @@
 
 import { Select } from "antd";
 import { type Indicator } from "@/lib/census-dashboard/indicators";
+import { displayAgeLabel, displayCategoryLabel } from "@/lib/census-dashboard/caption";
 
 type Props = {
   indicator?: Indicator;
+  indicatorId?: string;
   categoryId: string;
   sexId: string;
   ageId: string;
@@ -15,6 +17,7 @@ type Props = {
 
 export default function FilterBar({
   indicator,
+  indicatorId,
   categoryId,
   sexId,
   ageId,
@@ -41,7 +44,7 @@ export default function FilterBar({
             value={categoryId}
             options={categories.map((item) => ({
               value: item.id,
-              label: item.label,
+              label: displayCategoryLabel(indicatorId ?? indicator?.id ?? "", item.label),
             }))}
             onChange={onCategoryChange}
           />
@@ -71,7 +74,7 @@ export default function FilterBar({
             value={ageId}
             options={ages.map((item) => ({
               value: item.id,
-              label: item.label,
+              label: displayAgeLabel(indicatorId ?? indicator?.id ?? "", item.label),
             }))}
             onChange={onAgeChange}
           />

@@ -12,7 +12,8 @@ import type { MapLayer } from "@/lib/census-dashboard/geo";
 type TooltipInfo = {
   kind: "share" | "plain";
   layer: MapLayer;
-  noun: "хүн амын" | "өрхийн";
+  noun: string;
+  indicatorId?: string;
   category?: string;
   sex?: string;
   age?: string;
@@ -126,6 +127,7 @@ function tooltipHtml(
         category: tooltip.category,
         sex: tooltip.sex,
         age: tooltip.age,
+        indicatorId: tooltip.indicatorId,
         noun: tooltip.noun,
       }),
     );

@@ -258,6 +258,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
         category: selectedCategoryLabel!,
         sex: sexLabel,
         age: ageLabel,
+        indicatorId,
         noun: shareNoun,
         national: isNationalFocus,
       })
@@ -273,6 +274,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
       kind: isShare ? ("share" as const) : ("plain" as const),
       layer,
       noun: shareNoun,
+      indicatorId,
       category: selectedCategoryLabel,
       sex: sexLabel,
       age: ageLabel,
@@ -285,6 +287,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
       ageLabel,
       cardNote,
       categoryLabel,
+      indicatorId,
       indicatorLabel,
       isShare,
       layer,
@@ -448,6 +451,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
               />
               <FilterBar
                 indicator={indicator}
+                indicatorId={indicatorId}
                 categoryId={categoryId}
                 sexId={sexId}
                 ageId={ageId}
