@@ -247,7 +247,8 @@ function Dashboard({ topic, onTopicChange }: Props) {
     .filter(Boolean)
     .join(" · ");
 
-  const shareNoun = topic.id === "household" ? "өрхийн" : "хүн амын";
+  const shareNoun: "хүн амын" | "өрхийн" =
+    topic.id === "household" ? "өрхийн" : "хүн амын";
   const isShare = indicator?.unit === "share" && Boolean(selectedCategoryLabel);
   const isNationalFocus = !selectedRow;
   const shareCaption = isShare
