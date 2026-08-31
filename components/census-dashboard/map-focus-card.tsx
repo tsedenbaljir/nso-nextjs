@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { formatNumber } from "@/lib/census-dashboard/dashboard";
+import { formatNumber, mapColorScaleCss } from "@/lib/census-dashboard/dashboard";
 
 type Props = {
   title: string;
@@ -62,13 +62,16 @@ export default function MapFocusCard({
         </div>
       </div>
       <div className="map-focus-scale">
-        <span>Бага</span>
-        <div className="map-focus-bar">
+        <div className="map-focus-bar-wrap">
+          <div className="map-focus-bar" style={{ background: mapColorScaleCss() }} />
           {marker != null ? (
             <span className="map-focus-marker" style={{ left: `${marker}%` }} />
           ) : null}
         </div>
-        <span>Их</span>
+        <div className="map-focus-scale-labels">
+          <span className="map-focus-scale-min">{formatNumber(min)}</span>
+          <span className="map-focus-scale-max">{formatNumber(max)}</span>
+        </div>
       </div>
       {note ? <p className="map-focus-note">{note}</p> : null}
     </div>

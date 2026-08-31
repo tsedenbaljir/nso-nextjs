@@ -219,11 +219,14 @@
 
   .map-focus-scale {
     display: flex;
-    gap: 12px;
-    align-items: center;
+    flex-direction: column;
+    gap: 4px;
     margin-top: 14px;
-    color: #94a3b8;
-    font-size: 12px;
+  }
+
+  .map-focus-bar-wrap {
+    position: relative;
+    padding-bottom: 6px;
   }
 
   .map-focus-note {
@@ -235,22 +238,41 @@
 
   .map-focus-bar {
     position: relative;
-    flex: 1;
     height: 11px;
-    background: linear-gradient(90deg, #d7e9a8, #9fd8b1, #6ccbbb, #3cbfc6, #2d99b7, #1e73a8, #115191, #2b0a7a);
-    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid #d0d7de;
+    border-radius: 2px;
   }
 
   .map-focus-marker {
     position: absolute;
-    top: -7px;
-    width: 0;
-    height: 0;
-    border-right: 6px solid transparent;
-    border-bottom: 9px solid #12324f;
-    border-left: 6px solid transparent;
+    top: 0;
+    z-index: 1;
+    width: 1px;
+    height: 17px;
+    background: #111;
     transform: translateX(-50%);
+    pointer-events: none;
     transition: left 0.2s ease;
+  }
+
+  .map-focus-scale-labels {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    color: #8a97a3;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .map-focus-scale-min {
+    text-align: left;
+  }
+
+  .map-focus-scale-max {
+    margin-left: auto;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
   }
 
   .unit-map {

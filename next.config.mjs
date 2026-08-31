@@ -106,14 +106,15 @@ const nextConfig = {
                 destination: "/:lng/statistics-dashboard/business",
                 permanent: true,
             },
+            {
+                source: "/survey",
+                destination: "/mn/about-us/news/102923650",
+                permanent: false,
+            },
         ];
     },
     async rewrites() {
         return [
-            {
-                source: "/mn/Sudalgaa",
-                destination: "/mn/about-us/news/102923650",
-            },
             {
                 source: "/:lng/statistics-dashboard/:id/embed",
                 destination: "/:lng/embed/:id",

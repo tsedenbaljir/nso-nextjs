@@ -99,7 +99,8 @@ export async function proxy(req) {
     !languages.some((loc) => req.nextUrl.pathname.startsWith(`/${loc}`)) &&
     !req.nextUrl.pathname.startsWith("/_next") &&
     !req.nextUrl.pathname.startsWith("/api") &&
-    !req.nextUrl.pathname.startsWith("/geo")
+    !req.nextUrl.pathname.startsWith("/geo") &&
+    req.nextUrl.pathname !== "/survey"
   ) {
     const url = req.nextUrl.clone();
     url.pathname = `/${lng}${pathname}`;

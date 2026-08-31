@@ -10,7 +10,7 @@ import LayerControl from "@/components/census-dashboard/layer-control";
 import MapToolbar from "@/components/census-dashboard/map-toolbar";
 import { useGeoData } from "@/lib/census-dashboard/useGeoData";
 import { useIndicatorData } from "@/lib/census-dashboard/useIndicatorData";
-import { YEAR_OPTIONS, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/lib/census-dashboard/dashboard";
+import { YEAR_OPTIONS, colorScaleBounds, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/lib/census-dashboard/dashboard";
 import { aggregateValue, lookupValue, TOTAL_CATEGORY } from "@/lib/census-dashboard/indicators";
 import { AIMAG_OPTIONS } from "@/lib/census-dashboard/aimags";
 import { CENSUS_TYPES, DEFAULT_LAYERS, TOPICS, getTopic, type Topic } from "@/lib/census-dashboard/topics";
@@ -206,13 +206,10 @@ function Dashboard({ topic, onTopicChange }: Props) {
     ? rows.find((row) => row.key === selectedKey)
     : undefined;
 
-  const legendScale = useMemo(() => {
-    const nums = rows.map((row) => row.value).filter((n) => Number.isFinite(n));
-    if (!nums.length) return { min: 0, max: 1 };
-    const min = Math.min(...nums);
-    const max = Math.max(...nums);
-    return { min, max: max > min ? max : min + 1 };
-  }, [rows]);
+  const legendScale = useMemo(
+    () => colorScaleBounds(rows.map((row) => row.value)),
+    [rows],
+  );
 
   const focusTitle = selectedRow?.name
     ?? (soumCode

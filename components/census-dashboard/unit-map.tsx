@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import L from "leaflet";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import "leaflet/dist/leaflet.css";
-import { colorScaleBounds, formatNumber, parseUnitKey, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
+import { colorScaleBounds, formatNumber, MAP_COLORS, parseUnitKey, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
 import { formatShareCaption } from "@/lib/census-dashboard/caption";
 import { AIMAG_LABEL_OFFSET } from "@/lib/census-dashboard/aimags";
 import type { MapLayer } from "@/lib/census-dashboard/geo";
@@ -50,17 +50,7 @@ type ScaleState = {
   faintWidth: number;
 };
 
-const AREA_HOVER = "#D7E9A8";
-const MAP_COLORS = [
-  "#D7E9A8",
-  "#9FD8B1",
-  "#6CCBBB",
-  "#3CBFC6",
-  "#2D99B7",
-  "#1E73A8",
-  "#115191",
-  "#2B0A7A",
-];
+const AREA_HOVER = MAP_COLORS[0];
 const BASEMAP =
   "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}";
 // Доод талд илүү зай нөөцөлж, газрын зургийг focus картны дээгүүр гаргана.

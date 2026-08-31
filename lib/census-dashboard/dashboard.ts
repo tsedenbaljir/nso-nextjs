@@ -14,6 +14,24 @@ export const LAYER_OPTIONS: { value: MapLayer; label: string }[] = [
 
 export const YEAR_OPTIONS = [{ value: "2025", label: "2025 он" }];
 
+export const MAP_COLORS = [
+  "#D7E9A8",
+  "#9FD8B1",
+  "#3CBFC6",
+  "#2D99B7",
+  "#1E73A8",
+  "#2B0A7A",
+];
+
+export function mapColorScaleCss(colors: string[] = MAP_COLORS) {
+  const stops = colors.flatMap((color, i) => {
+    const start = (i / colors.length) * 100;
+    const end = ((i + 1) / colors.length) * 100;
+    return [`${color} ${start}%`, `${color} ${end}%`];
+  });
+  return `linear-gradient(90deg, ${stops.join(", ")})`;
+}
+
 export type UnitRow = {
   key: string;
   name: string;
@@ -42,6 +60,16 @@ export function formatNumber(value: number) {
   });
 }
 
+function niceBound(value: number, roundUp: boolean) {
+  if (!Number.isFinite(value) || value === 0) return value;
+  const sign = Math.sign(value);
+  const abs = Math.abs(value);
+  const exp = Math.floor(Math.log10(abs));
+  const mag = 10 ** Math.max(0, exp - 1);
+  const rounded = roundUp ? Math.ceil(abs / mag) * mag : Math.floor(abs / mag) * mag;
+  return sign * rounded;
+}
+
 export function colorScaleBounds(values: number[]) {
   const nums = values.filter((n) => Number.isFinite(n)).sort((a, b) => a - b);
   if (!nums.length) return { min: 0, max: 1 };
@@ -49,13 +77,18 @@ export function colorScaleBounds(values: number[]) {
   const at = (p: number) =>
     nums[Math.min(nums.length - 1, Math.max(0, Math.round(p * (nums.length - 1))))];
 
-  const min = at(0.1);
-  const max = at(0.72);
+  let min = at(0.1);
+  let max = at(0.72);
   if (max <= min) {
     const lo = nums[0];
     const hi = nums[nums.length - 1];
-    return { min: lo, max: hi > lo ? hi : lo + 1 };
+    min = lo;
+    max = hi > lo ? hi : lo + 1;
   }
+
+  min = niceBound(min, false);
+  max = niceBound(max, true);
+  if (max <= min) max = min + Math.max(1, niceBound(min, true) - min);
   return { min, max };
 }
 
