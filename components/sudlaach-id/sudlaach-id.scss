@@ -1,0 +1,290 @@
+.sid-page {
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px 56px;
+  background: #dce3ea;
+  min-height: 70vh;
+}
+
+.sid-card {
+  width: min(100%, 392px);
+}
+
+.sid-frame {
+  position: relative;
+  overflow: hidden;
+  min-height: 620px;
+  padding: 42px 28px 48px 32px;
+  color: #4a5560;
+  font-family: "Segoe UI", "Noto Sans", Arial, sans-serif;
+  background: #f7f8f9;
+  border: 1.5px solid #1a5fa8;
+  border-radius: 42px 10px 10px 10px;
+}
+
+.sid-frame::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid #7aa3c9;
+  border-radius: 36px 6px 6px 6px;
+  pointer-events: none;
+}
+
+.sid-frame::after {
+  content: "";
+  position: absolute;
+  right: 28px;
+  bottom: 18px;
+  left: 22px;
+  height: 64px;
+  background-image: repeating-linear-gradient(
+    to right,
+    #c5d0db 0 8px,
+    transparent 8px 16px
+  );
+  clip-path: polygon(
+    0 100%,
+    6% 70%,
+    12% 82%,
+    18% 48%,
+    26% 72%,
+    34% 28%,
+    42% 60%,
+    50% 36%,
+    58% 68%,
+    66% 22%,
+    74% 52%,
+    82% 30%,
+    90% 58%,
+    100% 16%,
+    100% 100%
+  );
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.sid-head {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 32px;
+}
+
+.sid-logo {
+  display: block;
+  height: 58px;
+  width: auto;
+  max-width: calc(100% - 18px);
+  object-fit: contain;
+  object-position: left center;
+}
+
+.sid-idrow {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+
+.sid-photo {
+  width: 148px;
+  height: 168px;
+  margin-left: 8px;
+  overflow: hidden;
+  background: #e6ebf0;
+  border: 1.5px solid #1a5fa8;
+}
+
+.sid-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.sid-photo-fallback {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 50% 36%, #b7c4d1 0 28%, transparent 29%),
+    radial-gradient(ellipse at 50% 94%, #9aabbb 0 42%, transparent 43%),
+    #e6ebf0;
+}
+
+.sid-qrcol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 10px;
+  padding-top: 0;
+  padding-left: 8px;
+}
+
+.sid-qrcol .ant-qrcode {
+  padding: 0;
+  background: #fff;
+}
+
+.sid-qrcol .ant-qrcode svg {
+  display: block;
+  width: 112px;
+  height: 112px;
+}
+
+.sid-no {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: auto 0 0;
+  color: #5b6773;
+  font-size: 14px;
+}
+
+.sid-dots {
+  flex: 1;
+  min-width: 84px;
+  padding: 0 4px 2px;
+  color: #334155;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  border-bottom: 1px dotted #8a97a3;
+}
+
+.sid-fields {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  margin: 8px 0 0;
+  row-gap: 16px;
+}
+
+.sid-field {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  column-gap: 12px;
+  align-items: baseline;
+  margin: 0;
+  padding: 0;
+}
+
+.sid-field dt {
+  margin: 0;
+  color: #6b7784;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.sid-field dd {
+  margin: 0;
+  min-width: 0;
+  padding-bottom: 4px;
+  color: #1a5fa8;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  line-height: 1.25;
+  text-align: left;
+  word-break: break-word;
+  border-bottom: 1px dotted #8a97a3;
+}
+
+.sid-field--pos dd {
+  color: #3d4650;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+}
+
+.sid-foot {
+  position: relative;
+  z-index: 1;
+  margin-top: 40px;
+}
+
+.sid-sign {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.sid-sign-title {
+  margin: 0;
+  color: #5b6773;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.sid-sign-name {
+  margin: 0;
+  color: #7a8793;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.sid-date {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 28px 0 0;
+  color: #6b7784;
+  font-size: 12.5px;
+}
+
+.sid-date .sid-dots {
+  max-width: 120px;
+  font-weight: 500;
+}
+
+.sid-export {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.sid-export-btn {
+  min-width: 128px;
+  padding: 8px 16px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: #1a5fa8;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.sid-export-btn:hover:not(:disabled) {
+  background: #164e8a;
+}
+
+.sid-export-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+@media (max-width: 420px) {
+  .sid-idrow {
+    grid-template-columns: 128px 1fr;
+  }
+
+  .sid-photo {
+    width: 128px;
+    height: 148px;
+  }
+}
