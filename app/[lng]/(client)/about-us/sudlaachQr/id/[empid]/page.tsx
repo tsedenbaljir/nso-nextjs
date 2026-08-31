@@ -14,8 +14,8 @@ export default async function SudlaachIdPage(props: {
   const { lng, empid } = await props.params;
   const qrUrl = sudlaachQrUrl(lng, empid);
   const empIdNum = parseEmpId(empid);
-  const empResult = empIdNum ? await getEmployeeCard(empIdNum) : { ok: false };
-  const initialEmp = empResult.ok ? empResult.emp : null;
+  const empResult = empIdNum ? await getEmployeeCard(empIdNum) : null;
+  const initialEmp = empResult && "emp" in empResult ? empResult.emp : null;
 
   return (
     <SudlaachIdCard

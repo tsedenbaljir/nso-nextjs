@@ -61,6 +61,24 @@ export function parseEmpId(raw) {
   return id;
 }
 
+/**
+ * @param {number} empId
+ * @returns {Promise<
+ *   | { ok: true, emp: {
+ *       empId: number,
+ *       familyName: string,
+ *       surName: string,
+ *       givenName: string,
+ *       aimagCode: string,
+ *       aimagName: string,
+ *       professionName: string,
+ *       positionName: string,
+ *       hasPhoto: boolean,
+ *       insertedDate: string | Date | null,
+ *     }}
+ *   | { ok: false, reason: string }
+ * >}
+ */
 export async function getEmployeeCard(empId) {
   const db = getHrdb();
   if (!db) return { ok: false, reason: "not-configured" };

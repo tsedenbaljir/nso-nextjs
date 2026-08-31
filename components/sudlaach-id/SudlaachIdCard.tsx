@@ -77,7 +77,7 @@ type EmpCard = {
   surName?: string;
   familyName?: string;
   positionName?: string;
-  insertedDate?: string | null;
+  insertedDate?: string | Date | null;
 };
 
 type Props = {
