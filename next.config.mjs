@@ -111,6 +111,10 @@ const nextConfig = {
     async rewrites() {
         return [
             {
+                source: "/mn/Sudalgaa",
+                destination: "/mn/about-us/news/102923650",
+            },
+            {
                 source: "/:lng/statistics-dashboard/:id/embed",
                 destination: "/:lng/embed/:id",
             },
