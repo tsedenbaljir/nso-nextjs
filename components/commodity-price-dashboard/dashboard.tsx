@@ -4,6 +4,7 @@ import { useRef, useMemo, useState } from "react";
 import type { PriceRow, PriceTable } from "@/lib/commodity-price-dashboard/nso";
 import { GROUPS, matchesGroup, type GroupId } from "@/lib/commodity-price-dashboard/groups";
 import { shortName } from "@/lib/commodity-price-dashboard/format";
+import { MARKET_PRICE_METHOD_NOTE } from "@/lib/commodity-price-dashboard/price-notes";
 import { WeeklyTable } from "./weekly-table";
 import { ChartPanel } from "./chart-panel";
 import { ExcelTable } from "./excel-table";
@@ -79,9 +80,13 @@ function DashboardInner({ data }: { data: PriceTable }) {
   return (
     <main className="page">
       <div className="pcards-header">
-        <div>
+        <div className="pcards-heading">
           <h2 className="pcards-title">Өргөн хэрэглээний бүтээгдэхүүний үнэ</h2>
-          <p className="pcards-subtitle">Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ</p>
+          <p className="pcards-lede">
+            <span className="pcards-subtitle">Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ</span>
+            {" — "}
+            <span className="pcards-method">{MARKET_PRICE_METHOD_NOTE}</span>
+          </p>
         </div>
         <div className="site-tools">
           <div className="live-pill">

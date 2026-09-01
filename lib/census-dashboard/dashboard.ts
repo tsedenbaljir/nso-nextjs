@@ -60,36 +60,58 @@ export function formatNumber(value: number) {
   });
 }
 
-function niceBound(value: number, roundUp: boolean) {
-  if (!Number.isFinite(value) || value === 0) return value;
-  const sign = Math.sign(value);
-  const abs = Math.abs(value);
-  const exp = Math.floor(Math.log10(abs));
-  const mag = 10 ** Math.max(0, exp - 1);
-  const rounded = roundUp ? Math.ceil(abs / mag) * mag : Math.floor(abs / mag) * mag;
-  return sign * rounded;
+export function formatPercent(value: number) {
+  return `${value.toLocaleString("mn-MN", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  })} %`;
 }
 
-export function colorScaleBounds(values: number[]) {
-  const nums = values.filter((n) => Number.isFinite(n)).sort((a, b) => a - b);
-  if (!nums.length) return { min: 0, max: 1 };
+export type ColorScale = {
+  min: number;
+  max: number;
+  sorted: number[];
+};
 
-  const at = (p: number) =>
-    nums[Math.min(nums.length - 1, Math.max(0, Math.round(p * (nums.length - 1))))];
+/** Equal-count (quantile) class so every color is used even with a large outlier. */
+export function mapColorIndex(value: number, sorted: number[]): number {
+  const n = sorted.length;
+  const k = MAP_COLORS.length;
+  if (!n) return 0;
+  if (sorted[0] === sorted[n - 1]) return 0;
 
-  let min = at(0.1);
-  let max = at(0.72);
-  if (max <= min) {
-    const lo = nums[0];
-    const hi = nums[nums.length - 1];
-    min = lo;
-    max = hi > lo ? hi : lo + 1;
+  let lo = 0;
+  let hi = n;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (sorted[mid] < value) lo = mid + 1;
+    else hi = mid;
+  }
+  return Math.min(k - 1, Math.floor((lo / n) * k));
+}
+
+export function mapColor(value: number, sorted: number[]): string {
+  return MAP_COLORS[mapColorIndex(value, sorted)] ?? MAP_COLORS[0];
+}
+
+export function legendMarkerPercent(value: number, sorted: number[]): number {
+  return ((mapColorIndex(value, sorted) + 0.5) / MAP_COLORS.length) * 100;
+}
+
+export function colorScaleBounds(
+  values: number[],
+  mode: "auto" | "percent" = "auto",
+): ColorScale {
+  const sorted = values.filter((n) => Number.isFinite(n)).sort((a, b) => a - b);
+  if (!sorted.length) {
+    return mode === "percent"
+      ? { min: 0, max: 100, sorted: [0, 100] }
+      : { min: 0, max: 1, sorted: [0, 1] };
   }
 
-  min = niceBound(min, false);
-  max = niceBound(max, true);
-  if (max <= min) max = min + Math.max(1, niceBound(min, true) - min);
-  return { min, max };
+  const min = sorted[0];
+  const max = sorted[sorted.length - 1];
+  return { min, max: max > min ? max : min, sorted };
 }
 
 export function unitKey(layer: MapLayer, id: number) {

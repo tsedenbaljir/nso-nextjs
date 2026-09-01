@@ -206,9 +206,15 @@ function Dashboard({ topic, onTopicChange }: Props) {
     ? rows.find((row) => row.key === selectedKey)
     : undefined;
 
+  const percentScale =
+    indicator?.unit === "share" || indicator?.unit === "rate";
   const legendScale = useMemo(
-    () => colorScaleBounds(rows.map((row) => row.value)),
-    [rows],
+    () =>
+      colorScaleBounds(
+        rows.map((row) => row.value),
+        percentScale ? "percent" : "auto",
+      ),
+    [percentScale, rows],
   );
 
   const focusTitle = selectedRow?.name
@@ -482,6 +488,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 overlays={overlays}
                 tooltip={tooltip}
                 fitToken={fitToken}
+                percentScale={percentScale}
                 onSelect={handleMapSelect}
               />
             ) : (
@@ -498,7 +505,9 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 value={focusValue}
                 min={legendScale.min}
                 max={legendScale.max}
+                sorted={legendScale.sorted}
                 markerValue={selectedRow?.value}
+                percent={percentScale}
               />
             ) : null}
           </main>

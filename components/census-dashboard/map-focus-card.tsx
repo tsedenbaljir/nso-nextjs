@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { formatNumber, mapColorScaleCss } from "@/lib/census-dashboard/dashboard";
+import { formatNumber, formatPercent, legendMarkerPercent, mapColorScaleCss } from "@/lib/census-dashboard/dashboard";
 
 type Props = {
   title: string;
@@ -10,7 +10,9 @@ type Props = {
   value: number;
   min: number;
   max: number;
+  sorted: number[];
   markerValue?: number;
+  percent?: boolean;
 };
 
 export default function MapFocusCard({
@@ -20,14 +22,13 @@ export default function MapFocusCard({
   value,
   min,
   max,
+  sorted,
   markerValue,
+  percent = false,
 }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
-  const span = max - min || 1;
   const marker =
-    markerValue == null
-      ? null
-      : Math.min(100, Math.max(0, ((markerValue - min) / span) * 100));
+    markerValue == null ? null : legendMarkerPercent(markerValue, sorted);
 
   useEffect(() => {
     const el = elRef.current;
@@ -55,7 +56,9 @@ export default function MapFocusCard({
   return (
     <div ref={elRef} className="map-focus">
       <div className="map-focus-main">
-        <strong className="map-focus-value">{formatNumber(value)}</strong>
+        <strong className="map-focus-value">
+          {percent ? formatPercent(value) : formatNumber(value)}
+        </strong>
         <div className="map-focus-copy">
           <p className="map-focus-title">{title}</p>
           <p className="map-focus-sub">{subtitle}</p>
@@ -69,8 +72,12 @@ export default function MapFocusCard({
           ) : null}
         </div>
         <div className="map-focus-scale-labels">
-          <span className="map-focus-scale-min">{formatNumber(min)}</span>
-          <span className="map-focus-scale-max">{formatNumber(max)}</span>
+          <span className="map-focus-scale-min">
+            {percent ? formatPercent(min) : formatNumber(min)}
+          </span>
+          <span className="map-focus-scale-max">
+            {percent ? formatPercent(max) : formatNumber(max)}
+          </span>
         </div>
       </div>
       {note ? <p className="map-focus-note">{note}</p> : null}

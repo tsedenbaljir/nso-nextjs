@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import L from "leaflet";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import "leaflet/dist/leaflet.css";
-import { colorScaleBounds, formatNumber, MAP_COLORS, parseUnitKey, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
+import { colorScaleBounds, formatNumber, mapColor, MAP_COLORS, parseUnitKey, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
 import { formatShareCaption } from "@/lib/census-dashboard/caption";
 import { AIMAG_LABEL_OFFSET } from "@/lib/census-dashboard/aimags";
 import type { MapLayer } from "@/lib/census-dashboard/geo";
@@ -38,6 +38,7 @@ type Props = {
   overlays?: BorderOverlay[];
   tooltip: TooltipInfo;
   fitToken?: number;
+  percentScale?: boolean;
   onSelect: (mapName: string) => void;
 };
 
@@ -46,6 +47,7 @@ type MapFeature = Feature<Geometry, Record<string, string | number>>;
 type ScaleState = {
   min: number;
   max: number;
+  sorted: number[];
   faintBorder: string;
   faintWidth: number;
 };
@@ -75,16 +77,6 @@ const WORLD_BOUNDS: L.LatLngBoundsLiteral = [
   [-85, -180],
   [85, 180],
 ];
-
-function scaleColor(value: number, min: number, max: number) {
-  if (max <= min) return MAP_COLORS[0];
-  const t = Math.min(1, Math.max(0, (value - min) / (max - min)));
-  const index = Math.min(
-    MAP_COLORS.length - 1,
-    Math.floor(t * MAP_COLORS.length),
-  );
-  return MAP_COLORS[index];
-}
 
 function escapeHtml(value: string) {
   return value
@@ -161,7 +153,7 @@ function featureStyle(
     weight: scale.faintWidth,
     fillColor: hovered
       ? AREA_HOVER
-      : scaleColor(values[name] ?? 0, scale.min, scale.max),
+      : mapColor(values[name] ?? 0, scale.sorted),
     fillOpacity: 0.94,
     opacity: 1,
   };
@@ -234,6 +226,7 @@ export default function UnitMap({
   overlays = [],
   tooltip,
   fitToken = 0,
+  percentScale = false,
   onSelect,
 }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
@@ -253,9 +246,11 @@ export default function UnitMap({
   const valuesRef = useRef(values);
   const tooltipRef = useRef(tooltip);
   const layerRef = useRef(layer);
+  const percentScaleRef = useRef(percentScale);
   const scaleRef = useRef<ScaleState>({
     min: 0,
     max: 1,
+    sorted: [0, 1],
     faintBorder: "#111111",
     faintWidth: 1,
   });
@@ -264,6 +259,7 @@ export default function UnitMap({
   valuesRef.current = values;
   tooltipRef.current = tooltip;
   layerRef.current = layer;
+  percentScaleRef.current = percentScale;
 
   useLayoutEffect(() => {
     const el = elRef.current;
@@ -342,10 +338,14 @@ export default function UnitMap({
     const nums = geojson.features.map(
       (feature) => valuesRef.current[String(feature.properties.mapName)] ?? 0,
     );
-    const { min, max } = colorScaleBounds(nums);
+    const { min, max, sorted } = colorScaleBounds(
+      nums,
+      percentScaleRef.current ? "percent" : "auto",
+    );
     scaleRef.current = {
       min,
       max,
+      sorted,
       faintBorder: layer === "aimag" ? "#111111" : "rgba(255,255,255,0.75)",
       faintWidth: layer === "bag" ? 0.45 : layer === "soum" ? 0.7 : 1,
     };
@@ -492,15 +492,18 @@ export default function UnitMap({
     const nums = geojson.features.map(
       (feature) => values[String(feature.properties.mapName)] ?? 0,
     );
-    const { min, max } = colorScaleBounds(nums);
-    scaleRef.current = { ...scaleRef.current, min, max };
+    const { min, max, sorted } = colorScaleBounds(
+      nums,
+      percentScale ? "percent" : "auto",
+    );
+    scaleRef.current = { ...scaleRef.current, min, max, sorted };
     paintLayer(
       dataLayer,
       values,
       hoverNameRef.current,
       scaleRef.current,
     );
-  }, [geojson, values]);
+  }, [geojson, values, percentScale]);
 
   return <div ref={elRef} className="unit-map" />;
 }
