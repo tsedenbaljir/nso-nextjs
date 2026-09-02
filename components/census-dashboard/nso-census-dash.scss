@@ -230,6 +230,52 @@
     padding-bottom: 6px;
   }
 
+  .map-focus-classes {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .map-focus-class {
+    min-width: 0;
+    text-align: center;
+  }
+
+  .map-focus-class-swatch {
+    display: block;
+    height: 11px;
+    border-top: 1px solid #d0d7de;
+    border-bottom: 1px solid #d0d7de;
+    border-right: 1px solid #d0d7de;
+  }
+
+  .map-focus-class:first-child .map-focus-class-swatch {
+    border-left: 1px solid #d0d7de;
+    border-radius: 2px 0 0 2px;
+  }
+
+  .map-focus-class:last-child .map-focus-class-swatch {
+    border-radius: 0 2px 2px 0;
+  }
+
+  .map-focus-class-label {
+    display: block;
+    margin-top: 5px;
+    color: #5b6e80;
+    font-size: 10.5px;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .map-focus-classes.is-count .map-focus-class-label {
+    white-space: normal;
+    font-size: 9.5px;
+    line-height: 1.15;
+    word-break: break-word;
+  }
+
   .map-focus-note {
     margin: 10px 0 0;
     color: #5b6e80;
@@ -670,6 +716,15 @@
 
     .map-focus-bar {
       height: 8px;
+    }
+
+    .map-focus-class-swatch {
+      height: 8px;
+    }
+
+    .map-focus-class-label {
+      margin-top: 4px;
+      font-size: 9px;
     }
 
     .map-focus-marker {

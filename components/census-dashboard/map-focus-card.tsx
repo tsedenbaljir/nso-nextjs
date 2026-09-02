@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { formatNumber, formatPercent, legendMarkerPercent, mapColorScaleCss } from "@/lib/census-dashboard/dashboard";
+import {
+  countClassLabels,
+  formatNumber,
+  formatPercent,
+  legendMarkerPercent,
+  MAP_COLORS,
+  PERCENT_CLASS_LABELS,
+  quantileClasses,
+} from "@/lib/census-dashboard/dashboard";
 
 type Props = {
   title: string;
@@ -20,15 +28,18 @@ export default function MapFocusCard({
   subtitle,
   note,
   value,
-  min,
-  max,
   sorted,
   markerValue,
   percent = false,
 }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
+  const mode = percent ? "percent" : "auto";
+  const classes = quantileClasses(sorted);
   const marker =
-    markerValue == null ? null : legendMarkerPercent(markerValue, sorted);
+    markerValue == null
+      ? null
+      : legendMarkerPercent(markerValue, { mode, classes });
+  const labels = percent ? PERCENT_CLASS_LABELS : countClassLabels(sorted);
 
   useEffect(() => {
     const el = elRef.current;
@@ -65,19 +76,19 @@ export default function MapFocusCard({
         </div>
       </div>
       <div className="map-focus-scale">
-        <div className="map-focus-bar-wrap">
-          <div className="map-focus-bar" style={{ background: mapColorScaleCss() }} />
+        <div className={`map-focus-classes${percent ? "" : " is-count"}`}>
+          {MAP_COLORS.map((color, i) => (
+            <div key={color} className="map-focus-class">
+              <span
+                className="map-focus-class-swatch"
+                style={{ background: color }}
+              />
+              <span className="map-focus-class-label">{labels[i]}</span>
+            </div>
+          ))}
           {marker != null ? (
             <span className="map-focus-marker" style={{ left: `${marker}%` }} />
           ) : null}
-        </div>
-        <div className="map-focus-scale-labels">
-          <span className="map-focus-scale-min">
-            {percent ? formatPercent(min) : formatNumber(min)}
-          </span>
-          <span className="map-focus-scale-max">
-            {percent ? formatPercent(max) : formatNumber(max)}
-          </span>
         </div>
       </div>
       {note ? <p className="map-focus-note">{note}</p> : null}

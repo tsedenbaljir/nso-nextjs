@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import L from "leaflet";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import "leaflet/dist/leaflet.css";
-import { colorScaleBounds, formatNumber, mapColor, MAP_COLORS, parseUnitKey, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
+import { colorScaleBounds, formatNumber, mapColor, MAP_COLORS, parseUnitKey, type ColorClass, type ColorScaleMode, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
 import { formatShareCaption } from "@/lib/census-dashboard/caption";
 import { AIMAG_LABEL_OFFSET } from "@/lib/census-dashboard/aimags";
 import type { MapLayer } from "@/lib/census-dashboard/geo";
@@ -48,11 +48,12 @@ type ScaleState = {
   min: number;
   max: number;
   sorted: number[];
+  mode: ColorScaleMode;
+  classes: ColorClass[];
   faintBorder: string;
   faintWidth: number;
 };
 
-const AREA_HOVER = MAP_COLORS[0];
 const BASEMAP =
   "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}";
 // Доод талд илүү зай нөөцөлж, газрын зургийг focus картны дээгүүр гаргана.
@@ -148,14 +149,14 @@ function featureStyle(
 ) {
   const name = String(feature?.properties.mapName ?? "");
   const hovered = name === hoverName;
+  const fill = mapColor(values[name] ?? 0, scale);
   return {
-    color: scale.faintBorder,
-    weight: scale.faintWidth,
-    fillColor: hovered
-      ? AREA_HOVER
-      : mapColor(values[name] ?? 0, scale.sorted),
+    color: hovered ? fill : scale.faintBorder,
+    weight: hovered ? 2.75 : scale.faintWidth,
+    fillColor: fill,
     fillOpacity: 0.94,
     opacity: 1,
+    lineJoin: "round" as const,
   };
 }
 
@@ -251,6 +252,8 @@ export default function UnitMap({
     min: 0,
     max: 1,
     sorted: [0, 1],
+    mode: "auto",
+    classes: MAP_COLORS.map(() => ({ min: 0, max: 0 })),
     faintBorder: "#111111",
     faintWidth: 1,
   });
@@ -338,7 +341,7 @@ export default function UnitMap({
     const nums = geojson.features.map(
       (feature) => valuesRef.current[String(feature.properties.mapName)] ?? 0,
     );
-    const { min, max, sorted } = colorScaleBounds(
+    const { min, max, sorted, mode, classes } = colorScaleBounds(
       nums,
       percentScaleRef.current ? "percent" : "auto",
     );
@@ -346,6 +349,8 @@ export default function UnitMap({
       min,
       max,
       sorted,
+      mode,
+      classes,
       faintBorder: layer === "aimag" ? "#111111" : "rgba(255,255,255,0.75)",
       faintWidth: layer === "bag" ? 0.45 : layer === "soum" ? 0.7 : 1,
     };
@@ -492,11 +497,11 @@ export default function UnitMap({
     const nums = geojson.features.map(
       (feature) => values[String(feature.properties.mapName)] ?? 0,
     );
-    const { min, max, sorted } = colorScaleBounds(
+    const { min, max, sorted, mode, classes } = colorScaleBounds(
       nums,
       percentScale ? "percent" : "auto",
     );
-    scaleRef.current = { ...scaleRef.current, min, max, sorted };
+    scaleRef.current = { ...scaleRef.current, min, max, sorted, mode, classes };
     paintLayer(
       dataLayer,
       values,
