@@ -7,8 +7,8 @@ import {
   formatPercent,
   legendMarkerPercent,
   MAP_COLORS,
-  PERCENT_CLASS_LABELS,
-  quantileClasses,
+  percentClassLabels,
+  type ColorClass,
 } from "@/lib/census-dashboard/dashboard";
 
 type Props = {
@@ -16,9 +16,7 @@ type Props = {
   subtitle: string;
   note?: string;
   value: number;
-  min: number;
-  max: number;
-  sorted: number[];
+  classes: ColorClass[];
   markerValue?: number;
   percent?: boolean;
 };
@@ -28,18 +26,18 @@ export default function MapFocusCard({
   subtitle,
   note,
   value,
-  sorted,
+  classes,
   markerValue,
   percent = false,
 }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
   const mode = percent ? "percent" : "auto";
-  const classes = quantileClasses(sorted);
   const marker =
     markerValue == null
       ? null
       : legendMarkerPercent(markerValue, { mode, classes });
-  const labels = percent ? PERCENT_CLASS_LABELS : countClassLabels(sorted);
+  const labels = percent ? percentClassLabels(classes) : countClassLabels(classes);
+  const swatches = MAP_COLORS.slice(0, Math.max(1, classes.length));
 
   useEffect(() => {
     const el = elRef.current;
@@ -77,7 +75,7 @@ export default function MapFocusCard({
       </div>
       <div className="map-focus-scale">
         <div className={`map-focus-classes${percent ? "" : " is-count"}`}>
-          {MAP_COLORS.map((color, i) => (
+          {swatches.map((color, i) => (
             <div key={color} className="map-focus-class">
               <span
                 className="map-focus-class-swatch"
