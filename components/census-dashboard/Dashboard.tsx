@@ -8,6 +8,8 @@ import MapFocusCard from "@/components/census-dashboard/map-focus-card";
 import SubFilterNav from "@/components/census-dashboard/sub-filter-nav";
 import LayerControl from "@/components/census-dashboard/layer-control";
 import MapToolbar from "@/components/census-dashboard/map-toolbar";
+import UseShare from "@/components/census-dashboard/use-share";
+import { downloadMapRows } from "@/lib/census-dashboard/export";
 import { useGeoData } from "@/lib/census-dashboard/useGeoData";
 import { useIndicatorData } from "@/lib/census-dashboard/useIndicatorData";
 import { YEAR_OPTIONS, colorScaleBounds, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/lib/census-dashboard/dashboard";
@@ -47,6 +49,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
   const [aimagId, setAimagId] = useState<number | null>(null);
   const [soumCode, setSoumCode] = useState<number | null>(null);
   const [bagAsb, setBagAsb] = useState<number | null>(null);
+  const [hoverKey, setHoverKey] = useState<string | null>(null);
 
   const data = geo.data;
   const indicator = stats.data?.indicators.find((item) => item.id === indicatorId);
@@ -170,9 +173,9 @@ function Dashboard({ topic, onTopicChange }: Props) {
       return [
         {
           geojson: toMapGeo(soums, (p) => unitKey("soum", p.asCode)),
-          color: "#5c7488",
-          width: soumCode ? 1.2 : 0.9,
-          opacity: soumCode ? 0.6 : 0.42,
+          color: "#6d8190",
+          width: soumCode ? 1.3 : 1.05,
+          opacity: soumCode ? 0.78 : 0.62,
         },
         // Сумын бүдэг шугамын дараа зурагдаж, аймгийн хүрээ дээр гарна.
         {
@@ -205,6 +208,10 @@ function Dashboard({ topic, onTopicChange }: Props) {
   const selectedRow = selectedKey
     ? rows.find((row) => row.key === selectedKey)
     : undefined;
+  const hoverRow = hoverKey
+    ? rows.find((row) => row.key === hoverKey)
+    : undefined;
+  const focusRow = hoverRow ?? selectedRow;
 
   const percentScale =
     indicator?.unit === "share" || indicator?.unit === "rate";
@@ -217,7 +224,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
     [percentScale, rows],
   );
 
-  const focusTitle = selectedRow?.name
+  const focusTitle = focusRow?.name
     ?? (soumCode
       ? data?.soums.features.find((feature) => feature.properties.asCode === soumCode)?.properties.name
       : undefined)
@@ -226,7 +233,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
       : undefined)
     ?? "Монгол Улс";
 
-  const focusValue = selectedRow?.value ?? tableTotal ?? 0;
+  const focusValue = focusRow?.value ?? tableTotal ?? 0;
   const indicatorLabel =
     topic.subFilters.find((item) => item.id === indicatorId)?.label ??
     indicator?.label ??
@@ -253,7 +260,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
   const shareNoun: "хүн амын" | "өрхийн" =
     topic.id === "household" ? "өрхийн" : "хүн амын";
   const isShare = indicator?.unit === "share" && Boolean(selectedCategoryLabel);
-  const isNationalFocus = !selectedRow;
+  const isNationalFocus = !focusRow;
   const shareCaption = isShare
     ? formatShareCaption({
         place: focusTitle,
@@ -391,6 +398,17 @@ function Dashboard({ topic, onTopicChange }: Props) {
     }
   }
 
+  function handleDownload() {
+    if (!rows.length) return;
+    downloadMapRows(rows, {
+      indicator: indicatorLabel,
+      category: categoryLabel || undefined,
+      year,
+      layer,
+      percent: percentScale,
+    });
+  }
+
   return (
     <ConfigProvider
       getPopupContainer={() => document.body}
@@ -475,6 +493,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
               ) : null}
               {error && <p className="dashboard-note">{error}</p>}
             </div>
+            <UseShare onDownload={handleDownload} downloadDisabled={!rows.length} />
           </aside>
 
           <main className="dashboard-map">
@@ -490,6 +509,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 fitToken={fitToken}
                 percentScale={percentScale}
                 onSelect={handleMapSelect}
+                onHover={setHoverKey}
               />
             ) : (
               <div className="dashboard-loading">Газрын зураг ачааллаж байна…</div>
@@ -503,10 +523,8 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 }
                 note={cardNote}
                 value={focusValue}
-                min={legendScale.min}
-                max={legendScale.max}
-                sorted={legendScale.sorted}
-                markerValue={selectedRow?.value}
+                classes={legendScale.classes}
+                markerValue={focusRow?.value ?? focusValue}
                 percent={percentScale}
               />
             ) : null}

@@ -40,6 +40,7 @@ type Props = {
   fitToken?: number;
   percentScale?: boolean;
   onSelect: (mapName: string) => void;
+  onHover?: (mapName: string | null) => void;
 };
 
 type MapFeature = Feature<Geometry, Record<string, string | number>>;
@@ -52,6 +53,7 @@ type ScaleState = {
   classes: ColorClass[];
   faintBorder: string;
   faintWidth: number;
+  faintOpacity: number;
 };
 
 const BASEMAP =
@@ -72,6 +74,25 @@ function fitPadding(map: L.Map) {
 }
 const MAP_MAX_ZOOM = 16;
 const MAP_MIN_ZOOM = 5;
+
+function faintStroke(layer: MapLayer) {
+  if (layer === "bag") {
+    return { faintBorder: "#9aa8b4", faintWidth: 0.75, faintOpacity: 0.9 };
+  }
+  if (layer === "soum") {
+    return { faintBorder: "#8b9bab", faintWidth: 0.95, faintOpacity: 0.82 };
+  }
+  return { faintBorder: "#4a5a68", faintWidth: 1.15, faintOpacity: 0.9 };
+}
+
+const HOVER_OUTLINE = {
+  color: "#333333",
+  weight: 1.7,
+  fill: false,
+  fillOpacity: 0,
+  opacity: 0.9,
+  lineJoin: "round" as const,
+};
 // Хэмжилтийн үеийн түр шал — үүнээс доош хэзээ ч томруулж харуулахгүй.
 const MAP_ZOOM_FLOOR = 2;
 const WORLD_BOUNDS: L.LatLngBoundsLiteral = [
@@ -151,11 +172,11 @@ function featureStyle(
   const hovered = name === hoverName;
   const fill = mapColor(values[name] ?? 0, scale);
   return {
-    color: hovered ? fill : scale.faintBorder,
-    weight: hovered ? 2.75 : scale.faintWidth,
+    color: hovered ? "#333333" : scale.faintBorder,
+    weight: hovered ? 1.6 : scale.faintWidth,
     fillColor: fill,
     fillOpacity: 0.94,
-    opacity: 1,
+    opacity: hovered ? 0.9 : scale.faintOpacity,
     lineJoin: "round" as const,
   };
 }
@@ -229,6 +250,7 @@ export default function UnitMap({
   fitToken = 0,
   percentScale = false,
   onSelect,
+  onHover,
 }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -237,8 +259,10 @@ export default function UnitMap({
   const labelsRef = useRef<L.LayerGroup | null>(null);
   const borderRendererRef = useRef<L.SVG | null>(null);
   const hoverRef = useRef<L.Tooltip | null>(null);
+  const hoverOutlineRef = useRef<L.GeoJSON | null>(null);
   const hoverNameRef = useRef<string | null>(null);
   const onSelectRef = useRef(onSelect);
+  const onHoverRef = useRef(onHover);
   const fitKeyRef = useRef<string | null>(null);
   const lastBoundsRef = useRef<L.LatLngBounds | null>(null);
   const countryBoundsRef = useRef<L.LatLngBounds | null>(null);
@@ -254,11 +278,13 @@ export default function UnitMap({
     sorted: [0, 1],
     mode: "auto",
     classes: MAP_COLORS.map(() => ({ min: 0, max: 0 })),
-    faintBorder: "#111111",
+    faintBorder: "#5c6b78",
     faintWidth: 1,
+    faintOpacity: 0.85,
   });
 
   onSelectRef.current = onSelect;
+  onHoverRef.current = onHover;
   valuesRef.current = values;
   tooltipRef.current = tooltip;
   layerRef.current = layer;
@@ -285,6 +311,10 @@ export default function UnitMap({
     bordersPane.style.zIndex = "450";
     bordersPane.style.pointerEvents = "none";
     borderRendererRef.current = L.svg({ pane: "borders" });
+    map.createPane("unit-hover");
+    const hoverPane = map.getPane("unit-hover")!;
+    hoverPane.style.zIndex = "460";
+    hoverPane.style.pointerEvents = "none";
 
     L.control.zoom({ position: "topright" }).addTo(map);
     L.tileLayer(BASEMAP, {
@@ -319,6 +349,8 @@ export default function UnitMap({
       observer.disconnect();
       hoverRef.current?.remove();
       hoverRef.current = null;
+      hoverOutlineRef.current?.remove();
+      hoverOutlineRef.current = null;
       map.remove();
       mapRef.current = null;
       dataLayerRef.current = null;
@@ -351,9 +383,9 @@ export default function UnitMap({
       sorted,
       mode,
       classes,
-      faintBorder: layer === "aimag" ? "#111111" : "rgba(255,255,255,0.75)",
-      faintWidth: layer === "bag" ? 0.45 : layer === "soum" ? 0.7 : 1,
+      ...faintStroke(layer),
     };
+    onHoverRef.current?.(null);
     const showLabels = geojson.features.length <= 40;
 
     if (dataLayerRef.current) {
@@ -364,6 +396,8 @@ export default function UnitMap({
     labelGroup.clearLayers();
     hoverRef.current?.remove();
     hoverRef.current = null;
+    hoverOutlineRef.current?.remove();
+    hoverOutlineRef.current = null;
     hoverNameRef.current = null;
 
     const dataLayer = L.geoJSON(geojson, {
@@ -400,6 +434,7 @@ export default function UnitMap({
         shape.on("click", () => onSelectRef.current(name));
         shape.on("mouseover", () => {
           hoverNameRef.current = name;
+          onHoverRef.current?.(name);
           const path = shape as L.Path;
           path.setStyle(
             featureStyle(
@@ -410,9 +445,18 @@ export default function UnitMap({
             ),
           );
           if (typeof path.bringToFront === "function") path.bringToFront();
+          hoverOutlineRef.current?.remove();
+          hoverOutlineRef.current = L.geoJSON(feature as MapFeature, {
+            pane: "unit-hover",
+            interactive: false,
+            style: HOVER_OUTLINE,
+          }).addTo(map);
         });
         shape.on("mouseout", () => {
           hoverNameRef.current = null;
+          onHoverRef.current?.(null);
+          hoverOutlineRef.current?.remove();
+          hoverOutlineRef.current = null;
           (shape as L.Path).setStyle(
             featureStyle(
               feature as MapFeature,

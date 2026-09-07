@@ -76,6 +76,81 @@
     border-radius: 999px;
   }
 
+  .use-share {
+    flex: 0 0 auto;
+    padding: 18px 24px 20px;
+    background: #eef1f4;
+    border-top: 1px solid #e4ebf1;
+  }
+
+  .use-share h2 {
+    margin: 0 0 12px;
+    color: #0f172a;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .use-share-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+  }
+
+  .use-share-grid a,
+  .use-share-grid button {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #1a5cad;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space: normal;
+    cursor: pointer;
+  }
+
+  .use-share-grid span {
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+
+  .use-share-grid a:hover,
+  .use-share-grid button:hover:not(:disabled) {
+    color: #0f3f78;
+  }
+
+  .use-share-grid button:disabled {
+    color: #94a3b8;
+    text-decoration: none;
+    cursor: not-allowed;
+  }
+
+  .use-share-grid svg {
+    flex: 0 0 auto;
+  }
+
+  .use-share-embed-note {
+    margin: 0 0 10px;
+    color: #475569;
+  }
+
+  .use-share-copied {
+    margin: 10px 0 0;
+    color: #0f766e;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
   .dashboard-filter-block {
     display: block;
     margin-bottom: 12px;
@@ -235,6 +310,7 @@
     display: grid;
     grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 0;
+    padding-top: 12px;
   }
 
   .map-focus-class {
@@ -294,13 +370,18 @@
   .map-focus-marker {
     position: absolute;
     top: 0;
-    z-index: 1;
-    width: 1px;
-    height: 17px;
-    background: #111;
+    z-index: 2;
+    display: block;
+    width: 16px;
+    height: 12px;
     transform: translateX(-50%);
     pointer-events: none;
-    transition: left 0.2s ease;
+    transition: left 0.18s ease;
+
+    svg {
+      display: block;
+      overflow: visible;
+    }
   }
 
   .map-focus-scale-labels {
@@ -617,6 +698,12 @@
       padding-right: max(14px, env(safe-area-inset-right));
     }
 
+    .use-share {
+      padding: 14px 14px 18px;
+      padding-left: max(14px, env(safe-area-inset-left));
+      padding-right: max(14px, env(safe-area-inset-right));
+    }
+
     .dashboard-sidebar-filters > * {
       grid-column: 1 / -1;
       min-width: 0;
@@ -728,10 +815,14 @@
     }
 
     .map-focus-marker {
-      top: -5px;
-      border-right-width: 5px;
-      border-bottom-width: 7px;
-      border-left-width: 5px;
+      top: 0;
+      width: 14px;
+      height: 10px;
+
+      svg {
+        width: 14px;
+        height: 10px;
+      }
     }
 
     .unit-map .leaflet-top .leaflet-control-zoom {
@@ -884,3 +975,75 @@
     }
   }
 }
+
+.use-share-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgb(15 23 42 / 45%);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.use-share-dialog {
+  width: min(32rem, 100%);
+  padding: 20px 20px 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 16px 40px rgb(15 23 42 / 18%);
+}
+
+.use-share-dialog h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.use-share-dialog p {
+  margin: 0 0 10px;
+  color: #475569;
+  font-size: 13.5px;
+}
+
+.use-share-dialog textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 6.5rem;
+  margin: 0 0 14px;
+  padding: 8px 10px;
+  border: 1px solid #d5dee6;
+  border-radius: 6px;
+  color: #0f172a;
+  font: 12.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  resize: vertical;
+}
+
+.use-share-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.use-share-dialog-actions button {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #d5dee6;
+  border-radius: 6px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.use-share-dialog-actions button.is-primary {
+  border-color: #1d4e78;
+  background: #1d4e78;
+  color: #fff;
+}
+
