@@ -14,16 +14,13 @@ export const LAYER_OPTIONS: { value: MapLayer; label: string }[] = [
 
 export const YEAR_OPTIONS = [{ value: "2025", label: "2025 он" }];
 
-// ONS Census Maps sequential palette (5-class), interpolated to 8 classes.
+// ONS Census Maps sequential palette (5 classes)
 // https://www.ons.gov.uk/census/maps
 export const MAP_COLORS = [
   "#CDE594",
-  "#A1D39D",
-  "#72C0A6",
-  "#3BA9B1",
-  "#1D8DAC",
-  "#196B96",
-  "#113D76",
+  "#80C6A3",
+  "#1F9EB7",
+  "#186290",
   "#080C54",
 ];
 
@@ -79,6 +76,7 @@ export function formatPercent(value: number) {
 }
 
 export type ColorScaleMode = "auto" | "percent";
+export type ColorScaleScheme = "jenks" | "sex-ratio";
 
 export type ColorClass = { min: number; max: number };
 
@@ -87,8 +85,47 @@ export type ColorScale = {
   max: number;
   sorted: number[];
   mode: ColorScaleMode;
+  scheme: ColorScaleScheme;
   classes: ColorClass[];
+  colors: string[];
 };
+
+/** Хүйсийн харьцаа: ONS 5 өнгө + #080C54-ээс бараан онцгой ангилал. */
+export const SEX_RATIO_COLORS = [...MAP_COLORS, "#060442"];
+
+export const SEX_RATIO_LABELS = [
+  "< 90",
+  "90–97",
+  "97–103",
+  "103–110",
+  "110–200",
+  "> 200",
+];
+
+export const SEX_RATIO_OUTLIER = 200;
+
+export function sexRatioClasses(sorted: number[]): ColorClass[] {
+  const max = sorted.length ? sorted[sorted.length - 1] : SEX_RATIO_OUTLIER;
+  return [
+    { min: 0, max: 90 },
+    { min: 90, max: 97 },
+    { min: 97, max: 103 },
+    { min: 103, max: 110 },
+    { min: 110, max: SEX_RATIO_OUTLIER },
+    { min: SEX_RATIO_OUTLIER, max: Math.max(max, SEX_RATIO_OUTLIER) },
+  ];
+}
+
+export function paletteFor(scale: Pick<ColorScale, "colors" | "scheme"> | { colors?: string[] }) {
+  return scale.colors?.length ? scale.colors : MAP_COLORS;
+}
+
+export function legendLabels(scale: Pick<ColorScale, "classes" | "mode" | "scheme">) {
+  if (scale.scheme === "sex-ratio") return SEX_RATIO_LABELS;
+  return scale.mode === "percent"
+    ? percentClassLabels(scale.classes)
+    : countClassLabels(scale.classes);
+}
 
 const EMPTY_CLASSES: ColorClass[] = MAP_COLORS.map(() => ({ min: 0, max: 0 }));
 
@@ -243,10 +280,11 @@ export function mapColorIndex(value: number, classes: ColorClass[]): number {
 
 export function mapColor(
   value: number,
-  scale: Pick<ColorScale, "classes" | "mode">,
+  scale: Pick<ColorScale, "classes" | "mode" | "colors">,
 ): string {
+  const palette = paletteFor(scale);
   const index = mapColorIndex(value, scale.classes);
-  return MAP_COLORS[index] ?? MAP_COLORS[0];
+  return palette[index] ?? palette[0];
 }
 
 export function legendMarkerPercent(
@@ -266,22 +304,36 @@ export function legendMarkerPercent(
 export function colorScaleBounds(
   values: number[],
   mode: ColorScaleMode = "auto",
+  scheme: ColorScaleScheme = "jenks",
 ): ColorScale {
   const sorted = values.filter((n) => Number.isFinite(n)).sort((a, b) => a - b);
   if (!sorted.length) {
     return mode === "percent"
-      ? { min: 0, max: 100, sorted: [0, 100], mode, classes: EMPTY_CLASSES }
-      : { min: 0, max: 1, sorted: [0, 1], mode, classes: EMPTY_CLASSES };
+      ? { min: 0, max: 100, sorted: [0, 100], mode, scheme: "jenks", classes: EMPTY_CLASSES, colors: MAP_COLORS }
+      : { min: 0, max: 1, sorted: [0, 1], mode, scheme: "jenks", classes: EMPTY_CLASSES, colors: MAP_COLORS };
   }
 
   const min = sorted[0];
   const max = sorted[sorted.length - 1];
+  if (scheme === "sex-ratio") {
+    return {
+      min,
+      max: max > min ? max : min,
+      sorted,
+      mode,
+      scheme,
+      classes: sexRatioClasses(sorted),
+      colors: SEX_RATIO_COLORS,
+    };
+  }
   return {
     min,
     max: max > min ? max : min,
     sorted,
     mode,
+    scheme: "jenks",
     classes: jenksClasses(sorted),
+    colors: MAP_COLORS,
   };
 }
 

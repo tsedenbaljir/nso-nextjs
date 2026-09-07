@@ -308,7 +308,7 @@
   .map-focus-classes {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0;
     padding-top: 12px;
   }
@@ -613,8 +613,9 @@
 
   .layer-toggle-group button {
     flex: 1;
-    height: 34px;
-    padding: 0 10px;
+    height: 36px;
+    min-width: 0;
+    padding: 0 8px;
     color: #6b8499;
     background: none;
     border: 0;
@@ -622,6 +623,9 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
     cursor: pointer;
   }
 
@@ -633,7 +637,6 @@
   .layer-toggle-group button.is-active {
     color: #fff;
     background: #1d4e78;
-    font-weight: 700;
   }
 
   .layer-toggle-short {

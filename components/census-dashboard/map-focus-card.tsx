@@ -17,6 +17,8 @@ type Props = {
   note?: string;
   value: number;
   classes: ColorClass[];
+  colors?: string[];
+  classLabels?: string[];
   markerValue?: number;
   percent?: boolean;
 };
@@ -27,6 +29,8 @@ export default function MapFocusCard({
   note,
   value,
   classes,
+  colors,
+  classLabels,
   markerValue,
   percent = false,
 }: Props) {
@@ -36,8 +40,13 @@ export default function MapFocusCard({
     markerValue == null
       ? null
       : legendMarkerPercent(markerValue, { mode, classes });
-  const labels = percent ? percentClassLabels(classes) : countClassLabels(classes);
-  const swatches = MAP_COLORS.slice(0, Math.max(1, classes.length));
+  const labels =
+    classLabels ??
+    (percent ? percentClassLabels(classes) : countClassLabels(classes));
+  const swatches = (colors?.length ? colors : MAP_COLORS).slice(
+    0,
+    Math.max(1, classes.length),
+  );
 
   useEffect(() => {
     const el = elRef.current;
