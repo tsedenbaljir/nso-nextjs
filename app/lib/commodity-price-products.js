@@ -18,7 +18,7 @@ export const PRICE_DATA_PRODUCTS = [
     { code: "SALT", name: "Давс, кг", unit: "кг", phrase: "1 кг давсны" },
     { code: "VEG_OIL", name: "Ургамлын тос, л", unit: "л", phrase: "1 л ургамлын тосны" },
     { code: "EGG", name: "Өндөг, ш", unit: "ш", phrase: "1 ширхэг өндөгний" },
-    { code: "PETROL_HIGH", name: "Бензин, А-92, л", unit: "л", phrase: "1 л бензиний (А-92)" },
+    { code: "PETROL_HIGH", name: "Бензин, АИ-92, л", unit: "л", phrase: "1 л бензиний (АИ-92)" },
 ];
 
 export const PRICE_PRODUCT_CODES = PRICE_DATA_PRODUCTS.map((p) => p.code);
