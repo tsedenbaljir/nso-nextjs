@@ -14,15 +14,17 @@ export const LAYER_OPTIONS: { value: MapLayer; label: string }[] = [
 
 export const YEAR_OPTIONS = [{ value: "2025", label: "2025 он" }];
 
+// ONS Census Maps sequential palette (5-class), interpolated to 8 classes.
+// https://www.ons.gov.uk/census/maps
 export const MAP_COLORS = [
-"#C6E89C",  
-"#95D5A1",
-"#61C1A7",
-"#20A8B0",
-"#058AAA",
-"#0F6793",
-"#123673",
-"#140051",
+  "#CDE594",
+  "#A1D39D",
+  "#72C0A6",
+  "#3BA9B1",
+  "#1D8DAC",
+  "#196B96",
+  "#113D76",
+  "#080C54",
 ];
 
 export const PERCENT_MAP_COLORS = MAP_COLORS;
