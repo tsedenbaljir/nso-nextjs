@@ -68,6 +68,7 @@ export default function Sidebar({ user, userstatus }) {
   ];
 
   const helperMenus = [
+    { name: "Хэрэглэгчийн хандалт", link: "analytics" },
     { name: "Нэр, томьёоны тайлбар", link: "glossary" },
     { name: "Гол нэрийн барааны үнэ", link: "commodity-price" },
     { name: "Санал хүсэлт", link: "contact" },
