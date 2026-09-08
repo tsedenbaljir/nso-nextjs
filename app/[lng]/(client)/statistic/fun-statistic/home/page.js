@@ -65,6 +65,28 @@ export default function Statistic(props) {
 
           <div
             className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
+            onClick={() => router.push(`${base}/commodity-price`)}
+            style={{ width: "300px" }}
+          >
+            <img
+              className="w-[250px] h-[250px] rounded-[20px] object-cover"
+              src="/images/sonirkholtoi/price.png"
+              alt=""
+            />
+            <br />
+            <label className="text-center text-[--font-size20] font-semibold hover:text-[--accent]">
+              {lng === "mn"
+                ? "Гол нэрийн барааны үнийн харьцуулалт"
+                : "Commodity price comparison"}
+            </label>
+            <span className="desc">
+              {lng === "mn"
+                ? "Гол нэрийн бараа, бүтээгдэхүүний үнийн өөрчлөлт, харьцуулалт."
+                : "Comparison of commodity prices and trends."}
+            </span>
+          </div>
+          <div
+            className="flex flex-col items-center cursor-pointer text-justify text-[--font-size15] hover:scale-[1.01] transition-transform"
             onClick={() => router.push(`${base}/human`)}
             style={{ width: "300px" }}
           >

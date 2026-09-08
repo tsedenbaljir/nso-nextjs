@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Paginator } from "primereact/paginator";
 import { getSectorNameById } from "./sectors";
-import { CENSUS_SUB_FILTER_YEARS_BY_ID } from "@/lib/census-file-library-years";
+import { isYearChipSector } from "@/lib/sectors";
 import { resolveMediaUrl } from "@/utils/resolveMediaUrl";
 
 export default function Tabs({
@@ -23,11 +23,8 @@ export default function Tabs({
         type === undefined || type === null || type === ""
             ? NaN
             : parseInt(String(type), 10);
-    const censusYearOptions =
-        !Number.isNaN(typeNum) &&
-        (CENSUS_SUB_FILTER_YEARS_BY_ID[typeNum]?.length ?? 0) > 0
-            ? CENSUS_SUB_FILTER_YEARS_BY_ID[typeNum]
-            : null;
+    // Он даруултай төрлүүд — файлуудын subYear-аас групчилж шүүнэ (?sub=YEAR)
+    const isYearChipType = isYearChipSector(typeNum);
 
     const setSubYearFilter = (year) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -38,6 +35,12 @@ export default function Tabs({
         }
         const q = params.toString();
         router.push(q ? `${pathname}?${q}` : pathname);
+    };
+
+    const sortYearsDesc = (a, b) => {
+        const na = parseInt(String(a).split("-")[0], 10);
+        const nb = parseInt(String(b).split("-")[0], 10);
+        return (Number.isNaN(nb) ? 0 : nb) - (Number.isNaN(na) ? 0 : na);
     };
 
     const [isOpen, setIsOpen] = useState(false);
@@ -63,8 +66,8 @@ export default function Tabs({
         });
     };
 
-    const getSortedItems = () => {
-        const sorted = [...menuItems];
+    const getSortedItems = (items) => {
+        const sorted = [...items];
         if (activeFilter === (lng === "mn" ? "Эхэнд шинэчлэгдсэн" : "Updated first")) {
             sorted.sort(
                 (a, b) =>
@@ -77,16 +80,6 @@ export default function Tabs({
         }
         return sorted;
     };
-
-    // const getExtension = (file_info) => {
-    //     try {
-    //         const file =
-    //             typeof file_info === "string" ? JSON.parse(file_info) : file_info;
-    //         return file?.extension?.toUpperCase() || "N/A";
-    //     } catch {
-    //         return "N/A";
-    //     }
-    // };
 
     const onDownloadDirect = async (fileInfo, id) => {
         try {
@@ -109,10 +102,40 @@ export default function Tabs({
             return JSON.parse(json);
         } catch (e) {
             console.warn("⚠ JSON.parse алдаа:", e.message, json);
-            return null; // алдаатай бол null буцаана
+            return null;
         }
     };
-    const pagedItems = getSortedItems().slice(
+    // Файлын он: file_info.subYear, байхгүй бол нийтэлсэн огнооны он
+    const getYearFromItem = (item) => {
+        const fileInfo = safeParse(item.file_info);
+        if (fileInfo?.subYear) return String(fileInfo.subYear);
+        if (item.published_date) {
+            const y = new Date(item.published_date).getFullYear();
+            if (!Number.isNaN(y)) return String(y);
+        }
+        return null;
+    };
+
+    // Хүснэгтийн файлуудаас он групчилж даруул үүсгэнэ
+    const yearChipOptions = (() => {
+        if (!isYearChipType) return [];
+        const years = new Set();
+        for (const item of menuItems) {
+            const year = getYearFromItem(item);
+            if (year) years.add(year);
+        }
+        return [...years].sort(sortYearsDesc);
+    })();
+
+    // Он сонгосон бол тухайн оны файлуудыг клиент талд шүүнэ
+    const visibleItems =
+        isYearChipType && activeSub
+            ? menuItems.filter((item) => getYearFromItem(item) === String(activeSub))
+            : menuItems;
+
+    const totalVisible = isYearChipType ? visibleItems.length : pagination.total;
+
+    const pagedItems = getSortedItems(visibleItems).slice(
         pagination.first,
         pagination.first + pagination.rows
     );
@@ -173,25 +196,32 @@ export default function Tabs({
                                 )}
                             </div>
                         </div>
-                        {censusYearOptions && (
+                        {isYearChipType && (
                             <div className="flex gap-2 mb-3 mt-2 items-start">
                                 <span className="text-sm text-gray-600 mr-1 shrink-0 pt-1.5">
                                     {lng === "mn" ? "Он:" : "Year:"}
                                 </span>
                                 <div className="min-w-0 flex-1 max-h-32 sm:max-h-36 overflow-y-auto overscroll-y-contain pr-1 [scrollbar-gutter:stable]">
                                     <div className="flex flex-wrap gap-2 items-center">
-                                        <button
-                                            type="button"
-                                            onClick={() => setSubYearFilter(null)}
-                                            className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
-                                                activeSub == null || activeSub === ""
-                                                    ? "border-[#005baa] bg-blue-50 text-[#005baa]"
-                                                    : "border-gray-300 bg-white hover:bg-gray-50"
-                                            }`}
-                                        >
-                                            {lng === "mn" ? "Бүгд" : "All"}
-                                        </button>
-                                        {censusYearOptions.map((year) => (
+                                        {yearChipOptions.length === 0 && !loading && (
+                                            <span className="text-sm text-gray-500 pt-1">
+                                                {lng === "mn" ? "Файл байхгүй байна." : "No files found."}
+                                            </span>
+                                        )}
+                                        {yearChipOptions.length > 0 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setSubYearFilter(null)}
+                                                className={`px-3 py-1 rounded-full border text-sm transition-colors shrink-0 ${
+                                                    activeSub == null || activeSub === ""
+                                                        ? "border-[#005baa] bg-blue-50 text-[#005baa]"
+                                                        : "border-gray-300 bg-white hover:bg-gray-50"
+                                                }`}
+                                            >
+                                                {lng === "mn" ? "Бүгд" : "All"}
+                                            </button>
+                                        )}
+                                        {yearChipOptions.map((year) => (
                                             <button
                                                 key={year}
                                                 type="button"
@@ -273,12 +303,12 @@ export default function Tabs({
                         <div className="__pagination mt-6 flex items-center justify-between">
                             <span>
                                 {lng === "mn" ? "Нийт:" : "Total:"}{" "}
-                                <strong>{pagination.total}</strong>
+                                <strong>{totalVisible}</strong>
                             </span>
                             <Paginator
                                 first={pagination.first}
                                 rows={pagination.rows}
-                                totalRecords={pagination.total}
+                                totalRecords={totalVisible}
                                 onPageChange={onPageChange}
                             />
                         </div>

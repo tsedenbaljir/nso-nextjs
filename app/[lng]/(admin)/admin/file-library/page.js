@@ -33,7 +33,7 @@ import {
   getAllFileTypeIds,
   getSectorNameById,
 } from "@/lib/sectors";
-import { CENSUS_SUB_FILTER_YEARS_BY_ID } from "@/lib/census-file-library-years";
+import dayjs from "dayjs";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -88,24 +88,11 @@ export default function FileLibraryAdmin() {
 
   const fileTypes = fileTypeOptions;
   const selectedType = Form.useWatch("type", form);
-  const selectedSub = Form.useWatch("sub", form);
   const selectedTypeNum = selectedType != null ? Number(selectedType) : null;
   const selectedSector =
     sectors_list.find((s) => s.id === selectedTypeNum) ||
     sectors_list.find((s) => (s.subFilters || []).some((sub) => sub.id === selectedTypeNum));
   const subOptions = selectedSector?.subFilters ?? [];
-  const selectedSubNum = selectedSub != null ? Number(selectedSub) : null;
-  const selectedSubItem = subOptions.find(
-    (s) => s.id === selectedSubNum || s.value === selectedSub || s.id === selectedSub
-  );
-  const censusLeafForYears =
-    selectedTypeNum != null && CENSUS_SUB_TYPE_IDS.includes(selectedTypeNum)
-      ? selectedTypeNum
-      : selectedSubItem?.id ?? null;
-  const yearOptions =
-    censusLeafForYears != null
-      ? (CENSUS_SUB_FILTER_YEARS_BY_ID[censusLeafForYears] ?? [])
-      : [];
   const getExtension = (name) => {
     if (typeof name !== "string") return "";
     const trimmed = name.trim();
@@ -267,6 +254,7 @@ export default function FileLibraryAdmin() {
       type: isSubId ? parentSector.id : id,
       sub: isSubId ? id : undefined,
       subYear: subYearFromFile,
+      publishedDate: record.createdDate ? dayjs(record.createdDate) : undefined,
       lng: record.lng || record.language,
       isPublic:
         record.isPublic === 1 || record.published === 1 || record.isPublic,
@@ -379,6 +367,9 @@ export default function FileLibraryAdmin() {
             lng: values.lng,
             isPublic: values.isPublic,
             fileInfo: fileInfo,
+            ...(values.publishedDate && {
+              publishedDate: values.publishedDate.format("YYYY-MM-DD"),
+            }),
           };
 
           const response = await fetch(url, {
@@ -409,6 +400,9 @@ export default function FileLibraryAdmin() {
           type: String(effectiveType),
           lng: values.lng,
           isPublic: values.isPublic,
+          ...(values.publishedDate && {
+            publishedDate: values.publishedDate.format("YYYY-MM-DD"),
+          }),
         };
         // Check if a new file was uploaded during editing
         if (FilesChangeValues.file && FilesChangeValues.fileList.length > 0) {
@@ -887,28 +881,54 @@ export default function FileLibraryAdmin() {
               </Select>
             </Form.Item>
 
-            <Form.Item name="subYear" label="Он" style={{ width: "100%" }}>
-              <Select
-                placeholder="Он сонгоно уу"
+            <Form.Item
+              name="subYear"
+              label="Он"
+              style={{ width: "100%" }}
+              extra="Нэг он (2021) эсвэл оны завсар (2006-2007) гэж бичнэ үү"
+              getValueFromEvent={(e) => {
+                const raw = typeof e === "string" ? e : e?.target?.value;
+                if (raw == null || raw === "") return undefined;
+                // Normalize: trim, en/em dash → hyphen, remove spaces around hyphen
+                return String(raw)
+                  .trim()
+                  .replace(/[–—−]/g, "-")
+                  .replace(/\s*-\s*/g, "-");
+              }}
+              rules={[
+                {
+                  validator: (_, value) => {
+                    if (value == null || value === "") return Promise.resolve();
+                    if (/^\d{4}(-\d{4})?$/.test(String(value))) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Жишээ: 2021 эсвэл 2006-2007"),
+                    );
+                  },
+                },
+              ]}
+            >
+              <Input
+                placeholder="Жишээ: 2021 эсвэл 2006-2007"
                 allowClear
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  String(option?.value ?? "")
-                    .toLowerCase()
-                    .includes(input.trim().toLowerCase())
-                }
-                listHeight={280}
-                disabled={yearOptions.length === 0}
-              >
-                {yearOptions.map((year) => (
-                  <Option key={year} value={year}>
-                    {year}
-                  </Option>
-                ))}
-              </Select>
+                maxLength={9}
+              />
             </Form.Item>
           </div>
+
+          <Form.Item
+            name="publishedDate"
+            label="Үүсгэсэн огноо"
+            extra="Хоосон үлдээвэл шинэ файлд өнөөдрийн огноо, засварт хуучин огноо хэвээр үлдэнэ"
+          >
+            <DatePicker
+              style={{ width: "100%" }}
+              format="YYYY-MM-DD"
+              placeholder="Огноо сонгоно уу"
+              allowClear
+            />
+          </Form.Item>
 
           <Form.Item
             name="lng"

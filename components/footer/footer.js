@@ -326,7 +326,7 @@ export default function Footer({ lng }) {
     };
 
     return (
-        <div className="nso_footer">
+        <div className="nso_footer mt-10">
             <div className="nso_container">
                 <div className="grid __group">
                     <div className="col-12 md:col-4 lg:col-4">

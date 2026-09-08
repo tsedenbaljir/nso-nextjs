@@ -5,6 +5,7 @@ import List from "../../list";
 import Sidebar from "../../sidebar";
 import ContactSourceCard from '@/components/contact/ContactSourceCard';
 import { useTranslation } from "@/app/i18n/client";
+import { isYearChipSector } from "@/lib/sectors";
 import '@/components/styles/contact-us.scss';
 
 export default function StateCate(props) {
@@ -25,7 +26,9 @@ export default function StateCate(props) {
   const fetchSubcategories = async (value) => {
     try {
 
-      const subParam = sub ? `&sub=${encodeURIComponent(sub)}` : "";
+      // Он даруултай төрлүүдэд оны шүүлтийг клиент талд хийнэ (файлын subYear-аас групчилж харуулна)
+      const isYearChipType = isYearChipSector(type);
+      const subParam = sub && !isYearChipType ? `&sub=${encodeURIComponent(sub)}` : "";
       const response = await fetch(
         `/api/file-library?lng=${lng}&type=${type}${subParam}&searchTerm=${value || ""}`
       );

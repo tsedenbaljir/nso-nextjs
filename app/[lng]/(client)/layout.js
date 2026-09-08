@@ -1,5 +1,4 @@
 import "../globals.scss";
-import Script from "next/script";
 import "primeflex/primeflex.css";
 import 'primeicons/primeicons.css';
 import Layout from '@/components/baseLayout';
@@ -31,7 +30,6 @@ export default async function ClientLayout(props) {
 
   return (
     <Layout lng={lng}>
-      <Script async src="/egune-chat.js"></Script>
       {children}
     </Layout>
   );

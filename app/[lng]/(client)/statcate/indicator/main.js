@@ -5,19 +5,18 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import LoadingDiv from "@/components/Loading/Text/Index";
-import { fetchTableauKey } from "@/app/services/actions";
+import TableauEmbed from "@/components/tableau/TableauEmbed";
 
 export default function Main({ lng, sector, subsector }) {
-  const [data, setData] = useState(null); // Store API data
-  const [iframeSrc, setIframeSrc] = useState(""); // Store iframe URL
-  const [error, setError] = useState(null); // Store error messages
-  const [loading, setLoading] = useState(true); // Loading state
+  const [data, setData] = useState(null);
+  const [tableauPath, setTableauPath] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Fetch subcategories
         const response = await fetch(`/api/catalogue?list_id=${subsector}`, {
           cache: "no-store",
         });
@@ -27,20 +26,11 @@ export default function Main({ lng, sector, subsector }) {
 
         if (result.data) {
           setData(result.data);
-          // Fetch Tableau Key using action
-          const tableauResult = await fetchTableauKey();
-          if (tableauResult?.success && tableauResult?.data?.value) {
-            const tkt = tableauResult?.data?.value;
-            // Ensure `data.tableau` exists before setting `iframeSrc`
-            if (tkt && result.data.tableau) {
-              setIframeSrc(
-                `https://tableau.1212.mn/trusted/${tkt}${result?.data?.tableau}`
-              );
-            }
-          } else {
-            console.error("Failed to fetch Tableau key:", tableauResult?.error);
-          }
-          
+          const path =
+            lng === "mn"
+              ? result.data.tableau
+              : result.data.tableau_eng || result.data.tableau;
+          setTableauPath(path || "");
         } else {
           console.error("No data found in catalogue response");
         }
@@ -52,7 +42,7 @@ export default function Main({ lng, sector, subsector }) {
     };
 
     fetchData();
-  }, [subsector]); // Fetch data when subsector changes
+  }, [subsector, lng]);
 
   return (
     <div className="bg-white">
@@ -78,18 +68,7 @@ export default function Main({ lng, sector, subsector }) {
 
           <br />
 
-          {/* Render iframe directly instead of using raw HTML */}
-          {iframeSrc && (
-            <div className="w-full h-[850px]">
-              <iframe
-                src={iframeSrc}
-                width="100%"
-                height="850"
-                style={{ border: "none" }}
-                loading="lazy"
-              ></iframe>
-            </div>
-          )}
+          <TableauEmbed viewPath={tableauPath} height={850} />
         </>
       )}
     </div>

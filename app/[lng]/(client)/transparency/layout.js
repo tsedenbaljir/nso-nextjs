@@ -1,11 +1,11 @@
 "use client"
 import React, { useEffect, useState, use } from 'react';
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useTranslation } from '@/app/i18n/client';
 import { BreadCrumb } from 'primereact/breadcrumb';
-import TextLoading from '@/components/Loading/OneField/Index';
+// import TextLoading from '@/components/Loading/OneField/Index';
 import ContactSourceCard from '@/components/contact/ContactSourceCard';
-import { getTransparencySourceKey } from './transparencyContacts';
+import { getTransparencySourceKey, getTransparencyIdFromPath } from './transparencyContacts';
 import '@/components/styles/contact-us.scss';
 import './transparency.scss';
 
@@ -19,28 +19,30 @@ export default function TransparencyLayout(props) {
     } = props;
 
     const { id, name } = useParams();
+    const pathname = usePathname();
+    const transparencyId = id ?? getTransparencyIdFromPath(pathname);
     const { t } = useTranslation(lng, "lng", "");
     const isMn = lng === 'mn';
 
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    // const [data, setData] = useState(null);
+    // const [loading, setLoading] = useState(true);
 
-    const getTransparency = async () => {
-        await fetch(`/api/transparency/${id}`, {
-            cache: "no-store",
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.status) setData(res.data);
-            })
-            .finally(() => setLoading(false));
-    }
-    useEffect(() => {
-        if (id) {
-            getTransparency()
-        }
-        setLoading(false);
-    }, [id]);
+    // const getTransparency = async () => {
+    //     await fetch(`/api/transparency/${transparencyId}`, {
+    //         cache: "no-store",
+    //     })
+    //         .then((res) => res.json())
+    //         .then((res) => {
+    //             if (res.status) setData(res.data);
+    //         })
+    //         .finally(() => setLoading(false));
+    // }
+    // useEffect(() => {
+    //     if (transparencyId) {
+    //         getTransparency()
+    //     }
+    //     setLoading(false);
+    // }, [transparencyId]);
 
     var breadMap = [
         { label: t('home'), url: [lng === 'mn' ? '/mn' : '/en'] },
@@ -63,7 +65,8 @@ export default function TransparencyLayout(props) {
                             <span className="__page_name">
                                 {t("transparency")}
                             </span>
-                            {loading ? <TextLoading /> : <BreadCrumb model={breadMap} />}
+                            {/* {loading ? <TextLoading /> : <BreadCrumb model={breadMap} />} */}
+                            <BreadCrumb model={breadMap} />
                         </div>
                         {isMn && (
                             <div className="__header" style={{ marginLeft: '20px' }}>
@@ -100,7 +103,7 @@ export default function TransparencyLayout(props) {
             <div className="transparency_layout_footer">
                 <div className="nso_container">
                     <div className="transparency_source_section">
-                        <ContactSourceCard lng={lng} sourceKey={getTransparencySourceKey(id)} />
+                        <ContactSourceCard lng={lng} sourceKey={getTransparencySourceKey(transparencyId)} />
                     </div>
                 </div>
             </div>

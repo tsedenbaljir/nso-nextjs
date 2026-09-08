@@ -449,7 +449,8 @@
     "sexTooltip": "Sex",
     "enterYourSalary": "Enter your salary",
     "giveName": "Name statistic",
-    "history": ""
+    "history": "",
+    "commodityPrice": "Main commodity price calculator"
   },
   "report": {
     "bulletin": "Monthly bulletin",

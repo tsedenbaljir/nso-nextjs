@@ -118,6 +118,10 @@ export interface DashboardConfig {
   lifeExpectancyNationalApiUrl?: string;
   /** Card нь өөр хуудас руу линклэнэ (жишээ: /population/by-region) */
   cardHref?: string;
+  /** Tableau view-г сайт дотор iframe-ээр харуулах (жишээ: /views/xxx/sheet0) */
+  tableauViewPath?: string;
+  /** Олон Tableau view-г таб хэлбэрээр харуулах */
+  tableauViews?: { path: string; title?: string }[];
 }
 
 export interface ChartConfig {

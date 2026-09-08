@@ -5,6 +5,34 @@ import https from 'https';
 const customHttpsAgent = new https.Agent({ rejectUnauthorized: false });
 const ELASTIC_URL = 'https://45.117.34.245:9200';
 
+// Монгол хэлний түгээмэл нөхцөл дагаврууд (уртаас нь эхэлж шалгана)
+const MN_SUFFIXES = [
+  'уудын', 'үүдийн', 'уудыг', 'үүдийг', 'уудаас', 'үүдээс',
+  'ууд', 'үүд',
+  'аас', 'ээс', 'оос', 'өөс',
+  'аар', 'ээр', 'оор', 'өөр',
+  'тай', 'тэй', 'той',
+  'ний', 'ийн', 'ийг',
+  'ны', 'ын', 'ыг',
+  'даа', 'дээ', 'доо', 'дөө',
+];
+
+// Үг бүрээс дагаврыг хуулж үндсийг гаргана (жишээ: "махны" -> "мах")
+function stemMongolian(text) {
+  return text
+    .split(/\s+/)
+    .map((word) => {
+      const lower = word.toLowerCase();
+      for (const suffix of MN_SUFFIXES) {
+        if (lower.endsWith(suffix) && lower.length - suffix.length >= 3) {
+          return word.slice(0, word.length - suffix.length);
+        }
+      }
+      return word;
+    })
+    .join(' ');
+}
+
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -14,20 +42,45 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Search query is required' }, { status: 400 });
     }
 
+    const searchFields = ["id^2", "name^3", "namemn^3", "nameen^3", "body", "file_info", "source", "info", "slug", "sector", "category", "link"];
+    const stemmedValues = stemMongolian(values);
+
+    const shouldQueries = [
+      {
+        "multi_match": {
+          "query": values,
+          "fields": searchFields,
+          "type": "best_fields",
+          "fuzziness": "AUTO",
+          "boost": 2
+        }
+      }
+    ];
+
+    // Дагавар хуулагдсан бол үндсээр нь давхар хайна ("махны" -> "мах")
+    if (stemmedValues !== values) {
+      shouldQueries.push({
+        "multi_match": {
+          "query": stemmedValues,
+          "fields": searchFields,
+          "type": "best_fields",
+          "fuzziness": "AUTO"
+        }
+      });
+    }
+
     const searchQuery = {
       "_source": ["_type", "id", "name", "namemn", "nameen", "body", "file_info", "source", "info", "slug", "sector", "category", "link"],
       "query": {
-        "multi_match": {
-          "query": values,
-          "fields": ["id^2", "name^3", "namemn^3", "nameen^3", "body", "file_info", "source", "info", "slug", "sector", "category", "link"],
-          "type": "best_fields",
-          "fuzziness": "AUTO"
+        "bool": {
+          "should": shouldQueries,
+          "minimum_should_match": 1
         }
       },
       "sort": [
         { "_score": { "order": "desc" } }
       ],
-      "size": 20,
+      "size": 70,
       "highlight": {
         "pre_tags": ["<span style='background: #ffe700;border-radius: 4px;padding-inline: 4px;'>"],
         "post_tags": ["</span>"],

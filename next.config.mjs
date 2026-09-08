@@ -1,6 +1,11 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+    outputFileTracingRoot: path.dirname(fileURLToPath(import.meta.url)),
+    devIndicators: false,
     logging: process.env.NODE_ENV === "development"
         ? {
             incomingRequests: {
@@ -14,6 +19,8 @@ const nextConfig = {
         serverActions: {
             bodySizeLimit: "100mb",
         },
+        // proxy.js clones request bodies; default 10MB truncates large /api/upload FormData
+        proxyClientMaxBodySize: "100mb",
     },
     turbopack: {},
     sassOptions: {
@@ -99,10 +106,19 @@ const nextConfig = {
                 destination: "/:lng/statistics-dashboard/business",
                 permanent: true,
             },
+            {
+                source: "/survey",
+                destination: "/mn/about-us/news/102923650",
+                permanent: false,
+            },
         ];
     },
     async rewrites() {
         return [
+            {
+                source: "/:lng/statistics-dashboard/:id/embed",
+                destination: "/:lng/embed/:id",
+            },
             {
                 source: "/:lng/statistics-dashboard",
                 destination: "/:lng/s-e-dashboard",
@@ -115,6 +131,18 @@ const nextConfig = {
     },
     async headers() {
         return [
+            {
+                source: "/:lng/embed/:path*",
+                headers: [
+                    { key: "Content-Security-Policy", value: "frame-ancestors *" },
+                ],
+            },
+            {
+                source: "/:lng/statistics-dashboard/:id/embed",
+                headers: [
+                    { key: "Content-Security-Policy", value: "frame-ancestors *" },
+                ],
+            },
             {
                 source: "/(.*)",
                 headers: [

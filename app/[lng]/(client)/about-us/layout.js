@@ -22,6 +22,10 @@ export default function Statecate(props) {
         { label: t('aboutUs') },
     ];
 
+    if (pathname.includes("/sudlaachQr")) {
+        return children;
+    }
+
     return (
         <>
             <div className='nso_about_us'>

@@ -1,4 +1,5 @@
 import type { DashboardConfig } from "@/lib/socio-dashboard/types";
+import router from "next/router";
 
 function range(startOrCount: number, end?: number): string[] {
   if (end === undefined) {
@@ -1105,8 +1106,7 @@ export const dashboards: DashboardConfig[] = [
       },
     ],
   },
-  
-  
+
   {
     id: "cpi",
     name: "Хэрэглээний үнийн индекс",
@@ -2340,6 +2340,102 @@ export const dashboards: DashboardConfig[] = [
     shortTitle: "",
     description: "",
     cardHref: "/population/by-region",
+    charts: [],
+  },
+  
+  {
+    id: "commodity-price-and-producer-price",
+    name: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
+    category: "ҮНЭ",
+    shortTitle: "Зах зээлийн үнэ ба үйлдвэрлэгчийн үнэ",
+  },
+  {
+    id: "population-census",
+    name: "Хүн амын тооллого",
+    category: "ТООЛЛОГО",
+    shortTitle: "Хүн амын тооллого",
+  },
+];
+
+/**
+ * Tableau тооллогын 6 карт — түр нуусан backup.
+ * Дахин нээхдээ `dashboards` руу буцааж оруулна.
+ */
+export const CENSUS_TABLEAU_CARDS_BACKUP: DashboardConfig[] = [
+  {
+    id: "census-population",
+    name: "Хүн ам",
+    category: "ТООЛЛОГО",
+    shortTitle: "Хүн ам",
+    description: "",
+    tableauViews: [
+      { path: "/views/-_17834054664630/sheet0_1", title: "Оршин суугаа хүн амын тоо" },
+    ],
+    charts: [],
+  },
+  {
+    id: "census-household",
+    name: "Өрх",
+    category: "ТООЛЛОГО",
+    shortTitle: "Өрх",
+    description: "",
+    tableauViews: [
+      { path: "/views/_17834997437830/1_", title: "Өрхийн тэргүүлэгчийн хүйс" },
+    ],
+    charts: [],
+  },
+  {
+    id: "census-employment",
+    name: "Хөдөлмөр эрхлэлт",
+    category: "ТООЛЛОГО",
+    shortTitle: "Хөдөлмөр эрхлэлт",
+    description: "",
+    tableauViews: [
+      {
+        path: "/views/_17858144480220/1_",
+        title:
+          "Хөдөлмөр эрхлэлтийн байдал, ажилгүйдлийн түвшин, ажиллах хүчний оролцооны түвшнээр",
+      },
+    ],
+    charts: [],
+  },
+  {
+    id: "census-social-protection",
+    name: "Нийгмийн хамгаалал",
+    category: "ТООЛЛОГО",
+    shortTitle: "Нийгмийн хамгаалал",
+    description: "",
+    tableauViews: [
+      {
+        path: "/views/_17858214475510/1_",
+        title: "Нийгмийн хамгаалалд хамрагдалтын байдлаар",
+      },
+    ],
+    charts: [],
+  },
+  {
+    id: "census-education",
+    name: "Боловсрол",
+    category: "ТООЛЛОГО",
+    shortTitle: "Боловсрол",
+    description: "",
+    tableauViews: [
+      {
+        path: "/views/SecondDashboard/1_",
+        title: "Боловсролын түвшин, боловсролын зэргээр",
+      },
+    ],
+    charts: [],
+  },
+  {
+    id: "census-health",
+    name: "Эрүүл мэнд",
+    category: "ТООЛЛОГО",
+    shortTitle: "Эрүүл мэнд",
+    description: "",
+    tableauViews: [
+      { path: "/views/_17835065313890/sheet1", title: "Хөгжлийн бэрхшээлтэй иргэд" },
+    ],
     charts: [],
   },
 ];

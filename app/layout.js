@@ -89,6 +89,7 @@ export default function RootLayout({ children }) {
         <Providers>
           {children}
         </Providers>
+        <Script src="/statgpt-chat.js" strategy="afterInteractive" />
       </body>
     </html>
   );
