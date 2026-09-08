@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import L from "leaflet";
 import type { Feature, FeatureCollection, Geometry } from "geojson";
 import "leaflet/dist/leaflet.css";
-import { colorScaleBounds, formatNumber, mapColor, MAP_COLORS, parseUnitKey, type ColorClass, type ColorScaleMode, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
+import { colorScaleBounds, formatNumber, mapColor, MAP_COLORS, SEX_RATIO_OUTLIER, parseUnitKey, type ColorClass, type ColorScaleMode, type ColorScaleScheme, type EchartsGeo } from "@/lib/census-dashboard/dashboard";
 import { formatShareCaption } from "@/lib/census-dashboard/caption";
 import { AIMAG_LABEL_OFFSET } from "@/lib/census-dashboard/aimags";
 import type { MapLayer } from "@/lib/census-dashboard/geo";
@@ -39,6 +39,7 @@ type Props = {
   tooltip: TooltipInfo;
   fitToken?: number;
   percentScale?: boolean;
+  scaleScheme?: ColorScaleScheme;
   onSelect: (mapName: string) => void;
   onHover?: (mapName: string | null) => void;
 };
@@ -50,7 +51,9 @@ type ScaleState = {
   max: number;
   sorted: number[];
   mode: ColorScaleMode;
+  scheme: ColorScaleScheme;
   classes: ColorClass[];
+  colors: string[];
   faintBorder: string;
   faintWidth: number;
   faintOpacity: number;
@@ -158,7 +161,13 @@ function tooltipHtml(
       <span class="map-tooltip-label">${label}</span>
       <span class="map-tooltip-value">${formatNumber(value)}</span>
     </div>
-    ${note ? `<p class="map-tooltip-caption">${note}</p>` : ""}
+    ${
+      tooltip.indicatorId === "sex-ratio" && value >= SEX_RATIO_OUTLIER
+        ? `<p class="map-tooltip-caption">Онцгой өндөр хүйсийн харьцаа: ${formatNumber(value)}. Ихэвчлэн хүн ам цөөн нэгжид гарна.</p>`
+        : note
+          ? `<p class="map-tooltip-caption">${note}</p>`
+          : ""
+    }
   </div>`;
 }
 
@@ -249,6 +258,7 @@ export default function UnitMap({
   tooltip,
   fitToken = 0,
   percentScale = false,
+  scaleScheme = "jenks",
   onSelect,
   onHover,
 }: Props) {
@@ -272,12 +282,15 @@ export default function UnitMap({
   const tooltipRef = useRef(tooltip);
   const layerRef = useRef(layer);
   const percentScaleRef = useRef(percentScale);
+  const scaleSchemeRef = useRef(scaleScheme);
   const scaleRef = useRef<ScaleState>({
     min: 0,
     max: 1,
     sorted: [0, 1],
     mode: "auto",
+    scheme: "jenks",
     classes: MAP_COLORS.map(() => ({ min: 0, max: 0 })),
+    colors: MAP_COLORS,
     faintBorder: "#5c6b78",
     faintWidth: 1,
     faintOpacity: 0.85,
@@ -289,6 +302,7 @@ export default function UnitMap({
   tooltipRef.current = tooltip;
   layerRef.current = layer;
   percentScaleRef.current = percentScale;
+  scaleSchemeRef.current = scaleScheme;
 
   useLayoutEffect(() => {
     const el = elRef.current;
@@ -373,16 +387,19 @@ export default function UnitMap({
     const nums = geojson.features.map(
       (feature) => valuesRef.current[String(feature.properties.mapName)] ?? 0,
     );
-    const { min, max, sorted, mode, classes } = colorScaleBounds(
+    const { min, max, sorted, mode, scheme, classes, colors } = colorScaleBounds(
       nums,
       percentScaleRef.current ? "percent" : "auto",
+      scaleSchemeRef.current,
     );
     scaleRef.current = {
       min,
       max,
       sorted,
       mode,
+      scheme,
       classes,
+      colors,
       ...faintStroke(layer),
     };
     onHoverRef.current?.(null);
@@ -541,18 +558,28 @@ export default function UnitMap({
     const nums = geojson.features.map(
       (feature) => values[String(feature.properties.mapName)] ?? 0,
     );
-    const { min, max, sorted, mode, classes } = colorScaleBounds(
+    const { min, max, sorted, mode, scheme, classes, colors } = colorScaleBounds(
       nums,
       percentScale ? "percent" : "auto",
+      scaleScheme,
     );
-    scaleRef.current = { ...scaleRef.current, min, max, sorted, mode, classes };
+    scaleRef.current = {
+      ...scaleRef.current,
+      min,
+      max,
+      sorted,
+      mode,
+      scheme,
+      classes,
+      colors,
+    };
     paintLayer(
       dataLayer,
       values,
       hoverNameRef.current,
       scaleRef.current,
     );
-  }, [geojson, values, percentScale]);
+  }, [geojson, values, percentScale, scaleScheme]);
 
   return <div ref={elRef} className="unit-map" />;
 }

@@ -12,7 +12,7 @@ import UseShare from "@/components/census-dashboard/use-share";
 import { downloadMapRows } from "@/lib/census-dashboard/export";
 import { useGeoData } from "@/lib/census-dashboard/useGeoData";
 import { useIndicatorData } from "@/lib/census-dashboard/useIndicatorData";
-import { YEAR_OPTIONS, colorScaleBounds, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/lib/census-dashboard/dashboard";
+import { YEAR_OPTIONS, colorScaleBounds, legendLabels, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/lib/census-dashboard/dashboard";
 import { aggregateValue, lookupValue, TOTAL_CATEGORY } from "@/lib/census-dashboard/indicators";
 import { AIMAG_OPTIONS } from "@/lib/census-dashboard/aimags";
 import { CENSUS_TYPES, DEFAULT_LAYERS, TOPICS, getTopic, type Topic } from "@/lib/census-dashboard/topics";
@@ -215,13 +215,15 @@ function Dashboard({ topic, onTopicChange }: Props) {
 
   const percentScale =
     indicator?.unit === "share" || indicator?.unit === "rate";
+  const scaleScheme = indicatorId === "sex-ratio" ? "sex-ratio" : "jenks";
   const legendScale = useMemo(
     () =>
       colorScaleBounds(
         rows.map((row) => row.value),
         percentScale ? "percent" : "auto",
+        scaleScheme,
       ),
-    [percentScale, rows],
+    [percentScale, rows, scaleScheme],
   );
 
   const focusTitle = focusRow?.name
@@ -339,11 +341,12 @@ function Dashboard({ topic, onTopicChange }: Props) {
 
   function handleLayerChange(next: MapLayer) {
     if (next === layer) return;
+    const leavingDrill = aimagId != null || soumCode != null || bagAsb != null;
     setLayer(next);
     setAimagId(null);
     setSoumCode(null);
     setBagAsb(null);
-    setFitToken((n) => n + 1);
+    if (leavingDrill) setFitToken((n) => n + 1);
   }
 
   function drillToSoum(id: number) {
@@ -500,7 +503,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
             <MapToolbar onHome={resetToCountry} />
             {data ? (
               <UnitMap
-                mapId={`${layer}-${aimagId ?? "all"}-${soumCode ?? "all"}-${mapGeo.features.length}`}
+                mapId={`${aimagId ?? "all"}-${soumCode ?? "all"}`}
                 geojson={mapGeo}
                 values={mapValues}
                 layer={layer}
@@ -508,6 +511,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 tooltip={tooltip}
                 fitToken={fitToken}
                 percentScale={percentScale}
+                scaleScheme={scaleScheme}
                 onSelect={handleMapSelect}
                 onHover={setHoverKey}
               />
@@ -524,6 +528,8 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 note={cardNote}
                 value={focusValue}
                 classes={legendScale.classes}
+                colors={legendScale.colors}
+                classLabels={legendLabels(legendScale)}
                 markerValue={focusRow?.value ?? focusValue}
                 percent={percentScale}
               />

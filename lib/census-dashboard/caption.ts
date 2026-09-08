@@ -197,7 +197,7 @@ export function formatShareCaption(input: {
 
 export function captionNotes(indicatorId: string): string[] {
   if (indicatorId === "sex-ratio") {
-    return ["Хүйсийн харьцаа: 100 эмэгтэйд ногдох эрэгтэйчүүдийн тоог хэлнэ."];
+    return ["Хүйсийн харьцаа: 100 эмэгтэйд ногдох эрэгтэйчүүдийн тоо. 97–103 хэвийн. 200-аас дээш нь онцгой тохиолдол."];
   }
   if (indicatorId === "dependency") {
     return [
