@@ -9,6 +9,7 @@ import { environment } from "@/lib/statcate-intro/configs/environment";
 import { environmentalEconomicAccount } from "@/lib/statcate-intro/configs/environmental-economic-account";
 import { foreignTrade } from "@/lib/statcate-intro/configs/foreign-trade";
 import { governmentBudget } from "@/lib/statcate-intro/configs/government-budget";
+import { housingPriceIndex } from "@/lib/statcate-intro/configs/housing-price-index";
 import { investment } from "@/lib/statcate-intro/configs/investment";
 import { moneyAndFinance } from "@/lib/statcate-intro/configs/money-and-finance";
 import { nationalAccounts } from "@/lib/statcate-intro/configs/national-accounts";
@@ -35,6 +36,7 @@ export const INTRO_CONFIGS: IntroDashboardConfig[] = [
   environmentalEconomicAccount,
   foreignTrade,
   governmentBudget,
+  housingPriceIndex,
   investment,
   moneyAndFinance,
   nationalAccounts,

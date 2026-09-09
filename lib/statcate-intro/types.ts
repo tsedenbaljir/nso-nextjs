@@ -26,6 +26,8 @@ export type IntroIconName =
   | "sdg"
   | "child"
   | "elder"
+  | "male"
+  | "female"
   | "bop"
   | "cpi"
   | "environment"
@@ -48,6 +50,9 @@ export type IntroIconName =
   | "potato"
   | "vegetables"
   | "housing"
+  | "housingNew"
+  | "housingOld"
+  | "housingPrice"
   | "calendar"
   | "ag"
   | "fire"
@@ -79,6 +84,9 @@ export type IntroTableConfig = {
   files?: (string | { file: string; select: Record<string, string[]> })[];
   /** PX дэд хавтас, ж: "INEQUALITY, Gini index, Theil index" */
   subtables?: string;
+  /** Өөр салбар/дэд салбараас татах (ж: ТХЗ → ядуурлын хүснэгт). */
+  sourceSector?: string;
+  sourceSubsector?: string;
   label: LocalizedText;
   icon?: IntroIconName;
   unit?: LocalizedText;
