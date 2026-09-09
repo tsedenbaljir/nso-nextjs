@@ -30,6 +30,7 @@ export async function loadIntroTables(
         unit: table.unit ? loc(lng, table.unit) : undefined,
         format: table.format,
         geo: table.geo,
+        time: table.time,
         nationalMode: table.nationalMode,
         rows: packs.flat(),
       };

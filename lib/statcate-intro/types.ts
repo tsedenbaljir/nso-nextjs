@@ -22,7 +22,45 @@ export type IntroIconName =
   | "welfare"
   | "sdg"
   | "child"
-  | "elder";
+  | "elder"
+  | "bop"
+  | "cpi"
+  | "environment"
+  | "energy"
+  | "trade"
+  | "budget"
+  | "investment"
+  | "money"
+  | "gdp"
+  | "ppi"
+  | "productivity"
+  | "fx"
+  | "forest"
+  | "goods"
+  | "services"
+  | "reserves"
+  | "food"
+  | "housing"
+  | "calendar"
+  | "ag"
+  | "fire"
+  | "damage"
+  | "protection"
+  | "tax"
+  | "export"
+  | "import"
+  | "balance"
+  | "expense"
+  | "domestic"
+  | "foreign"
+  | "fdi"
+  | "loans"
+  | "npl"
+  | "growth"
+  | "capita"
+  | "mining"
+  | "manufacturing"
+  | "utilities";
 
 export type IntroValueFormat = "count" | "percent" | "decimal" | "currency";
 
@@ -44,6 +82,8 @@ export type IntroTableConfig = {
   nationalMode?: "code" | "average";
   /** PX dimension code -> value codes. Өгөөгүй бол бүх утгыг авна. */
   select?: Record<string, string[]>;
+  /** Энэ хүснэгтийн цаг хугацааны хэмжээс. Өгөөгүй бол config.dimensions.time. */
+  time?: string;
 };
 
 export type IntroDimensions = {
@@ -83,6 +123,7 @@ export type TrendWidget = {
   type: "trend";
   span?: IntroWidgetSpan;
   tables?: string[];
+  title?: LocalizedText;
   /** fromZero = тоо. nice = хувь/индекс, өгөгдлийн хүрээгээр. */
   yAxis?: TrendYAxisMode;
   height?: number;
@@ -123,6 +164,7 @@ export type CategoryStatsWidget = {
   dimension: string;
   totals?: string[];
   title?: LocalizedText;
+  labelMap?: Record<string, string>;
 };
 
 export type CategoryBarsWidget = {
@@ -133,6 +175,10 @@ export type CategoryBarsWidget = {
   title?: LocalizedText;
   labelMap?: Record<string, string>;
   height?: number;
+  layout?: "vertical" | "horizontal";
+  /** Абсолют утгаараа эхний N мөр. */
+  top?: number;
+  totals?: string[];
 };
 
 export type IntroWidget =
@@ -168,6 +214,7 @@ export type IntroTableData = {
   unit?: string;
   format?: IntroValueFormat;
   geo?: string;
+  time?: string;
   nationalMode?: "code" | "average";
   rows: PxRow[];
 };

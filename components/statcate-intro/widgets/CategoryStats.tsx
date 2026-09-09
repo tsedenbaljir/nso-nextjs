@@ -1,8 +1,8 @@
 "use client";
 
 import { INTRO_COLORS } from "@/lib/statcate-intro/constants";
-import { formatValue, loc, num, trimLabel } from "@/lib/statcate-intro/format";
-import { dimLabel, isTotalLabel, yearOrLatest } from "@/lib/statcate-intro/query";
+import { finiteNum, formatValue, loc, trimLabel } from "@/lib/statcate-intro/format";
+import { isTotalLabel, rowsForYear } from "@/lib/statcate-intro/query";
 import type { CategoryStatsWidget } from "@/lib/statcate-intro/types";
 import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDashboard";
 
@@ -18,15 +18,17 @@ export default function CategoryStats({ widget, dash }: Props) {
   const table = tablesById[widget.table];
   if (!table) return null;
 
-  const usedYear = yearOrLatest(table.rows, config, year);
+  const { year: usedYear, rows: yearRows } = rowsForYear(table.rows, config, year, table);
   const totals = widget.totals ?? ["Бүгд", "Нийт", "Total", "All"];
-  const items = table.rows
-    .filter((row) => dimLabel(row, config.dimensions.time) === usedYear)
-    .map((row) => ({
-      label: trimLabel(row[widget.dimension]),
-      value: num(row.value),
-    }))
-    .filter((item) => item.label && !isTotalLabel(item.label, totals));
+  const items = yearRows
+    .map((row) => {
+      const raw = trimLabel(row[widget.dimension]);
+      return {
+        label: widget.labelMap?.[raw] ?? raw,
+        value: finiteNum(row.value),
+      };
+    })
+    .filter((item) => item.label && item.value != null && !isTotalLabel(item.label, totals));
 
   if (!items.length) return null;
 
@@ -34,7 +36,10 @@ export default function CategoryStats({ widget, dash }: Props) {
 
   return (
     <section className="sector-intro-hero">
-      <h4 className="category-stats-title">{title}</h4>
+      <h4 className="category-stats-title">
+        {title}
+        {usedYear !== year ? <span> · {usedYear}</span> : null}
+      </h4>
       <div className="category-stats">
         {items.map((item, i) => (
           <article

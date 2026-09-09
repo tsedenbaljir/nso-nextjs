@@ -3,9 +3,9 @@
 import ReactECharts from "echarts-for-react";
 import { TrendMark } from "@/lib/statcate-intro/marks";
 import { COPY, INTRO_COLORS } from "@/lib/statcate-intro/constants";
-import { loc } from "@/lib/statcate-intro/format";
+import { formatValue, loc } from "@/lib/statcate-intro/format";
 import { trendChartOption } from "@/lib/statcate-intro/charts";
-import { listYears, nationalValue } from "@/lib/statcate-intro/query";
+import { hasYear, listYears, nationalValue, timeDimOf, yearOrLatest } from "@/lib/statcate-intro/query";
 import type { TrendWidget } from "@/lib/statcate-intro/types";
 import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDashboard";
 
@@ -23,24 +23,32 @@ export default function TrendChart({ widget, dash }: Props) {
     .map((id) => tables.find((table) => table.id === id))
     .filter((table): table is NonNullable<typeof table> => Boolean(table));
   const labels = [
-    ...new Set(selected.flatMap((table) => listYears(table.rows, config.dimensions.time))),
+    ...new Set(selected.flatMap((table) => listYears(table.rows, timeDimOf(config, table)))),
   ].sort((a, b) => Number(a) - Number(b));
   const option = trendChartOption(
     labels,
     selected.map((table) => {
-      const years = new Set(listYears(table.rows, config.dimensions.time));
       return {
         name: table.label,
         data: labels.map((year) =>
-          years.has(year) ? nationalValue(table.rows, config, year, undefined, table) : null,
+          hasYear(table.rows, config, year, table)
+            ? nationalValue(table.rows, config, yearOrLatest(table.rows, config, year, table, false), undefined, table)
+            : null,
         ),
       };
     }),
     config.palette ?? INTRO_COLORS,
     widget.yAxis ?? (selected.every((table) => table.format === "percent" || table.format === "decimal") ? "nice" : "fromZero"),
+    {
+      lng,
+      formatValue: (value, seriesName) => {
+        const table = selected.find((item) => item.label === seriesName);
+        return formatValue(value, lng, table?.format ?? selected[0]?.format ?? "count");
+      },
+    },
   );
   const icon = config.sectionIcons?.trend;
-  const height = widget.height ?? 380;
+  const height = widget.height ?? 320;
 
   return (
     <div className="sector-intro-panel">
@@ -50,7 +58,7 @@ export default function TrendChart({ widget, dash }: Props) {
         ) : (
           <TrendMark size={16} />
         )}
-        {loc(lng, COPY.trend)}
+        {loc(lng, widget.title ?? COPY.trend)}
       </h4>
       <div className="sector-intro-chart" style={{ height }}>
         <ReactECharts option={option} style={{ height, width: "100%" }} notMerge />

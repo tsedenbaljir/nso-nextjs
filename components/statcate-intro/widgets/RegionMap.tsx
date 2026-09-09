@@ -7,8 +7,9 @@ import type { EChartsOption } from "echarts";
 import { MapMark } from "@/lib/statcate-intro/marks";
 import { COPY, INTRO_FONT } from "@/lib/statcate-intro/constants";
 import { AIMAG_ID_TO_NAME, canonicalAimagName, mapColorPieces } from "@/lib/statcate-intro/aimag-map";
-import { formatValue, loc, num, trimLabel } from "@/lib/statcate-intro/format";
+import { formatValue, loc, finiteNum, trimLabel } from "@/lib/statcate-intro/format";
 import { queryRows, yearOrLatest } from "@/lib/statcate-intro/query";
+import { introItemTooltipFormatter, introTooltipBase } from "@/lib/statcate-intro/tooltip";
 import type { RegionMapLayout, RegionMapWidget } from "@/lib/statcate-intro/types";
 import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDashboard";
 
@@ -74,7 +75,7 @@ export default function RegionMap({ widget, dash }: Props) {
   }, []);
 
   const table = config && year ? tablesById[widget.table] : undefined;
-  const mapYear = table && config && year ? yearOrLatest(table.rows, config, year) : year;
+  const mapYear = table && config && year ? yearOrLatest(table.rows, config, year, table) : year;
   const geoDim = table?.geo ?? config?.dimensions.geo;
 
   const rows = useMemo(() => {
@@ -92,7 +93,9 @@ export default function RegionMap({ widget, dash }: Props) {
     )) {
       const name = canonicalAimagName(trimLabel(row[geoDim]));
       if (!name) continue;
-      byName.set(name, num(row.value));
+      const value = finiteNum(row.value);
+      if (value == null) continue;
+      byName.set(name, value);
     }
     return [...byName.entries()].map(([name, value]) => ({ name, value }));
   }, [config, table, widget.table, mapYear, geoDim]);
@@ -116,14 +119,13 @@ export default function RegionMap({ widget, dash }: Props) {
     textStyle: { fontFamily: INTRO_FONT },
     tooltip: {
       trigger: "item",
-      extraCssText: `font-family: ${INTRO_FONT};`,
-      textStyle: { fontFamily: INTRO_FONT, fontSize: 13 },
-      className: "sector-intro-echart-tooltip",
-      formatter: (params) => {
-        const item = params as { name?: string; value?: number };
-        if (item.value == null || Number.isNaN(Number(item.value))) return `${item.name ?? ""}`;
-        return `${item.name}<br/>${tableLabel}: <b>${formatValue(Number(item.value), lng, format)}</b>`;
-      },
+      ...introTooltipBase,
+      formatter: introItemTooltipFormatter({
+        lng,
+        year: mapYear,
+        valueLabel: table?.unit || tableLabel,
+        formatValue: (value) => formatValue(value, lng, format),
+      }),
     },
     visualMap: {
       type: "piecewise",

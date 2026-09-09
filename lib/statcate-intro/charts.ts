@@ -1,13 +1,24 @@
 import type { EChartsOption } from "echarts";
 import { INTRO_COLORS, INTRO_FONT } from "@/lib/statcate-intro/constants";
+import { introAxisTooltipFormatter, introTooltipBase } from "@/lib/statcate-intro/tooltip";
 import type { TrendYAxisMode } from "@/lib/statcate-intro/types";
 
 const text = { fontFamily: INTRO_FONT };
-const tooltipBase = {
-  extraCssText: `font-family: ${INTRO_FONT};`,
-  textStyle: { fontFamily: INTRO_FONT, fontSize: 13 },
-  className: "sector-intro-echart-tooltip",
+
+export type ChartTooltipMeta = {
+  lng?: string;
+  year?: string;
+  valueLabel?: string;
+  formatValue?: (value: number, seriesName?: string) => string;
 };
+
+function compactAxisNumber(value: number) {
+  const abs = Math.abs(value);
+  if (abs >= 1_000_000) return `${Number((value / 1_000_000).toFixed(1))}M`;
+  if (abs >= 10_000) return `${Number((value / 1_000).toFixed(0))}k`;
+  if (Number.isInteger(value)) return String(value);
+  return Number(value.toFixed(1)).toString();
+}
 
 function niceStep(span: number) {
   const raw = span / 4;
@@ -33,25 +44,39 @@ function trendYAxis(series: { data: (number | null)[] }[], mode: TrendYAxisMode)
   return { min: min >= 0 ? Math.max(0, lo) : lo, max: hi };
 }
 
+function chartTooltip(meta?: ChartTooltipMeta) {
+  return {
+    ...introTooltipBase,
+    formatter: introAxisTooltipFormatter(meta),
+  };
+}
+
 export function trendChartOption(
   years: string[],
   series: { name: string; data: (number | null)[] }[],
   colors: string[] = INTRO_COLORS,
   yAxis: TrendYAxisMode = "fromZero",
+  tooltip?: ChartTooltipMeta,
 ): EChartsOption {
   return {
     color: colors,
     textStyle: text,
-    tooltip: { trigger: "axis", ...tooltipBase },
+    tooltip: { trigger: "axis", ...chartTooltip(tooltip) },
     legend: {
       bottom: 0,
-      itemGap: 22,
+      itemGap: 18,
       itemWidth: 10,
       itemHeight: 10,
+      padding: [0, 0, 0, 0],
       textStyle: { ...text, color: "#5b6b80", fontSize: 12 },
     },
-    grid: { left: 48, right: 18, top: 28, bottom: 44, containLabel: true },
-    xAxis: { type: "category", data: years, axisLabel: { ...text, color: "#64748b" } },
+    grid: { left: 12, right: 18, top: 16, bottom: 34, containLabel: true },
+    xAxis: {
+      type: "category",
+      data: years,
+      axisLabel: { ...text, color: "#64748b", margin: 10 },
+      axisTick: { alignWithLabel: true },
+    },
     yAxis: {
       type: "value",
       scale: true,
@@ -61,7 +86,7 @@ export function trendChartOption(
       axisLabel: {
         ...text,
         color: "#64748b",
-        formatter: (value: number) => (Number.isInteger(value) ? String(value) : Number(value.toFixed(1)).toString()),
+        formatter: compactAxisNumber,
       },
     },
     series: series.map((item) => ({
@@ -80,11 +105,12 @@ export function groupedBarOption(
   categories: string[],
   series: { name: string; data: number[] }[],
   colors: string[] = INTRO_COLORS,
+  tooltip?: ChartTooltipMeta,
 ): EChartsOption {
   return {
     color: colors,
     textStyle: text,
-    tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, ...tooltipBase },
+    tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, ...chartTooltip(tooltip) },
     legend: {
       bottom: 0,
       itemGap: 22,
@@ -102,7 +128,7 @@ export function groupedBarOption(
     yAxis: {
       type: "value",
       splitLine: { lineStyle: { color: "#e2e8f0" } },
-      axisLabel: { ...text, color: "#64748b" },
+      axisLabel: { ...text, color: "#64748b", formatter: compactAxisNumber },
     },
     series: series.map((item) => ({
       name: item.name,
@@ -119,6 +145,7 @@ export function categoryBarOption(
   values: number[],
   color = INTRO_COLORS[0],
   suffix = "",
+  tooltip?: ChartTooltipMeta,
 ): EChartsOption {
   return {
     color: [color],
@@ -126,15 +153,16 @@ export function categoryBarOption(
     tooltip: {
       trigger: "axis",
       axisPointer: { type: "shadow" },
-      ...tooltipBase,
-      formatter: (params) => {
-        const item = Array.isArray(params) ? params[0] : params;
-        const row = item as { name?: string; value?: number };
-        return `${row.name ?? ""}: <b>${row.value ?? ""}${suffix}</b>`;
-      },
+      ...chartTooltip({
+        ...tooltip,
+        valueLabel: tooltip?.valueLabel ?? "",
+        formatValue:
+          tooltip?.formatValue ??
+          ((value) => `${Number.isFinite(value) ? value : ""}${suffix}`),
+      }),
     },
     legend: { show: false },
-    grid: { left: 48, right: 18, top: 20, bottom: 36, containLabel: true },
+    grid: { left: 12, right: 18, top: 20, bottom: 12, containLabel: true },
     xAxis: {
       type: "category",
       data: categories,
@@ -143,17 +171,18 @@ export function categoryBarOption(
     },
     yAxis: {
       type: "value",
-      min: 0,
+      min: values.some((value) => value < 0) ? undefined : 0,
       splitLine: { lineStyle: { color: "#e2e8f0" } },
       axisLabel: {
         ...text,
         color: "#64748b",
-        formatter: (value: number) => `${value}${suffix}`,
+        formatter: (value: number) => `${compactAxisNumber(value)}${suffix}`,
       },
     },
     series: [
       {
         type: "bar",
+        name: tooltip?.valueLabel || undefined,
         data: values,
         barMaxWidth: 42,
         itemStyle: { borderRadius: [8, 8, 0, 0] },
@@ -162,28 +191,49 @@ export function categoryBarOption(
   };
 }
 
-export function regionBarOption(rows: { name: string; value: number }[], color = INTRO_COLORS[0]): EChartsOption {
+export function regionBarOption(
+  rows: { name: string; value: number }[],
+  color = INTRO_COLORS[0],
+  tooltip?: ChartTooltipMeta,
+): EChartsOption {
   return {
     color: [color],
     textStyle: text,
-    tooltip: { trigger: "axis", ...tooltipBase },
-    grid: { left: 108, right: 16, top: 8, bottom: 24 },
+    tooltip: {
+      trigger: "axis",
+      ...chartTooltip(tooltip),
+    },
+    grid: { left: 8, right: 16, top: 8, bottom: 4, containLabel: true },
     xAxis: {
       type: "value",
       splitLine: { lineStyle: { color: "#e2e8f0" } },
-      axisLabel: { ...text, color: "#64748b" },
+      axisLabel: {
+        ...text,
+        color: "#64748b",
+        hideOverlap: true,
+        margin: 6,
+        formatter: compactAxisNumber,
+      },
     },
     yAxis: {
       type: "category",
       inverse: true,
       data: rows.map((item) => item.name),
-      axisLabel: { ...text, color: "#475569", width: 96, overflow: "truncate" },
+      axisLabel: {
+        ...text,
+        color: "#475569",
+        width: 128,
+        overflow: "truncate",
+        ellipsis: "…",
+      },
     },
     series: [
       {
         type: "bar",
+        name: tooltip?.valueLabel || undefined,
         data: rows.map((item) => item.value),
-        barMaxWidth: 14,
+        barMaxWidth: 16,
+        barCategoryGap: "28%",
         itemStyle: { borderRadius: [0, 8, 8, 0] },
       },
     ],

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { COPY } from "@/lib/statcate-intro/constants";
 import { loc } from "@/lib/statcate-intro/format";
 import { loadIntroTables } from "@/lib/statcate-intro/load";
-import { listYears } from "@/lib/statcate-intro/query";
+import { listYears, timeDimOf } from "@/lib/statcate-intro/query";
 import { getIntroDashboardConfig } from "@/lib/statcate-intro/registry";
 import type { IntroTableData } from "@/lib/statcate-intro/types";
 
@@ -36,7 +36,7 @@ export function useIntroDashboard({ lng, sector, subsector }: Args) {
         const packs = await loadIntroTables(lng, sectorName, subsectorName, config);
         if (cancelled) return;
         const uniqueYears = [
-          ...new Set(packs.flatMap((table) => listYears(table.rows, config.dimensions.time))),
+          ...new Set(packs.flatMap((table) => listYears(table.rows, timeDimOf(config, table)))),
         ].sort((a, b) => Number(b) - Number(a));
         setTables(packs);
         setYears(uniqueYears);

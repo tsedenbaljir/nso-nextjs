@@ -193,3 +193,60 @@ export function MapMark(props: MarkProps) {
     </Svg>
   );
 }
+
+export function GlobeMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M3.5 12h17" />
+      <path d="M12 3.5c2.4 2.2 3.6 5.2 3.6 8.5s-1.2 6.3-3.6 8.5C9.6 18.3 8.4 15.3 8.4 12S9.6 5.7 12 3.5Z" />
+    </Svg>
+  );
+}
+
+export function PercentMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <path d="M6 18 18 6" />
+      <circle cx="7.5" cy="7.5" r="2.2" />
+      <circle cx="16.5" cy="16.5" r="2.2" />
+    </Svg>
+  );
+}
+
+export function LeafMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <path d="M5 19c8-1 13-7 14-14-8 1-13 7-14 14Z" />
+      <path d="M8 16c2.2-2.4 5-4.2 8.5-5.2" />
+    </Svg>
+  );
+}
+
+export function BoltMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <path d="M13 3 6 13h6l-1 8 7-10h-6l1-8Z" />
+    </Svg>
+  );
+}
+
+export function ChartMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <path d="M4 20h16" />
+      <path d="M7 16v-5" />
+      <path d="M12 16V8" />
+      <path d="M17 16v-8" />
+    </Svg>
+  );
+}
+
+export function FactoryMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <path d="M3 21V9l6 4V9l6 4V7h6v14H3Z" />
+      <path d="M7 21v-3M12 21v-3M17 21v-3" />
+    </Svg>
+  );
+}

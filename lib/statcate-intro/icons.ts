@@ -1,23 +1,77 @@
+import { createElement } from "react";
+import {
+  Activity,
+  AlertTriangle,
+  ArrowDownToLine,
+  ArrowLeftRight,
+  ArrowUpFromLine,
+  Banknote,
+  BarChart3,
+  CalendarDays,
+  CloudLightning,
+  Cog,
+  Coins,
+  CreditCard,
+  DollarSign,
+  Droplets,
+  Flame,
+  Gauge,
+  GitCompare,
+  Handshake,
+  House,
+  Landmark,
+  Mountain,
+  Package,
+  Plane,
+  Receipt,
+  Scale,
+  Shield,
+  Trees,
+  TrendingUp,
+  User,
+  UtensilsCrossed,
+  Wallet,
+  Warehouse,
+  Wheat,
+} from "lucide-react";
 import {
   BookMark,
+  BoltMark,
   CareMark,
   ChildMark,
   ChurchMark,
   CoinMark,
   DharmaMark,
   ElderMark,
+  FactoryMark,
+  GlobeMark,
   InsuredMark,
+  LeafMark,
   MosqueMark,
   OtherMark,
   PensionerMark,
   PeopleMark,
+  PercentMark,
   SdgMark,
   TempleMark,
 } from "@/lib/statcate-intro/marks";
 import { trimLabel } from "@/lib/statcate-intro/format";
 import type { IntroIconName } from "@/lib/statcate-intro/types";
+import type { LucideIcon } from "lucide-react";
 
 type Mark = typeof TempleMark;
+
+function asMark(Icon: LucideIcon): Mark {
+  function LucideMark({ size = 24, className }: { size?: number; className?: string }) {
+    return createElement(Icon, {
+      size,
+      strokeWidth: 2.25,
+      className,
+      "aria-hidden": true,
+    });
+  }
+  return LucideMark;
+}
 
 export const INTRO_ICONS: Record<IntroIconName, Mark> = {
   temple: TempleMark,
@@ -37,6 +91,86 @@ export const INTRO_ICONS: Record<IntroIconName, Mark> = {
   sdg: SdgMark,
   child: ChildMark,
   elder: ElderMark,
+  bop: asMark(Scale),
+  cpi: PercentMark,
+  environment: LeafMark,
+  energy: BoltMark,
+  trade: asMark(ArrowLeftRight),
+  budget: asMark(Landmark),
+  investment: asMark(TrendingUp),
+  money: asMark(Banknote),
+  gdp: asMark(BarChart3),
+  ppi: FactoryMark,
+  productivity: asMark(Gauge),
+  fx: asMark(DollarSign),
+  forest: asMark(Trees),
+  goods: asMark(Package),
+  services: asMark(Handshake),
+  reserves: asMark(Coins),
+  food: asMark(UtensilsCrossed),
+  housing: asMark(House),
+  calendar: asMark(CalendarDays),
+  ag: asMark(Wheat),
+  fire: asMark(Flame),
+  damage: asMark(CloudLightning),
+  protection: asMark(Shield),
+  tax: asMark(Receipt),
+  export: asMark(ArrowUpFromLine),
+  import: asMark(ArrowDownToLine),
+  balance: asMark(GitCompare),
+  expense: asMark(Wallet),
+  domestic: asMark(Warehouse),
+  foreign: asMark(Plane),
+  fdi: GlobeMark,
+  loans: asMark(CreditCard),
+  npl: asMark(AlertTriangle),
+  growth: asMark(Activity),
+  capita: asMark(User),
+  mining: asMark(Mountain),
+  manufacturing: asMark(Cog),
+  utilities: asMark(Droplets),
+};
+
+/** KPI icon бүрт өөр өнгө — нэг л palette-ийн давталтаас илүү ялгаатай. */
+export const INTRO_ICON_COLORS: Partial<Record<IntroIconName, string>> = {
+  bop: "#0F6A6A",
+  goods: "#C45A2A",
+  services: "#1A5CAD",
+  reserves: "#B8860B",
+  cpi: "#C0392B",
+  food: "#D35400",
+  housing: "#2980B9",
+  calendar: "#5B6B80",
+  environment: "#2E7D32",
+  ag: "#558B2F",
+  forest: "#1B5E20",
+  fire: "#E65100",
+  damage: "#6A1B9A",
+  protection: "#00695C",
+  tax: "#6A1B9A",
+  energy: "#F9A825",
+  trade: "#1565C0",
+  export: "#2E7D32",
+  import: "#C62828",
+  balance: "#5B6B80",
+  budget: "#5B2C6F",
+  expense: "#AD1457",
+  investment: "#1565C0",
+  domestic: "#00838F",
+  foreign: "#6A1B9A",
+  fdi: "#0277BD",
+  money: "#1A5CAD",
+  fx: "#B8860B",
+  loans: "#00695C",
+  npl: "#C62828",
+  gdp: "#1A5CAD",
+  growth: "#0E7C7B",
+  capita: "#3949AB",
+  ppi: "#E67E22",
+  mining: "#5D4037",
+  manufacturing: "#455A64",
+  utilities: "#0277BD",
+  productivity: "#00897B",
 };
 
 const INTRO_ICON_IMAGES: Partial<Record<IntroIconName, string>> = {
@@ -65,6 +199,10 @@ export function resolveIconImage(name?: IntroIconName): string | undefined {
 
 export function resolveIcon(name?: IntroIconName): Mark {
   return INTRO_ICONS[name ?? "other"];
+}
+
+export function resolveIconColor(name?: IntroIconName): string | undefined {
+  return name ? INTRO_ICON_COLORS[name] : undefined;
 }
 
 export function resolveCategoryIconName(label: string, map?: Record<string, IntroIconName>): IntroIconName {

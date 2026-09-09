@@ -27,9 +27,9 @@ export default function CategoryFlow({ widget, dash }: Props) {
   const items = listCategories(source.rows, config).map((label, i) => ({
     label,
     color: colorFor(label, i, widget.colors),
-    source: nationalValue(source.rows, config, year, label),
-    target: nationalValue(target.rows, config, year, label),
-    extra: extra ? nationalValue(extra.rows, config, year, label) : 0,
+    source: nationalValue(source.rows, config, year, label) ?? 0,
+    target: nationalValue(target.rows, config, year, label) ?? 0,
+    extra: extra ? (nationalValue(extra.rows, config, year, label) ?? 0) : 0,
   }));
 
   if (!items.length) return null;

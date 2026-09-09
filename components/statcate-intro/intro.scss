@@ -20,6 +20,87 @@
 
 .sector-intro-echart-tooltip {
   font-family: "sf-pro-text", roboto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.sector-intro-echart-tooltip .intro-tip {
+  min-width: 168px;
+  max-width: 280px;
+  padding: 16px 18px 14px;
+  text-align: center;
+  color: #aeb6c7;
+  background: #1a1c2c;
+  border-radius: 18px;
+  box-shadow: 0 14px 36px rgb(0 0 0 / 35%);
+}
+
+.sector-intro-echart-tooltip .intro-tip--chart {
+  min-width: 200px;
+  max-width: 340px;
+  padding: 14px 16px 12px;
+}
+
+.sector-intro-echart-tooltip .intro-tip--chart .intro-tip-title {
+  margin-bottom: 10px;
+}
+
+.sector-intro-echart-tooltip .intro-tip--chart .intro-tip-label {
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-size: 12px;
+  font-weight: 500;
+  max-width: 210px;
+  line-height: 1.35;
+}
+
+.sector-intro-echart-tooltip .intro-tip-pin {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 0 auto 8px;
+  color: #d7dde8;
+}
+
+.sector-intro-echart-tooltip .intro-tip-title {
+  margin: 0 0 12px;
+  color: #7ee8de;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+
+.sector-intro-echart-tooltip .intro-tip-divider {
+  height: 1px;
+  margin: 10px 0;
+  background: #2e3345;
+}
+
+.sector-intro-echart-tooltip .intro-tip-row {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.sector-intro-echart-tooltip .intro-tip-label {
+  color: #9aa3b5;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sector-intro-echart-tooltip .intro-tip-value {
+  color: #9aa3b5;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 .sector-intro-error {
@@ -110,10 +191,10 @@
 }
 
 .sector-intro-kpi-icon {
-  flex: 0 0 3.2rem;
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: 999px;
+  flex: 0 0 3.6rem;
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 1rem;
   overflow: hidden;
   background: transparent;
 
@@ -122,6 +203,13 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+
+  &.is-mark {
+    background: color-mix(in srgb, var(--accent) 18%, #fff);
+    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, #fff);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent);
+    color: var(--accent, var(--nso));
   }
 }
 
@@ -148,7 +236,7 @@
 
 .category-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
   padding: 0.85rem 1.15rem 1.15rem;
 }
@@ -278,7 +366,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  align-items: stretch;
+  align-items: start;
 }
 
 .sector-intro-chart-cell {
@@ -291,7 +379,7 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 1.05rem 1.05rem 1rem;
+  padding: 1.05rem 1.05rem 0.85rem;
 }
 
 .sector-intro-chart,

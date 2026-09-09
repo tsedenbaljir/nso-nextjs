@@ -1,0 +1,85 @@
+import type { IntroDashboardConfig } from "@/lib/statcate-intro/types";
+
+const LAND_LABELS = {
+  "Хөдөө аж ахуйн газар": "Хөдөө аж ахуй",
+  "Хот, тосгон, бусад суурины газар": "Хот, суурин",
+  "Зам, шугам, сүлжээний газар": "Зам, сүлжээ",
+  "Ойн сан бүхий газар": "Ойн сан",
+  "Усны сан бүхий газар": "Усны сан",
+  "Тусгай хэрэгцээний газар": "Тусгай хэрэгцээ",
+};
+
+export const environment: IntroDashboardConfig = {
+  id: "environment",
+  subsector: "Environment",
+  title: { mn: "Байгаль орчин", en: "Environment" },
+  subtitle: { mn: "газрын сан, түймэр, гамшиг", en: "land, wildfire, disasters" },
+  palette: ["#2E7D32", "#1565C0", "#C62828", "#6D4C41"],
+  mapColors: ["#E8F5E9", "#A5D6A7", "#66BB6A", "#2E7D32", "#1B5E20"],
+  dimensions: { time: "Он", geo: "Бүс" },
+  tables: [
+    {
+      id: "agLand",
+      file: "DT_NSO_2400_001V1.px",
+      label: { mn: "Хөдөө аж ахуйн газар", en: "Agricultural land" },
+      unit: { mn: "мян. га", en: "thousand ha" },
+      icon: "ag",
+      format: "decimal",
+      select: { Үзүүлэлт: ["1"] },
+    },
+    {
+      id: "forestLand",
+      file: "DT_NSO_2400_001V1.px",
+      label: { mn: "Ойн сан бүхий газар", en: "Forest land" },
+      unit: { mn: "мян. га", en: "thousand ha" },
+      icon: "forest",
+      format: "decimal",
+      select: { Үзүүлэлт: ["4"] },
+    },
+    {
+      id: "fires",
+      file: "DT_NSO_2400_005V1.px",
+      geo: "Бүс",
+      label: { mn: "Ой, хээрийн түймэр", en: "Forest and steppe fires" },
+      unit: { mn: "тоо", en: "number" },
+      icon: "fire",
+      format: "count",
+    },
+    {
+      id: "damage",
+      file: "DT_NSO_2400_012V1.px",
+      time: "Сар",
+      label: { mn: "Гамшгийн хохирол", en: "Disaster damage" },
+      unit: { mn: "тэрбум ₮", en: "billion ₮" },
+      icon: "damage",
+      format: "decimal",
+      select: { Үзүүлэлт: ["9"] },
+    },
+    {
+      id: "landTypes",
+      file: "DT_NSO_2400_001V1.px",
+      label: { mn: "Газрын нэгдмэл сан", en: "Land fund by class" },
+      unit: { mn: "мян. га", en: "thousand ha" },
+      format: "decimal",
+    },
+  ],
+  widgets: [
+    { type: "kpis", tables: ["agLand", "forestLand", "fires", "damage"] },
+    {
+      type: "category-bars",
+      table: "landTypes",
+      dimension: "Үзүүлэлт",
+      layout: "horizontal",
+      span: "full",
+      totals: ["Нийт талбайн хэмжээ"],
+      labelMap: LAND_LABELS,
+      title: { mn: "Газрын сан, үндсэн ангилал", en: "Land fund by main class" },
+    },
+    { type: "trend", tables: ["fires"], yAxis: "fromZero", title: { mn: "Ой, хээрийн түймэр", en: "Wildfires" } },
+    {
+      type: "region-map",
+      table: "fires",
+      layout: { legend: "horizontal", aspectScale: 1.05, left: 8, right: 8, top: 22, bottom: 56 },
+    },
+  ],
+};
