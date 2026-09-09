@@ -17,6 +17,11 @@ type Props = {
   note?: string;
   value: number;
   classes: ColorClass[];
+<<<<<<< HEAD
+=======
+  colors?: string[];
+  classLabels?: string[];
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
   markerValue?: number;
   percent?: boolean;
 };
@@ -27,6 +32,11 @@ export default function MapFocusCard({
   note,
   value,
   classes,
+<<<<<<< HEAD
+=======
+  colors,
+  classLabels,
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
   markerValue,
   percent = false,
 }: Props) {
@@ -36,8 +46,18 @@ export default function MapFocusCard({
     markerValue == null
       ? null
       : legendMarkerPercent(markerValue, { mode, classes });
+<<<<<<< HEAD
   const labels = percent ? percentClassLabels(classes) : countClassLabels(classes);
   const swatches = MAP_COLORS.slice(0, Math.max(1, classes.length));
+=======
+  const labels =
+    classLabels ??
+    (percent ? percentClassLabels(classes) : countClassLabels(classes));
+  const swatches = (colors?.length ? colors : MAP_COLORS).slice(
+    0,
+    Math.max(1, classes.length),
+  );
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 
   useEffect(() => {
     const el = elRef.current;
@@ -74,7 +94,14 @@ export default function MapFocusCard({
         </div>
       </div>
       <div className="map-focus-scale">
+<<<<<<< HEAD
         <div className={`map-focus-classes${percent ? "" : " is-count"}`}>
+=======
+        <div
+          className={`map-focus-classes${percent ? "" : " is-count"}`}
+          style={{ gridTemplateColumns: `repeat(${swatches.length}, minmax(0, 1fr))` }}
+        >
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
           {swatches.map((color, i) => (
             <div key={color} className="map-focus-class">
               <span
@@ -85,7 +112,17 @@ export default function MapFocusCard({
             </div>
           ))}
           {marker != null ? (
-            <span className="map-focus-marker" style={{ left: `${marker}%` }} />
+            <span className="map-focus-marker" style={{ left: `${marker}%` }} aria-hidden>
+              <svg viewBox="0 0 16 12" width="16" height="12">
+                <polygon
+                  points="8,11 1.2,1.6 14.8,1.6"
+                  fill="#fff"
+                  stroke="#111"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
           ) : null}
         </div>
       </div>

@@ -14,15 +14,14 @@ export const LAYER_OPTIONS: { value: MapLayer; label: string }[] = [
 
 export const YEAR_OPTIONS = [{ value: "2025", label: "2025 он" }];
 
+// ONS Census Maps sequential palette (5 classes)
+// https://www.ons.gov.uk/census/maps
 export const MAP_COLORS = [
-  "#D7E9A8",
-  "#9FD8B1",
-  "#6CCBBB",
-  "#3CBFC6",
-  "#2D99B7",
-  "#1E73A8",
-  "#115191",
-  "#2B0A7A",
+  "#CDE594",
+  "#80C6A3",
+  "#1F9EB7",
+  "#186290",
+  "#080C54",
 ];
 
 export const PERCENT_MAP_COLORS = MAP_COLORS;
@@ -77,6 +76,7 @@ export function formatPercent(value: number) {
 }
 
 export type ColorScaleMode = "auto" | "percent";
+export type ColorScaleScheme = "jenks" | "sex-ratio";
 
 export type ColorClass = { min: number; max: number };
 
@@ -85,8 +85,47 @@ export type ColorScale = {
   max: number;
   sorted: number[];
   mode: ColorScaleMode;
+  scheme: ColorScaleScheme;
   classes: ColorClass[];
+  colors: string[];
 };
+
+/** Хүйсийн харьцаа: ONS 5 өнгө + #080C54-ээс бараан онцгой ангилал. */
+export const SEX_RATIO_COLORS = [...MAP_COLORS, "#060442"];
+
+export const SEX_RATIO_LABELS = [
+  "< 90",
+  "90–97",
+  "97–103",
+  "103–110",
+  "110–200",
+  "> 200",
+];
+
+export const SEX_RATIO_OUTLIER = 200;
+
+export function sexRatioClasses(sorted: number[]): ColorClass[] {
+  const max = sorted.length ? sorted[sorted.length - 1] : SEX_RATIO_OUTLIER;
+  return [
+    { min: 0, max: 90 },
+    { min: 90, max: 97 },
+    { min: 97, max: 103 },
+    { min: 103, max: 110 },
+    { min: 110, max: SEX_RATIO_OUTLIER },
+    { min: SEX_RATIO_OUTLIER, max: Math.max(max, SEX_RATIO_OUTLIER) },
+  ];
+}
+
+export function paletteFor(scale: Pick<ColorScale, "colors" | "scheme"> | { colors?: string[] }) {
+  return scale.colors?.length ? scale.colors : MAP_COLORS;
+}
+
+export function legendLabels(scale: Pick<ColorScale, "classes" | "mode" | "scheme">) {
+  if (scale.scheme === "sex-ratio") return SEX_RATIO_LABELS;
+  return scale.mode === "percent"
+    ? percentClassLabels(scale.classes)
+    : countClassLabels(scale.classes);
+}
 
 const EMPTY_CLASSES: ColorClass[] = MAP_COLORS.map(() => ({ min: 0, max: 0 }));
 
@@ -112,9 +151,14 @@ function rangeVariance(
 }
 
 /**
+<<<<<<< HEAD
  * Fisher–Jenks / 1D ckmeans class start indexes.
  * Same objective as ArcGIS “Natural Breaks (Jenks)” and QGIS:
  * minimise within-class variance so similar values share a colour.
+=======
+ * Fisher–Jenks / 1D ckmeans. Same objective as ArcGIS Natural Breaks:
+ * similar values share a colour; outliers get their own class.
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
  */
 function jenksClassStarts(sorted: number[], k: number): number[] {
   const n = sorted.length;
@@ -174,10 +218,13 @@ function jenksWorkingValues(sorted: number[]): number[] {
   return sorted;
 }
 
+<<<<<<< HEAD
 /**
  * Equal-count bins. Easy to explain, but similar values can get different
  * colours and a few huge units still squeeze the rest of the palette.
  */
+=======
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 export function quantileClasses(
   sorted: number[],
   k = MAP_COLORS.length,
@@ -191,7 +238,10 @@ export function quantileClasses(
   });
 }
 
+<<<<<<< HEAD
 /** Natural-break classes for count/ratio choropleths. */
+=======
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 export function jenksClasses(
   sorted: number[],
   k = MAP_COLORS.length,
@@ -233,6 +283,7 @@ export function formatPercentClassRange(min: number, max: number) {
 
 export function percentClassLabels(classes: ColorClass[]): string[] {
   return classes.map((item) => formatPercentClassRange(item.min, item.max));
+<<<<<<< HEAD
 }
 
 /** Isolate exact 0, then natural breaks on the rest (sparse shares like Казах). */
@@ -246,6 +297,8 @@ export function percentClasses(
     return [{ min: 0, max: 0 }, ...jenksClasses(rest, Math.max(1, k - 1))];
   }
   return jenksClasses(sorted, k);
+=======
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 }
 
 export function mapColorIndex(value: number, classes: ColorClass[]): number {
@@ -260,40 +313,80 @@ export function mapColorIndex(value: number, classes: ColorClass[]): number {
 
 export function mapColor(
   value: number,
-  scale: Pick<ColorScale, "classes" | "mode">,
+  scale: Pick<ColorScale, "classes" | "mode" | "colors">,
 ): string {
+<<<<<<< HEAD
   const index = mapColorIndex(value, scale.classes);
   return MAP_COLORS[index] ?? MAP_COLORS[0];
+=======
+  const palette = paletteFor(scale);
+  const index = mapColorIndex(value, scale.classes);
+  return palette[index] ?? palette[0];
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 }
 
 export function legendMarkerPercent(
   value: number,
   scale: Pick<ColorScale, "classes" | "mode">,
 ): number {
+<<<<<<< HEAD
   const index = mapColorIndex(value, scale.classes);
   const bins = Math.max(1, scale.classes.length);
   return ((index + 0.5) / bins) * 100;
+=======
+  const { classes } = scale;
+  const bins = Math.max(1, classes.length);
+  const index = mapColorIndex(value, classes);
+  const cls = classes[index];
+  if (!cls) return ((index + 0.5) / bins) * 100;
+  const span = cls.max - cls.min;
+  const t = span > 0 ? Math.min(1, Math.max(0, (value - cls.min) / span)) : 0.5;
+  return ((index + t) / bins) * 100;
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 }
 
 export function colorScaleBounds(
   values: number[],
   mode: ColorScaleMode = "auto",
+  scheme: ColorScaleScheme = "jenks",
 ): ColorScale {
   const sorted = values.filter((n) => Number.isFinite(n)).sort((a, b) => a - b);
   if (!sorted.length) {
     return mode === "percent"
+<<<<<<< HEAD
       ? { min: 0, max: 100, sorted: [0, 100], mode, classes: EMPTY_CLASSES }
       : { min: 0, max: 1, sorted: [0, 1], mode, classes: EMPTY_CLASSES };
+=======
+      ? { min: 0, max: 100, sorted: [0, 100], mode, scheme: "jenks", classes: EMPTY_CLASSES, colors: MAP_COLORS }
+      : { min: 0, max: 1, sorted: [0, 1], mode, scheme: "jenks", classes: EMPTY_CLASSES, colors: MAP_COLORS };
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
   }
 
   const min = sorted[0];
   const max = sorted[sorted.length - 1];
+  if (scheme === "sex-ratio") {
+    return {
+      min,
+      max: max > min ? max : min,
+      sorted,
+      mode,
+      scheme,
+      classes: sexRatioClasses(sorted),
+      colors: SEX_RATIO_COLORS,
+    };
+  }
   return {
     min,
     max: max > min ? max : min,
     sorted,
     mode,
+<<<<<<< HEAD
     classes: mode === "percent" ? percentClasses(sorted) : jenksClasses(sorted),
+=======
+    scheme: "jenks",
+    classes: jenksClasses(sorted),
+    colors: MAP_COLORS,
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
   };
 }
 

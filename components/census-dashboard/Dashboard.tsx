@@ -8,10 +8,14 @@ import MapFocusCard from "@/components/census-dashboard/map-focus-card";
 import SubFilterNav from "@/components/census-dashboard/sub-filter-nav";
 import LayerControl from "@/components/census-dashboard/layer-control";
 import MapToolbar from "@/components/census-dashboard/map-toolbar";
+<<<<<<< HEAD
+=======
+import UseShare from "@/components/census-dashboard/use-share";
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 import { downloadMapRows } from "@/lib/census-dashboard/export";
 import { useGeoData } from "@/lib/census-dashboard/useGeoData";
 import { useIndicatorData } from "@/lib/census-dashboard/useIndicatorData";
-import { YEAR_OPTIONS, colorScaleBounds, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/lib/census-dashboard/dashboard";
+import { YEAR_OPTIONS, colorScaleBounds, legendLabels, parseUnitKey, toMapGeo, unitKey, type UnitRow } from "@/lib/census-dashboard/dashboard";
 import { aggregateValue, lookupValue, TOTAL_CATEGORY } from "@/lib/census-dashboard/indicators";
 import { AIMAG_OPTIONS } from "@/lib/census-dashboard/aimags";
 import { CENSUS_TYPES, DEFAULT_LAYERS, TOPICS, getTopic, type Topic } from "@/lib/census-dashboard/topics";
@@ -48,6 +52,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
   const [aimagId, setAimagId] = useState<number | null>(null);
   const [soumCode, setSoumCode] = useState<number | null>(null);
   const [bagAsb, setBagAsb] = useState<number | null>(null);
+  const [hoverKey, setHoverKey] = useState<string | null>(null);
 
   const data = geo.data;
   const indicator = stats.data?.indicators.find((item) => item.id === indicatorId);
@@ -171,9 +176,9 @@ function Dashboard({ topic, onTopicChange }: Props) {
       return [
         {
           geojson: toMapGeo(soums, (p) => unitKey("soum", p.asCode)),
-          color: "#5c7488",
-          width: soumCode ? 1.2 : 0.9,
-          opacity: soumCode ? 0.6 : 0.42,
+          color: "#6d8190",
+          width: soumCode ? 1.3 : 1.05,
+          opacity: soumCode ? 0.78 : 0.62,
         },
         // Сумын бүдэг шугамын дараа зурагдаж, аймгийн хүрээ дээр гарна.
         {
@@ -206,19 +211,25 @@ function Dashboard({ topic, onTopicChange }: Props) {
   const selectedRow = selectedKey
     ? rows.find((row) => row.key === selectedKey)
     : undefined;
+  const hoverRow = hoverKey
+    ? rows.find((row) => row.key === hoverKey)
+    : undefined;
+  const focusRow = hoverRow ?? selectedRow;
 
   const percentScale =
     indicator?.unit === "share" || indicator?.unit === "rate";
+  const scaleScheme = indicatorId === "sex-ratio" ? "sex-ratio" : "jenks";
   const legendScale = useMemo(
     () =>
       colorScaleBounds(
         rows.map((row) => row.value),
         percentScale ? "percent" : "auto",
+        scaleScheme,
       ),
-    [percentScale, rows],
+    [percentScale, rows, scaleScheme],
   );
 
-  const focusTitle = selectedRow?.name
+  const focusTitle = focusRow?.name
     ?? (soumCode
       ? data?.soums.features.find((feature) => feature.properties.asCode === soumCode)?.properties.name
       : undefined)
@@ -227,7 +238,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
       : undefined)
     ?? "Монгол Улс";
 
-  const focusValue = selectedRow?.value ?? tableTotal ?? 0;
+  const focusValue = focusRow?.value ?? tableTotal ?? 0;
   const indicatorLabel =
     topic.subFilters.find((item) => item.id === indicatorId)?.label ??
     indicator?.label ??
@@ -254,7 +265,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
   const shareNoun: "хүн амын" | "өрхийн" =
     topic.id === "household" ? "өрхийн" : "хүн амын";
   const isShare = indicator?.unit === "share" && Boolean(selectedCategoryLabel);
-  const isNationalFocus = !selectedRow;
+  const isNationalFocus = !focusRow;
   const shareCaption = isShare
     ? formatShareCaption({
         place: focusTitle,
@@ -333,11 +344,12 @@ function Dashboard({ topic, onTopicChange }: Props) {
 
   function handleLayerChange(next: MapLayer) {
     if (next === layer) return;
+    const leavingDrill = aimagId != null || soumCode != null || bagAsb != null;
     setLayer(next);
     setAimagId(null);
     setSoumCode(null);
     setBagAsb(null);
-    setFitToken((n) => n + 1);
+    if (leavingDrill) setFitToken((n) => n + 1);
   }
 
   function drillToSoum(id: number) {
@@ -390,6 +402,17 @@ function Dashboard({ topic, onTopicChange }: Props) {
       setSoumCode(bag.properties.asCode);
       setAimagId(bag.properties.aimagId);
     }
+  }
+
+  function handleDownload() {
+    if (!rows.length) return;
+    downloadMapRows(rows, {
+      indicator: indicatorLabel,
+      category: categoryLabel || undefined,
+      year,
+      layer,
+      percent: percentScale,
+    });
   }
 
   return (
@@ -476,6 +499,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
               ) : null}
               {error && <p className="dashboard-note">{error}</p>}
             </div>
+            <UseShare onDownload={handleDownload} downloadDisabled={!rows.length} />
           </aside>
 
           <main className="dashboard-map">
@@ -494,7 +518,7 @@ function Dashboard({ topic, onTopicChange }: Props) {
             />
             {data ? (
               <UnitMap
-                mapId={`${layer}-${aimagId ?? "all"}-${soumCode ?? "all"}-${mapGeo.features.length}`}
+                mapId={`${aimagId ?? "all"}-${soumCode ?? "all"}`}
                 geojson={mapGeo}
                 values={mapValues}
                 layer={layer}
@@ -502,7 +526,9 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 tooltip={tooltip}
                 fitToken={fitToken}
                 percentScale={percentScale}
+                scaleScheme={scaleScheme}
                 onSelect={handleMapSelect}
+                onHover={setHoverKey}
               />
             ) : (
               <div className="dashboard-loading">Газрын зураг ачааллаж байна…</div>
@@ -517,7 +543,13 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 note={cardNote}
                 value={focusValue}
                 classes={legendScale.classes}
+<<<<<<< HEAD
                 markerValue={selectedRow?.value}
+=======
+                colors={legendScale.colors}
+                classLabels={legendLabels(legendScale)}
+                markerValue={focusRow?.value ?? focusValue}
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
                 percent={percentScale}
               />
             ) : null}
