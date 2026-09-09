@@ -2,7 +2,7 @@
 
 import { INTRO_COLORS } from "@/lib/statcate-intro/constants";
 import { formatValue } from "@/lib/statcate-intro/format";
-import { resolveIcon, resolveIconColor, resolveIconImage } from "@/lib/statcate-intro/icons";
+import { resolveIcon, resolveIconColor } from "@/lib/statcate-intro/icons";
 import { nationalValue, yearOrLatest } from "@/lib/statcate-intro/query";
 import type { KpiWidget } from "@/lib/statcate-intro/types";
 import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDashboard";
@@ -37,7 +37,6 @@ export default function KpiRow({ widget, dash }: Props) {
   return (
     <section className="sector-intro-kpis">
       {items.map((item, i) => {
-        const image = resolveIconImage(item.icon);
         const Icon = resolveIcon(item.icon);
         const accent = resolveIconColor(item.icon) ?? palette[i % palette.length];
         return (
@@ -46,8 +45,8 @@ export default function KpiRow({ widget, dash }: Props) {
             className="sector-intro-kpi"
             style={{ ["--accent" as string]: accent }}
           >
-            <span className={`sector-intro-kpi-icon${image ? "" : " is-mark"}`}>
-              {image ? <img src={image} alt="" width={44} height={44} /> : <Icon size={24} />}
+            <span className="sector-intro-kpi-icon is-mark">
+              <Icon size={22} />
             </span>
             <div>
               <strong>{formatValue(item.value, lng, item.format)}</strong>

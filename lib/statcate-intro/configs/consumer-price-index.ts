@@ -8,8 +8,8 @@ export const consumerPriceIndex: IntroDashboardConfig = {
   subsector: "Consumer Price Index",
   title: { mn: "Хэрэглээний үнэ", en: "Consumer price index" },
   subtitle: { mn: "инфляц, бүлэг, аймаг", en: "inflation, groups, aimags" },
-  palette: ["#C0392B", "#1A5CAD", "#0E7C7B", "#E67E22"],
-  mapColors: ["#FDE8D8", "#F5B48A", "#E07A4A", "#C0392B", "#7B1E1E"],
+  palette: ["#1A5CAD", "#0E7C7B", "#2980B9", "#5B6B80"],
+  mapColors: ["#E8F1F8", "#A8C8E0", "#5B9BC4", "#1A5CAD", "#0D3A66"],
   dimensions: { time: "Он", geo: "Бүс" },
   tables: [
     {

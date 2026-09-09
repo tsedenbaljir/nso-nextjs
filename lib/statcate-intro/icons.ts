@@ -7,71 +7,65 @@ import {
   ArrowUpFromLine,
   Banknote,
   BarChart3,
+  Beef,
+  BookOpen,
   Building2,
   CalendarDays,
+  ChartPie,
+  Church,
+  ClipboardCheck,
   CloudLightning,
   Cog,
   Coins,
   CreditCard,
   DollarSign,
   Droplets,
+  Factory,
   Flame,
   Gauge,
   GitCompare,
+  Globe2,
   Handshake,
   Home,
   HousePlus,
+  IdCard,
   Landmark,
   LandPlot,
+  Leaf,
+  Milk,
   Mountain,
   Package,
+  Percent,
   Plane,
   Receipt,
+  Salad,
   Scale,
   Shield,
+  ShieldCheck,
   Trees,
   TrendingUp,
   User,
+  Users,
   UsersRound,
   UtensilsCrossed,
   Wallet,
   Warehouse,
   Wheat,
+  Carrot,
+  Zap,
 } from "lucide-react";
-import {
-  BookMark,
-  BoltMark,
-  CareMark,
-  ChildMark,
-  ChurchMark,
-  CoinMark,
-  DharmaMark,
-  ElderMark,
-  FactoryMark,
-  GlobeMark,
-  InsuredMark,
-  LeafMark,
-  MosqueMark,
-  OtherMark,
-  PensionerMark,
-  PeopleMark,
-  PercentMark,
-  SdgMark,
-  TempleMark,
-  MaleMark,
-  FemaleMark,
-} from "@/lib/statcate-intro/marks";
+import { MaleMark, FemaleMark } from "@/lib/statcate-intro/marks";
 import { trimLabel } from "@/lib/statcate-intro/format";
 import type { IntroIconName } from "@/lib/statcate-intro/types";
 import type { LucideIcon } from "lucide-react";
 
-type Mark = typeof TempleMark;
+type Mark = typeof MaleMark;
 
 function asMark(Icon: LucideIcon): Mark {
-  function LucideMark({ size = 24, className }: { size?: number; className?: string }) {
+  function LucideMark({ size = 22, className }: { size?: number; className?: string }) {
     return createElement(Icon, {
       size,
-      strokeWidth: 2.25,
+      strokeWidth: 2,
       className,
       "aria-hidden": true,
     });
@@ -79,37 +73,38 @@ function asMark(Icon: LucideIcon): Mark {
   return LucideMark;
 }
 
+/** Энгийн line icon — бүх танилцуулгын KPI/flow дээр нэг албан ёсны хэв. */
 export const INTRO_ICONS: Record<IntroIconName, Mark> = {
-  temple: TempleMark,
-  people: PeopleMark,
+  temple: asMark(Landmark),
+  people: asMark(Users),
   representatives: asMark(UsersRound),
   male: MaleMark,
   female: FemaleMark,
-  book: BookMark,
-  dharma: DharmaMark,
-  church: ChurchMark,
-  mosque: MosqueMark,
-  other: OtherMark,
-  poverty: PeopleMark,
-  gini: OtherMark,
-  subsistence: BookMark,
-  insured: InsuredMark,
-  pensioner: PensionerMark,
-  avgPension: CoinMark,
-  welfare: CareMark,
-  sdg: SdgMark,
-  child: ChildMark,
-  elder: ElderMark,
+  book: asMark(BookOpen),
+  dharma: asMark(Landmark),
+  church: asMark(Church),
+  mosque: asMark(Building2),
+  other: asMark(Building2),
+  poverty: asMark(Users),
+  gini: asMark(ChartPie),
+  subsistence: asMark(ClipboardCheck),
+  insured: asMark(ShieldCheck),
+  pensioner: asMark(IdCard),
+  avgPension: asMark(Coins),
+  welfare: asMark(Handshake),
+  sdg: asMark(Globe2),
+  child: asMark(Users),
+  elder: asMark(Users),
   bop: asMark(Scale),
-  cpi: PercentMark,
-  environment: LeafMark,
-  energy: BoltMark,
+  cpi: asMark(Percent),
+  environment: asMark(Leaf),
+  energy: asMark(Zap),
   trade: asMark(ArrowLeftRight),
   budget: asMark(Landmark),
   investment: asMark(TrendingUp),
   money: asMark(Banknote),
   gdp: asMark(BarChart3),
-  ppi: FactoryMark,
+  ppi: asMark(Factory),
   productivity: asMark(Gauge),
   fx: asMark(DollarSign),
   forest: asMark(Trees),
@@ -117,10 +112,10 @@ export const INTRO_ICONS: Record<IntroIconName, Mark> = {
   services: asMark(Handshake),
   reserves: asMark(Coins),
   food: asMark(UtensilsCrossed),
-  meat: asMark(UtensilsCrossed),
-  milk: asMark(UtensilsCrossed),
-  potato: asMark(UtensilsCrossed),
-  vegetables: asMark(UtensilsCrossed),
+  meat: asMark(Beef),
+  milk: asMark(Milk),
+  potato: asMark(Carrot),
+  vegetables: asMark(Salad),
   housing: asMark(Building2),
   housingNew: asMark(HousePlus),
   housingOld: asMark(Home),
@@ -137,7 +132,7 @@ export const INTRO_ICONS: Record<IntroIconName, Mark> = {
   expense: asMark(Wallet),
   domestic: asMark(Warehouse),
   foreign: asMark(Plane),
-  fdi: GlobeMark,
+  fdi: asMark(Globe2),
   loans: asMark(CreditCard),
   npl: asMark(AlertTriangle),
   growth: asMark(Activity),
@@ -147,7 +142,6 @@ export const INTRO_ICONS: Record<IntroIconName, Mark> = {
   utilities: asMark(Droplets),
 };
 
-/** KPI icon бүрт өөр өнгө — нэг л palette-ийн давталтаас илүү ялгаатай. */
 export const INTRO_ICON_COLORS: Partial<Record<IntroIconName, string>> = {
   representatives: "#5B6B80",
   male: "#12658F",
@@ -155,17 +149,23 @@ export const INTRO_ICON_COLORS: Partial<Record<IntroIconName, string>> = {
   sdg: "#E5243B",
   child: "#1A5CAD",
   elder: "#5B6B80",
-  poverty: "#E5243B",
+  poverty: "#C0392B",
+  gini: "#5B6B80",
+  subsistence: "#1A5CAD",
+  insured: "#0E7C7B",
+  pensioner: "#5B6B80",
+  avgPension: "#B8860B",
+  welfare: "#12658F",
   bop: "#0F6A6A",
   goods: "#C45A2A",
   services: "#1A5CAD",
   reserves: "#B8860B",
-  cpi: "#C0392B",
+  cpi: "#1A5CAD",
   food: "#D35400",
-  meat: "#D35400",
-  milk: "#D35400",
-  potato: "#D35400",
-  vegetables: "#D35400",
+  meat: "#C0392B",
+  milk: "#2980B9",
+  potato: "#B8860B",
+  vegetables: "#2E7D32",
   housing: "#2980B9",
   housingNew: "#0E7C7B",
   housingOld: "#5B6B80",
@@ -201,35 +201,14 @@ export const INTRO_ICON_COLORS: Partial<Record<IntroIconName, string>> = {
   manufacturing: "#455A64",
   utilities: "#0277BD",
   productivity: "#00897B",
+  temple: "#8A146F",
+  people: "#12658F",
+  book: "#5B6B80",
+  dharma: "#C45A2A",
+  church: "#1A5CAD",
+  mosque: "#0E7C7B",
+  other: "#5B6B80",
 };
-
-const INTRO_ICON_IMAGES: Partial<Record<IntroIconName, string>> = {
-  meat: "/icons/price/meat.png",
-  milk: "/icons/price/milk.png",
-  potato: "/icons/price/potato.png",
-  vegetables: "/icons/price/cabbage.png",
-  temple: "/icons/religion/temple.png",
-  people: "/icons/religion/people.png",
-  book: "/icons/religion/book.png",
-  dharma: "/icons/religion/buddha.png",
-  church: "/icons/religion/church.png",
-  mosque: "/icons/religion/mosque.png",
-  other: "/icons/religion/other.png",
-  poverty: "/icons/poverty/poverty.png",
-  gini: "/icons/poverty/gini.png",
-  subsistence: "/icons/poverty/adt.png",
-};
-
-const INTRO_CLERGY_IMAGES: Partial<Record<IntroIconName, string>> = {
-  dharma: "/icons/religion/clergy-monk.png",
-  church: "/icons/religion/clergy-priest.png",
-  mosque: "/icons/religion/clergy-islam.png",
-  other: "/icons/religion/clergy-other.png",
-};
-
-export function resolveIconImage(name?: IntroIconName): string | undefined {
-  return name ? INTRO_ICON_IMAGES[name] : undefined;
-}
 
 export function resolveIcon(name?: IntroIconName): Mark {
   return INTRO_ICONS[name ?? "other"];
@@ -251,12 +230,4 @@ export function resolveCategoryIconName(label: string, map?: Record<string, Intr
 
 export function resolveCategoryIcon(label: string, map?: Record<string, IntroIconName>): Mark {
   return INTRO_ICONS[resolveCategoryIconName(label, map)];
-}
-
-export function resolveCategoryImage(label: string, map?: Record<string, IntroIconName>): string | undefined {
-  return INTRO_ICON_IMAGES[resolveCategoryIconName(label, map)];
-}
-
-export function resolveCategoryClergyImage(label: string, map?: Record<string, IntroIconName>): string | undefined {
-  return INTRO_CLERGY_IMAGES[resolveCategoryIconName(label, map)];
 }

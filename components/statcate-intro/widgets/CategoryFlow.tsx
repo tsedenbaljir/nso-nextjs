@@ -1,11 +1,7 @@
 "use client";
 
 import { formatCount } from "@/lib/statcate-intro/format";
-import {
-  resolveCategoryClergyImage,
-  resolveCategoryIcon,
-  resolveCategoryImage,
-} from "@/lib/statcate-intro/icons";
+import { resolveCategoryIcon } from "@/lib/statcate-intro/icons";
 import { colorFor, listCategories, nationalValue } from "@/lib/statcate-intro/query";
 import type { CategoryFlowWidget } from "@/lib/statcate-intro/types";
 import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDashboard";
@@ -39,12 +35,14 @@ export default function CategoryFlow({ widget, dash }: Props) {
       <div className="category-flow">
         <div className="category-flow-col category-flow-col--left">
           {items.map((item) => {
-            const image = resolveCategoryImage(item.label, widget.categoryIcons);
             const Icon = resolveCategoryIcon(item.label, widget.categoryIcons);
             return (
               <div key={item.label} className="category-flow-node">
-                <span className="category-flow-orb">
-                  {image ? <img src={image} alt="" width={40} height={40} /> : <Icon size={20} />}
+                <span
+                  className="category-flow-orb is-mark"
+                  style={{ ["--accent" as string]: item.color }}
+                >
+                  <Icon size={18} />
                 </span>
                 <div>
                   <strong>{formatCount(item.source, lng)}</strong>
@@ -60,7 +58,6 @@ export default function CategoryFlow({ widget, dash }: Props) {
 
         <div className="category-flow-col category-flow-col--right">
           {items.map((item) => {
-            const clergy = resolveCategoryClergyImage(item.label, widget.categoryIcons);
             const Icon = resolveCategoryIcon(item.label, widget.categoryIcons);
             return (
               <article
@@ -68,8 +65,8 @@ export default function CategoryFlow({ widget, dash }: Props) {
                 className="category-flow-card"
                 style={{ ["--accent" as string]: item.color }}
               >
-                <span className="category-flow-card-icon">
-                  {clergy ? <img src={clergy} alt="" width={40} height={40} /> : <Icon size={20} />}
+                <span className="category-flow-card-icon is-mark">
+                  <Icon size={18} />
                 </span>
                 <div>
                   <p>
