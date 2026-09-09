@@ -8,7 +8,10 @@ import MapFocusCard from "@/components/census-dashboard/map-focus-card";
 import SubFilterNav from "@/components/census-dashboard/sub-filter-nav";
 import LayerControl from "@/components/census-dashboard/layer-control";
 import MapToolbar from "@/components/census-dashboard/map-toolbar";
+<<<<<<< HEAD
+=======
 import UseShare from "@/components/census-dashboard/use-share";
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 import { downloadMapRows } from "@/lib/census-dashboard/export";
 import { useGeoData } from "@/lib/census-dashboard/useGeoData";
 import { useIndicatorData } from "@/lib/census-dashboard/useIndicatorData";
@@ -500,7 +503,19 @@ function Dashboard({ topic, onTopicChange }: Props) {
           </aside>
 
           <main className="dashboard-map">
-            <MapToolbar onHome={resetToCountry} />
+            <MapToolbar
+              onHome={resetToCountry}
+              downloadDisabled={!rows.length}
+              onDownload={() =>
+                downloadMapRows(rows, {
+                  indicator: indicatorLabel,
+                  category: categoryLabel || undefined,
+                  year,
+                  layer,
+                  percent: percentScale,
+                })
+              }
+            />
             {data ? (
               <UnitMap
                 mapId={`${aimagId ?? "all"}-${soumCode ?? "all"}`}
@@ -528,9 +543,13 @@ function Dashboard({ topic, onTopicChange }: Props) {
                 note={cardNote}
                 value={focusValue}
                 classes={legendScale.classes}
+<<<<<<< HEAD
+                markerValue={selectedRow?.value}
+=======
                 colors={legendScale.colors}
                 classLabels={legendLabels(legendScale)}
                 markerValue={focusRow?.value ?? focusValue}
+>>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
                 percent={percentScale}
               />
             ) : null}

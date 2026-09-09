@@ -6,6 +6,8 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import LoadingDiv from "@/components/Loading/Text/Index";
 import TableauEmbed from "@/components/tableau/TableauEmbed";
+import SectorIntroDashboard from "@/components/statcate-intro/SectorIntroDashboard";
+import { hasIntroDashboard } from "@/lib/statcate-intro/registry";
 
 export default function Main({ lng, sector, subsector }) {
   const [data, setData] = useState(null);
@@ -68,7 +70,11 @@ export default function Main({ lng, sector, subsector }) {
 
           <br />
 
-          <TableauEmbed viewPath={tableauPath} height={850} />
+          {hasIntroDashboard(subsector) ? (
+            <SectorIntroDashboard lng={lng} sector={sector} subsector={subsector} />
+          ) : (
+            <TableauEmbed viewPath={tableauPath} height={850} />
+          )}
         </>
       )}
     </div>
