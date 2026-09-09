@@ -9,8 +9,10 @@ async function loadFile(
   table: IntroTableConfig,
   file: string,
 ): Promise<PxRow[]> {
-  const meta = await fetchPxMetadata(lng, sector, subsector, file, table.subtables);
-  return fetchPxRows(lng, sector, subsector, file, meta, table.select, table.subtables);
+  const fromSector = table.sourceSector ?? sector;
+  const fromSubsector = table.sourceSubsector ?? subsector;
+  const meta = await fetchPxMetadata(lng, fromSector, fromSubsector, file, table.subtables);
+  return fetchPxRows(lng, fromSector, fromSubsector, file, meta, table.select, table.subtables);
 }
 
 export async function loadIntroTables(
