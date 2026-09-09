@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
+import { Agent } from 'undici';
 
 const baseAPI = 'https://data.1212.mn/api/v1';
+const insecure = new Agent({ connect: { rejectUnauthorized: false } });
 
 export async function GET(request) {
     try {
@@ -28,6 +30,7 @@ export async function GET(request) {
                     'Content-Type': 'application/json',
                     'access-token': 'a79fb6ab-5953-4c46-a240-a20c2af9150a',
                 },
+                dispatcher: insecure,
             }
         );
 
@@ -73,6 +76,7 @@ export async function POST(request) {
                     'access-token': 'a79fb6ab-5953-4c46-a240-a20c2af9150a',
                 },
                 body: JSON.stringify(postBody),
+                dispatcher: insecure,
             }
         );
         if (!response.ok) {

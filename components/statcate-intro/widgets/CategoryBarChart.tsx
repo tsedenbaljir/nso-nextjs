@@ -21,7 +21,7 @@ export default function CategoryBarChart({ widget, dash, chartHeight }: Props) {
   const table = tablesById[widget.table];
   if (!table) return null;
 
-  const { year: usedYear, rows: yearRows } = rowsForYear(table.rows, config, year, table);
+  const { year: usedYear, rows: yearRows } = rowsForYear(table.rows, config, year, table, widget.fallbackYear ?? true);
   const totals = widget.totals ?? [];
   let rows = yearRows
     .map((row) => {
@@ -46,8 +46,18 @@ export default function CategoryBarChart({ widget, dash, chartHeight }: Props) {
 
   if (!rows.length) return null;
 
+  const chartRows = widget.categories
+    ? widget.categories.map(({ code, label }) => {
+        const row = code == null ? undefined : yearRows.find(
+          (item) => String(item[`${widget.dimension}_code`]) === code,
+        );
+        return { name: loc(lng, label), value: finiteNum(row?.value) };
+      })
+    : rows;
+
   const suffix = table.format === "percent" ? "%" : "";
   const horizontal = widget.layout === "horizontal";
+  const color = widget.color ?? (config.palette ?? INTRO_COLORS)[0];
   const tip = {
     lng,
     year: usedYear,
@@ -55,14 +65,27 @@ export default function CategoryBarChart({ widget, dash, chartHeight }: Props) {
     formatValue: (value: number) => formatValue(value, lng, table.format ?? "count"),
   };
   const option = horizontal
-    ? regionBarOption(rows, (config.palette ?? INTRO_COLORS)[0], tip)
+    ? regionBarOption(chartRows, color, tip)
     : categoryBarOption(
-        rows.map((item) => item.name),
-        rows.map((item) => item.value),
-        (config.palette ?? INTRO_COLORS)[0],
+        chartRows.map((item) => item.name),
+        chartRows.map((item) => item.value),
+        color,
         suffix,
         tip,
       );
+  if (widget.valueColorBands?.length) {
+    option.visualMap = {
+      type: "piecewise",
+      show: false,
+      dimension: 0,
+      seriesIndex: 0,
+      pieces: widget.valueColorBands.map(({ min, max, color }) => ({
+        ...(min != null ? { gte: min } : {}),
+        ...(max != null ? { lt: max } : {}),
+        color,
+      })),
+    };
+  }
   const height =
     widget.height ?? chartHeight ?? (horizontal ? Math.min(480, Math.max(320, rows.length * 30)) : 320);
   const title = widget.title ? loc(lng, widget.title) : table.label;

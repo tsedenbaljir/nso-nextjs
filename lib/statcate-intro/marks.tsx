@@ -24,6 +24,24 @@ function Svg({ size = 22, className, children }: MarkProps & { children: ReactNo
   );
 }
 
+export function MaleMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="9" cy="15" r="6" />
+      <path d="m13.3 10.7 7-7M14 3h7v7" />
+    </Svg>
+  );
+}
+
+export function FemaleMark(props: MarkProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="8" r="6" />
+      <path d="M12 14v8M8 18h8" />
+    </Svg>
+  );
+}
+
 export function TempleMark(props: MarkProps) {
   return (
     <Svg {...props}>

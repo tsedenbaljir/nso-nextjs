@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
 import { parse } from 'node-html-parser';
+import { Agent } from 'undici';
+
+const insecure = new Agent({ connect: { rejectUnauthorized: false } });
+
+function emptyMetadataResponse() {
+    return NextResponse.json({ content: '' });
+}
 
 export async function GET(request) {
     try {
@@ -16,54 +23,43 @@ export async function GET(request) {
             );
         }
 
-        const link = subtables ? `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}__${subtables}/${id}` :
-            `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodeURIComponent(sector)}__${decodeURIComponent(subsector)}/${id}`
-        const response = await fetch(link);
+        const decodedSector = decodeURIComponent(sector);
+        const decodedSubsector = decodeURIComponent(subsector);
+        const link = subtables
+            ? `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodedSector}__${decodedSubsector}__${subtables}/${id}`
+            : `https://data.1212.mn/pxweb/${lng}/NSO/NSO__${decodedSector}__${decodedSubsector}/${id}`;
+
+        const response = await fetch(link, { dispatcher: insecure });
         if (!response.ok) {
-            return NextResponse.json({
-                status: false,
-                data: [],
-                message: "Failed to fetch data"
-            });
+            return emptyMetadataResponse();
         }
-        const contentType = response.headers.get('Content-Type');
+
+        const contentType = response.headers.get('Content-Type') ?? '';
         const metadata = await response.text();
 
         if (!contentType.includes('text/html')) {
-            return NextResponse.json([]);
+            return emptyMetadataResponse();
         }
 
         const root = parse(metadata);
         const wrapElement = root.querySelector('#pxwebcontent');
-
         if (!wrapElement) {
-            return NextResponse.json(
-                { error: 'Could not find pxwebcontent element' },
-                { status: 404 }
-            );
+            return emptyMetadataResponse();
         }
 
         const SelectionPage = wrapElement.querySelector('#SelectionPage');
         if (!SelectionPage) {
-            return NextResponse.json(
-                { error: 'Could not find SelectionPage element' },
-                { status: 404 }
-            );
+            return emptyMetadataResponse();
         }
 
         const footnotesDiv = SelectionPage.querySelector('#ctl00_ContentPlaceHolderMain_divFootnotes');
         if (!footnotesDiv) {
-            return NextResponse.json(
-                { error: 'Could not find footnotes div' },
-                { status: 404 }
-            );
+            return emptyMetadataResponse();
         }
 
         return NextResponse.json({ content: footnotesDiv.innerHTML });
     } catch (error) {
-        return NextResponse.json(
-            { error: error.message },
-            { status: 500 }
-        );
+        console.error('Error fetching table metadata:', error);
+        return emptyMetadataResponse();
     }
 }

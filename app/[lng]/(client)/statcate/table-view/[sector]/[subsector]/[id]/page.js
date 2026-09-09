@@ -48,26 +48,18 @@ export default function TableView(props) {
         getData();
         async function getMetadata() {
             try {
-                // Fetch the URL
                 const resMetadata = await fetch(`/api/table-view/metadata?lng=${lng}&sector=${sector}&subsector=${subsector}&id=${id}${subtables ? `&subtables=${subtables}` : ''}`);
 
                 if (!resMetadata.ok) {
-                    setLoading(false);
-                    setMetadata([]);
-                    throw new Error('Failed to fetch metadata');
+                    setMetadata('');
+                    return;
                 }
 
                 const data = await resMetadata.json();
-                if (data.error) {
-                    console.error('Error fetching metadata:', data.error);
-                    setMetadata([]);
-                } else if (data.content) {
-                    setMetadata(data.content);
-                } else {
-                    console.log('No metadata content found in response');
-                }
+                setMetadata(typeof data.content === 'string' ? data.content : '');
             } catch (error) {
-                console.error('Error fetching or parsing data:', error);
+                console.error('Error fetching or parsing metadata:', error);
+                setMetadata('');
             }
         }
         getMetadata()

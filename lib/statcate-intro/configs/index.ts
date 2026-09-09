@@ -15,6 +15,10 @@ import { moneyAndFinance } from "@/lib/statcate-intro/configs/money-and-finance"
 import { nationalAccounts } from "@/lib/statcate-intro/configs/national-accounts";
 import { producerPriceIndex } from "@/lib/statcate-intro/configs/producer-price-index";
 import { productivity } from "@/lib/statcate-intro/configs/productivity";
+import { disability } from "@/lib/statcate-intro/configs/disability";
+import { election } from "@/lib/statcate-intro/configs/election";
+import { foodSecurity } from "@/lib/statcate-intro/configs/food-security";
+import { gender } from "@/lib/statcate-intro/configs/gender";
 
 /**
  * Шинэ салбар нэмэх:
@@ -38,4 +42,8 @@ export const INTRO_CONFIGS: IntroDashboardConfig[] = [
   nationalAccounts,
   producerPriceIndex,
   productivity,
+  disability,
+  election,
+  foodSecurity,
+  gender,
 ];

@@ -2101,6 +2101,25 @@
           
           "duties": "The Statistical Council of the National Statistics Office shall perform its functions with the mandate to support the implementation of official statistical activities, and provide recommendations on matters related to enhancement of methodological coherence, improvement of the quality of official statistics, strengthening of coordination among data producers"
           
-        }
+        },
+        {
+          "id": 26,
+            "title": "Permanent Board of Methodology",
+            "goals": "The primary objective of the Council is to identify the needs for statistical data collection and to develop and improve censuses, registrations, surveys, indicators, estimation methodologies, statistical methods, sampling designs, classifications, standards, codes, concepts, questionnaires, forms, and manuals in compliance with the Law on Statistics, other relevant legislation, internationally accepted methodologies, standards, and recommendations. The Council also aims to ensure methodological consistency and provide scientifically sound professional opinions, conclusions, and recommendations.",
+            "duties": [
+              {
+                "title": "To review and improve the matters to be discussed and presented at Council meetings in accordance with the Law on Statistics, other relevant legislation, internationally accepted standards, methodologies, and statistical practices, while reflecting national circumstances and specificities."
+              },
+              {
+                "title": "To ensure that administrative statistical data do not duplicate official statistical data and that consistency and coherence among statistical indicators are maintained."
+              },
+              {
+                "title": "To examine the necessity for censuses, registrations, surveys, forms, questionnaires, and data collection activities conducted at the national level, other than those stipulated in the Law on Statistics, and to provide professional opinions and recommendations."
+              },
+              {
+                "title": "To issue scientifically grounded professional conclusions and recommendations."
+              }
+            ]
+          }
   ]
 }
