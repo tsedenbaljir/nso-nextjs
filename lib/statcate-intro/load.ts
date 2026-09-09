@@ -22,7 +22,12 @@ export async function loadIntroTables(
   return Promise.all(
     config.tables.map(async (table) => {
       const files = [table.file, ...(table.files ?? [])];
-      const packs = await Promise.all(files.map((file) => loadFile(lng, sector, subsector, table, file)));
+      const packs = await Promise.all(files.map((source) => {
+        // Historical files may encode the same indicator with different dimensions.
+        const file = typeof source === "string" ? source : source.file;
+        const sourceTable = typeof source === "string" ? table : { ...table, select: source.select };
+        return loadFile(lng, sector, subsector, sourceTable, file);
+      }));
       return {
         id: table.id,
         label: loc(lng, table.label),

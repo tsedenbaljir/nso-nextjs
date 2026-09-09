@@ -197,7 +197,7 @@ export function categoryBarOption(
 }
 
 export function regionBarOption(
-  rows: { name: string; value: number }[],
+  rows: { name: string; value: number | null }[],
   color = INTRO_COLORS[0],
   tooltip?: ChartTooltipMeta,
 ): EChartsOption {

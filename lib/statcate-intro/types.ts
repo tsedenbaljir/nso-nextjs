@@ -8,6 +8,9 @@ export type PxRow = Record<string, string | number | null>;
 export type IntroIconName =
   | "temple"
   | "people"
+  | "representatives"
+  | "male"
+  | "female"
   | "book"
   | "dharma"
   | "church"
@@ -40,6 +43,10 @@ export type IntroIconName =
   | "services"
   | "reserves"
   | "food"
+  | "meat"
+  | "milk"
+  | "potato"
+  | "vegetables"
   | "housing"
   | "calendar"
   | "ag"
@@ -69,7 +76,7 @@ export type IntroTableConfig = {
   id: string;
   file: string;
   /** Нэмэлт PX файлууд — мөрийг нэгтгэнэ (ж: 1995–2020 + 2022). */
-  files?: string[];
+  files?: (string | { file: string; select: Record<string, string[]> })[];
   /** PX дэд хавтас, ж: "INEQUALITY, Gini index, Theil index" */
   subtables?: string;
   label: LocalizedText;
@@ -139,6 +146,7 @@ export type RegionBarsWidget = {
 };
 
 export type RegionMapLayout = {
+  fitToContainer?: boolean;
   aspectScale?: number;
   layoutCenter?: [string, string];
   layoutSize?: string;
@@ -152,6 +160,7 @@ export type RegionMapLayout = {
 
 export type RegionMapWidget = {
   type: "region-map";
+  title?: LocalizedText;
   span?: IntroWidgetSpan;
   table: string;
   layout?: RegionMapLayout;
@@ -169,6 +178,14 @@ export type CategoryStatsWidget = {
 
 export type CategoryBarsWidget = {
   type: "category-bars";
+  /** Fixed rows shared by paired charts; absent codes retain an empty row. */
+  categories?: { code?: string; label: LocalizedText }[];
+  /** Show only the selected year when false (for one-off events such as runoffs). */
+  fallbackYear?: boolean;
+  /** Override the dashboard palette for this chart. */
+  color?: string;
+  /** Value bands: min inclusive, max exclusive; applied only to this widget. */
+  valueColorBands?: { min?: number; max?: number; color: string }[];
   span?: IntroWidgetSpan;
   table: string;
   dimension: string;

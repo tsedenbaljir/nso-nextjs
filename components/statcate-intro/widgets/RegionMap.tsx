@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts";
 import type { EChartsOption } from "echarts";
@@ -48,6 +48,17 @@ type GeoCollection = {
 export default function RegionMap({ widget, dash, chartHeight }: Props) {
   const { config, tablesById, year, lng } = dash;
   const [ready, setReady] = useState(false);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [geoRatio, setGeoRatio] = useState(0);
+
+  useEffect(() => {
+    const element = chartRef.current;
+    if (!element || !widget.layout?.fitToContainer) return;
+    const observer = new ResizeObserver(([entry]) => setContainerWidth(entry.contentRect.width));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [config, year, widget.layout?.fitToContainer]);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,6 +66,16 @@ export default function RegionMap({ widget, dash, chartHeight }: Props) {
       .then((res) => res.json())
       .then((json: GeoCollection) => {
         if (cancelled) return;
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        function visit(coordinates: unknown) {
+          if (!Array.isArray(coordinates)) return;
+          if (typeof coordinates[0] === "number" && typeof coordinates[1] === "number") {
+            minX = Math.min(minX, coordinates[0]); maxX = Math.max(maxX, coordinates[0]);
+            minY = Math.min(minY, coordinates[1]); maxY = Math.max(maxY, coordinates[1]);
+          } else coordinates.forEach(visit);
+        }
+        json.features.forEach((feature) => visit((feature.geometry as { coordinates?: unknown })?.coordinates));
+        if (maxY > minY) setGeoRatio((maxX - minX) / (maxY - minY));
         const features = (json.features ?? []).map((feature) => {
           const id = feature.properties?.id ?? feature.properties?.aimag_id;
           const name =
@@ -115,6 +136,13 @@ export default function RegionMap({ widget, dash, chartHeight }: Props) {
   const layout = widget.layout;
   const height = chartHeight ?? layout?.height ?? 380;
   const legend = layout?.legend ?? "horizontal";
+  const fittedLayout = layout?.fitToContainer && containerWidth > 0 && geoRatio > 0
+    ? {
+        aspectScale: layout.aspectScale ?? 0.75,
+        layoutCenter: ["50%", "45%"] as [string, string],
+        layoutSize: Math.min(containerWidth * 0.94, (height * 0.9 - 32) * geoRatio * (layout.aspectScale ?? 0.75)),
+      }
+    : mapSeriesLayout(layout);
 
   const option: EChartsOption = {
     textStyle: { fontFamily: INTRO_FONT },
@@ -144,7 +172,7 @@ export default function RegionMap({ widget, dash, chartHeight }: Props) {
         type: "map",
         map: MAP_NAME,
         roam: false,
-        ...mapSeriesLayout(layout),
+        ...fittedLayout,
         data: rows,
         name: tableLabel,
         itemStyle: { borderColor: "#fff", borderWidth: 0.8, areaColor: emptyColor },
@@ -165,10 +193,10 @@ export default function RegionMap({ widget, dash, chartHeight }: Props) {
         ) : (
           <MapMark size={16} />
         )}
-        {loc(lng, COPY.byRegion)}
+        {loc(lng, widget.title ?? COPY.byRegion)}
         {mapYear && mapYear !== year ? <span> · {mapYear}</span> : null}
       </h4>
-      <div className="sector-intro-chart sector-intro-chart--map" style={{ height }}>
+      <div ref={chartRef} className="sector-intro-chart sector-intro-chart--map" style={{ height }}>
         {ready ? (
           rows.length ? (
             <ReactECharts option={option} style={{ height: "100%", width: "100%" }} notMerge />

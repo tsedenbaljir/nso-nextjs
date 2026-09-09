@@ -29,6 +29,7 @@ import {
   Trees,
   TrendingUp,
   User,
+  UsersRound,
   UtensilsCrossed,
   Wallet,
   Warehouse,
@@ -54,6 +55,8 @@ import {
   PercentMark,
   SdgMark,
   TempleMark,
+  MaleMark,
+  FemaleMark,
 } from "@/lib/statcate-intro/marks";
 import { trimLabel } from "@/lib/statcate-intro/format";
 import type { IntroIconName } from "@/lib/statcate-intro/types";
@@ -76,6 +79,9 @@ function asMark(Icon: LucideIcon): Mark {
 export const INTRO_ICONS: Record<IntroIconName, Mark> = {
   temple: TempleMark,
   people: PeopleMark,
+  representatives: asMark(UsersRound),
+  male: MaleMark,
+  female: FemaleMark,
   book: BookMark,
   dharma: DharmaMark,
   church: ChurchMark,
@@ -108,6 +114,10 @@ export const INTRO_ICONS: Record<IntroIconName, Mark> = {
   services: asMark(Handshake),
   reserves: asMark(Coins),
   food: asMark(UtensilsCrossed),
+  meat: asMark(UtensilsCrossed),
+  milk: asMark(UtensilsCrossed),
+  potato: asMark(UtensilsCrossed),
+  vegetables: asMark(UtensilsCrossed),
   housing: asMark(House),
   calendar: asMark(CalendarDays),
   ag: asMark(Wheat),
@@ -133,12 +143,19 @@ export const INTRO_ICONS: Record<IntroIconName, Mark> = {
 
 /** KPI icon бүрт өөр өнгө — нэг л palette-ийн давталтаас илүү ялгаатай. */
 export const INTRO_ICON_COLORS: Partial<Record<IntroIconName, string>> = {
+  representatives: "#5B6B80",
+  male: "#12658F",
+  female: "#8A146F",
   bop: "#0F6A6A",
   goods: "#C45A2A",
   services: "#1A5CAD",
   reserves: "#B8860B",
   cpi: "#C0392B",
   food: "#D35400",
+  meat: "#D35400",
+  milk: "#D35400",
+  potato: "#D35400",
+  vegetables: "#D35400",
   housing: "#2980B9",
   calendar: "#5B6B80",
   environment: "#2E7D32",
@@ -174,6 +191,10 @@ export const INTRO_ICON_COLORS: Partial<Record<IntroIconName, string>> = {
 };
 
 const INTRO_ICON_IMAGES: Partial<Record<IntroIconName, string>> = {
+  meat: "/icons/price/meat.png",
+  milk: "/icons/price/milk.png",
+  potato: "/icons/price/potato.png",
+  vegetables: "/icons/price/cabbage.png",
   temple: "/icons/religion/temple.png",
   people: "/icons/religion/people.png",
   book: "/icons/religion/book.png",
