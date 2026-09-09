@@ -12,9 +12,10 @@ import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDa
 type Props = {
   widget: TrendWidget;
   dash: IntroDashboardState;
+  chartHeight?: number;
 };
 
-export default function TrendChart({ widget, dash }: Props) {
+export default function TrendChart({ widget, dash, chartHeight }: Props) {
   const { config, tables, lng } = dash;
   if (!config) return null;
 
@@ -48,7 +49,7 @@ export default function TrendChart({ widget, dash }: Props) {
     },
   );
   const icon = config.sectionIcons?.trend;
-  const height = widget.height ?? 320;
+  const height = widget.height ?? chartHeight ?? 320;
 
   return (
     <div className="sector-intro-panel">
@@ -61,7 +62,7 @@ export default function TrendChart({ widget, dash }: Props) {
         {loc(lng, widget.title ?? COPY.trend)}
       </h4>
       <div className="sector-intro-chart" style={{ height }}>
-        <ReactECharts option={option} style={{ height, width: "100%" }} notMerge />
+        <ReactECharts option={option} style={{ height: "100%", width: "100%" }} notMerge />
       </div>
     </div>
   );

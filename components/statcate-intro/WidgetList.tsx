@@ -7,6 +7,7 @@ import TrendChart from "@/components/statcate-intro/widgets/TrendChart";
 import RegionBarChart from "@/components/statcate-intro/widgets/RegionBarChart";
 import RegionMap from "@/components/statcate-intro/widgets/RegionMap";
 import CategoryBarChart from "@/components/statcate-intro/widgets/CategoryBarChart";
+import { INTRO_HALF_CHART_HEIGHT } from "@/lib/statcate-intro/constants";
 import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDashboard";
 import type { IntroWidget, IntroWidgetSpan } from "@/lib/statcate-intro/types";
 
@@ -17,7 +18,7 @@ function spanOf(widget: IntroWidget): IntroWidgetSpan {
     : "half";
 }
 
-function renderWidget(widget: IntroWidget, dash: IntroDashboardState) {
+function renderWidget(widget: IntroWidget, dash: IntroDashboardState, chartHeight?: number) {
   switch (widget.type) {
     case "kpis":
       return <KpiRow widget={widget} dash={dash} />;
@@ -26,13 +27,13 @@ function renderWidget(widget: IntroWidget, dash: IntroDashboardState) {
     case "category-stats":
       return <CategoryStats widget={widget} dash={dash} />;
     case "category-bars":
-      return <CategoryBarChart widget={widget} dash={dash} />;
+      return <CategoryBarChart widget={widget} dash={dash} chartHeight={chartHeight} />;
     case "trend":
-      return <TrendChart widget={widget} dash={dash} />;
+      return <TrendChart widget={widget} dash={dash} chartHeight={chartHeight} />;
     case "region-bars":
-      return <RegionBarChart widget={widget} dash={dash} />;
+      return <RegionBarChart widget={widget} dash={dash} chartHeight={chartHeight} />;
     case "region-map":
-      return <RegionMap widget={widget} dash={dash} />;
+      return <RegionMap widget={widget} dash={dash} chartHeight={chartHeight} />;
   }
 }
 
@@ -69,7 +70,7 @@ export default function WidgetList({ dash }: { dash: IntroDashboardState }) {
           <section key={i} className="sector-intro-block sector-intro-charts">
             {row.items.map((widget, j) => (
               <div key={`${widget.type}-${j}`} className="sector-intro-chart-cell">
-                {renderWidget(widget, dash)}
+                {renderWidget(widget, dash, INTRO_HALF_CHART_HEIGHT)}
               </div>
             ))}
           </section>

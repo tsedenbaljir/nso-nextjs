@@ -12,9 +12,10 @@ import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDa
 type Props = {
   widget: RegionBarsWidget;
   dash: IntroDashboardState;
+  chartHeight?: number;
 };
 
-export default function RegionBarChart({ widget, dash }: Props) {
+export default function RegionBarChart({ widget, dash, chartHeight }: Props) {
   const { config, tablesById, year, lng } = dash;
   if (!config || !year) return null;
 
@@ -43,7 +44,7 @@ export default function RegionBarChart({ widget, dash }: Props) {
     .filter((item): item is { name: string; value: number } => Boolean(item.name) && item.value != null)
     .sort((a, b) => b.value - a.value);
 
-  const height = Math.min(480, Math.max(320, rows.length * 24));
+  const height = chartHeight ?? Math.min(480, Math.max(320, rows.length * 24));
   const title = widget.title ? loc(lng, widget.title) : loc(lng, COPY.byRegion);
 
   return (
@@ -61,7 +62,7 @@ export default function RegionBarChart({ widget, dash }: Props) {
             valueLabel: table.unit || table.label,
             formatValue: (value) => formatValue(value, lng, table.format ?? "count"),
           })}
-          style={{ height, width: "100%" }}
+          style={{ height: "100%", width: "100%" }}
           notMerge
         />
       </div>

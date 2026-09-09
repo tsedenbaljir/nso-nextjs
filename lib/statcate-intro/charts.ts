@@ -5,6 +5,9 @@ import type { TrendYAxisMode } from "@/lib/statcate-intro/types";
 
 const text = { fontFamily: INTRO_FONT };
 
+/** Shared plot box so paired trend + bar cards align top/bottom axes. */
+const ALIGNED_GRID = { left: 12, right: 16, top: 40, bottom: 28, containLabel: true } as const;
+
 export type ChartTooltipMeta = {
   lng?: string;
   year?: string;
@@ -63,18 +66,19 @@ export function trendChartOption(
     textStyle: text,
     tooltip: { trigger: "axis", ...chartTooltip(tooltip) },
     legend: {
-      bottom: 0,
+      top: 0,
+      left: "center",
       itemGap: 18,
       itemWidth: 10,
       itemHeight: 10,
       padding: [0, 0, 0, 0],
       textStyle: { ...text, color: "#5b6b80", fontSize: 12 },
     },
-    grid: { left: 12, right: 18, top: 16, bottom: 34, containLabel: true },
+    grid: { ...ALIGNED_GRID },
     xAxis: {
       type: "category",
       data: years,
-      axisLabel: { ...text, color: "#64748b", margin: 10 },
+      axisLabel: { ...text, color: "#64748b", margin: 8 },
       axisTick: { alignWithLabel: true },
     },
     yAxis: {
@@ -112,13 +116,14 @@ export function groupedBarOption(
     textStyle: text,
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" }, ...chartTooltip(tooltip) },
     legend: {
-      bottom: 0,
+      top: 0,
+      left: "center",
       itemGap: 22,
       itemWidth: 10,
       itemHeight: 10,
       textStyle: { ...text, color: "#5b6b80", fontSize: 12 },
     },
-    grid: { left: 52, right: 20, top: 16, bottom: 48 },
+    grid: { ...ALIGNED_GRID, left: 52 },
     xAxis: {
       type: "category",
       data: categories,
@@ -162,7 +167,7 @@ export function categoryBarOption(
       }),
     },
     legend: { show: false },
-    grid: { left: 12, right: 18, top: 20, bottom: 12, containLabel: true },
+    grid: { ...ALIGNED_GRID },
     xAxis: {
       type: "category",
       data: categories,
@@ -203,7 +208,7 @@ export function regionBarOption(
       trigger: "axis",
       ...chartTooltip(tooltip),
     },
-    grid: { left: 8, right: 16, top: 8, bottom: 4, containLabel: true },
+    grid: { ...ALIGNED_GRID, left: 8 },
     xAxis: {
       type: "value",
       splitLine: { lineStyle: { color: "#e2e8f0" } },

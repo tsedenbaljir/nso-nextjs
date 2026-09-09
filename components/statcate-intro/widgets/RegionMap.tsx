@@ -33,6 +33,7 @@ function mapSeriesLayout(layout?: RegionMapLayout) {
 type Props = {
   widget: RegionMapWidget;
   dash: IntroDashboardState;
+  chartHeight?: number;
 };
 
 type GeoCollection = {
@@ -44,7 +45,7 @@ type GeoCollection = {
   }[];
 };
 
-export default function RegionMap({ widget, dash }: Props) {
+export default function RegionMap({ widget, dash, chartHeight }: Props) {
   const { config, tablesById, year, lng } = dash;
   const [ready, setReady] = useState(false);
 
@@ -112,7 +113,7 @@ export default function RegionMap({ widget, dash }: Props) {
   const hoverColor = config.palette?.[1] ?? "#0E7C7B";
   const icon = config.sectionIcons?.map;
   const layout = widget.layout;
-  const height = layout?.height ?? 380;
+  const height = chartHeight ?? layout?.height ?? 380;
   const legend = layout?.legend ?? "horizontal";
 
   const option: EChartsOption = {
@@ -170,7 +171,7 @@ export default function RegionMap({ widget, dash }: Props) {
       <div className="sector-intro-chart sector-intro-chart--map" style={{ height }}>
         {ready ? (
           rows.length ? (
-            <ReactECharts option={option} style={{ height, width: "100%" }} notMerge />
+            <ReactECharts option={option} style={{ height: "100%", width: "100%" }} notMerge />
           ) : (
             <p className="sector-intro-map-loading">
               {lng === "en" ? "No regional breakdown for this year." : "Энэ онд аймгийн задаргаа байхгүй."}

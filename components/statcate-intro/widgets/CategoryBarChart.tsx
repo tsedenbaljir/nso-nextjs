@@ -11,9 +11,10 @@ import type { IntroDashboardState } from "@/components/statcate-intro/useIntroDa
 type Props = {
   widget: CategoryBarsWidget;
   dash: IntroDashboardState;
+  chartHeight?: number;
 };
 
-export default function CategoryBarChart({ widget, dash }: Props) {
+export default function CategoryBarChart({ widget, dash, chartHeight }: Props) {
   const { config, tablesById, year, lng } = dash;
   if (!config || !year) return null;
 
@@ -62,7 +63,8 @@ export default function CategoryBarChart({ widget, dash }: Props) {
         suffix,
         tip,
       );
-  const height = widget.height ?? (horizontal ? Math.min(480, Math.max(320, rows.length * 30)) : 320);
+  const height =
+    widget.height ?? chartHeight ?? (horizontal ? Math.min(480, Math.max(320, rows.length * 30)) : 320);
   const title = widget.title ? loc(lng, widget.title) : table.label;
 
   return (
@@ -72,7 +74,7 @@ export default function CategoryBarChart({ widget, dash }: Props) {
         {usedYear !== year ? <span> · {usedYear}</span> : null}
       </h4>
       <div className="sector-intro-chart" style={{ height }}>
-        <ReactECharts option={option} style={{ height, width: "100%" }} notMerge />
+        <ReactECharts option={option} style={{ height: "100%", width: "100%" }} notMerge />
       </div>
     </div>
   );

@@ -7,6 +7,9 @@ export const INTRO_COLORS = [
 
 export const INTRO_FONT = "'sf-pro-text', roboto";
 
+/** Side-by-side intro chart cards share this plot height so axes line up. */
+export const INTRO_HALF_CHART_HEIGHT = 320;
+
 export const DEFAULT_TOTAL_LABELS = ["Бүгд", "Total", "All"];
 
 export const DEFAULT_NATIONAL_CODE = "0";
