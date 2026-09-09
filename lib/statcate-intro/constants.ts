@@ -10,6 +10,16 @@ export const INTRO_FONT = "'sf-pro-text', roboto";
 /** Side-by-side intro chart cards share this plot height so axes line up. */
 export const INTRO_HALF_CHART_HEIGHT = 320;
 
+/** All intro region maps share this canvas height. */
+export const INTRO_MAP_HEIGHT = 360;
+
+/** Shared ECharts map inset so Mongolia renders the same size on every dashboard. */
+export const INTRO_MAP_SERIES = {
+  aspectScale: 1.05,
+  horizontal: { left: 12, right: 12, top: 18, bottom: 52 },
+  vertical: { left: 88, right: 12, top: 14, bottom: 14 },
+} as const;
+
 export const DEFAULT_TOTAL_LABELS = ["Бүгд", "Total", "All"];
 
 export const DEFAULT_NATIONAL_CODE = "0";

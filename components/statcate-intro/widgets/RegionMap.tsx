@@ -5,7 +5,7 @@ import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts";
 import type { EChartsOption } from "echarts";
 import { MapMark } from "@/lib/statcate-intro/marks";
-import { COPY, INTRO_FONT } from "@/lib/statcate-intro/constants";
+import { COPY, INTRO_FONT, INTRO_MAP_HEIGHT, INTRO_MAP_SERIES } from "@/lib/statcate-intro/constants";
 import { AIMAG_ID_TO_NAME, canonicalAimagName, mapColorPieces } from "@/lib/statcate-intro/aimag-map";
 import { formatValue, loc, finiteNum, trimLabel } from "@/lib/statcate-intro/format";
 import { queryRows, yearOrLatest } from "@/lib/statcate-intro/query";
@@ -17,16 +17,11 @@ const MAP_NAME = "nso-intro-aimag";
 const GEO_URL = "/census-dashboard/geo/aimag.geojson";
 
 function mapSeriesLayout(layout?: RegionMapLayout) {
-  const aspectScale = layout?.aspectScale ?? 0.75;
-  if (layout?.layoutCenter && layout?.layoutSize) {
-    return { layoutCenter: layout.layoutCenter, layoutSize: layout.layoutSize, aspectScale };
-  }
+  const legend = layout?.legend ?? "horizontal";
+  const inset = legend === "vertical" ? INTRO_MAP_SERIES.vertical : INTRO_MAP_SERIES.horizontal;
   return {
-    left: layout?.left ?? 8,
-    right: layout?.right ?? 8,
-    top: layout?.top ?? 12,
-    bottom: layout?.bottom ?? 48,
-    aspectScale,
+    aspectScale: INTRO_MAP_SERIES.aspectScale,
+    ...inset,
   };
 }
 
@@ -45,7 +40,7 @@ type GeoCollection = {
   }[];
 };
 
-export default function RegionMap({ widget, dash, chartHeight }: Props) {
+export default function RegionMap({ widget, dash }: Props) {
   const { config, tablesById, year, lng } = dash;
   const [ready, setReady] = useState(false);
 
@@ -113,7 +108,7 @@ export default function RegionMap({ widget, dash, chartHeight }: Props) {
   const hoverColor = config.palette?.[1] ?? "#0E7C7B";
   const icon = config.sectionIcons?.map;
   const layout = widget.layout;
-  const height = chartHeight ?? layout?.height ?? 380;
+  const height = INTRO_MAP_HEIGHT;
   const legend = layout?.legend ?? "horizontal";
 
   const option: EChartsOption = {

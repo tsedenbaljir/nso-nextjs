@@ -101,7 +101,7 @@ export const moneyAndFinance: IntroDashboardConfig = {
     {
       type: "region-map",
       table: "deposits",
-      layout: { legend: "horizontal", aspectScale: 1.05, left: 8, right: 8, top: 22, bottom: 56 },
+      layout: { legend: "horizontal" },
     },
   ],
 };

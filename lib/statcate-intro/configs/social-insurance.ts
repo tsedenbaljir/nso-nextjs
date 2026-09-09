@@ -76,14 +76,7 @@ export const socialInsurance: IntroDashboardConfig = {
     {
       type: "region-map",
       table: "pensioners",
-      layout: {
-        legend: "horizontal",
-        aspectScale: 1.08,
-        left: 8,
-        right: 8,
-        top: 16,
-        bottom: 48,
-      },
+      layout: { legend: "horizontal" },
     },
   ],
 };
