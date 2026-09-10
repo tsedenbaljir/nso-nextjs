@@ -229,7 +229,7 @@ export function regionBarOption(
         color: "#475569",
         width: 128,
         overflow: "truncate",
-        ellipsis: "…",
+        // ellipsis: "…",
       },
     },
     series: [
