@@ -151,14 +151,8 @@ function rangeVariance(
 }
 
 /**
-<<<<<<< HEAD
- * Fisher–Jenks / 1D ckmeans class start indexes.
- * Same objective as ArcGIS “Natural Breaks (Jenks)” and QGIS:
- * minimise within-class variance so similar values share a colour.
-=======
  * Fisher–Jenks / 1D ckmeans. Same objective as ArcGIS Natural Breaks:
  * similar values share a colour; outliers get their own class.
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
  */
 function jenksClassStarts(sorted: number[], k: number): number[] {
   const n = sorted.length;
@@ -218,13 +212,6 @@ function jenksWorkingValues(sorted: number[]): number[] {
   return sorted;
 }
 
-<<<<<<< HEAD
-/**
- * Equal-count bins. Easy to explain, but similar values can get different
- * colours and a few huge units still squeeze the rest of the palette.
- */
-=======
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 export function quantileClasses(
   sorted: number[],
   k = MAP_COLORS.length,
@@ -238,10 +225,6 @@ export function quantileClasses(
   });
 }
 
-<<<<<<< HEAD
-/** Natural-break classes for count/ratio choropleths. */
-=======
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 export function jenksClasses(
   sorted: number[],
   k = MAP_COLORS.length,
@@ -283,22 +266,6 @@ export function formatPercentClassRange(min: number, max: number) {
 
 export function percentClassLabels(classes: ColorClass[]): string[] {
   return classes.map((item) => formatPercentClassRange(item.min, item.max));
-<<<<<<< HEAD
-}
-
-/** Isolate exact 0, then natural breaks on the rest (sparse shares like Казах). */
-export function percentClasses(
-  sorted: number[],
-  k = MAP_COLORS.length,
-): ColorClass[] {
-  const zeros = sorted.filter((value) => value === 0).length;
-  const rest = sorted.filter((value) => value > 0);
-  if (zeros > 0 && rest.length > 0 && zeros >= Math.max(3, sorted.length * 0.05)) {
-    return [{ min: 0, max: 0 }, ...jenksClasses(rest, Math.max(1, k - 1))];
-  }
-  return jenksClasses(sorted, k);
-=======
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 }
 
 export function mapColorIndex(value: number, classes: ColorClass[]): number {
@@ -315,25 +282,15 @@ export function mapColor(
   value: number,
   scale: Pick<ColorScale, "classes" | "mode" | "colors">,
 ): string {
-<<<<<<< HEAD
-  const index = mapColorIndex(value, scale.classes);
-  return MAP_COLORS[index] ?? MAP_COLORS[0];
-=======
   const palette = paletteFor(scale);
   const index = mapColorIndex(value, scale.classes);
   return palette[index] ?? palette[0];
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 }
 
 export function legendMarkerPercent(
   value: number,
   scale: Pick<ColorScale, "classes" | "mode">,
 ): number {
-<<<<<<< HEAD
-  const index = mapColorIndex(value, scale.classes);
-  const bins = Math.max(1, scale.classes.length);
-  return ((index + 0.5) / bins) * 100;
-=======
   const { classes } = scale;
   const bins = Math.max(1, classes.length);
   const index = mapColorIndex(value, classes);
@@ -342,7 +299,6 @@ export function legendMarkerPercent(
   const span = cls.max - cls.min;
   const t = span > 0 ? Math.min(1, Math.max(0, (value - cls.min) / span)) : 0.5;
   return ((index + t) / bins) * 100;
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
 }
 
 export function colorScaleBounds(
@@ -353,13 +309,8 @@ export function colorScaleBounds(
   const sorted = values.filter((n) => Number.isFinite(n)).sort((a, b) => a - b);
   if (!sorted.length) {
     return mode === "percent"
-<<<<<<< HEAD
-      ? { min: 0, max: 100, sorted: [0, 100], mode, classes: EMPTY_CLASSES }
-      : { min: 0, max: 1, sorted: [0, 1], mode, classes: EMPTY_CLASSES };
-=======
       ? { min: 0, max: 100, sorted: [0, 100], mode, scheme: "jenks", classes: EMPTY_CLASSES, colors: MAP_COLORS }
       : { min: 0, max: 1, sorted: [0, 1], mode, scheme: "jenks", classes: EMPTY_CLASSES, colors: MAP_COLORS };
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
   }
 
   const min = sorted[0];
@@ -380,13 +331,9 @@ export function colorScaleBounds(
     max: max > min ? max : min,
     sorted,
     mode,
-<<<<<<< HEAD
-    classes: mode === "percent" ? percentClasses(sorted) : jenksClasses(sorted),
-=======
     scheme: "jenks",
     classes: jenksClasses(sorted),
     colors: MAP_COLORS,
->>>>>>> 57db59cc3621a9a85e9ee2e1cc194a1c05f43e9b
   };
 }
 
