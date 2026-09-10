@@ -112,7 +112,7 @@ export function introAxisTooltipFormatter(opts?: {
 
     const title = String(first.axisValueLabel ?? first.axisValue ?? first.name ?? "").trim();
     const rows = items
-      .map((item) => {
+      .map((item): TipRow | null => {
         const raw = item.value ?? item.data;
         const num = Array.isArray(raw) ? Number(raw[raw.length - 1]) : Number(raw);
         if (!Number.isFinite(num)) return null;
@@ -123,7 +123,7 @@ export function introAxisTooltipFormatter(opts?: {
           color: seriesColor(item),
         };
       })
-      .filter((row): row is TipRow => Boolean(row));
+      .filter((row): row is TipRow => row != null);
 
     // Trend charts already use the year as the axis title — don't repeat it.
     const year = opts?.year && opts.year !== title ? opts.year : undefined;
