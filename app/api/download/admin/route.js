@@ -211,7 +211,7 @@ export async function PUT(req) {
                 extension: data.file_url.split('.').pop() || 'pdf',
                 mediaType: 'application/pdf',
                 pages: 1,
-                downloads: 0,
+                // downloads: 0,
                 isPublic: true,
                 createdDate: currentDate
             });
