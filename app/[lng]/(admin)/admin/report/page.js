@@ -292,7 +292,7 @@ export default function ReportAdmin(props) {
         }
     };
 
-    const createFileInfo = (file, fileUrl) => {
+    const createFileInfo = (file, fileUrl, previousDownloads = 0) => {
         const currentDate = new Date().toISOString();
         const extension = file.name.split('.').pop().toLowerCase();
 
@@ -316,7 +316,7 @@ export default function ReportAdmin(props) {
             extension: extension,
             mediaType: mediaTypes[extension] || 'application/octet-stream',
             pages: 1,
-            downloads: 0,
+            downloads: Number(previousDownloads) || 0,
             isPublic: true,
             createdDate: currentDate
         };
@@ -412,7 +412,9 @@ export default function ReportAdmin(props) {
             if (editUploadedFile) {
                 try {
                     const fileUrl = await uploadFile(editUploadedFile);
-                    const fileInfo = createFileInfo(editUploadedFile, fileUrl);
+                    const oldInfo = parseFileInfo(editingItem?.file_info);
+                    const previousDownloads = Number(oldInfo?.downloads) || 0;
+                    const fileInfo = createFileInfo(editUploadedFile, fileUrl, previousDownloads);
                     payload.file_url = fileUrl;
                     payload.file_info = JSON.stringify(fileInfo);
                     payload.file_size = editUploadedFile.size;

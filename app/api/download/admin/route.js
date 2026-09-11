@@ -199,22 +199,43 @@ export async function PUT(req) {
             new Date(data.published_date).toISOString().slice(0, 19).replace('T', ' ') : 
             currentDate;
 
-        // If a new file is provided, construct file_info. Otherwise we will not touch file_info/file_size.
+        // If a new file is provided, update file_info/file_size but keep previous download count.
         let shouldUpdateFileFields = false;
         let fileInfo = null;
-        if (data.file_url) {
+        if (data.file_info || data.file_url) {
             shouldUpdateFileFields = true;
-            fileInfo = JSON.stringify({
-                originalName: data.file_url.split('/').pop() || data.file_url,
-                pathName: data.file_url,
-                fileSize: data.file_size || 0,
-                extension: data.file_url.split('.').pop() || 'pdf',
-                mediaType: 'application/pdf',
-                pages: 1,
-                // downloads: 0,
-                isPublic: true,
-                createdDate: currentDate
-            });
+
+            // Prefer client-provided file_info (already preserves downloads).
+            if (data.file_info) {
+                fileInfo = typeof data.file_info === 'string'
+                    ? data.file_info
+                    : JSON.stringify(data.file_info);
+            } else {
+                let previousDownloads = 0;
+                try {
+                    const existing = await db('web_1212_download').where({ id: data.id }).first();
+                    if (existing?.file_info) {
+                        const parsed = typeof existing.file_info === 'string'
+                            ? JSON.parse(existing.file_info)
+                            : existing.file_info;
+                        previousDownloads = Number(parsed?.downloads) || 0;
+                    }
+                } catch (e) {
+                    console.warn('Could not read previous downloads:', e.message);
+                }
+
+                fileInfo = JSON.stringify({
+                    originalName: data.file_url.split('/').pop() || data.file_url,
+                    pathName: data.file_url,
+                    fileSize: data.file_size || 0,
+                    extension: data.file_url.split('.').pop() || 'pdf',
+                    mediaType: 'application/pdf',
+                    pages: 1,
+                    downloads: previousDownloads,
+                    isPublic: true,
+                    createdDate: currentDate
+                });
+            }
         }
 
         // Build dynamic update to preserve file_info/file_size when no new file uploaded
@@ -222,7 +243,6 @@ export async function PUT(req) {
             'name = ?',
             'language = ?',
             'file_type = ?',
-            'views = ?',
             'published = ?',
             'published_date = ?',
             'list_order = ?',
@@ -235,7 +255,6 @@ export async function PUT(req) {
             data.name,
             data.language,
             data.file_type,
-            data.views || 0,
             data.published !== undefined ? data.published : 1,
             publishedDate,
             data.list_order || null,
@@ -245,9 +264,16 @@ export async function PUT(req) {
             data.data_viz_id || null
         ];
 
+        // Only overwrite views when explicitly sent (avoid resetting to 0 on edit)
+        if (data.views !== undefined && data.views !== null) {
+            setClauses.splice(3, 0, 'views = ?');
+            params.splice(3, 0, data.views);
+        }
+
         if (shouldUpdateFileFields) {
-            setClauses.splice(3, 0, 'file_info = ?', 'file_size = ?');
-            params.splice(3, 0, fileInfo, data.file_size || 0);
+            const insertAt = setClauses.indexOf('published = ?');
+            setClauses.splice(insertAt, 0, 'file_info = ?', 'file_size = ?');
+            params.splice(insertAt, 0, fileInfo, data.file_size || 0);
         }
 
         const updateSql = `
