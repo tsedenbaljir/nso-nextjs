@@ -68,10 +68,12 @@ export default function ClassificationDetailAdmin(props0) {
     const [metaFields, setMetaFields] = useState([]);
     const [generalModal, setGeneralModal] = useState(false);
     const [generalEditingId, setGeneralEditingId] = useState(null);
+    const [generalValues, setGeneralValues] = useState(null);
     const [generalForm] = Form.useForm();
 
     // Main record (indicator) edit
     const [mainModal, setMainModal] = useState(false);
+    const [mainValues, setMainValues] = useState(null);
     const [mainForm] = Form.useForm();
 
     // Files
@@ -118,19 +120,28 @@ export default function ClassificationDetailAdmin(props0) {
     /* ---------- General info (Ерөнхий мэдээлэл) ---------- */
     const openGeneralAdd = () => {
         setGeneralEditingId(null);
-        generalForm.resetFields();
+        setGeneralValues({});
         setGeneralModal(true);
     };
 
     const openGeneralEdit = (row) => {
         setGeneralEditingId(row.id);
-        generalForm.setFieldsValue({
+        setGeneralValues({
             meta_data_id: row.meta_data_id,
             valuemn: row.valuemn,
             valueen: row.valueen,
         });
         setGeneralModal(true);
     };
+
+    useEffect(() => {
+        if (!generalModal) return;
+        if (generalValues && Object.keys(generalValues).length) {
+            generalForm.setFieldsValue(generalValues);
+        } else {
+            generalForm.resetFields();
+        }
+    }, [generalModal, generalValues, generalForm]);
 
     const submitGeneral = async (values) => {
         try {
@@ -151,7 +162,8 @@ export default function ClassificationDetailAdmin(props0) {
             if (result.status) {
                 message.success(result.message);
                 setGeneralModal(false);
-                generalForm.resetFields();
+                setGeneralValues(null);
+                setTimeout(() => generalForm.resetFields(), 0);
                 fetchGeneral();
             } else {
                 message.error(result.message);
@@ -184,7 +196,7 @@ export default function ClassificationDetailAdmin(props0) {
     /* ---------- Main record (Үзүүлэлтийн мэдээлэл) ---------- */
     const openMainEdit = () => {
         if (!mainRecord) return;
-        mainForm.setFieldsValue({
+        setMainValues({
             namemn: mainRecord.namemn,
             nameen: mainRecord.nameen,
             code: mainRecord.code,
@@ -194,6 +206,11 @@ export default function ClassificationDetailAdmin(props0) {
         });
         setMainModal(true);
     };
+
+    useEffect(() => {
+        if (!mainModal || !mainValues) return;
+        mainForm.setFieldsValue(mainValues);
+    }, [mainModal, mainValues, mainForm]);
 
     const submitMain = async (values) => {
         try {
@@ -206,6 +223,8 @@ export default function ClassificationDetailAdmin(props0) {
             if (result.status) {
                 message.success(result.message);
                 setMainModal(false);
+                setMainValues(null);
+                setTimeout(() => mainForm.resetFields(), 0);
                 fetchMain();
             } else {
                 message.error(result.message);
@@ -445,9 +464,15 @@ export default function ClassificationDetailAdmin(props0) {
             <Modal
                 title={generalEditingId ? 'Ерөнхий мэдээлэл засах' : 'Ерөнхий мэдээлэл нэмэх'}
                 open={generalModal}
-                onCancel={() => setGeneralModal(false)}
+                onCancel={() => {
+                    setGeneralModal(false);
+                    setGeneralValues(null);
+                    setTimeout(() => generalForm.resetFields(), 0);
+                }}
                 footer={null}
                 width={700}
+                destroyOnHidden={false}
+                forceRender
             >
                 <Form form={generalForm} layout="vertical" onFinish={submitGeneral}>
                     <Form.Item name="meta_data_id" label="Нэр (талбар)" rules={[{ required: true }]}>
@@ -480,9 +505,15 @@ export default function ClassificationDetailAdmin(props0) {
             <Modal
                 title="Үзүүлэлтийн мэдээлэл засах"
                 open={mainModal}
-                onCancel={() => setMainModal(false)}
+                onCancel={() => {
+                    setMainModal(false);
+                    setMainValues(null);
+                    setTimeout(() => mainForm.resetFields(), 0);
+                }}
                 footer={null}
                 width={700}
+                destroyOnHidden={false}
+                forceRender
             >
                 <Form form={mainForm} layout="vertical" onFinish={submitMain}>
                     <Form.Item name="code" label="Код">
@@ -507,7 +538,16 @@ export default function ClassificationDetailAdmin(props0) {
                         </Select>
                     </Form.Item>
                     <Form.Item className="mb-0 text-right">
-                        <Button onClick={() => setMainModal(false)} className="mr-2">Болих</Button>
+                        <Button
+                            onClick={() => {
+                                setMainModal(false);
+                                setMainValues(null);
+                                setTimeout(() => mainForm.resetFields(), 0);
+                            }}
+                            className="mr-2"
+                        >
+                            Болих
+                        </Button>
                         <Button type="primary" htmlType="submit">Хадгалах</Button>
                     </Form.Item>
                 </Form>

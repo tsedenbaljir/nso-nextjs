@@ -20,6 +20,7 @@ export default function ClassificationAdmin(props0) {
     const [data, setData] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [editingValues, setEditingValues] = useState(null);
     const [searchValue, setSearchValue] = useState('');
     const [pagination, setPagination] = useState({
         current: 1,
@@ -104,7 +105,7 @@ export default function ClassificationAdmin(props0) {
             });
             const result = await response.json();
             if (result.status) {
-                form.setFieldsValue({
+                setEditingValues({
                     namemn: result.data.namemn,
                     nameen: result.data.nameen,
                     descriptionmn: result.data.descriptionmn,
@@ -122,10 +123,18 @@ export default function ClassificationAdmin(props0) {
 
     const handleAdd = () => {
         setEditingId(null);
-        form.resetFields();
-        form.setFieldsValue({ active: 1 });
+        setEditingValues({ active: 1 });
         setModalVisible(true);
     };
+
+    useEffect(() => {
+        if (!modalVisible) return;
+        if (editingValues) {
+            form.setFieldsValue(editingValues);
+        } else {
+            form.resetFields();
+        }
+    }, [modalVisible, editingValues, form]);
 
     const handleSubmit = async (values) => {
         try {
@@ -153,7 +162,9 @@ export default function ClassificationAdmin(props0) {
             if (result.status) {
                 message.success(editingId ? 'Амжилттай шинэчлэгдлээ' : 'Амжилттай нэмэгдлээ');
                 setModalVisible(false);
-                form.resetFields();
+                setEditingValues(null);
+                setEditingId(null);
+                setTimeout(() => form.resetFields(), 0);
                 fetchData(pagination.current, pagination.pageSize, searchValue);
             } else {
                 message.error(result.message || 'Алдаа гарлаа');
@@ -253,10 +264,14 @@ export default function ClassificationAdmin(props0) {
                 open={modalVisible}
                 onCancel={() => {
                     setModalVisible(false);
-                    form.resetFields();
+                    setEditingValues(null);
+                    setEditingId(null);
+                    setTimeout(() => form.resetFields(), 0);
                 }}
                 footer={null}
                 width={800}
+                destroyOnHidden={false}
+                forceRender
             >
                 <Form form={form} layout="vertical" onFinish={handleSubmit}>
                     <Form.Item name="code" label="Код">
