@@ -5,6 +5,7 @@ import type { PriceRow, PriceTable } from "@/lib/commodity-price-dashboard/nso";
 import { GROUPS, matchesGroup, type GroupId } from "@/lib/commodity-price-dashboard/groups";
 import { shortName } from "@/lib/commodity-price-dashboard/format";
 import { MARKET_PRICE_METHOD_NOTE } from "@/lib/commodity-price-dashboard/price-notes";
+import { useCpiPpiMonthly } from "@/lib/commodity-price-dashboard/useCpiPpiMonthly";
 import { WeeklyTable } from "./weekly-table";
 import { ChartPanel } from "./chart-panel";
 import { ExcelTable } from "./excel-table";
@@ -12,6 +13,7 @@ import { ThemeProvider } from "./theme-provider";
 import "./nso-price-dash.scss";
 
 function DashboardInner({ data }: { data: PriceTable }) {
+  const monthly = useCpiPpiMonthly();
   const [group, setGroup] = useState<GroupId>("all");
   const [selected, setSelected] = useState<string[]>(() =>
     data.rows[0] ? [data.rows[0].product] : [],
@@ -53,9 +55,10 @@ function DashboardInner({ data }: { data: PriceTable }) {
     function step(time: number) {
       if (!startTime) startTime = time;
       const progress = Math.min((time - startTime) / duration, 1);
-      const ease = progress < 0.5
-        ? 4 * progress * progress * progress
-        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      const ease =
+        progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
       window.scrollTo(0, start + diff * ease);
       if (progress < 1) requestAnimationFrame(step);
     }
@@ -116,6 +119,7 @@ function DashboardInner({ data }: { data: PriceTable }) {
           selected={visibleSelected}
           periods={data.periods}
           onToggle={toggle}
+          monthly={monthly.data}
         />
       </section>
 
@@ -124,15 +128,10 @@ function DashboardInner({ data }: { data: PriceTable }) {
       </section>
 
       <section className="stack stack--follow">
-        <ExcelTable selected={visibleSelected} />
+        <ExcelTable selected={visibleSelected} monthly={monthly.data} />
       </section>
 
-      <button
-        type="button"
-        className="scroll-top-btn"
-        onClick={scrollToTop}
-        aria-label="Дээш"
-      >
+      <button type="button" className="scroll-top-btn" onClick={scrollToTop} aria-label="Дээш">
         ↑
       </button>
     </main>

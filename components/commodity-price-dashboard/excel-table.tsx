@@ -2,10 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import monthly from "@/lib/commodity-price-dashboard/cpi-vs-ppi.json";
 import { catalogIndex } from "@/lib/commodity-price-dashboard/nso";
 import { CHART_COLORS } from "@/lib/commodity-price-dashboard/chart";
 import { formatMonth, formatTugrik, monthDot, pctChange } from "@/lib/commodity-price-dashboard/format";
+import type { CpiPpiFile } from "@/lib/commodity-price-dashboard/useCpiPpiMonthly";
 import { ProductIcon } from "./product-icon";
 import { PpiStars } from "./price-notes";
 import { ppiProductStars } from "@/lib/commodity-price-dashboard/price-notes";
@@ -26,7 +26,13 @@ function ChangeBadge({ value }: { value: number | null }) {
   return <span className="badge badge--down">↓ {value.toFixed(1)}%</span>;
 }
 
-export function ExcelTable({ selected }: { selected: string[] }) {
+export function ExcelTable({
+  selected,
+  monthly,
+}: {
+  selected: string[];
+  monthly: CpiPpiFile;
+}) {
   const months = monthly.months;
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
@@ -35,7 +41,7 @@ export function ExcelTable({ selected }: { selected: string[] }) {
     return monthly.products
       .filter((product) => names.has(product.name) || names.has(product.short))
       .sort((a, b) => catalogIndex(a.name) - catalogIndex(b.name));
-  }, [selected]);
+  }, [selected, monthly.products]);
 
   const monthLabels = months.map(monthDot);
 
@@ -151,17 +157,24 @@ export function ExcelTable({ selected }: { selected: string[] }) {
                         <td className="now month">{formatMonth(month)}</td>
                         <td className="num group-start">{formatTugrik(cpi)}</td>
                         <td className="change">
-                          <ChangeBadge value={pctChange(cpi, product.cpi[i - 1])} />
+                          <ChangeBadge value={pctChange(cpi, product.cpi[i - 1] ?? null)} />
                         </td>
                         <td className="change">
-                          <ChangeBadge value={i >= 12 ? pctChange(cpi, product.cpi[i - 12]) : null} />
+                          <ChangeBadge
+                            value={i >= 12 ? pctChange(cpi, product.cpi[i - 12] ?? null) : null}
+                          />
                         </td>
-                        <td className="num group-start"><PpiStars count={ppiProductStars(product.name)} />{formatTugrik(ppi)}</td>
-                        <td className="change">
-                          <ChangeBadge value={pctChange(ppi, product.ppi[i - 1])} />
+                        <td className="num group-start">
+                          <PpiStars count={ppiProductStars(product.name)} />
+                          {formatTugrik(ppi)}
                         </td>
                         <td className="change">
-                          <ChangeBadge value={i >= 12 ? pctChange(ppi, product.ppi[i - 12]) : null} />
+                          <ChangeBadge value={pctChange(ppi, product.ppi[i - 1] ?? null)} />
+                        </td>
+                        <td className="change">
+                          <ChangeBadge
+                            value={i >= 12 ? pctChange(ppi, product.ppi[i - 12] ?? null) : null}
+                          />
                         </td>
                       </tr>
                     );
