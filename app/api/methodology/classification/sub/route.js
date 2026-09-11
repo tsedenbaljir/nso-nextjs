@@ -144,7 +144,7 @@ export async function DELETE(req) {
         await db(TABLE)
             .where({ id })
             .update({
-                deleted: db.fn.now(),
+                deleted: 1,
                 active: 0,
                 last_modified_by: 'admin',
                 last_modified_date: db.fn.now(),
