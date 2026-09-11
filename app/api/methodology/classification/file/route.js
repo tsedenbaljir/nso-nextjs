@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeFile, unlink } from 'fs/promises';
+import { writeFile, unlink, mkdir } from 'fs/promises';
 import path from 'path';
 import { existsSync } from 'fs';
 import { db } from '@/app/api/config/db_csweb.config.js';
@@ -145,6 +145,7 @@ export async function POST(req) {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+        await mkdir(uploadDir, { recursive: true });
         const storedName = `${Date.now()}-${originalName.replace(/[^\w.\-()+\sа-яА-ЯөүёӨҮЁ]/g, '_')}`;
         const filePath = path.join(uploadDir, storedName);
         await writeFile(filePath, buffer);
