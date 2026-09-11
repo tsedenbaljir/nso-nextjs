@@ -90,14 +90,14 @@ const CAPTION_SPEC: Record<string, CaptionSpec> = {
     noun: ({ age }) => (age ? "хүн амын" : "хөдөлмөрийн насны хүн амын"),
   },
   "pension-coverage": {
-    noun: "ахмад насны хүн амын",
+    noun: "оршин суугаа хүн амын",
     categoryPhrase: (label) =>
       /хамрагдаагүй/i.test(label)
         ? "өндөр насны тэтгэвэрт хамрагддаггүй"
         : "өндөр насны тэтгэвэрт хамрагддаг",
   },
   "pension-status": {
-    noun: "ахмад насны хүн амын",
+    noun: "оршин суугаа хүн амын",
     categoryPhrase: () => "өндөр насны тэтгэвэрт хамрагддаг",
   },
   enrollment: {
@@ -181,9 +181,13 @@ export function formatShareCaption(input: {
     (typeof spec?.noun === "function" ? spec.noun({ age }) : spec?.noun) ??
     input.noun ??
     "хүн амын";
+  const nationalHead =
+    input.indicatorId === "pension-coverage" || input.indicatorId === "pension-status"
+      ? "Монгол Улсад"
+      : "Монгол Улсын";
   const head =
     input.national || input.place === "Монгол Улс"
-      ? "Монгол Улсын"
+      ? nationalHead
       : `${input.place} ${LAYER_GENITIVE[input.layer]}`;
   const agePhrase = formatAgePhrase(age, spec?.defaultAge);
   const sex = input.sex ? inSentence(input.sex) : undefined;
