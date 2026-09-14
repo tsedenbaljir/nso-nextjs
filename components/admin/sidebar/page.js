@@ -71,7 +71,7 @@ export default function Sidebar({ user, userstatus }) {
     { name: "Хэрэглэгчийн хандалт", link: "analytics" },
     { name: "Нэр, томьёоны тайлбар", link: "glossary" },
     { name: "Гол нэрийн барааны үнэ", link: "commodity-price" },
-    { name: "ХҮИ / ҮҮИ сарын үнэ", link: "cpi-ppi" },
+    { name: "ХҮИ / ҮҮИ", link: "cpi-ppi" },
     { name: "Санал хүсэлт", link: "contact" },
     { name: "Цахим шуудан", link: "subscribeEmail" },
   ];
