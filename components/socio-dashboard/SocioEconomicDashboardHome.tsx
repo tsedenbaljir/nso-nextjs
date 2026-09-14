@@ -404,6 +404,21 @@ const cardIcons: Record<string, ReactNode> = {
       <path d="M6 12v5c3 3 9 3 12 0v-5" />
     </svg>
   ),
+  "society-health": (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="size-3 shrink-0"
+    >
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+      <path d="M12 5v14" />
+      <path d="M5 12h14" />
+    </svg>
+  ),
   "business-register": (
     <svg
       viewBox="0 0 24 24"
@@ -518,6 +533,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   "ЭРЧИМ ХҮЧ": "#ffa726",     // orange бүдэг
   "ХӨДӨЛМӨР": "#26a69a",      // teal бүдэг
   "НИЙГЭМ": "#42a5f5",        // blue бүдэг
+  "БОЛОВСРОЛ, ЭРҮҮЛ МЭНД": "#00897b", // teal
   "Тест": "#9e9e9e",          // саарал
   // "Бизнес регистр": "#0050C3", // цэнхэр
 };
@@ -531,7 +547,7 @@ const DASHBOARD_CATEGORIES = [...new Set(dashboards.map((d) => d.category).filte
 const ALL_CATEGORIES = [...new Set([...DASHBOARD_CATEGORIES, ...EXTERNAL_CATEGORIES])];
 
 /** Үндсэн салбарууд (дотоод dashboard-тай) */
-const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ", "ҮНЭ", "ТООЛЛОГО"];
+const PRIMARY_CATEGORIES = ["ХҮН АМ", "ЭДИЙН ЗАСАГ", "ХӨДӨЛМӨР", "НИЙГЭМ", "БОЛОВСРОЛ, ЭРҮҮЛ МЭНД", "ҮНЭ", "ТООЛЛОГО"];
 
 /** Их өгөгдлийн хянах самбарын салбарууд */
 const SECONDARY_CATEGORIES = ["БОЛОВСРОЛ", "НИЙГМИЙН ХАЛАМЖ", "ЭРҮҮЛ МЭНД", "ХУУЛЬ ЗҮЙ", "БАЙГАЛЬ ОРЧИН", "ЗАМ ТЭЭВЭР", "АЯЛАЛ ЖУУЛЧЛАЛ", "ЭРЧИМ ХҮЧ"];

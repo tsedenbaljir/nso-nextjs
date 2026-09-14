@@ -8,14 +8,14 @@ import type { EChartsOption } from "echarts";
 const GEO_JSON_URL = "/geo/aimag-valid.json";
 const GEO_SOUM_URL = "/geo/soum.geojson";
 /** Bilgee/mongolia-geojson – жижиг, тохиромжтой (GitHub) */
-const GEO_AIMAG_SIMPLE_URL = "/geo/aimag-bilgee.geojson";
+const GEO_AIMAG_SIMPLE_URL = "/geo/aimag-hdx.geojson";
 /** УБ-ийн 9 дүүрэг (mng_admin2-аас задласан) */
 const GEO_UB_DUUREG_URL = "/geo/ub-duureg.geojson";
 
 interface GeoFeature {
   type: "Feature";
   geometry: unknown;
-  properties?: { aimag_id?: number; aimagname1?: string; name?: string; nameRaw?: string; soum_id?: number; prefecture?: string; adm1_name?: string; adm2_name1?: string };
+  properties?: { aimag_id?: number; aimagname1?: string; name?: string; nameRaw?: string; soum_id?: number; prefecture?: string; adm1_name?: string; adm1_name1?: string; adm2_name1?: string };
 }
 
 /** Sum name (normalized) → aimag_id, from soum GeoJSON */
@@ -75,13 +75,14 @@ const MONGOLIAN_TO_ENGLISH_AIMAG: Record<string, string> = {
   "Завхан": "Zavkhan",
 };
 
-/** Англи→Монгол аймгийн нэр (Bilgee prefecture нэрс болон бусад вариантууд). Багахангай, Багануур-ыг тусад нэрээр үлдээж Улаанбаатар 3 удаа гарахаас сэргийлнэ */
+/** Англи→Монгол аймгийн нэр (Bilgee prefecture нэрс болон бусад вариантууд).
+ *  Багахангай, Багануур нь УБ-ийн тусгаар полигон — «Улаанбаатар» гэж нэгтгэнэ. */
 const ENGLISH_TO_MONGOLIAN_AIMAG: Record<string, string> = {
   ...Object.fromEntries(Object.entries(MONGOLIAN_TO_ENGLISH_AIMAG).map(([mn, en]) => [en, mn])),
   Arkhangai: "Архангай",
   "Bayan-Ulgii": "Баян-Өлгий",
-  Bagakhangai: "Багахангай",
-  Baganuur: "Багануур",
+  Bagakhangai: "Улаанбаатар",
+  Baganuur: "Улаанбаатар",
   GoviAltai: "Говь-Алтай",
   Khentii: "Хэнтий",
   Khuvsgul: "Хөвсгөл",
@@ -149,6 +150,11 @@ interface MongoliaChoroplethMapProps {
   layoutCenter?: [string, string];
   /** Өргөн/өндрийн харьцаа (ECharts aspectScale); сумын map-д босоо шахагдсан засах бол 1.1–1.2 */
   aspectScale?: number;
+  /**
+   * Хэт өндөр outlier (жишээ: УБ) өнгөний масштабыг давамгайлах үед
+   * max-ийг ~90-р хувьд тогтооно — бусад бүсүүд ялгагдана.
+   */
+  robustColorScale?: boolean;
 }
 
 function normalizeAimagName(s: string): string {
@@ -221,6 +227,35 @@ const MAP_COLORS = {
   },
 };
 
+/** Outlier-тай choropleth-д илүү олон алхамтай өнгө */
+const ROBUST_MAP_COLORS = ["#dbeafe", "#93c5fd", "#60a5fa", "#2563eb", "#1e3a8a"];
+
+/** Дотоод нүх (hole) хасч зөвхөн гадна цагираг үлдээнэ — Төв/Сэлэнгэ дээрх УБ-н нүх «сум» шиг харагдахаас сэргийлнэ */
+function stripInteriorRings(geometry: GeoFeature["geometry"]): GeoFeature["geometry"] {
+  if (!geometry || typeof geometry !== "object") return geometry;
+  const g = geometry as { type?: string; coordinates?: unknown[] };
+  if (g.type === "Polygon" && Array.isArray(g.coordinates) && g.coordinates.length > 0) {
+    return { type: "Polygon", coordinates: [g.coordinates[0]] } as GeoFeature["geometry"];
+  }
+  if (g.type === "MultiPolygon" && Array.isArray(g.coordinates)) {
+    return {
+      type: "MultiPolygon",
+      coordinates: g.coordinates.map((poly) =>
+        Array.isArray(poly) && poly.length > 0 ? [poly[0]] : poly
+      ),
+    } as GeoFeature["geometry"];
+  }
+  return geometry;
+}
+
+function resolveSimpleAimagName(props: GeoFeature["properties"]): string | null {
+  const direct = props?.adm1_name1;
+  if (direct && String(direct).trim()) return String(direct).trim();
+  const englishName = (props?.adm1_name ?? props?.prefecture) as string | undefined;
+  if (!englishName) return null;
+  return ENGLISH_TO_MONGOLIAN_AIMAG[englishName] ?? null;
+}
+
 export function MongoliaChoroplethMap({
   title = "Аймгаар",
   data,
@@ -244,6 +279,7 @@ export function MongoliaChoroplethMap({
   layoutSize: layoutSizeProp,
   layoutCenter: layoutCenterProp,
   aspectScale: aspectScaleProp,
+  robustColorScale = false,
 }: MongoliaChoroplethMapProps) {
   const chartRef = useRef<ReactECharts>(null);
   const [geoJson, setGeoJson] = useState<GeoFeatureCollection | null>(null);
@@ -360,10 +396,13 @@ export function MongoliaChoroplethMap({
           const features = json.features
             ?.map((f: GeoFeature) => {
               const props = f.properties ?? {};
-              const englishName = (props.adm1_name ?? props.prefecture) as string | undefined;
-              const mongolianName = englishName ? ENGLISH_TO_MONGOLIAN_AIMAG[englishName] : undefined;
+              const mongolianName = resolveSimpleAimagName(props);
               if (!mongolianName) return null;
-              return { ...f, properties: { ...props, name: mongolianName } } as GeoFeature;
+              return {
+                ...f,
+                geometry: stripInteriorRings(f.geometry),
+                properties: { ...props, name: mongolianName },
+              } as GeoFeature;
             })
             .filter((f): f is GeoFeature => f !== null);
           const collection: GeoFeatureCollection = { ...json, features: features ?? [] };
@@ -384,10 +423,13 @@ export function MongoliaChoroplethMap({
             const features = json.features
               ?.map((f: GeoFeature) => {
                 const props = f.properties ?? {};
-                const englishName = (props.adm1_name ?? props.prefecture) as string | undefined;
-                const mongolianName = englishName ? ENGLISH_TO_MONGOLIAN_AIMAG[englishName] : undefined;
+                const mongolianName = resolveSimpleAimagName(props);
                 if (!mongolianName) return null;
-                return { ...f, properties: { ...props, name: mongolianName } } as GeoFeature;
+                return {
+                  ...f,
+                  geometry: stripInteriorRings(f.geometry),
+                  properties: { ...props, name: mongolianName },
+                } as GeoFeature;
               })
               .filter((f): f is GeoFeature => f !== null);
             const collection: GeoFeatureCollection = { ...json, features: features ?? [] };
@@ -592,26 +634,32 @@ export function MongoliaChoroplethMap({
     if (useDuuregLevel) return mapDataForChart;
     if (!useSimpleAimagMap) return mapDataForChart;
     const mongolianNames = Object.keys(MONGOLIAN_TO_ENGLISH_AIMAG);
-    const out = mapDataForChart.map((d) => {
+    const byCanonical = new Map<string, (typeof mapDataForChart)[0]>();
+    for (const d of mapDataForChart) {
       const normalized = d.name.replace(/[\s-–]+/g, " ").trim().toLowerCase();
-      const matchedName = mongolianNames.find((mn) => {
-        const mnNorm = mn.replace(/[\s-–]+/g, " ").trim().toLowerCase();
-        return mnNorm === normalized || normalized.includes(mnNorm) || mnNorm.includes(normalized);
-      });
-      return {
-        name: matchedName ?? d.name,
-        value: d.value,
-        ageGroups: (d as { ageGroups?: MapDataItem["ageGroups"] }).ageGroups,
-        maltaiorhGroups: (d as { maltaiorhGroups?: MapDataItem["maltaiorhGroups"] }).maltaiorhGroups,
-      };
-    });
-    const ub = out.find((d) => aimagNameMatch(d.name, "Улаанбаатар"));
-    if (ub) {
-      const ubItem = { name: ub.name, value: ub.value, ageGroups: ub.ageGroups, maltaiorhGroups: ub.maltaiorhGroups };
-      if (!out.some((d) => aimagNameMatch(d.name, "Багахангай"))) out.push({ ...ubItem, name: "Багахангай" });
-      if (!out.some((d) => aimagNameMatch(d.name, "Багануур"))) out.push({ ...ubItem, name: "Багануур" });
+      // Багануур/Багахангай өгөгдөл ирвэл УБ-тай нэгтгэнэ
+      const forceUb =
+        normalized === "багануур" ||
+        normalized === "багахангай" ||
+        normalized.includes("улаанбаатар");
+      const matchedName = forceUb
+        ? "Улаанбаатар"
+        : mongolianNames.find((mn) => {
+            const mnNorm = mn.replace(/[\s-–]+/g, " ").trim().toLowerCase();
+            return mnNorm === normalized || normalized.includes(mnNorm) || mnNorm.includes(normalized);
+          });
+      const name = matchedName ?? d.name;
+      const prev = byCanonical.get(name);
+      if (!prev || d.value > prev.value) {
+        byCanonical.set(name, {
+          name,
+          value: d.value,
+          ageGroups: (d as { ageGroups?: MapDataItem["ageGroups"] }).ageGroups,
+          maltaiorhGroups: (d as { maltaiorhGroups?: MapDataItem["maltaiorhGroups"] }).maltaiorhGroups,
+        });
+      }
     }
-    return out;
+    return Array.from(byCanonical.values());
   }, [mapDataForChart, useSimpleAimagMap, useDuuregLevel]);
 
   const currentMapName = useMemo(() => {
@@ -641,9 +689,19 @@ export function MongoliaChoroplethMap({
   const option: EChartsOption = useMemo(() => {
     const hasGeo = showingAimag ? geoJson : drillDownAimagId != null ? drillMapReady : geoJson;
     if (!hasGeo || !currentMapName || loadedMapName !== currentMapName) return {};
-    const values = finalMapData.map((d) => d.value).filter((v) => v > 0);
-    const maxVal = values.length > 0 ? Math.max(...values) : 100;
+    const values = finalMapData.map((d) => d.value).filter((v) => Number.isFinite(v) && v > 0);
     const minVal = values.length > 0 ? Math.min(...values) : 0;
+    let maxVal = values.length > 0 ? Math.max(...values) : 100;
+    let colorStops = MAP_COLORS[colorVariant].inRange;
+    if (robustColorScale && values.length >= 3) {
+      const sorted = [...values].sort((a, b) => a - b);
+      const max = sorted[sorted.length - 1]!;
+      const second = sorted[sorted.length - 2]!;
+      if (second > 0 && max > second * 2) {
+        maxVal = Math.max(second * 1.02, minVal * 1.01);
+      }
+      colorStops = ROBUST_MAP_COLORS;
+    }
 
     return {
       title: {
@@ -666,7 +724,9 @@ export function MongoliaChoroplethMap({
         formatter: (params: unknown) => {
           const p = params as { name?: string; data?: { value?: number; ageGroups?: { "0-19": number; "20-54": number; "55+": number }; maltaiorhGroups?: { "200 хүртэлх": number; "201-500": number; "501-1000": number; "1000+": number } } };
           const name = String(p?.name ?? "");
-          const item = finalMapData.find((d) => d.name === name);
+          const item =
+            finalMapData.find((d) => d.name === name) ??
+            finalMapData.find((d) => aimagNameMatch(d.name, name));
           const val = p?.data?.value ?? item?.value;
           const ageGroups = p?.data?.ageGroups ?? (item as { ageGroups?: { "0-19": number; "20-54": number; "55+": number } })?.ageGroups;
           const maltaiorhGroups = p?.data?.maltaiorhGroups ?? (item as { maltaiorhGroups?: { "200 хүртэлх": number; "201-500": number; "501-1000": number; "1000+": number } })?.maltaiorhGroups;
@@ -720,7 +780,8 @@ export function MongoliaChoroplethMap({
         bottom: subtextOnly ? 0 : 24,
         itemWidth: 12,
         itemHeight: 120,
-        inRange: { color: MAP_COLORS[colorVariant].inRange },
+        inRange: { color: colorStops },
+        outOfRange: { color: colorStops[colorStops.length - 1] },
         text: ["", ""],
         calculable: false,
       },
@@ -742,7 +803,7 @@ export function MongoliaChoroplethMap({
         },
       ],
     };
-  }, [geoJson, drillDownAimagId, drillMapReady, title, subtextOnly, finalMapData, currentMapName, loadedMapName, showingAimag, colorVariant, dataLabel, valueSuffix, showColorLegend, showRegionLabels, effectiveLayoutCenter, effectiveLayoutSize, aspectScaleProp]);
+  }, [geoJson, drillDownAimagId, drillMapReady, title, subtextOnly, finalMapData, currentMapName, loadedMapName, showingAimag, colorVariant, dataLabel, valueSuffix, showColorLegend, showRegionLabels, effectiveLayoutCenter, effectiveLayoutSize, aspectScaleProp, robustColorScale]);
 
   const effectiveHeight = heightProp ?? (subtextOnly ? 400 : 360);
   // Map бүртгэгдэж амжаагүй үед skeleton харуулах

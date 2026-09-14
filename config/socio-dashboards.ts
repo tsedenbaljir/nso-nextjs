@@ -134,6 +134,11 @@ const EDUCATION_STUDENTS_URL = `${BASE_URL}Education,%20health/General%20indicat
 /** Боловсрол — төгсөгчид (Ангилал, Он) */
 const EDUCATION_GRADUATES_URL = `${BASE_URL}Education,%20health/General%20indicators%20for%20Education/DT_NSO_2002_068V1.px`;
 
+/** Эрүүл мэнд — халдварт өвчнөөр өвчлөгчид, аймаг/нийслэл, жилээр */
+const DISEASE_BY_AIMAG_YEAR_URL = `${BASE_URL}Education,%20health/Disease/DT_NSO_2100_028V1.px`;
+/** Эрүүл мэнд — халдварт өвчнөөр өвчлөгчид, өвчний төрөл, сараар */
+const DISEASE_BY_TYPE_MONTH_URL = `${BASE_URL}Education,%20health/Disease/DT_NSO_2100_035V1.px`;
+
 /** Бизнес регистр — хуулийн этгэдийн тоо, өмчийн хэлбэр, үйл ажиллагаа эрхлэлтийн байдал, жилээр */
 const BUSINESS_REGISTER_URL = `${BASE_URL}Labour,%20business/Statistical%20Business%20Register/DT_NSO_2600_011V2.px`;
 /** Үйл ажиллагаа явуулж байгаа ААНБ-н тоо — эдийн засгийн салбар, улирлаар */
@@ -2150,9 +2155,8 @@ export const dashboards: DashboardConfig[] = [
   {
     id: "society-education",
     name: "Боловсрол",
-    category: "НИЙГЭМ",
+    category: "БОЛОВСРОЛ, ЭРҮҮЛ МЭНД",
     shortTitle: "Боловсрол",
-    // description: "Нийгэм салбарын боловсролын үзүүлэлтүүд",
     kpiApiUrl: EDUCATION_STUDENTS_URL,
     kpiTimeDimension: "Он",
     kpiFormat: "number",
@@ -2231,6 +2235,43 @@ export const dashboards: DashboardConfig[] = [
           response: { format: "json-stat2" },
         },
         chartHeight: 420,
+      },
+    ],
+  },
+  {
+    id: "society-health",
+    name: "ХАЛДВАРТ ӨВЧНӨӨР ӨВЧЛӨГЧИД, аймаг, нийслэл, жилээр",
+    category: "БОЛОВСРОЛ, ЭРҮҮЛ МЭНД",
+    shortTitle: "ХАЛДВАРТ ӨВЧНӨӨР ӨВЧЛӨГЧИД, аймаг, нийслэл, жилээр",
+    kpiApiUrl: DISEASE_BY_AIMAG_YEAR_URL,
+    kpiTimeDimension: "Он",
+    kpiFormat: "number",
+    kpiLabel: "Аймаг тус бүрийн өвчлөлийн тоо",
+    kpiSelections: { Бүс: ["0"] },
+    trendApiUrl: DISEASE_BY_AIMAG_YEAR_URL,
+    trendTimeDimension: "Он",
+    trendSelections: { Бүс: ["0"], Он: range(10) },
+    mapApiUrl: DISEASE_BY_AIMAG_YEAR_URL,
+    mapDimension: "Бүс",
+    mapLevel: "aimag",
+    mapTitle: "ХАЛДВАРТ ӨВЧНӨӨР ӨВЧЛӨГЧИД",
+    charts: [
+      {
+        id: "health-disease-by-type-month",
+        title: "ХХАЛДВАРТ ӨВЧНӨӨР ӨВЧЛӨГЧИД, зарим өвчний төрлөөр, сараар",
+        type: "line",
+        xDimension: "Сар",
+        seriesDimensions: ["Үзүүлэлт"],
+        defaultSeriesCodes: { Үзүүлэлт: ["1"] },
+        chartApiUrl: DISEASE_BY_TYPE_MONTH_URL,
+        chartFixedQuery: {
+          query: [
+            { code: "Үзүүлэлт", selection: { filter: "item", values: range(12) } },
+            { code: "Сар", selection: { filter: "item", values: range(60) } },
+          ],
+          response: { format: "json-stat2" },
+        },
+        chartHeight: 360,
       },
     ],
   },

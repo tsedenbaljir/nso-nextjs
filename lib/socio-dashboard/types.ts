@@ -88,6 +88,8 @@ export interface DashboardConfig {
   showMapPlaceholder?: boolean;
   mapApiUrl?: string;
   mapDimension?: string;
+  /** Газрын зургийн хэсгийн гарчиг (өөрчлөхгүй бол default) */
+  mapTitle?: string;
   /** "soum" = sum-level map (сумаар), need soum.geojson and sum-level Бүс data */
   mapLevel?: "aimag" | "soum";
   introText?: string;

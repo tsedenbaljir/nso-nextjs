@@ -243,7 +243,7 @@ function latestYearMonthFromMoneyFinanceRows(rows: DataRow[]): { year: number; m
 }
 
 export function DashboardView({ config }: DashboardViewProps) {
-  const { apiUrl: configApiUrl, apiUrlByLevel, apiUrlByLevelMonthlyChange, housingChangeUrl, charts = [], mapApiUrl, mapDimension, mapLevel, showMapPlaceholder, birthRateMapApiUrl, birthRateMapDimension, deathRateMapApiUrl, deathRateMapDimension, lifeExpectancyMapApiUrl, lifeExpectancyMapDimension, lifeExpectancyNationalApiUrl } = config;
+  const { apiUrl: configApiUrl, apiUrlByLevel, apiUrlByLevelMonthlyChange, housingChangeUrl, charts = [], mapApiUrl, mapDimension, mapLevel, mapTitle, showMapPlaceholder, birthRateMapApiUrl, birthRateMapDimension, deathRateMapApiUrl, deathRateMapDimension, lifeExpectancyMapApiUrl, lifeExpectancyMapDimension, lifeExpectancyNationalApiUrl } = config;
   const hasLevels = !!apiUrlByLevel && Object.keys(apiUrlByLevel).length > 0;
   const levelKeys = useMemo(() => (apiUrlByLevel ? Object.keys(apiUrlByLevel) : []), [apiUrlByLevel]);
   const [selectedLevel, setSelectedLevel] = useState(
@@ -803,6 +803,34 @@ export function DashboardView({ config }: DashboardViewProps) {
             };
             try {
               const chartDataset = await getPxData(chartUrl, query);
+              nextChartData[chart.id] = jsonStatToRows(chartDataset);
+            } catch {
+              nextChartData[chart.id] = [];
+            }
+          })
+        );
+        setChartDataByChartId((prev) => ({ ...prev, ...nextChartData }));
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Уучлаарай алдаа гарлаа.");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+    if (config.id === "society-health") {
+      const healthCharts = charts.filter((c) => getChartApiUrl(c));
+      if (healthCharts.length === 0) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const nextChartData: Record<string, DataRow[]> = {};
+        await Promise.all(
+          healthCharts.map(async (chart) => {
+            const chartUrl = getChartApiUrl(chart);
+            const fixedQuery = chart.chartFixedQuery;
+            if (!chartUrl || !fixedQuery) return;
+            try {
+              const chartDataset = await getPxData(chartUrl, fixedQuery);
               nextChartData[chart.id] = jsonStatToRows(chartDataset);
             } catch {
               nextChartData[chart.id] = [];
@@ -1429,7 +1457,7 @@ export function DashboardView({ config }: DashboardViewProps) {
   }, [config.id, selections["Ангилал"]]);
 
   useEffect(() => {
-    if (config.id === "society-education") {
+    if (config.id === "society-education" || config.id === "society-health") {
       if (chartApiCharts.length === 0 || !chartMetaReady) return;
       loadData();
       return;
@@ -1442,7 +1470,7 @@ export function DashboardView({ config }: DashboardViewProps) {
   }, [metadata, selections, loadData, config.id, chartMetaReady, chartApiCharts.length]);
 
   useEffect(() => {
-    if (!metadata || !charts?.length) return;
+    if (!charts?.length) return;
     setTrendChartSeriesSelection((prev) => {
       let next = prev;
       for (const chart of charts) {
@@ -1454,7 +1482,7 @@ export function DashboardView({ config }: DashboardViewProps) {
       }
       return next;
     });
-  }, [metadata, charts]);
+  }, [metadata, charts, metadataByChartId]);
 
   // Улсын төсөв Жил tab: default эхлэх 2021, дуусах 2025
   const selectionsOn = selections["Он"];
@@ -1866,17 +1894,18 @@ export function DashboardView({ config }: DashboardViewProps) {
     };
   }, [mapApiUrl]);
 
+  const mapPreferLatestYear = config.id === "livestock" || config.id === "society-health";
+
   const effectiveMapYear = useMemo(() => {
     if (!mapMetadata) return "";
     const yearVar = mapMetadata.variables.find((v) => v.code === "Он");
     const yearLabels = yearVar?.valueTexts ?? yearVar?.values ?? [];
     if (yearLabels.length === 0) return selectedMapYearLocal ?? selectedMapYear ?? "";
-    const defaultLabel =
-      config.id === "livestock"
-        ? yearLabels[0]
-        : yearLabels[yearLabels.length - 1];
+    const defaultLabel = mapPreferLatestYear
+      ? yearLabels[0]
+      : yearLabels[yearLabels.length - 1];
     return selectedMapYearLocal ?? selectedMapYear ?? defaultLabel;
-  }, [mapMetadata, selectedMapYearLocal, selectedMapYear, config.id]);
+  }, [mapMetadata, selectedMapYearLocal, selectedMapYear, mapPreferLatestYear]);
 
   useEffect(() => {
     if (!mapMetadata || !mapApiUrl) return;
@@ -1884,14 +1913,14 @@ export function DashboardView({ config }: DashboardViewProps) {
     const yearLabels = yearVar?.valueTexts ?? yearVar?.values ?? [];
     const yearValues = yearVar?.values ?? [];
     const defaultLabelForFetch =
-      config.id === "livestock" && yearLabels.length > 0
+      mapPreferLatestYear && yearLabels.length > 0
         ? yearLabels[0]
         : yearLabels.length > 0
           ? yearLabels[yearLabels.length - 1]
           : "";
     const yearLabel = effectiveMapYear || defaultLabelForFetch;
     const yearIdx = yearLabels.indexOf(yearLabel);
-    const fallbackIdx = config.id === "livestock" ? 0 : yearValues.length - 1;
+    const fallbackIdx = mapPreferLatestYear ? 0 : yearValues.length - 1;
     const yearValue = yearIdx >= 0 && yearValues[yearIdx] != null ? yearValues[yearIdx] : yearValues[fallbackIdx];
     let cancelled = false;
     setMapLoading(true);
@@ -1905,6 +1934,13 @@ export function DashboardView({ config }: DashboardViewProps) {
             return s.length === 3;
           })
         : null;
+    const busValuesForHealth =
+      config.id === "society-health" && busVar?.values?.length
+        ? busVar.values.filter((c) => {
+            const s = String(c ?? "").trim();
+            return s.length === 3 || s === "5"; // 5 = Улаанбаатар
+          })
+        : null;
 
     const query = mapMetadata.variables.map((v) => {
       if (v.code === "Хүйс" && genderVar?.values?.length) {
@@ -1915,6 +1951,9 @@ export function DashboardView({ config }: DashboardViewProps) {
       }
       if (v.code === "Бүс" && busValuesForLivestock?.length) {
         return { code: v.code, selection: { filter: "item" as const, values: busValuesForLivestock } };
+      }
+      if (v.code === "Бүс" && busValuesForHealth?.length) {
+        return { code: v.code, selection: { filter: "item" as const, values: busValuesForHealth } };
       }
       return {
         code: v.code,
@@ -1934,7 +1973,7 @@ export function DashboardView({ config }: DashboardViewProps) {
     return () => {
       cancelled = true;
     };
-  }, [mapApiUrl, mapMetadata, effectiveMapYear, config.id]);
+  }, [mapApiUrl, mapMetadata, effectiveMapYear, config.id, mapPreferLatestYear]);
 
   const mapYears = useMemo(() => {
     if (!mapMetadata) return [];
@@ -2597,19 +2636,51 @@ export function DashboardView({ config }: DashboardViewProps) {
         </div>
       )}
 
-      {!apiUrl && config.id !== "society-education" && (
+      {!apiUrl && config.id !== "society-education" && config.id !== "society-health" && (
         <div className="rounded-md border border-[var(--card-border)] bg-[var(--card-bg-muted)] p-5 text-center chart-section-label text-[var(--muted-foreground)]">
           Энэ дашбоард одоогоор бэлтгэгдэж байна. Тун удахгүй нээгдэх болно.
         </div>
       )}
 
 
+      {config.id === "society-health" && mapApiUrl && (
+        <section className="space-y-2">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="chart-section-title">{mapTitle ?? "ХАЛДВАРТ ӨВЧНӨӨР ӨВЧЛӨГЧИД"}</h3>
+            {mapYears.length > 0 && (
+              <Select
+                value={effectiveMapYear}
+                onChange={(v) => setSelectedMapYearLocal(v)}
+                options={mapYears.map((label) => ({ value: label, label }))}
+                style={{ width: 120, minWidth: 120 }}
+                size="small"
+                getPopupContainer={(n) => n?.parentElement ?? (typeof document !== "undefined" ? document.body : null)}
+              />
+            )}
+          </div>
+          <div className="w-full">
+            <MongoliaChoroplethMap
+              title=""
+              data={mapData}
+              subtextOnly
+              dataLabel="Өвчлөгчид"
+              useSimpleAimagMap
+              robustColorScale
+              height={380}
+              layoutCenter={["50%", "50%"]}
+              layoutSize="135%"
+            />
+          </div>
+        </section>
+      )}
+
       {((metadata &&
           (rows.length > 0 ||
             Object.keys(chartDataByChartId).some((id) => (chartDataByChartId[id]?.length ?? 0) > 0) ||
             Object.keys(computedNetGrowthByChartId).some((id) => (computedNetGrowthByChartId[id]?.length ?? 0) > 0))) ||
         (config.id === "society-education" && charts.length > 0) ||
-        (mapApiUrl && config.id !== "population")) && (
+        (config.id === "society-health" && charts.length > 0) ||
+        (mapApiUrl && config.id !== "population" && config.id !== "society-health")) && (
         <>
           <div className="space-y-6">
           {charts.map((chart, chartIndex) => {
@@ -4702,6 +4773,61 @@ export function DashboardView({ config }: DashboardViewProps) {
                 />
               );
             };
+
+            if (config.id === "society-health" && chart.id === "health-disease-by-type-month") {
+              const diseaseRows = chartDataByChartId[chart.id] ?? [];
+              const metaDisease = metadataByChartId[chart.id];
+              if (!metaDisease) return null;
+              if (!diseaseRows.length) {
+                return (
+                  <div key={chart.id} className="py-8 text-center text-[var(--muted-foreground)]">
+                    Мэдээлэл татагдаж байна...
+                  </div>
+                );
+              }
+              const diseaseDim = "Үзүүлэлт";
+              const diseaseVar = metaDisease.variables.find((v) => v.code === diseaseDim);
+              const selectedDiseaseCodes =
+                trendChartSeriesSelection[chart.id] ??
+                chart.defaultSeriesCodes?.[diseaseDim] ??
+                (diseaseVar?.values?.[1] != null
+                  ? [String(diseaseVar.values[1])]
+                  : diseaseVar?.values?.[0] != null
+                    ? [String(diseaseVar.values[0])]
+                    : []);
+              const filteredDiseaseRows = diseaseRows.filter((r) => {
+                const code = String(r[`${diseaseDim}_code`] ?? r[diseaseDim] ?? "");
+                return selectedDiseaseCodes.includes(code);
+              });
+              const diseaseFilter = diseaseVar?.values?.length ? (
+                <Select
+                  size="small"
+                  showSearch
+                  optionFilterProp="label"
+                  value={selectedDiseaseCodes[0] ?? diseaseVar.values[1] ?? diseaseVar.values[0]}
+                  onChange={(val) => {
+                    setTrendChartSeriesSelection((prev) => ({ ...prev, [chart.id]: [String(val)] }));
+                  }}
+                  options={(diseaseVar.values ?? []).map((val, i) => ({
+                    value: val,
+                    label: String(diseaseVar.valueTexts?.[i] ?? val).trim(),
+                  }))}
+                  style={{ minWidth: 220, maxWidth: "100%" }}
+                />
+              ) : null;
+              return (
+                <div key={chart.id} className="min-w-0">
+                  {renderTrendChart(chart, filteredDiseaseRows, metaDisease, {
+                    showRangeSlider: true,
+                    enableSlicers: false,
+                    showLatestValue: true,
+                    headerExtraTitleRow: diseaseFilter,
+                    valueAxisTitle: null,
+                    chartHeight: chart.chartHeight ?? 360,
+                  })}
+                </div>
+              );
+            }
 
             if (config.id === "population" && chart.id === "population-area" && metaForChart) {
               const inlineVars = (metaForChart ?? metadata)?.variables.filter(
@@ -11210,9 +11336,9 @@ export function DashboardView({ config }: DashboardViewProps) {
         );
       })()}
 
-      {mapApiUrl && config.id !== "population" && (
+      {mapApiUrl && config.id !== "population" && config.id !== "society-health" && (
         <section className="space-y-3 -mt-1">
-          <h3 className="chart-section-title">{config.id === "livestock" ? "МАЛЫН ТОО" : "Хүн амын тоо"}</h3>
+          <h3 className="chart-section-title">{mapTitle ?? (config.id === "livestock" ? "МАЛЫН ТОО" : "Хүн амын тоо")}</h3>
           <div className="flex flex-wrap items-center gap-4">
             {mapYears.length > 0 && (
               <div className="flex flex-wrap items-center gap-2">
