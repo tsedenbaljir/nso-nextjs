@@ -133,7 +133,7 @@ export default function UserManagementPage() {
                         <Input.Password placeholder="Нууц үг" />
                     </Form.Item>
                     <Form.Item name="role" label="Хэрэглэгчийн түвшин">
-                        <Input placeholder="admin, laws, transparency, metadata-questionnaire." />
+                        <Input placeholder="admin эсвэл цэсний нэр: cpi-ppi, commodity-price, laws, …" />
                     </Form.Item>
                 </Form>
             </Modal>

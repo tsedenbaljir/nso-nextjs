@@ -10,6 +10,16 @@ import { Path } from '@/utils/path';
 import MenuItems from './MenuItems';
 // import DarkModeSwitcher from './darkMode';
 
+/** Roles талбарт бичсэн нэрийг цэсний link slug руу хөрвүүлэх */
+const ROLE_ALIASES = {
+  cpivsppi: "cpi-ppi",
+  "cpi_ppi": "cpi-ppi",
+  "cpi/ppi": "cpi-ppi",
+  "хуи": "cpi-ppi",
+  commodity: "commodity-price",
+  "commodity_price": "commodity-price",
+};
+
 export default function Sidebar({ user, userstatus }) {
   const pathname = Path();
   var pth = pathname.split("/")[3];
@@ -26,22 +36,27 @@ export default function Sidebar({ user, userstatus }) {
       .trim()
       .toLowerCase();
 
+  const toMenuSlug = (val) => {
+    const n = normalize(val);
+    return ROLE_ALIASES[n] || n;
+  };
+
   const getAllowedSlugs = (roleValue) => {
     if (!roleValue) return [];
-    if (Array.isArray(roleValue)) return roleValue.map(normalize);
+    if (Array.isArray(roleValue)) return roleValue.map(toMenuSlug);
     if (typeof roleValue === 'string') {
       // Try JSON first
       try {
         const parsed = JSON.parse(roleValue);
-        if (Array.isArray(parsed)) return parsed.map(normalize);
-        if (parsed && Array.isArray(parsed.allowed)) return parsed.allowed.map(normalize);
+        if (Array.isArray(parsed)) return parsed.map(toMenuSlug);
+        if (parsed && Array.isArray(parsed.allowed)) return parsed.allowed.map(toMenuSlug);
       } catch (_) {
         // Not JSON, treat as comma/space-separated list
       }
       return roleValue
         .split(/[\s,;|]+/)
         .filter(Boolean)
-        .map(normalize);
+        .map(toMenuSlug);
     }
     return [];
   };
@@ -78,6 +93,9 @@ export default function Sidebar({ user, userstatus }) {
 
   const filterMenus = (items) =>
     isAdmin ? items : items.filter((item) => allowedSet?.has(normalize(item.link)));
+
+  const visibleHelperMenus = filterMenus(helperMenus);
+  const showHelperSection = isAdmin || visibleHelperMenus.length > 0;
 
   const handleElasticIndex = async () => {
     try {
@@ -122,23 +140,25 @@ export default function Sidebar({ user, userstatus }) {
                 ))}
               </ul>
             </div>
-            {isAdmin && (
+            {showHelperSection && (
               <div >
                 <h3 className="mb-3 text-sm font-medium text-dark-4 dark:text-dark-6 border-b">
                   ТУСЛАХ ЦЭС
                 </h3>
                 <ul className="mb-6 flex flex-col gap-2">
-                  {filterMenus(helperMenus).map((item) => (
+                  {visibleHelperMenus.map((item) => (
                     <MenuItems key={item.link} name={item.name} isActive={pth === item.link} link={item.link} />
                   ))}
-                  <li>
-                    <div
-                      className={`cursor-pointer relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out dark:bg-white/10 text-white bg-orange-500 hover:bg-orange-600`}
-                      onClick={handleElasticIndex}
-                    >
-                      Хайлт индекслэх
-                    </div>
-                  </li>
+                  {isAdmin && (
+                    <li>
+                      <div
+                        className={`cursor-pointer relative flex rounded-[7px] px-3.5 py-2 font-medium duration-300 ease-in-out dark:bg-white/10 text-white bg-orange-500 hover:bg-orange-600`}
+                        onClick={handleElasticIndex}
+                      >
+                        Хайлт индекслэх
+                      </div>
+                    </li>
+                  )}
                 </ul>
               </div>
             )}

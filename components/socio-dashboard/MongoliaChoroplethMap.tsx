@@ -230,24 +230,6 @@ const MAP_COLORS = {
 /** Outlier-тай choropleth-д илүү олон алхамтай өнгө */
 const ROBUST_MAP_COLORS = ["#dbeafe", "#93c5fd", "#60a5fa", "#2563eb", "#1e3a8a"];
 
-/** Дотоод нүх (hole) хасч зөвхөн гадна цагираг үлдээнэ — Төв/Сэлэнгэ дээрх УБ-н нүх «сум» шиг харагдахаас сэргийлнэ */
-function stripInteriorRings(geometry: GeoFeature["geometry"]): GeoFeature["geometry"] {
-  if (!geometry || typeof geometry !== "object") return geometry;
-  const g = geometry as { type?: string; coordinates?: unknown[] };
-  if (g.type === "Polygon" && Array.isArray(g.coordinates) && g.coordinates.length > 0) {
-    return { type: "Polygon", coordinates: [g.coordinates[0]] } as GeoFeature["geometry"];
-  }
-  if (g.type === "MultiPolygon" && Array.isArray(g.coordinates)) {
-    return {
-      type: "MultiPolygon",
-      coordinates: g.coordinates.map((poly) =>
-        Array.isArray(poly) && poly.length > 0 ? [poly[0]] : poly
-      ),
-    } as GeoFeature["geometry"];
-  }
-  return geometry;
-}
-
 function resolveSimpleAimagName(props: GeoFeature["properties"]): string | null {
   const direct = props?.adm1_name1;
   if (direct && String(direct).trim()) return String(direct).trim();
@@ -400,11 +382,16 @@ export function MongoliaChoroplethMap({
               if (!mongolianName) return null;
               return {
                 ...f,
-                geometry: stripInteriorRings(f.geometry),
                 properties: { ...props, name: mongolianName },
               } as GeoFeature;
             })
             .filter((f): f is GeoFeature => f !== null);
+          // Жижиг аймаг/хот (УБ, Дархан, Орхон)-ыг сүүлд зурна — tooltip зөв таарах
+          features?.sort((a, b) => {
+            const rank = (n: string) =>
+              n === "Улаанбаатар" || n === "Дархан-Уул" || n === "Орхон" || n === "Говьсүмбэр" ? 1 : 0;
+            return rank(String(a.properties?.name ?? "")) - rank(String(b.properties?.name ?? ""));
+          });
           const collection: GeoFeatureCollection = { ...json, features: features ?? [] };
           echarts.registerMap("mongolia_simple", collection as any);
           setLoadedMapName("mongolia_simple");
@@ -427,11 +414,15 @@ export function MongoliaChoroplethMap({
                 if (!mongolianName) return null;
                 return {
                   ...f,
-                  geometry: stripInteriorRings(f.geometry),
                   properties: { ...props, name: mongolianName },
                 } as GeoFeature;
               })
               .filter((f): f is GeoFeature => f !== null);
+            features?.sort((a, b) => {
+              const rank = (n: string) =>
+                n === "Улаанбаатар" || n === "Дархан-Уул" || n === "Орхон" || n === "Говьсүмбэр" ? 1 : 0;
+              return rank(String(a.properties?.name ?? "")) - rank(String(b.properties?.name ?? ""));
+            });
             const collection: GeoFeatureCollection = { ...json, features: features ?? [] };
             echarts.registerMap("mongolia", collection as any);
             setLoadedMapName("mongolia");
