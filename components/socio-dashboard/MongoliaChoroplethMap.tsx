@@ -515,7 +515,7 @@ export function MongoliaChoroplethMap({
     }
   }, [activeAimagName, nameToAimagId]);
 
-  const mapDataForChart = useMemo(() => {
+  const mapDataForChart = useMemo((): MapDataItem[] => {
     if (isDrillMode && showingAimag) {
       const byAimagName = new Map<string, { sum: number; count: number }>();
       for (const d of data) {
@@ -625,7 +625,7 @@ export function MongoliaChoroplethMap({
     if (useDuuregLevel) return mapDataForChart;
     if (!useSimpleAimagMap) return mapDataForChart;
     const mongolianNames = Object.keys(MONGOLIAN_TO_ENGLISH_AIMAG);
-    const byCanonical = new Map<string, (typeof mapDataForChart)[0]>();
+    const byCanonical = new Map<string, MapDataItem>();
     for (const d of mapDataForChart) {
       const normalized = d.name.replace(/[\s-–]+/g, " ").trim().toLowerCase();
       // Багануур/Багахангай өгөгдөл ирвэл УБ-тай нэгтгэнэ
@@ -645,8 +645,8 @@ export function MongoliaChoroplethMap({
         byCanonical.set(name, {
           name,
           value: d.value,
-          ageGroups: (d as { ageGroups?: MapDataItem["ageGroups"] }).ageGroups,
-          maltaiorhGroups: (d as { maltaiorhGroups?: MapDataItem["maltaiorhGroups"] }).maltaiorhGroups,
+          ageGroups: d.ageGroups,
+          maltaiorhGroups: d.maltaiorhGroups,
         });
       }
     }
